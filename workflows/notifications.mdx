@@ -45,7 +45,7 @@ The platform sends email automatically at major loan lifecycle events. Notificat
 
 ## Member notifications
 
-Emails to borrowers are off by default. They are controlled at the deployment level by the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, not by a screen the Tenant Administrator manages. Until that setting equals `true`, member recipients are filtered out before any email is enqueued. When it is switched on, members receive emails for two events only:
+Emails to borrowers are off by default. They are controlled at the deployment level by the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, not by a screen the Administrator manages. Until that setting equals `true`, member recipients are filtered out before any email is enqueued. When it is switched on, members receive emails for two events only:
 
 - **Loan declined.** The declined-decision email tells them the application was unsuccessful and includes the rationale.
 - **Disbursement executed.** A confirmation that funds have been released.
@@ -53,12 +53,12 @@ Emails to borrowers are off by default. They are controlled at the deployment le
 Members never receive internal workflow notifications such as Information requested or Ready for Disbursement. Those are staff-facing events.
 
 <Note>
-Your credit union's name and branding appear in every email the platform sends, to staff and members alike. The from-name on the email comes from your tenant's configured sender name, and your primary brand color accents the loan link button. Branding is snapshotted at the moment the email is queued, not re-read at delivery, so the email always reflects the settings in force when the event fired.
+Your credit union's name and branding appear in every email the platform sends, to staff and members alike. The from-name on the email comes from your credit union's configured sender name, and your primary brand color accents the loan link button. Branding is snapshotted at the moment the email is queued, not re-read at delivery, so the email always reflects the settings in force when the event fired.
 </Note>
 
 ## Assignment notifications
 
-When someone uses the Assignment panel to route a loan to a specific person, that person receives an "a loan needs your attention" email immediately, as long as the loan is actionable. This is separate from the event-based notifications in the table above. Directing any loan to a specific person uses the `loans.assign` capability, which Credit Managers, Branch Managers, and Tenant Administrators hold. That is not the only path: a Credit Officer can route their own draft to an adjudicator with `loans.submit`, and a stage worker can reassign a loan within their own stage by holding that stage's owning capability, for example an Adjudicator with `loans.adjudicate` handing a file to another Adjudicator.
+When someone uses the Assignment panel to route a loan to a specific person, that person receives an "a loan needs your attention" email immediately, as long as the loan is actionable. This is separate from the event-based notifications in the table above. Directing any loan to a specific person uses the `loans.assign` capability, which Credit Managers, Branch Managers, and Administrators hold. That is not the only path: a Credit Officer can route their own draft to an adjudicator with `loans.submit`, and a stage worker can reassign a loan within their own stage by holding that stage's owning capability, for example an Adjudicator with `loans.adjudicate` handing a file to another Adjudicator.
 
 One exception: assigning a loan that is still in **DRAFT** does **not** send the email. A draft pre-assignment is treated as routing intent only. The adjudicator gets the notice later, when the loan is submitted and routes to Adjudication.
 
@@ -75,7 +75,7 @@ Once a loan has an assignee, stage-team events go only to that person instead of
 
 | Event | Unassigned (worst case) | Assigned (scoped) |
 |---|---|---|
-| Loan routed to Adjudication | Every Adjudicator in the tenant | The one assigned Adjudicator |
+| Loan routed to Adjudication | Every Adjudicator in the credit union | The one assigned Adjudicator |
 | Security request documents submitted | The whole Securities team | The one assigned owner |
 | Ready for Disbursement or scheduled | The whole Disbursement team | The one assigned owner |
 
@@ -89,5 +89,5 @@ The fan-out for **Loan filed** is not driven by whether the loan is assigned. It
 - **Scoped notifications off.** The legacy wider fan-out is restored: the Credit Officer, all Credit Manager (`reports.view`) holders, and the Branch Managers whose branch matches the loan's branch (via `loans.read.branch`). Branch Managers at other branches are never included.
 
 <Tip>
-If you are not getting notifications you expect, check two things. First, confirm with your Tenant Administrator that your role is configured with the right capabilities. Second, check whether the loan is assigned to someone else. If it is, that person is the only one receiving stage notifications for that file.
+If you are not getting notifications you expect, check two things. First, confirm with your Administrator that your role is configured with the right capabilities. Second, check whether the loan is assigned to someone else. If it is, that person is the only one receiving stage notifications for that file.
 </Tip>

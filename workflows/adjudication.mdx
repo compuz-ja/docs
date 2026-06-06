@@ -9,7 +9,7 @@ The Adjudication queue is where loan applications are reviewed and decided. As a
 
 ## What you need
 
-You need the **Adjudicator** role, which carries the `loans.adjudicate` capability. If you can reach the queue but the **Claim** button is missing, ask your Tenant Administrator to confirm your role assignment.
+You need the **Adjudicator** role, which carries the `loans.adjudicate` capability. If you can reach the queue but the **Claim** button is missing, ask your Administrator to confirm your role assignment.
 
 ## Processing an application
 
@@ -93,7 +93,7 @@ You may see the same application more than once if multiple rounds of informatio
 
 If the risk band exceeds the policy ceiling for the product, an **Override required** panel appears on the Approve path. The panel shows whenever the band is out of range, regardless of what your role can do. It reads `Risk band <band> exceeds the policy ceiling for <loan type> loans` and asks for a separate override rationale of at least 20 characters before the decision can be recorded. The `loans.override` capability controls whether you can complete the override, not whether the panel appears.
 
-Three things must all hold for an override to go through: you hold `loans.override`, the tenant's `creditManagerOverrideEnabled` flag (a setting on `TenantWorkflowOverride`) is on, and your override rationale is at least 20 characters. That flag is a per-tenant configuration setting, not something a screen in the product toggles. If any of the three is missing, the platform refuses the approval, records the exact reason against the audit trail (a failed-decision event), and leaves the application's status unchanged so you can correct and retry.
+Three things must all hold for an override to go through: you hold `loans.override`, your credit union's `creditManagerOverrideEnabled` flag (a setting on `TenantWorkflowOverride`) is on, and your override rationale is at least 20 characters. That flag is a workspace-level configuration setting, not something a screen in the product toggles. If any of the three is missing, the platform refuses the approval, records the exact reason against the audit trail (a failed-decision event), and leaves the application's status unchanged so you can correct and retry.
 
 By default `loans.override` belongs to the **Credit Manager** role, not the standard Adjudicator role. A plain Adjudicator who lacks `loans.override` still sees the **Override required** panel when the band is out of range, but with a message that their role does not include the override capability: `Contact your Credit Manager to approve, or decline this application.` The platform refuses the approval if they try to record it. Decline the file, or use Request more information to ask the Credit Officer to reassess eligibility.
 

@@ -61,7 +61,7 @@ Jamaica routes a domestic payment two different ways depending on the rail. ACH/
 
 ## The seeded bank directory
 
-The platform ships a global bank directory of Bank of Jamaica supervised deposit-taking institutions. It is shared across every tenant, not tenant-scoped. The picker appears for ACH, RTGS, and wire, and only when the directory is non-empty. Pick a bank and one action fills its name and SWIFT/BIC onto the payee; it also fills the 3-digit ACH bank code once those codes are loaded (they ship NULL).
+The platform ships a global bank directory of Bank of Jamaica supervised deposit-taking institutions. It is shared across every workspace, not workspace-scoped. The picker appears for ACH, RTGS, and wire, and only when the directory is non-empty. Pick a bank and one action fills its name and SWIFT/BIC onto the payee; it also fills the 3-digit ACH bank code once those codes are loaded (they ship NULL).
 
 The directory holds the supervised set: eight commercial banks, two building societies, one merchant bank, and the central bank.
 

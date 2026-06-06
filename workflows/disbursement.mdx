@@ -9,7 +9,7 @@ The **Disbursement** queue holds approved loans that are ready for funds release
 
 ## What you need
 
-You need the **Disbursement** role, which carries the `loans.disburse` capability. If you can view the queue but cannot act on applications, ask your Tenant Administrator to verify your role.
+You need the **Disbursement** role, which carries the `loans.disburse` capability. If you can view the queue but cannot act on applications, ask your Administrator to verify your role.
 
 ## How a disbursement works
 
@@ -18,7 +18,7 @@ You need the **Disbursement** role, which carries the `loans.disburse` capabilit
     Open **Disbursement** under the **Review queue** group in the sidebar. The queue's **Pending** tab shows loans in **DISBURSEMENT** status that are ready for scheduling or execution; the **Completed** tab shows disbursed and filed loans. The **All / My queue / Unassigned** tabs filter to your files or unclaimed work.
   </Step>
   <Step title="Open the application">
-    Click a row to open the disbursement detail page. You'll see the approved loan amount, the fee schedule pre-populated from the tenant configuration, and the calculated net-to-member amount.
+    Click a row to open the disbursement detail page. You'll see the approved loan amount, the fee schedule pre-populated from your credit union's configuration, and the calculated net-to-member amount.
   </Step>
   <Step title="Review fees and the net to member">
     The form shows the gross approved amount, the fee and tax breakdown, and the live **Net to member** figure. This is the amount you must distribute in full across all payees.
@@ -34,9 +34,9 @@ You need the **Disbursement** role, which carries the `loans.disburse` capabilit
   <Step title="Execute the release">
     Return to the instruction and click **Mark disbursed** to release the funds. Only then does the loan move to **DISBURSED**. The Credit Officer is notified, and the member is notified too if member email delivery has been switched on for the platform (the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, off by default). Scheduling and execution are two separate actions, so a file can be scheduled by one officer and released by another.
 
-    Dual control is off until a tenant sets a threshold, so existing tenants are never blocked by it. When it applies, the platform refuses to release the funds while approval is still pending. The block is enforced server-side, not by graying out the button: a net at or above the tenant's dual-control threshold sets the instruction to await a second approver, and a **different** user holding `disbursements.approve` must sign off before the release goes through (the maker cannot be the checker). Until they do, **Mark disbursed** is turned away with an "awaiting a maker-checker approval" message.
+    Dual control is off until your credit union sets a threshold, so existing workspaces are never blocked by it. When it applies, the platform refuses to release the funds while approval is still pending. The block is enforced server-side, not by graying out the button: a net at or above your credit union's dual-control threshold sets the instruction to await a second approver, and a **different** user holding `disbursements.approve` must sign off before the release goes through (the maker cannot be the checker). Until they do, **Mark disbursed** is turned away with an "awaiting a maker-checker approval" message.
 
-    There is one exception to the two-step flow: when auto-disbursement is enabled and the net to member is at or below the configured threshold, scheduling executes the release immediately. Auto-disbursement also requires that no dual-control approval is pending, that the officer is within their personal limit, and that the tenant does not require AML screening.
+    There is one exception to the two-step flow: when auto-disbursement is enabled and the net to member is at or below the configured threshold, scheduling executes the release immediately. Auto-disbursement also requires that no dual-control approval is pending, that the officer is within their personal limit, and that your credit union does not require AML screening.
   </Step>
   <Step title="File the loan">
     With the loan in **DISBURSED**, the **File loan** card shows a **File loan (terminal)** button. Clicking it fires the **DISBURSED → FILED** transition (gated by `loans.disburse`) and closes the file at its terminal **FILED** state. Filing always lands on **FILED**; it never routes the loan anywhere else. Filing is a manual step, not automatic.
@@ -103,7 +103,7 @@ Marking a loan **DISBURSED** stamps the bank reference number on the instruction
 
 A few credit unions require a security check *after* funds have gone out, for example to confirm vehicle insurance was activated or a lien was filed. That re-check is a distinct **DISBURSED → SECURITIES** transition, gated by `loans.adjudicate`, that someone holding that capability initiates with a post-disbursement security request. It is not part of the **File loan** button, and clicking **File loan** never triggers it.
 
-When that transition fires, the workflow opens a new security request and moves the file back to the Securities queue for review, while the loan's status stays **DISBURSED**. The platform only allows it when the tenant's `securitiesFinalCheckRequired` configuration flag is on (a setting on `TenantWorkflowOverride`, defaulting off; there is no screen that toggles it). Once the new request is resolved, the file returns through Disbursement and can be filed.
+When that transition fires, the workflow opens a new security request and moves the file back to the Securities queue for review, while the loan's status stays **DISBURSED**. The platform only allows it when your credit union's `securitiesFinalCheckRequired` configuration flag is on (a setting on `TenantWorkflowOverride`, defaulting off; there is no screen that toggles it). Once the new request is resolved, the file returns through Disbursement and can be filed.
 
 <Note>
 **FILED** is the terminal state. Once a loan is filed, the record is locked from further editing and the audit trail is complete. Any future lending for the same member requires a new application.

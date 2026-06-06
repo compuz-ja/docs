@@ -19,7 +19,7 @@ Every loan application moves through a defined workflow. Each status tells you w
 | **SECURITIES** | Securities | The Securities team verifies and perfects the collateral, then clears it for disbursement. The documents requested are set per loan rather than fixed by the system. |
 | **SECURITIES_ISSUE** | Adjudicator | The Securities team flagged a structural problem with the collateral package (for example, a valuation mismatch or ineligible collateral) and sent it back to the Adjudicator. The Adjudicator resolves the issue and returns the file to the Securities team. |
 | **DISBURSEMENT** | Disbursement | All collateral has been cleared. Disbursement schedules the payees and executes the release of funds. |
-| **DISBURSED** | Disbursement | Funds have been released. The Disbursement team files the loan to complete it. If the `securitiesFinalCheckRequired` tenant workflow override is set (it defaults to off), the loan returns to Securities for a final post-disbursement check first. |
+| **DISBURSED** | Disbursement | Funds have been released. The Disbursement team files the loan to complete it. If the `securitiesFinalCheckRequired` workflow override is set (it defaults to off), the loan returns to Securities for a final post-disbursement check first. |
 | **FILED** | Terminal | The loan record is locked. The audit trail is complete. No further edits or transitions are possible. |
 | **DECLINED** | Terminal | The Adjudicator declined the application. The record is sealed and preserved in the audit trail. |
 | **DRAFT_ABANDONED** | Terminal | The Credit Officer chose not to proceed with the draft and selected Abandon Draft. |

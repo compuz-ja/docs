@@ -8,7 +8,7 @@
     "light": "#FBBF24",
     "dark": "#D97706"
   },
-  "favicon": "/favicon.ico",
+  "favicon": "/favicon.svg",
   "icons": {
     "library": "lucide"
   },
@@ -119,8 +119,8 @@
             "group": "Administration",
             "icon": "settings",
             "pages": [
-              "admin/tenant-setup",
-              "admin/tenant-configuration",
+              "admin/workspace-setup",
+              "admin/workspace-configuration",
               "admin/loan-products",
               "admin/loan-types",
               "admin/rate-tables",

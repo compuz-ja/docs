@@ -5,11 +5,11 @@ description: "The four controls that wrap fund release: maker-checker dual contr
 icon: "shield-check"
 ---
 
-Four controls sit around the moment funds are released: maker-checker dual control, AML and sanctions screening, a per-officer limit, and optional auto-disbursement. Each is off by default, so a tenant that configures nothing keeps the simple release path.
+Four controls sit around the moment funds are released: maker-checker dual control, AML and sanctions screening, a per-officer limit, and optional auto-disbursement. Each is off by default, so a workspace that configures nothing keeps the simple release path.
 
 ## Dual control (maker-checker)
 
-A disbursement above the tenant threshold needs a second person to approve it before it can be released.
+A disbursement above the workspace threshold needs a second person to approve it before it can be released.
 
 The threshold is `TenantConfig.dualControlThresholdCents`. When the net to member is **at or above** the threshold, the instruction's `approvalStatus` is set to `PENDING` and a `disbursement.approval.requested` event fires. The comparison is `net >= threshold`. A `null` threshold means dual control is off, which is the default.
 
@@ -52,20 +52,20 @@ Each officer can carry a personal ceiling, `Membership.disbursementLimitCents`. 
 
 ## Auto-disbursement
 
-A tenant can opt in to release a scheduled disbursement automatically when it clears every gate. It is off by default.
+A workspace can opt in to release a scheduled disbursement automatically when it clears every gate. It is off by default.
 
 Auto-disbursement is governed by `TenantConfig.autoDisburseEnabled` and `TenantConfig.autoDisburseThresholdCents`. The decision is a pure gate, `shouldAutoDisburse`, and it fires only when **all** of these hold:
 
 - The feature is enabled.
 - A threshold is configured and the net is at or below it.
 - No approval is outstanding (`approvalStatus` is `NOT_REQUIRED`).
-- Screening is satisfied. When the tenant requires screening, the rollup must be `CLEAR`.
+- Screening is satisfied. When the workspace requires screening, the rollup must be `CLEAR`.
 - The officer is within their personal limit.
 
 When all hold, the disbursement executes immediately and a `disbursement.auto_executed` event fires. Auto-disbursement only fires at or below `TenantConfig.autoDisburseThresholdCents`, which is the gate.
 
 <Note>
-Auto-disbursement is consulted at schedule time, before screening has run, so the schedule path passes the screening rollup as `NOT_SCREENED`. A tenant with `amlScreeningRequired` set to `true` therefore never auto-disburses: the screening gate cannot be satisfied yet. Auto-disbursement fires for tenants that do not require screening.
+Auto-disbursement is consulted at schedule time, before screening has run, so the schedule path passes the screening rollup as `NOT_SCREENED`. A workspace with `amlScreeningRequired` set to `true` therefore never auto-disburses: the screening gate cannot be satisfied yet. Auto-disbursement fires for workspaces that do not require screening.
 </Note>
 
 ## Configuring the controls

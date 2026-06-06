@@ -1,17 +1,17 @@
 ---
 title: "Saved payees and loan payoff"
 sidebarTitle: "Saved payees"
-description: "The per-tenant saved-payee directory for attorneys, dealers, insurers, and government offices, and how a lender-payoff payee settles an existing loan elsewhere."
+description: "The per-workspace saved-payee directory for attorneys, dealers, insurers, and government offices, and how a lender-payoff payee settles an existing loan elsewhere."
 icon: "bookmark"
 ---
 
-The saved-payee directory is a per-tenant list of reusable payees, so officers stop re-typing the attorneys, dealers, insurers, and government offices they pay over and over. It holds the non-secret routing and the default method. The account number is never stored here.
+The saved-payee directory is a per-workspace list of reusable payees, so officers stop re-typing the attorneys, dealers, insurers, and government offices they pay over and over. It holds the non-secret routing and the default method. The account number is never stored here.
 
 ## Where it lives
 
 The directory is at `/{tenantSlug}/admin/disbursement/payees`, with `/new` to add one and `/{payeeId}` to edit one. The nav label is **Saved payees**.
 
-For a tenant on `https://loan.compuzign.com/your-slug`, the directory is at `https://loan.compuzign.com/your-slug/admin/disbursement/payees`.
+For a workspace on `https://loan.compuzign.com/your-slug`, the directory is at `https://loan.compuzign.com/your-slug/admin/disbursement/payees`.
 
 ## Who can manage it
 
@@ -44,7 +44,7 @@ You can create, edit, deactivate, and restore a payee. Every action is audited.
 
 Deactivate and restore are idempotent. Asking for a state the payee is already in is a no-op: nothing changes and no audit event fires.
 
-Payees are de-duplicated by name. No two active payees in a tenant can share a name, compared case-insensitively, so the picker stays unambiguous. A rename that would collide with another active payee is refused.
+Payees are de-duplicated by name. No two active payees in a workspace can share a name, compared case-insensitively, so the picker stays unambiguous. A rename that would collide with another active payee is refused.
 
 The directory page lets you search by name, case-insensitively, and filter by status: all, active, or inactive. That is how you find a deactivated payee to restore.
 

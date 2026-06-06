@@ -9,7 +9,7 @@ The identity verification health screen confirms that the providers behind membe
 
 Member KYC verifies a member's TRN and driver's licence against an outside identity service. This admin screen does not verify any member. It reports which provider is configured for each verification slot and lets you run a fixture check to confirm each one responds. Use it after a provider configuration change, after credentials rotate, or when the KYC page misbehaves and you need to isolate whether the partner is reachable.
 
-**Required role:** Tenant Administrator (`admin.tenant.manage` capability).
+**Required role:** Administrator (`admin.tenant.manage` capability).
 
 To open the screen, navigate to `/{tenantSlug}/admin/identity-health`. For example, `https://loan.compuzign.com/your-slug/admin/identity-health`.
 
@@ -87,7 +87,7 @@ For how to submit a member for verification, read the result statuses, and handl
   <Card title="KYC verification" icon="scan-face" href="/members/kyc-verification">
     Submit a member for identity verification and handle the result.
   </Card>
-  <Card title="Tenant configuration" icon="sliders-horizontal" href="/admin/tenant-configuration">
+  <Card title="Workspace configuration" icon="sliders-horizontal" href="/admin/workspace-configuration">
     Workspace-wide operational settings, including audit retention.
   </Card>
 </CardGroup>

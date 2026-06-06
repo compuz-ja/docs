@@ -60,24 +60,24 @@ The `remitTo` field records who the fee, tax, or deduction is owed to. There are
 
 Each fee line carries a `taxable` flag. GCT applies only to lines flagged taxable. Financial-service and insurance-service fees are GCT-exempt, so a processing fee is not taxable. Legal and valuation fees are taxable and carry GCT.
 
-The tenant default GCT rate is `gctRateBps`, which defaults to `1500`, that is 15%, the Jamaica standard. It is stored on the tenant configuration.
+The workspace default GCT rate is `gctRateBps`, which defaults to `1500`, that is 15%, the Jamaica standard. It is stored on the workspace configuration.
 
-A **Disbursement** officer can override the GCT rate for a single disbursement. The override is passed per schedule and clamped to the range 0 to 10000 basis points. When omitted, the tenant default applies. This covers a special rate or a zero-rated case without changing the tenant default.
+A **Disbursement** officer can override the GCT rate for a single disbursement. The override is passed per schedule and clamped to the range 0 to 10000 basis points. When omitted, the workspace default applies. This covers a special rate or a zero-rated case without changing the workspace default.
 
 ## The two fee tables
 
-Fees live in two places: an editable per-tenant catalogue, and an immutable snapshot on each instruction.
+Fees live in two places: an editable per-workspace catalogue, and an immutable snapshot on each instruction.
 
 | Table | What it is |
 | --- | --- |
-| `TenantFeeScheduleItem` | The editable per-tenant fee/tax catalogue. Officers read these as defaults per loan type, and a tenant edits them. |
+| `TenantFeeScheduleItem` | The editable per-workspace fee/tax catalogue. Officers read these as defaults per loan type, and your Administrator edits them. |
 | `DisbursementFee` | The immutable applied line on a `DisbursementInstruction`, captured at schedule time. Never deleted. |
 
 The catalogue is the configurable source. The snapshot is the legal record of exactly what was charged on a specific disbursement.
 
 ### Seeded Jamaica defaults
 
-A tenant created through the demo seed gets ten Jamaica fee items spread across the loan types. The defaults are starting points; a tenant edits them.
+A workspace created through the demo seed gets ten Jamaica fee items spread across the loan types. The defaults are starting points; your Administrator edits them.
 
 | Code | Label | Loan type | Calc | Treatment | Remit to | Taxable |
 | --- | --- | --- | --- | --- | --- | --- |

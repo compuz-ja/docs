@@ -8,7 +8,7 @@ icon: "users"
 The Loan Origination System uses role-based access control. Every user holds exactly one role within a workspace, and that role determines which pages, queues, and actions are available to you. Roles are configured per credit union, so the same person could hold a **Credit Officer** role in one workspace and an **Adjudicator** role in another.
 
 <Note>
-  Roles are assigned by your **Tenant Administrator**. If you need access to a feature that is not available to you, contact your administrator to discuss a role change.
+  Roles are assigned by your **Administrator**. If you need access to a feature that is not available to you, contact your administrator to discuss a role change.
 </Note>
 
 ## Built-in roles
@@ -32,8 +32,8 @@ The Loan Origination System uses role-based access control. Every user holds exa
   <Card title="Branch Manager" icon="building">
     Manages lending activity within their branch. Can view all loans in their branch, assign loans to officers within that branch, and view branch-level reports.
   </Card>
-  <Card title="Tenant Administrator" icon="settings">
-    Administers the workspace. Manages users, invitations, roles, branding, loan products, rate tables, and all tenant configuration, and can run the full loan capture flow. The only role that invites new staff, suspends members, and changes role assignments. It does not adjudicate loans, review securities, or disburse funds. Those stages belong to the Adjudicator, Securities, and Disbursement roles.
+  <Card title="Administrator" icon="settings">
+    Administers the workspace. Manages users, invitations, roles, branding, loan products, rate tables, and all workspace configuration, and can run the full loan capture flow. The only role that invites new staff, suspends members, and changes role assignments. It does not adjudicate loans, review securities, or disburse funds. Those stages belong to the Adjudicator, Securities, and Disbursement roles.
   </Card>
 </CardGroup>
 
@@ -41,7 +41,7 @@ The Loan Origination System uses role-based access control. Every user holds exa
 
 The table below summarises what each role is permitted to do.
 
-| Action | Credit Officer | Adjudicator | Securities | Disbursement | Credit Manager | Branch Manager | Tenant Administrator |
+| Action | Credit Officer | Adjudicator | Securities | Disbursement | Credit Manager | Branch Manager | Administrator |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Create and edit loan applications | ✓ | | | | | | ✓ |
 | Submit loan for adjudication | ✓ | | | | | | ✓ |
@@ -60,15 +60,15 @@ The table below summarises what each role is permitted to do.
 | Manage loan products and rate tables | | | | | ✓ | | ✓ |
 | View reports and analytics | | | | | ✓ | ✓ | ✓ |
 | Invite staff and manage roles | | | | | | | ✓ |
-| Tenant configuration and branding | | | | | | | ✓ |
+| Workspace configuration and branding | | | | | | | ✓ |
 
 <Note>
-  The Tenant Administrator runs the loan capture flow and sees every loan through its all-loans read, but it holds none of the adjudication (`loans.adjudicate`), securities (`securities.review`), disbursement (`loans.disburse`), or payee-directory (`disbursements.payees.manage`) capabilities. Five roles see loans across all branches through `loans.read.all`: the Adjudicator, Securities, Disbursement, Credit Manager, and Tenant Administrator. That all-branches read is a superset of the branch-scoped view. Only the Branch Manager holds the branch-scoped `loans.read.branch`.
+  The Administrator runs the loan capture flow and sees every loan through its all-loans read, but it holds none of the adjudication (`loans.adjudicate`), securities (`securities.review`), disbursement (`loans.disburse`), or payee-directory (`disbursements.payees.manage`) capabilities. Five roles see loans across all branches through `loans.read.all`: the Adjudicator, Securities, Disbursement, Credit Manager, and Administrator. That all-branches read is a superset of the branch-scoped view. Only the Branch Manager holds the branch-scoped `loans.read.branch`.
 </Note>
 
 ## How roles are assigned
 
-Roles are chosen at the point of invitation. When a **Tenant Administrator** sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
+Roles are chosen at the point of invitation. When a **Administrator** sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
 
 Each user holds exactly one role per workspace. If someone's responsibilities change, an administrator updates the role at any time from **Administration → Team & roles**. A **Credit Officer** promoted to **Credit Manager** is one example. Changing the role replaces the previous one rather than adding a second, and the new role takes effect on the user's next page load.
 
@@ -83,7 +83,7 @@ Some actions require more than one capability to line up before they succeed. Ca
 
   1. **`workflows.transition`**, the global workflow engine gate.
   2. **`loans.transition`**, the loan-domain gate.
-  3. **`loans.submit`**, the per-transition capability, granted to **Credit Officers** and **Tenant Administrators**.
+  3. **`loans.submit`**, the per-transition capability, granted to **Credit Officers** and **Administrators**.
   4. **The member's KYC is Verified.** The member's `kycStatus` must equal `VERIFIED` before submission is allowed.
 
   If any capability or the KYC check is missing, the **Submit** button is hidden or the action is rejected, and the platform shows a clear message about what still needs to be completed.

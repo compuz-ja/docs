@@ -5,11 +5,11 @@ description: "Monitor production volume, cycle time, credit quality, operations,
 icon: "trending-up"
 ---
 
-The analytics page gives any role with `reports.view` (Credit Managers, Branch Managers, and Tenant Administrators) a live view of loan production, cycle time, credit quality, operations, and member health.
+The analytics page gives any role with `reports.view` (Credit Managers, Branch Managers, and Administrators) a live view of loan production, cycle time, credit quality, operations, and member health.
 
-Every section reads a single shared **date range** at the top of the page, and the numbers reflect the current state of your workspace each time the page loads. All data is scoped to your credit union's workspace, so you never see another tenant's data. The default range is the last 12 months. A badge on the page notes that every monetary figure is in Jamaican dollars (JMD).
+Every section reads a single shared **date range** at the top of the page, and the numbers reflect the current state of your workspace each time the page loads. All data is scoped to your credit union's workspace, so you never see another credit union's data. The default range is the last 12 months. A badge on the page notes that every monetary figure is in Jamaican dollars (JMD).
 
-**Required role:** any role with `reports.view`. Credit Managers and Tenant Administrators see all branches; Branch Managers see only their own branch.
+**Required role:** any role with `reports.view`. Credit Managers and Administrators see all branches; Branch Managers see only their own branch.
 
 To open analytics, navigate to **Dashboards → Analytics** (the page is titled **Loan production**). Without `reports.view` you are redirected back to your dashboard.
 
@@ -23,7 +23,7 @@ To open analytics, navigate to **Dashboards → Analytics** (the page is titled 
 
 The analytics page respects your role's branch access:
 
-- **Credit Managers** and **Tenant Administrators** see data across all branches.
+- **Credit Managers** and **Administrators** see data across all branches.
 - **Branch Managers** see only the metrics for their own branch. Loans and members from other branches are excluded from every chart, total, and CSV export.
 
 This scoping is automatic. You do not set a filter, and a Branch Manager cannot reach another branch's data regardless of the date range selected.

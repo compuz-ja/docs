@@ -35,7 +35,7 @@ A member's KYC status moves through the following states as you work through ver
 
 ## Submitting a member for KYC verification
 
-You need the **members.kyc.submit** capability to submit verification requests. The Credit Officer and the Tenant Administrator hold this capability, so either can run an automated check or record a manual attestation.
+You need the **members.kyc.submit** capability to submit verification requests. The Credit Officer and the Administrator hold this capability, so either can run an automated check or record a manual attestation.
 
 <Steps>
   <Step title="Open the member's profile">
@@ -65,7 +65,7 @@ You need the **members.kyc.submit** capability to submit verification requests. 
 
 ## Record an in-person verification
 
-Anyone with the **members.kyc.submit** capability, which the Credit Officer and the Tenant Administrator hold, can record a manual, in-person identity check instead of running the automated service. This is the default flow today while the automated registry integration is being configured. Use it when the member presents their identification at the branch and a staff member confirms it against the person.
+Anyone with the **members.kyc.submit** capability, which the Credit Officer and the Administrator hold, can record a manual, in-person identity check instead of running the automated service. This is the default flow today while the automated registry integration is being configured. Use it when the member presents their identification at the branch and a staff member confirms it against the person.
 
 To submit a manual attestation you must provide all three of the following:
 
@@ -99,10 +99,10 @@ If a member's KYC status is **FAILED**, the identity details submitted did not m
 
 When a member's KYC status is **MANUAL_REVIEW**, the automated check could not reach a conclusion, for example because the records returned an ambiguous match. The platform automatically creates a task in the **KYC review** queue, found in the sidebar under **Review queue** then **KYC review**.
 
-A staff member with the **members.kyc.review** capability, which the Credit Manager and Tenant Administrator hold, works the queued task. They first **claim** the task onto themselves, which moves it from the open queue into their hands, then submit one of three decisions based on the documents and information on file:
+A staff member with the **members.kyc.review** capability, which the Credit Manager and Administrator hold, works the queued task. They first **claim** the task onto themselves, which moves it from the open queue into their hands, then submit one of three decisions based on the documents and information on file:
 
 - **Approve**: the member's KYC status moves to **VERIFIED** and they become eligible for loan applications.
 - **Reject**: the member's KYC status moves to **FAILED**, and you can correct their details and resubmit.
-- **Escalate to senior reviewer**: this closes the review as Escalated and records the chosen senior reviewer (Credit Manager or Tenant Administrator) plus a reason code in the audit log. The member's KYC status does not change; they stay in **MANUAL_REVIEW**, but the review task itself is now closed.
+- **Escalate to senior reviewer**: this closes the review as Escalated and records the chosen senior reviewer (Credit Manager or Administrator) plus a reason code in the audit log. The member's KYC status does not change; they stay in **MANUAL_REVIEW**, but the review task itself is now closed.
 
 While a member is in MANUAL_REVIEW status, their profile remains fully visible and editable. You can keep uploading documents to support the reviewer's decision. New loan applications cannot be submitted until the review is resolved.

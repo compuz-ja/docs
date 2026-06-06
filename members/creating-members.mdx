@@ -13,7 +13,7 @@ A member profile is the customer record a loan application links to. No member r
 
 ## Who can create members
 
-You need the **members.create** capability to add new member profiles. This capability is held by the Credit Officer and the Tenant Administrator. If you cannot see the **New Member** button, ask your Tenant Administrator to check your role assignment.
+You need the **members.create** capability to add new member profiles. This capability is held by the Credit Officer and the Administrator. If you cannot see the **New Member** button, ask your Administrator to check your role assignment.
 
 ## Creating a new member
 
@@ -62,7 +62,7 @@ You need the **members.create** capability to add new member profiles. This capa
 </Steps>
 
 <Warning>
-  Several identity fields are encrypted at rest with a per-tenant AES-256-GCM key as a compliance requirement: TRN, driver's licence number, passport number, bank account number, government ID number, mother's maiden name, and internal notes. They cannot be exported or copied in plain text. The **Reveal** control, which decrypts a stored value in place, is available only when editing an existing member, not on the create form, and only for five of these fields: TRN, driver's licence, passport, bank account, and internal notes. The government ID number and mother's maiden name are encrypted but have no Reveal path; they show as blank edit inputs. Reveal requires the **members.edit** capability, and each reveal emits a `member.pii.revealed` audit event recording who revealed which field. The decrypted value itself is never written to the audit log.
+  Several identity fields are encrypted at rest with your credit union's own AES-256-GCM key as a compliance requirement: TRN, driver's licence number, passport number, bank account number, government ID number, mother's maiden name, and internal notes. They cannot be exported or copied in plain text. The **Reveal** control, which decrypts a stored value in place, is available only when editing an existing member, not on the create form, and only for five of these fields: TRN, driver's licence, passport, bank account, and internal notes. The government ID number and mother's maiden name are encrypted but have no Reveal path; they show as blank edit inputs. Reveal requires the **members.edit** capability, and each reveal emits a `member.pii.revealed` audit event recording who revealed which field. The decrypted value itself is never written to the audit log.
 </Warning>
 
 ---
@@ -109,7 +109,7 @@ A member's status reflects the current state of their account with your credit u
     The **DECEASED** value exists on the record, but the platform has no in-app control to set it, and bulk CSV import does not set it either (imported members default to ACTIVE). It appears only through a direct data migration. Day to day, the statuses you set are ACTIVE and INACTIVE.
   </Accordion>
   <Accordion title="Suspending and reactivating a member">
-    Suspend and reactivate both require the **members.suspend** capability, which is restricted to the Tenant Administrator. Suspending sets the member to **INACTIVE**, the same status described above; use it when an account needs to be placed under review, for example due to suspected fraud or a compliance hold. The suspension form requires a reason of at least three characters, which is stored on the record and emitted with the `member.suspended` audit event. A suspended member's profile remains visible to staff but cannot be used for new loan origination until you reactivate them, which sets the status back to **ACTIVE** and clears the stored reason.
+    Suspend and reactivate both require the **members.suspend** capability, which is restricted to the Administrator. Suspending sets the member to **INACTIVE**, the same status described above; use it when an account needs to be placed under review, for example due to suspected fraud or a compliance hold. The suspension form requires a reason of at least three characters, which is stored on the record and emitted with the `member.suspended` audit event. A suspended member's profile remains visible to staff but cannot be used for new loan origination until you reactivate them, which sets the status back to **ACTIVE** and clears the stored reason.
   </Accordion>
 </AccordionGroup>
 
@@ -117,6 +117,6 @@ A member's status reflects the current state of their account with your credit u
 
 ## Soft deletion
 
-Deleting a member requires the **members.delete** capability, which is restricted to the Tenant Administrator. When a member is deleted, they are hidden from the standard Members list and search results. Their record is not permanently erased. It is preserved in full for regulatory audit purposes and can be restored by a Tenant Administrator if needed.
+Deleting a member requires the **members.delete** capability, which is restricted to the Administrator. When a member is deleted, they are hidden from the standard Members list and search results. Their record is not permanently erased. It is preserved in full for regulatory audit purposes and can be restored by an Administrator if needed.
 
 If you need to remove a member from active use without deleting them, suspend the member instead.

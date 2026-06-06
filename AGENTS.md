@@ -11,8 +11,9 @@
 
 - Call the product the **Loan Origination System** or **LOS**. Never call it "iLoan". The string "iLoan" must not appear anywhere in the docs, including titles, frontmatter, and image alt text. The internal repository is named `cns-iloan`, but that name stays out of user-facing docs.
 - The capture role is **Credit Officer**, never "Loan Officer".
-- The seven built-in roles are exactly: Tenant Administrator, Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Branch Manager. Do not invent roles (there is no "Lead").
-- Use "member" for the credit union customer, "staff" for credit union employees, "tenant" or "workspace" for a credit union on the platform.
+- The seven built-in roles are exactly: Administrator, Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Branch Manager. The admin role is **Administrator**, never "Tenant Administrator". Do not invent roles (there is no "Lead").
+- **Never expose multi-tenancy.** Do not write "tenant", "multi-tenant", "per-tenant", or "cross-tenant" in prose. A credit union has its own private **workspace**; refer to "your workspace" or "your credit union". Staff should never read that they are a "tenant". The only exception is literal code identifiers, which keep their real names: the capability `admin.tenant.manage` (and the other `admin.tenant.*` strings), the models `TenantConfig` / `TenantBranding` / `TenantWorkflowOverride`, and audit events like `tenant.onboarded`. Keep those exact, in code font.
+- Use "member" for the credit union customer, "staff" for credit union employees, "workspace" for a credit union's isolated account on the platform.
 - Capability strings are dot-notation and must match the codebase exactly (for example `members.documents.view`, plural `members`). When in doubt, check `packages/shared/src/capabilities.ts` in the `cns-iloan` repo.
 
 ## Style preferences (voice)

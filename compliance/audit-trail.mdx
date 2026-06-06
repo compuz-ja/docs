@@ -22,7 +22,7 @@ Every meaningful event is captured automatically. Recording is always on. There 
     Every login, logout, failed login, and permission-denied event is captured, and the session ID is recorded whenever the action came from an authenticated session.
   </Card>
   <Card title="Configuration changes" icon="settings">
-    Every change to rates, workflow configuration, user roles, and tenant settings is logged, including who made the change and its previous value.
+    Every change to rates, workflow configuration, user roles, and workspace settings is logged, including who made the change and its previous value.
   </Card>
 </CardGroup>
 
@@ -44,9 +44,9 @@ Each entry records:
 ## Accessing the audit viewer
 
 <Note>
-  Viewing the audit trail requires the `reports.view` capability. The seeded **Tenant Administrator**, **Credit Manager**, and **Branch Manager** roles all carry it, so all three see the full tenant-wide audit trail. A role that holds only `loans.read.branch` (and not `reports.view`) gets a narrower view, scoped to the events for its assigned branch. Operational roles, including **Credit Officer**, **Adjudicator**, **Securities**, and **Disbursement**, hold neither capability and cannot open the audit trail in this release.
+  Viewing the audit trail requires the `reports.view` capability. The seeded **Administrator**, **Credit Manager**, and **Branch Manager** roles all carry it, so all three see the full workspace-wide audit trail. A role that holds only `loans.read.branch` (and not `reports.view`) gets a narrower view, scoped to the events for its assigned branch. Operational roles, including **Credit Officer**, **Adjudicator**, **Securities**, and **Disbursement**, hold neither capability and cannot open the audit trail in this release.
 
-  The **Audit log** link in the navigation is gated separately on the `audit.export` capability, which only the **Tenant Administrator** role holds. A Credit Manager or Branch Manager does not see the nav link, but they can still reach the page by visiting `/admin/audit-viewer` directly, where `reports.view` grants them the same tenant-wide view.
+  The **Audit log** link in the navigation is gated separately on the `audit.export` capability, which only the **Administrator** role holds. A Credit Manager or Branch Manager does not see the nav link, but they can still reach the page by visiting `/admin/audit-viewer` directly, where `reports.view` grants them the same workspace-wide view.
 </Note>
 
 <Steps>

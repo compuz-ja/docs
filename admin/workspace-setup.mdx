@@ -1,29 +1,29 @@
 ---
-title: "Configure your credit union workspace settings"
-sidebarTitle: "Tenant setup"
+title: "Workspace setup"
+sidebarTitle: "Workspace setup"
 description: "Configure your workspace branding, manage branches, and understand what is fixed at onboarding and what you can change later."
 icon: "building"
 ---
 
-The tenant setup area is where a Tenant Administrator controls your workspace branding, branches, and the settings fixed at onboarding.
+The workspace setup area is where an Administrator controls your workspace branding, branches, and the settings fixed at onboarding.
 
-Each credit union on the platform has its own isolated workspace called a **tenant**. Your workspace is identified by a unique slug that appears in every URL your team uses. As a **Tenant Administrator** you can configure branding and view your branches. A few settings are fixed at onboarding and cannot be changed afterward.
+Each credit union on the platform has its own private, isolated workspace. Your workspace is identified by a unique slug that appears in every URL your team uses. As a **Administrator** you can configure branding and view your branches. A few settings are fixed at onboarding and cannot be changed afterward.
 
-**Required role:** Tenant Administrator (`admin.tenant.manage` capability)
+**Required role:** Administrator (`admin.tenant.manage` capability)
 
-## Your tenant slug
+## Your workspace slug
 
-Your tenant slug is the short, URL-safe identifier assigned to your credit union at onboarding. It appears in every URL your team uses, for example:
+Your workspace slug is the short, URL-safe identifier assigned to your credit union at onboarding. It appears in every URL your team uses, for example:
 
 ```
 /my-credit-union/loans
 /my-credit-union/admin/products
 ```
 
-The slug appears in every URL your team uses, and it is baked into your onboarding records. Loan IDs do not use the slug: they embed the **branch code** instead, for example `MDVL-AUTO-00001`. Audit records are keyed to your tenant, not to the slug text. Because it is fixed into so many permanent links, **the slug cannot be changed after onboarding**.
+The slug appears in every URL your team uses, and it is baked into your onboarding records. Loan IDs do not use the slug: they embed the **branch code** instead, for example `MDVL-AUTO-00001`. Audit records are keyed to your workspace, not to the slug text. Because it is fixed into so many permanent links, **the slug cannot be changed after onboarding**.
 
 <Warning>
-  Your tenant slug cannot be changed after onboarding. Every URL references this
+  Your workspace slug cannot be changed after onboarding. Every URL references this
   value, and it is baked into your onboarding records. If you believe your slug
   needs to change, contact support before going live. It is far simpler to
   correct before any loans are created.
@@ -115,7 +115,7 @@ If your credit union opens a new branch after going live, contact support to hav
 
 ## Initial administrator account
 
-The first Tenant Administrator account is created during onboarding using the email address provided in the setup configuration. Once you are signed in with that account, you can invite additional administrators and staff from **Administration → Invitations**.
+The first Administrator account is created during onboarding using the email address provided in the setup configuration. Once you are signed in with that account, you can invite additional administrators and staff from **Administration → Invitations**.
 
 <Accordion title="What roles can I invite?">
   The roles available in your workspace are configured at onboarding. The
@@ -123,7 +123,7 @@ The first Tenant Administrator account is created during onboarding using the em
 
   | Role | What they can do |
   |---|---|
-  | **Tenant Administrator** | Full access to all admin settings, including branding, products, rates, and invitations |
+  | **Administrator** | Full access to all admin settings, including branding, products, rates, and invitations |
   | **Credit Manager** | Manage loan products and rate tables, view all-branch analytics, oversee the full pipeline |
   | **Branch Manager** | View analytics scoped to their branch, manage and assign loans in their branch |
   | **Credit Officer** | Capture and manage loan applications |
@@ -136,4 +136,4 @@ The first Tenant Administrator account is created during onboarding using the em
 
 ## Deeper operational configuration
 
-Branding and branches are the visual and structural setup. Your workspace also has operational settings such as the **GCT rate**, the **dual-control threshold** for large disbursements, the **AML screening** toggle, and the **audit retention** period. Those live on the separate [Tenant configuration](/admin/tenant-configuration) page so they stay distinct from branding.
+Branding and branches are the visual and structural setup. Your workspace also has operational settings such as the **GCT rate**, the **dual-control threshold** for large disbursements, the **AML screening** toggle, and the **audit retention** period. Those live on the separate [Workspace configuration](/admin/workspace-configuration) page so they stay distinct from branding.

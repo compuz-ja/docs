@@ -1,27 +1,27 @@
 ---
 title: "Data security and privacy for credit unions"
 sidebarTitle: "Data security"
-description: "How the platform protects member data: tenant isolation, AES-256-GCM encryption, PII redaction, and role-based access controls."
+description: "How the platform protects member data: workspace isolation, AES-256-GCM encryption, PII redaction, and role-based access controls."
 icon: "shield-check"
 ---
 
 The Loan Origination System is built for the security requirements of regulated financial institutions. Member PII is encrypted at rest before it ever touches the database. All data is isolated per credit union. Every mutating action and every permission denial is recorded in an immutable, hash-chained audit log.
 
-## Tenant isolation
+## Workspace isolation
 
-Every credit union on the platform is a fully separate **tenant**. A user in one credit union cannot access any data belonging to another, regardless of their role or permissions.
+Every credit union on the platform runs in a fully isolated **workspace**. A user in one credit union cannot access any data belonging to another, regardless of their role or permissions.
 
 Isolation is enforced at multiple layers:
 
-- **Application layer:** every query is scoped to the authenticated tenant. The application never constructs cross-tenant queries.
-- **Data layer:** Postgres row-level security scopes every query to the authenticated tenant's data. Cross-tenant access is structurally prevented.
-- **Encryption layer:** each tenant has its own encryption key. Even at the storage level, one tenant's encrypted data is keyed separately from all others.
+- **Application layer:** every query is scoped to your workspace. The application never constructs cross-workspace queries.
+- **Data layer:** Postgres row-level security scopes every query to your workspace's data. Cross-workspace access is structurally prevented.
+- **Encryption layer:** each credit union has its own encryption key. Even at the storage level, one workspace's encrypted data is keyed separately from all others.
 
 Nothing is required on your part. Isolation is the default and cannot be turned off.
 
 ## Encryption at rest
 
-Sensitive identity fields are encrypted with **AES-256-GCM** before they are stored in the database. Each credit union has its own per-tenant data encryption key, derived from a master key using HKDF at the moment data is read or written. Your members' data is encrypted with a key that belongs exclusively to your credit union.
+Sensitive identity fields are encrypted with **AES-256-GCM** before they are stored in the database. Each credit union has its own per-workspace data encryption key, derived from a master key using HKDF at the moment data is read or written. Your members' data is encrypted with a key that belongs exclusively to your credit union.
 
 These member identity fields are always encrypted at rest:
 
@@ -35,7 +35,7 @@ These member identity fields are always encrypted at rest:
   <Card title="Member notes" icon="notebook-pen" />
 </CardGroup>
 
-The same AES-256-GCM, per-tenant scheme also encrypts identity numbers on **guarantor** records (TRN and driver's licence), the **payee account number** on a disbursement, and each tenant's stored **integration credentials**.
+The same AES-256-GCM, per-workspace scheme also encrypts identity numbers on **guarantor** records (TRN and driver's licence), the **payee account number** on a disbursement, and each credit union's stored **integration credentials**.
 
 These values are never stored in plain text. They cannot be exported in bulk through any reporting feature. Access requires authentication and appropriate role permissions, and every access is recorded in the audit log.
 
@@ -44,10 +44,10 @@ These values are never stored in plain text. They cannot be exported in bulk thr
 Member documents are stored in secure cloud storage, not in the application database. That covers PDFs, identity images, and supporting materials. Access to a document requires:
 
 1. A valid authenticated session
-2. The `members.documents.view` capability, held by the staff who work loans (Credit Officer, Adjudicator, Securities, and Disbursement) and by the Tenant Administrator
-3. The document belonging to a member within your credit union's tenant
+2. The `members.documents.view` capability, held by the staff who work loans (Credit Officer, Adjudicator, Securities, and Disbursement) and by the Administrator
+3. The document belonging to a member within your credit union's workspace
 
-Document uploads and deletions are recorded in the audit trail with the full actor identity and timestamp. Every download requires the `members.documents.view` capability and an active tenant membership.
+Document uploads and deletions are recorded in the audit trail with the full actor identity and timestamp. Every download requires the `members.documents.view` capability and an active workspace membership.
 
 ## PII in operational logs
 
@@ -56,16 +56,16 @@ The platform produces two distinct types of records, and they handle PII differe
 | Record type | PII treatment | Who can access |
 |---|---|---|
 | **Operational logs** for monitoring and debugging | PII is automatically redacted. PII keys are replaced with `[REDACTED]` at write time. | Engineering and operations teams |
-| **Legal audit log**, the audit trail | Full PII is present. This is the complete, unredacted record. | Users with the `reports.view` capability: Tenant Administrator, Credit Manager, and Branch Manager |
+| **Legal audit log**, the audit trail | Full PII is present. This is the complete, unredacted record. | Users with the `reports.view` capability: Administrator, Credit Manager, and Branch Manager |
 
-Operational logs replace PII keys with `[REDACTED]` at write time, so routine system monitoring never carries member PII. The legal audit log retains the full detail needed for regulatory inquiries. In-app access to it requires the `reports.view` capability (Tenant Administrator, Credit Manager, Branch Manager); regulators receive that detail through a signed compliance export bundle rather than direct access to the log.
+Operational logs replace PII keys with `[REDACTED]` at write time, so routine system monitoring never carries member PII. The legal audit log retains the full detail needed for regulatory inquiries. In-app access to it requires the `reports.view` capability (Administrator, Credit Manager, Branch Manager); regulators receive that detail through a signed compliance export bundle rather than direct access to the log.
 
 ## Access controls
 
 <Accordion title="Authentication and multi-factor authentication">
   Every user must authenticate with a valid email and password before accessing any data. There are no anonymous access paths.
 
-  Multi-factor authentication (MFA) is available for all user accounts. Enable MFA for every user with administrative access, especially Credit Managers and Tenant Administrators. Each user enables it themselves under Profile then Authentication. See [Set up multi-factor authentication](/access/mfa).
+  Multi-factor authentication (MFA) is available for all user accounts. Enable MFA for every user with administrative access, especially Credit Managers and Administrators. Each user enables it themselves under Profile then Authentication. See [Set up multi-factor authentication](/access/mfa).
 
   Each audit entry records whether MFA was satisfied for the session, so you can verify that sensitive actions were performed by properly-authenticated users.
 </Accordion>
@@ -74,7 +74,7 @@ Operational logs replace PII keys with `[REDACTED]` at write time, so routine sy
   Access to data and actions is controlled by capabilities assigned to roles. No user can access data or perform actions beyond what their assigned role permits. Every permission-denied event is recorded in the audit trail, so an attempt outside a user's role is visible.
 
   Common roles and their scope:
-  - **Tenant Administrator:** full workspace access, user management, configuration, compliance export
+  - **Administrator:** full workspace access, user management, configuration, compliance export
   - **Credit Manager:** full loan pipeline visibility, audit viewer
   - **Branch Manager:** read-only access scoped to their assigned branch
   - **Adjudicator:** adjudication queue and decision recording
@@ -87,7 +87,7 @@ Operational logs replace PII keys with `[REDACTED]` at write time, so routine sy
 </Accordion>
 
 <Accordion title="Account suspension">
-  A Tenant Administrator can suspend any user account immediately. Suspension takes effect on the user's next request: the membership capability check fails and access to the tenant is blocked. You can respond to a potential credential compromise or a departing staff member without delay.
+  An Administrator can suspend any user account immediately. Suspension takes effect on the user's next request: the membership capability check fails and access to the workspace is blocked. You can respond to a potential credential compromise or a departing staff member without delay.
 </Accordion>
 
 ## Audit completeness as a security control
@@ -105,5 +105,5 @@ The hash-chain integrity means that even if someone deleted or altered audit ent
 </Note>
 
 <Tip>
-  Enable MFA for all users with administrative access, especially Credit Managers and Tenant Administrators. Each user enables multi-factor authentication themselves under **Profile** then **Authentication**, as described in [Multi-factor authentication](/access/mfa). An administrator can only reset or disable a user's MFA, not enroll it for them. These roles can access the full audit trail and generate compliance export bundles, so protecting them against credential theft is a high-priority step.
+  Enable MFA for all users with administrative access, especially Credit Managers and Administrators. Each user enables multi-factor authentication themselves under **Profile** then **Authentication**, as described in [Multi-factor authentication](/access/mfa). An administrator can only reset or disable a user's MFA, not enroll it for them. These roles can access the full audit trail and generate compliance export bundles, so protecting them against credential theft is a high-priority step.
 </Tip>

@@ -1,15 +1,15 @@
 ---
-title: "Tenant configuration"
-sidebarTitle: "Tenant configuration"
+title: "Workspace configuration"
+sidebarTitle: "Workspace configuration"
 description: "Set workspace-wide operational settings such as GCT rate, audit retention, dual-control thresholds, AML screening, and auto-disbursement defaults."
 icon: "sliders-horizontal"
 ---
 
-Tenant configuration holds the workspace-wide operational settings that govern tax, audit retention, and how disbursements are controlled.
+Workspace configuration holds the workspace-wide operational settings that govern tax, audit retention, and how disbursements are controlled.
 
-These settings are stored once per workspace in the `TenantConfig` record. They apply to every loan and every branch in your credit union. Branding and branches are configured separately on the [Tenant setup](/admin/tenant-setup) page.
+These settings are stored once per workspace in the `TenantConfig` record. They apply to every loan and every branch in your credit union. Branding and branches are configured separately on the [Workspace setup](/admin/workspace-setup) page.
 
-**Required role:** Tenant Administrator, which holds `admin.tenant.manage`. The Credit Manager holds the `admin.disbursement.config` capability, but no in-product editor currently consumes it for these settings (see below).
+**Required role:** Administrator, which holds `admin.tenant.manage`. The Credit Manager holds the `admin.disbursement.config` capability, but no in-product editor currently consumes it for these settings (see below).
 
 ## Settings stored in TenantConfig
 
@@ -23,13 +23,13 @@ Every workspace has exactly one `TenantConfig` record. The platform creates it a
 | AML screening required | `amlScreeningRequired` | `false` | When on, every payee must screen `CLEAR` before a disbursement can execute |
 | Auto-disburse enabled | `autoDisburseEnabled` | `false` | When on, a scheduled disbursement that clears every gate releases automatically (see below) |
 | Auto-disburse threshold | `autoDisburseThresholdCents` | Not set (NULL) | The ceiling for auto-disbursement. A disbursement whose net is at or below this amount can auto-release. Stored in cents. NULL means no ceiling is configured, so nothing auto-releases even when the feature is on |
-| Privileged audit viewer | `auditPrivilegedViewerEnabled` | `false` | Reserved for a future separation-of-duties audit role. Ships `false` for every tenant today |
+| Privileged audit viewer | `auditPrivilegedViewerEnabled` | `false` | Reserved for a future separation-of-duties audit role. Ships `false` for every workspace today |
 
 <Warning>
   Of these, only **audit anchor retention** can be configured (at onboarding).
   The GCT rate, dual-control threshold, AML screening flag, and both
   auto-disburse fields currently take their schema defaults shown above, and
-  there is no shipped way to change them per tenant after go-live.
+  there is no shipped way to change them per workspace after go-live.
 </Warning>
 
 <Note>
@@ -71,7 +71,7 @@ This behavior is controlled by `securitiesFinalCheckRequired`, a workflow overri
 
 ## How configuration is set
 
-The `TenantConfig` record is written in one place today: the tenant onboarding CLI command `db:onboard-tenant`. It validates the configuration file, creates the workspace, writes the `TenantConfig` row, and records a `tenant.onboarded` audit event. See [Tenant setup](/admin/tenant-setup) for the onboarding flow.
+The `TenantConfig` record is written in one place today: the workspace onboarding CLI command `db:onboard-tenant`. It validates the configuration file, creates the workspace, writes the `TenantConfig` row, and records a `tenant.onboarded` audit event. See [Workspace setup](/admin/workspace-setup) for the onboarding flow.
 
 The onboarding write only sets `auditAnchorRetentionYears` (from the config file, default `7`) and `auditPrivilegedViewerEnabled` (always `false`). It does not write the GCT rate, dual-control threshold, AML flag, or auto-disburse fields, so those take their schema defaults. There is currently no admin UI or server action that edits any of these after go-live.
 
@@ -83,7 +83,7 @@ The onboarding write only sets `auditAnchorRetentionYears` (from the config file
 </Note>
 
 <Warning>
-  Your tenant slug is fixed at onboarding and is not part of the editable
+  Your workspace slug is fixed at onboarding and is not part of the editable
   configuration. It is embedded in every URL your team uses and cannot be
   changed afterward.
 </Warning>
@@ -95,7 +95,7 @@ The onboarding write only sets `auditAnchorRetentionYears` (from the config file
     How dual control, AML screening, per-officer limits, and auto-disbursement
     behave at execution time.
   </Card>
-  <Card title="Tenant setup" icon="building" href="/admin/tenant-setup">
+  <Card title="Workspace setup" icon="building" href="/admin/workspace-setup">
     Branding, branches, and what is fixed at onboarding.
   </Card>
 </CardGroup>

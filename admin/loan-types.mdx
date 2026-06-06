@@ -7,9 +7,9 @@ icon: "tags"
 
 Loan types are the named lending categories your staff pick when starting a new application, each bound to one of four built-in security bases.
 
-A loan type pairs a name your team recognizes, such as "Civil Servant Auto," with a fixed **security basis** that the rate engine, risk engine, forms, and PDF templates switch on. The UI labels this field "Security basis"; internally it is the loan archetype enum, and this guide uses the two words interchangeably. Each basis is a fixed engine path, so you can add any number of named types without code changes. As a **Tenant Administrator** or **Credit Manager** you create, edit, archive, and restore these types.
+A loan type pairs a name your team recognizes, such as "Civil Servant Auto," with a fixed **security basis** that the rate engine, risk engine, forms, and PDF templates switch on. The UI labels this field "Security basis"; internally it is the loan archetype enum, and this guide uses the two words interchangeably. Each basis is a fixed engine path, so you can add any number of named types without code changes. As a **Administrator** or **Credit Manager** you create, edit, archive, and restore these types.
 
-**Required role:** Tenant Administrator or Credit Manager (`loans.types.manage` capability). Viewing the list requires `loans.types.read`.
+**Required role:** Administrator or Credit Manager (`loans.types.manage` capability). Viewing the list requires `loans.types.read`.
 
 To manage loan types, navigate to `/{tenantSlug}/admin/loan-types`. For example, `https://loan.compuzign.com/your-slug/admin/loan-types`.
 

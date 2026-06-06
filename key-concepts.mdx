@@ -1,26 +1,26 @@
 ---
 title: "Key concepts and terminology"
 sidebarTitle: "Key concepts"
-description: "Tenants, roles, loan applications, loan types, risk bands, KYC status, the audit trail, and compliance exports, defined once."
+description: "Workspaces, roles, loan applications, loan types, risk bands, KYC status, the audit trail, and compliance exports, defined once."
 icon: "list"
 ---
 
-These are the concepts every screen in the platform is built on: tenants, roles, loan applications, loan types, risk bands, KYC status, the audit trail, and compliance exports.
+These are the concepts every screen in the platform is built on: workspaces, roles, loan applications, loan types, risk bands, KYC status, the audit trail, and compliance exports.
 
 ---
 
-## Tenant
+## Workspace
 
-A **tenant** is your credit union's isolated workspace. Every record your team creates, like member records, loan applications, audit entries, rate tables, and user accounts, belongs to your tenant and is invisible to every other credit union on the platform.
+A **workspace** is your credit union's isolated environment. Every record your team creates, like member records, loan applications, audit entries, rate tables, and user accounts, belongs to your workspace and is invisible to every other credit union on the platform.
 
-Your tenant is identified by a short **slug** that appears in every URL:
+Your workspace is identified by a short **slug** that appears in every URL:
 
 ```text
 https://loan.compuzign.com/your-slug/loans
 https://loan.compuzign.com/your-slug/members
 ```
 
-The slug is set when your tenant is created and cannot change afterwards. If your credit union's display name changes, only the name shown in the interface updates. The slug in your URLs stays the same.
+The slug is set when your workspace is created and cannot change afterwards. If your credit union's display name changes, only the name shown in the interface updates. The slug in your URLs stays the same.
 
 ---
 
@@ -38,9 +38,9 @@ The built-in roles for the Credit Department:
 | **Disbursement** | Apply fees, schedule payees, and execute approved disbursements |
 | **Credit Manager** | Oversee the full pipeline, approve high-value disbursements, read reports across branches |
 | **Branch Manager** | View and monitor loans for their assigned branch |
-| **Tenant Administrator** | Manage users, roles, invitations, and tenant configuration |
+| **Administrator** | Manage users, roles, invitations, and workspace configuration |
 
-Your Tenant Administrator assigns your role when they invite you. If your responsibilities change, ask them to move you to a different role.
+Your Administrator assigns your role when they invite you. If your responsibilities change, ask them to move you to a different role.
 
 ---
 
@@ -50,7 +50,7 @@ The **loan application** is the central record. It captures everything about a m
 
 Every application moves through a defined sequence of statuses: DRAFT, SUBMITTED, ADJUDICATION, APPROVED, then SECURITIES, DISBURSEMENT, DISBURSED, and FILED.
 
-A loan can also move backward for corrections. An Adjudicator can send a file back to DRAFT, the Securities team can return it to ADJUDICATION, and a tenant that requires a post-disbursement re-check can route a DISBURSED loan back to SECURITIES. A loan can also be cancelled while it is SUBMITTED or in DISBURSEMENT, which takes it to a terminal CANCELLED status.
+A loan can also move backward for corrections. An Adjudicator can send a file back to DRAFT, the Securities team can return it to ADJUDICATION, and a credit union that requires a post-disbursement re-check can route a DISBURSED loan back to SECURITIES. A loan can also be cancelled while it is SUBMITTED or in DISBURSEMENT, which takes it to a terminal CANCELLED status.
 
 <Note>
   Loan applications are **never deleted**. Once created, a loan record exists for good. If a loan cannot proceed, it reaches a terminal status like **Declined**, **Cancelled**, or **Draft abandoned**, but the record stays, fully visible in the audit trail.
@@ -136,8 +136,8 @@ The bundle is self-contained and independently verifiable. A regulator does not 
 
 ## Frequently asked questions
 
-<Accordion title="Can I change my credit union's tenant slug?">
-  No. Your slug is set when your credit union is onboarded and cannot change afterwards. It is embedded in every URL your staff uses and tied to the integrity of your audit chain. If your credit union rebrands, your Tenant Administrator can update the display name in the interface, but the URL slug stays the same.
+<Accordion title="Can I change my credit union's workspace slug?">
+  No. Your slug is set when your credit union is onboarded and cannot change afterwards. It is embedded in every URL your staff uses and tied to the integrity of your audit chain. If your credit union rebrands, your Administrator can update the display name in the interface, but the URL slug stays the same.
 </Accordion>
 
 <Accordion title="What happens if a member fails KYC verification?">
@@ -145,5 +145,5 @@ The bundle is self-contained and independently verifiable. A regulator does not 
 </Accordion>
 
 <Accordion title="Is my credit union's data shared with other credit unions on the platform?">
-  No. Every credit union runs in a fully isolated environment. Your member records, loan applications, staff accounts, rate tables, and audit logs are invisible to every other tenant. Isolation is enforced at every layer of the system, so there is no path for data to cross tenant boundaries.
+  No. Every credit union runs in a fully isolated workspace. Your member records, loan applications, staff accounts, rate tables, and audit logs are invisible to every other credit union. Isolation is enforced at every layer of the system, so there is no path for data to cross workspace boundaries.
 </Accordion>

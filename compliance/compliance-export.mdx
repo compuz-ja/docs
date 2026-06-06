@@ -9,9 +9,9 @@ The Loan Origination System generates a self-contained, cryptographically-signed
 
 ## Who can generate a compliance export
 
-Generating a compliance export bundle requires the `reports.view` capability. The seeded **Tenant Administrator**, **Credit Manager**, and **Branch Manager** roles all carry it, so any of the three can generate a bundle. The export action checks `reports.view`, then re-validates the filter input with a Zod schema before the bundle runs, so a request cannot smuggle a cross-tenant or malformed filter past the gate.
+Generating a compliance export bundle requires the `reports.view` capability. The seeded **Administrator**, **Credit Manager**, and **Branch Manager** roles all carry it, so any of the three can generate a bundle. The export action checks `reports.view`, then re-validates the filter input with a Zod schema before the bundle runs, so a request cannot smuggle a cross-workspace or malformed filter past the gate.
 
-There is a separate `audit.export` capability that the platform reserves for the **Tenant Administrator** role as a compliance privilege, but it only controls whether the **Audit log** link appears in the navigation. It does not gate the export itself. A Credit Manager or Branch Manager does not see the nav link and reaches the audit trail at `/admin/audit-viewer` directly, where `reports.view` enables both the view and the export.
+There is a separate `audit.export` capability that the platform reserves for the **Administrator** role as a compliance privilege, but it only controls whether the **Audit log** link appears in the navigation. It does not gate the export itself. A Credit Manager or Branch Manager does not see the nav link and reaches the audit trail at `/admin/audit-viewer` directly, where `reports.view` enables both the view and the export.
 
 <Note>
   Do not confuse the compliance export bundle with the [quick CSV or JSON export](/compliance/audit-trail#quick-csv-or-json-export) on the same page. The quick export is a fast, unsigned download of up to 1,000 rows for internal work. The compliance bundle described here is the signed, hash-chained, immutably-stored archive that a regulator can verify offline.
