@@ -1,0 +1,85 @@
+---
+title: "Member management overview for iLoan credit unions"
+sidebarTitle: "Overview"
+description: "iLoan's member directory stores borrower profiles, tracks KYC status, and links members to their loan applications throughout the origination process."
+---
+
+The Members section is the central directory for everyone who borrows from your credit union. Every loan application in iLoan belongs to a member record, so keeping member profiles accurate and their identity verification up to date is the foundation of your origination workflow. You can search, create, update, and manage members directly from the Members list, and navigate to a member's linked loans and uploaded documents from their profile page.
+
+## What a member record contains
+
+Each member profile stores the following information:
+
+| Field | Notes |
+|---|---|
+| First name, middle name, last name | Used for search and display throughout iLoan |
+| Date of birth | Required for identity verification |
+| Email address | Primary contact; used for correspondence |
+| Phone number | Primary contact number |
+| Address | Street, city, parish, and postal code |
+| TRN | Tax Registration Number — encrypted at rest |
+| Driver's licence number | Encrypted at rest |
+| Passport number | Encrypted at rest |
+| Bank account number | Encrypted at rest |
+| Employment status | Used in loan risk assessment |
+| Branch | The credit union branch this member belongs to |
+| Member account number (CIF) | Your internal identifier for this member |
+
+Members can also have additional contacts (secondary phone numbers, email addresses, or mailing addresses) attached to their profile.
+
+## Member status tracks
+
+Every member record carries two independent status fields that serve different purposes.
+
+### MemberStatus — lifecycle
+
+This tracks whether the member's account is open and eligible for new loans.
+
+| Status | Meaning |
+|---|---|
+| **ACTIVE** | Default status. The member is in good standing and can apply for loans. |
+| **INACTIVE** | The member account has been closed. Records are preserved for audit purposes. |
+| **DECEASED** | A terminal status indicating the member is deceased. Records are fully preserved. |
+
+### KycStatus — identity verification
+
+This tracks whether the member's identity has been verified through the Know Your Customer process.
+
+| Status | Meaning |
+|---|---|
+| **UNVERIFIED** | No verification check has been run yet. |
+| **IN_PROGRESS** | A verification request has been submitted and is awaiting a result. |
+| **VERIFIED** | Identity confirmed — the member is eligible for loan applications. |
+| **FAILED** | Verification was rejected. Review and correct the member's details, then resubmit. |
+| **MANUAL_REVIEW** | The automated check could not reach a conclusion. A KYC Reviewer must approve or reject manually. |
+
+<Note>
+  A member's KYC status must be **VERIFIED** before a loan application can be submitted for that member. A member can be ACTIVE with an UNVERIFIED KYC status — you can create and edit the profile at any time, but you will not be able to submit a loan until KYC is complete.
+</Note>
+
+## Members and loan applications
+
+One member can have multiple loan applications over time. On each member's profile page you will see a summary of their loan history — the total number of applications and the three most recent, with links to view the full details of each. Conversely, every loan application page shows the member it belongs to, so you can navigate between the two in either direction.
+
+## Finding the Members section
+
+Navigate to **/{your-credit-union}/members** to open the Members list. You can also reach it from the main navigation sidebar. From there you can search for existing members, open a member's profile, or create a new member.
+
+---
+
+## What you can do
+
+<CardGroup cols={2}>
+  <Card title="Creating Members" icon="user-plus" href="/members/creating-members">
+    Create new member profiles, search for existing members, edit details, and manage member status.
+  </Card>
+  <Card title="KYC Verification" icon="shield-check" href="/members/kyc-verification">
+    Submit a member for identity verification, understand each KYC status, and handle manual review cases.
+  </Card>
+  <Card title="Documents" icon="file-lines" href="/members/documents">
+    Upload identity and supporting documents to a member's profile, and manage the document library.
+  </Card>
+  <Card title="Loan Applications" icon="file-contract" href="/loans/overview">
+    Understand how member records connect to the loan origination workflow.
+  </Card>
+</CardGroup>

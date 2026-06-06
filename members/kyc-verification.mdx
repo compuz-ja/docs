@@ -1,0 +1,88 @@
+---
+title: "KYC identity verification for credit union members"
+sidebarTitle: "KYC Verification"
+description: "Learn how to submit a member for KYC identity verification in iLoan, understand the verification statuses, and handle manual review cases."
+---
+
+KYC (Know Your Customer) identity verification is the regulatory check that confirms a member is who they say they are before your credit union advances a loan. iLoan verifies a member's TRN, driver's licence, or passport details against the identity verification service and records the result permanently in the member's profile. Every verification attempt — successful or not — is preserved in the KYC history, giving you a complete audit trail.
+
+<Warning>
+  A loan application cannot be submitted if the member's KYC status is not **VERIFIED**. Complete this step before you begin the loan origination process for any member.
+</Warning>
+
+## KYC status lifecycle
+
+A member's KYC status moves through the following states as you work through the verification process.
+
+| Status | What it means |
+|---|---|
+| **UNVERIFIED** | No verification check has been run for this member yet. This is the default status for all newly created members. |
+| **IN_PROGRESS** | A verification request has been submitted and iLoan is awaiting a result from the identity verification service. This usually resolves within seconds. |
+| **VERIFIED** | The member's identity has been confirmed. They are eligible to be linked to a loan application. |
+| **FAILED** | The verification was rejected — the identity details submitted did not pass the check. Review the member's TRN, driver's licence, or passport number for errors and resubmit. |
+| **MANUAL_REVIEW** | The automated check could not reach a definitive conclusion. The verification has been escalated to the KYC Review queue for a human decision. The member remains ineligible for loans until a reviewer approves or rejects the case. |
+
+<Note>
+  KYC history is permanent. Every verification attempt creates a new record on the member's profile showing the date, time, result, and the staff member who submitted it. This history is visible on the KYC Verification tab and cannot be edited or deleted.
+</Note>
+
+---
+
+## Submitting a member for KYC verification
+
+You need the **members.kyc.submit** capability to submit verification requests. Credit Officers and above are typically granted this capability.
+
+<Steps>
+  <Step title="Open the member's profile">
+    Search for the member on the Members list and click their name to open their profile.
+  </Step>
+  <Step title="Go to the KYC Verification tab">
+    Click the **KYC** button in the profile header, or navigate directly to the KYC Verification tab on the member's profile page. You will see the member's current KYC status and the full verification history.
+  </Step>
+  <Step title="Confirm the identifier you are verifying">
+    The KYC page shows two identity panels side by side: one for the member's **TRN** and one for their **Driver's licence**. Each panel displays whether a number is on file and lists any identity documents already uploaded for that identifier.
+
+    Confirm that the relevant number is on file (shown as encrypted). If a number is missing, click **Edit** to return to the member's profile and add it before proceeding.
+  </Step>
+  <Step title="Click Submit for Verification">
+    Select the identifier type you want to verify — **TRN** or **Driver's licence** — and click **Submit for Verification**. iLoan sends the details to the identity verification service and sets the member's KYC status to **IN_PROGRESS**.
+  </Step>
+  <Step title="Wait for the result">
+    Results usually come back within seconds. The page will reflect the new status once the check completes:
+
+    - **VERIFIED** — the check passed. The member is now eligible for loan applications.
+    - **FAILED** — the check was rejected. See the section below on retrying.
+    - **MANUAL_REVIEW** — the check was escalated. See the section below on manual review.
+  </Step>
+</Steps>
+
+---
+
+## Retrying a failed verification
+
+If a member's KYC status is **FAILED**, it means the identity details submitted did not match the records held by the verification service. Before resubmitting, correct the underlying cause.
+
+<Steps>
+  <Step title="Review the member's identity details">
+    Go to the member's profile and click **Edit**. Check the TRN, driver's licence number, and passport number carefully for typos, transposed digits, or missing characters.
+  </Step>
+  <Step title="Correct any errors and save">
+    Update the relevant field and save the profile.
+  </Step>
+  <Step title="Resubmit the verification">
+    Return to the KYC Verification tab and click **Submit for Verification** again. Each new submission creates a fresh verification record — your previous attempts and their results remain in the history.
+  </Step>
+</Steps>
+
+---
+
+## Manual review
+
+When a member's KYC status is **MANUAL_REVIEW**, the automated check could not reach a conclusion — for example, because the records returned an ambiguous match. iLoan automatically creates a task in the **KYC Review queue** (found under **Admin → KYC Review**).
+
+A staff member with the **members.kyc.review** capability — typically a KYC Reviewer or Administrator — must open the queued task and either **approve** or **reject** the verification based on the documents and information on file.
+
+- If **approved**, the member's KYC status moves to **VERIFIED** and they become eligible for loan applications.
+- If **rejected**, the member's KYC status moves to **FAILED** and you can correct their details and resubmit.
+
+While a member is in MANUAL_REVIEW status, their profile remains fully visible and editable — you can continue uploading documents to support the reviewer's decision. However, new loan applications cannot be submitted until the review is resolved.

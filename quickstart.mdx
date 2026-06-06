@@ -1,0 +1,91 @@
+---
+title: "Get started with iLoan — originate your first loan"
+sidebarTitle: "Quickstart"
+description: "Learn how to sign in, set up your team, verify a member's identity, and originate your first loan application in iLoan in a few straightforward steps."
+---
+
+This guide walks you through the essential steps to start using iLoan: signing in to your credit union's workspace, verifying a member's identity, creating a loan application, submitting it for adjudication, and tracking it as it moves through the workflow. By the end you will have submitted your first loan and know how to monitor it from your dashboard.
+
+<Tip>
+  Before you create your first loan application, invite the rest of your team so that each person can act in their own role. Go to **Settings → Team** and send invitations to your Adjudicators, Securities Reviewers, and Disbursement Officers. A loan cannot advance past adjudication without someone assigned to that queue.
+</Tip>
+
+<Steps>
+  <Step title="Sign in to your workspace">
+    Each credit union on iLoan has its own tenant URL. Navigate to your credit union's address — for example:
+
+    ```text
+    https://app.example.com/{your-slug}
+    ```
+
+    Replace `{your-slug}` with the short identifier your Tenant Administrator provided (for example, `https://app.example.com/demo-cu`).
+
+    Enter your email address and password on the login screen. If your administrator has enabled multi-factor authentication for your role, you will be prompted to enter a one-time code from your authenticator app before you can continue.
+
+    Once signed in, you will land on your role's home dashboard. What you see depends on your role — Credit Officers see the loan capture queue; Adjudicators see the adjudication queue; and so on.
+  </Step>
+
+  <Step title="Verify your first member">
+    Loan applications in iLoan are always linked to a verified member record. Before you can submit a loan you need to create the member and complete their KYC verification.
+
+    1. In the left navigation, click **Members**.
+    2. Click **New Member** and fill in the member's personal details: full name, date of birth, Tax Registration Number (TRN), contact information, and branch assignment.
+    3. Save the record. The member's KYC status will show as **Unverified**.
+    4. Open the member record and click **Start KYC Verification**. Upload the required identity documents (for example, a national ID and proof of address).
+    5. Submit the verification request. The status will move to **In Progress** while the documents are reviewed. Once approved, the status changes to **Verified**.
+
+    A member with a **Verified** KYC status is ready to be linked to a loan application. If verification is flagged for manual review, the member will appear in the KYC review queue for an authorised reviewer to assess.
+  </Step>
+
+  <Step title="Create a loan application">
+    With a verified member in place, you can open a new loan application.
+
+    1. In the left navigation, click **Loans**, then click **New Loan Application**.
+    2. Search for and select the member you just verified.
+    3. Choose the **loan type** that matches the member's request:
+       - **Unsecured** — a personal loan with no collateral
+       - **Cash-Secured** — backed by the member's savings or shares
+       - **Auto** — a vehicle loan secured against the vehicle
+       - **Mortgage** — a property loan secured against real estate
+    4. Work through each section of the form: applicant details, employment information, statement of affairs (income and expenses), loan purpose, guarantors (if applicable), and collateral details (if applicable).
+
+    The platform auto-saves your progress as a draft as you go. You can leave and return to the application at any time before submitting.
+  </Step>
+
+  <Step title="Submit for adjudication">
+    Before you submit, review the auto-calculated figures that iLoan has computed from your inputs:
+
+    - **TDSR (Total Debt Service Ratio)** — your applicant's monthly debt obligations as a percentage of gross income
+    - **Risk Band** — a rating from **R1** (lowest risk) to **R5** (highest risk), calculated automatically from employment, income, loan type, and other factors
+    - **Indicative Interest Rate** — the rate that will apply based on the loan product and risk band
+
+    Check that all required sections show a green tick. When you are satisfied that the application is complete, click **Submit for Adjudication**.
+
+    The application status changes from **Draft** to **Submitted**, and the loan enters the Adjudication queue. The form sections are now locked — only an Adjudicator can request changes at this point.
+  </Step>
+
+  <Step title="Track the loan through the workflow">
+    After submission, your loan moves automatically from department to department. You can monitor its progress at any time from your **Dashboard** or from the **Loans** list.
+
+    The status will advance through the following stages:
+
+    | Status | Department | What is happening |
+    |---|---|---|
+    | **Submitted** | Adjudication queue | Waiting for an Adjudicator to claim the application |
+    | **Adjudication** | Adjudication | Adjudicator is reviewing the application |
+    | **Info Requested** | Your queue | Adjudicator has asked for more information |
+    | **Approved** | — | Decision recorded; moving to Securities |
+    | **Securities** | Securities queue | Securities Reviewer confirming collateral |
+    | **Disbursement** | Disbursement queue | Disbursement Officer scheduling funds release |
+    | **Disbursed** | — | Funds released; loan being archived |
+    | **Filed** | — | Loan complete and on permanent record |
+
+    If the Adjudicator requests more information, the status moves to **Info Requested** in your queue with a note explaining what is needed. Update the application and resubmit — the loan will return to the Adjudication queue for the decision to continue.
+
+    You will receive an in-app notification (and email, if configured) each time the loan status changes.
+  </Step>
+</Steps>
+
+<Note>
+  What you can see and do in iLoan is determined by your role. A Credit Officer can create and submit applications but cannot access the Adjudication or Disbursement queues. An Adjudicator can approve or decline but cannot edit a submitted application's form data. If you need access to a feature that is not visible to you, contact your Tenant Administrator to review your role assignment.
+</Note>

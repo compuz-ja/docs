@@ -1,0 +1,108 @@
+---
+title: "Schedule and execute loan fund disbursements in iLoan"
+sidebarTitle: "Disbursement"
+description: "Learn how to enter payee details, schedule disbursements, and release approved loan funds using the iLoan Disbursement queue and payee directory."
+---
+
+The Disbursement queue holds approved loans that are ready for funds release. As a Disbursement Officer, you'll enter the payee details, verify the fee calculations, and execute the disbursement. The loan is only marked **DISBURSED** once you confirm — no funds are scheduled or released until you take action.
+
+## What you need
+
+You must have the **Disbursement Officer** role, which includes the `loans.disburse` capability. If you can view the queue but cannot act on applications, contact your Tenant Administrator to verify your role.
+
+## Disbursing a loan
+
+<Steps>
+  <Step title="Open the Disbursement queue">
+    Go to **Admin → Disbursement**. The queue shows loans with **DISBURSEMENT** status that are ready for scheduling. Use the **All / My queue / Unassigned** tabs to filter to your assigned files.
+  </Step>
+  <Step title="Open the application">
+    Click a row to open the disbursement detail page. You'll see the approved loan amount, the fee schedule pre-populated from the tenant configuration, and the calculated net-to-member amount.
+  </Step>
+  <Step title="Review fees and deductions">
+    The disbursement form shows the **gross approved amount** at the top, followed by a breakdown of fees, taxes, and deductions. Each fee line shows its rate or flat amount, the treatment (Deduct / Paid separately / Capitalize), and the line total including any GCT.
+
+    You can:
+    - Edit a fee amount or rate if an override is needed
+    - Waive a fee line — a waiver reason is required and is recorded on the audit trail
+    - Add a custom fee or deduction line
+    - Adjust the GCT rate if it differs from the tenant default for this disbursement
+
+    The **Net to member** figure updates live as you make changes. This is the amount that must be fully distributed across all payees.
+  </Step>
+  <Step title="Set the scheduled date">
+    Pick the date the funds should clear to the payees. This must be today or a future date.
+  </Step>
+  <Step title="Enter payee details">
+    For each payee, provide:
+
+    - **Payee type** — Member, Third Party, Attorney, Insurer, Government, Loan Payoff, or Other
+    - **Payee name** — the legal name of the recipient
+    - **Payment method** — ACH, RTGS, Internal Transfer, Cheque, Manager's Cheque, or Wire/SWIFT
+    - **Account number** — the destination account (encrypted at write time)
+    - **Routing details** — bank code, branch/transit code, SWIFT/BIC, or account type as required by the selected payment method
+    - **Amount** — the portion of the net routed to this payee
+    - **Purpose** — a brief description (e.g. *Net to member*, *Dealer payment*, *Attorney fees*)
+
+    Use the bank directory search to auto-fill the bank name and SWIFT/BIC when you type the bank name.
+  </Step>
+  <Step title="Verify the payee total">
+    The **Payees total vs net** panel at the bottom of the form shows you in real time whether the sum of all payee amounts equals the net-to-member figure. The form will not allow scheduling until these figures match exactly.
+  </Step>
+  <Step title="Schedule and execute the disbursement">
+    Click **Schedule disbursement** to record the disbursement instruction. The loan moves to **DISBURSED** status. The Credit Officer is notified, and the member is notified if member email notifications are enabled by your Tenant Administrator.
+  </Step>
+</Steps>
+
+## Multi-payee disbursements
+
+Many loans are paid to more than one party. For example, an auto loan might be split between a payment to the car dealer and a remainder to the member; a mortgage might include a portion to an attorney for title transfer fees.
+
+To add multiple payees, click **Add another payee** below the payee list. Each payee gets its own row with its own name, payment method, amount, and routing details. The sum of all payee amounts must equal the net-to-member figure exactly before you can schedule.
+
+<Warning>
+The total of all payee amounts must equal the net-to-member amount exactly. The form will not allow scheduling if there is any shortfall or excess. Check the **Payees total vs net** panel — it shows you the current total, the required net, and the difference.
+</Warning>
+
+You can also use the **Put net in row 1** shortcut to automatically fill the first payee's amount field with the full net figure — useful for single-payee disbursements.
+
+## Payee directory
+
+Frequently used payees — such as attorneys, insurance companies, or dealer accounts — can be saved to the **Payee Directory** so you don't have to re-enter their details on every disbursement.
+
+<CardGroup cols={2}>
+  <Card title="Save a payee" icon="bookmark">
+    On the disbursement form, click **Save to directory** next to any payee row that has a name entered. The payee's name, type, payment method, and routing details are saved to the directory for reuse.
+  </Card>
+  <Card title="Use a saved payee" icon="bookmark-check">
+    On the disbursement form, click **Pick saved payee** and select the payee from the list. Their details pre-fill the row; you only need to enter the amount and purpose.
+  </Card>
+</CardGroup>
+
+You can also manage the payee directory directly at **Admin → Disbursement → Payees**, where you can create, edit, or remove saved payees outside of the disbursement flow.
+
+## Payment method rules
+
+| Method | Notes |
+|---|---|
+| ACH | Maximum J$1,000,000 per payee per Jamaica RTGS rules. Switch to RTGS for larger amounts. |
+| RTGS | No ceiling; bank code, branch/transit, and routing number required. |
+| Internal Transfer | Routes to a member's account at the credit union; account type required. |
+| Cheque | No bank routing details needed; payee mailing address is optional. |
+| Manager's Cheque | Same as Cheque; mailing address optional. |
+| Wire / SWIFT | SWIFT/BIC required; routing/ABA number required for US wires. |
+
+## After disbursement
+
+Once a loan is marked **DISBURSED**, what happens next depends on your credit union's configuration:
+
+- **Securities final check enabled** — the loan returns to the Securities queue for a post-disbursement review before being filed. The Securities team will review the completed package and mark it ready to file. You will see the loan move back to the Securities queue briefly.
+- **Securities final check not enabled** — the loan moves directly to **FILED** status once disbursement is confirmed.
+
+<Note>
+**FILED** is the terminal state. Once a loan is filed, the record is locked from all further editing. The audit trail is complete and preserved. Any future lending activity for the same member requires a new application.
+</Note>
+
+## Disbursement Dashboard
+
+The **Disbursement Dashboard** at **Admin → Disbursement → Dashboard** shows scheduled and executed disbursements, total values by date range, and queue depth by status. Use it to confirm that scheduled disbursements are moving through to execution and to spot any files that have been waiting for an unusual amount of time.

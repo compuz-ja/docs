@@ -1,0 +1,132 @@
+---
+title: "How to create and submit a loan application in iLoan"
+sidebarTitle: "Creating an Application"
+description: "Step-by-step guide to creating a loan application draft, filling in all required sections, and submitting it for adjudication in iLoan."
+---
+
+Creating a loan application in iLoan is a multi-step process. You work through a series of form sections at your own pace — saving progress along the way — and submit when everything is complete. Once submitted, the application is automatically routed to the Adjudication queue.
+
+## Before you start
+
+Make sure the following conditions are met before opening a new application:
+
+- **Member KYC status is VERIFIED.** iLoan blocks submission for any member whose identity verification is not complete. If KYC is still pending, complete that process first.
+- **You have the Credit Officer role.** You need permission to create and submit loan applications. Contact your system administrator if you're unsure about your role.
+
+## Steps to create and submit an application
+
+<Steps>
+
+  <Step title="Go to Loans → New Loan Application">
+    From the main navigation, select **Loans**, then click **New Loan Application** in the top-right corner of the loans list.
+  </Step>
+
+  <Step title="Search for and select the member">
+    Type the member's name, account number, or TRN into the member search field. Select the correct member from the results. The member's basic details will pre-fill the Applicant Information section.
+  </Step>
+
+  <Step title="Select the loan type">
+    Choose one of the four loan types: **Unsecured**, **Cash-Secured**, **Auto**, or **Mortgage**. The loan type determines which form sections appear. See [Loan Types](/loans/loan-types) for a full breakdown.
+
+    <Note>
+      The loan type is locked once the application is submitted. If you select the wrong type, you will need to abandon the draft and start a new application.
+    </Note>
+  </Step>
+
+  <Step title="Select the loan product">
+    Choose the loan product that applies to this application. Products are configured by your credit union and determine the eligible amount range, term limits, and applicable rate tables.
+  </Step>
+
+  <Step title="Fill in Applicant Information">
+    Confirm or complete the applicant's personal details — name, date of birth, contact information, and address.
+  </Step>
+
+  <Step title="Fill in Employment">
+    Enter the applicant's employment details: employment type (employed, self-employed, retired, etc.), employer name, occupation, length of employment, and gross monthly income. iLoan uses this information to calculate risk and residual income.
+  </Step>
+
+  <Step title="Fill in Statement of Affairs">
+    List the applicant's existing financial obligations — monthly debt payments, living expenses, and other outgoings. iLoan uses these figures to calculate the Total Debt Service Ratio (TDSR) and residual income.
+  </Step>
+
+  <Step title="Fill in Loan Purpose">
+    Enter the loan amount requested, the purpose of the loan, and the requested term in months.
+  </Step>
+
+  <Step title="Fill in the collateral section (if applicable)">
+    Depending on the loan type you selected, an additional section will appear:
+
+    - **Cash-Secured:** Enter the savings account details and balance to be pledged as security.
+    - **Auto:** Enter the vehicle's make, model, year, VIN, estimated valuation, and insurance details.
+    - **Mortgage:** Enter the property address, estimated valuation, title reference, and insurance details.
+
+    This section does not appear for Unsecured loans.
+  </Step>
+
+  <Step title="Add guarantors (optional)">
+    If the application requires or benefits from a guarantor, click **Add Guarantor** and fill in the guarantor's personal, employment, and income details. You can add more than one guarantor.
+
+    <Tip>
+      You can add or remove guarantors at any time while the application is in DRAFT status.
+    </Tip>
+  </Step>
+
+  <Step title="Review the auto-calculated figures">
+    Before submitting, review the figures iLoan calculates automatically on the Review screen:
+
+    - **Risk Band** (R1–R5) — overall risk score based on employment, income, debt, and loan type
+    - **TDSR** — share of gross income going to all debt repayments
+    - **LTV** — loan amount as a proportion of collateral value (secured loans only)
+    - **Monthly payment** — estimated repayment amount
+    - **Residual income** — take-home income remaining after all obligations
+
+    These are estimates displayed during capture. The authoritative figures are confirmed at Adjudication.
+  </Step>
+
+  <Step title="Click Submit">
+    When you're satisfied that all sections are complete and the figures look correct, click **Submit**. The application status moves from DRAFT to SUBMITTED, and is automatically placed in the Adjudication queue.
+  </Step>
+
+</Steps>
+
+<Warning>
+  If the member's KYC status is not VERIFIED, the Submit button will be disabled. Complete KYC verification before attempting to submit.
+</Warning>
+
+<Note>
+  Your loan is assigned a unique Loan ID (e.g. MDVL-UNS-00001) when you first save the draft. This ID appears in the application header and in all subsequent notifications.
+</Note>
+
+---
+
+## Saving a draft
+
+You do not need to complete all sections in a single session. Click **Save Draft** at any point to preserve your progress. The application remains in DRAFT status, and you can return to it from the Loans list at any time.
+
+iLoan also auto-saves your progress as you move between form steps, so you won't lose work if you navigate away unexpectedly.
+
+---
+
+## Abandoning a draft
+
+If you've started an application but decide not to proceed, use the **Abandon Draft** option from the application's action menu. The status changes to **DRAFT\_ABANDONED**, the record is preserved in the audit trail, and the application is removed from your active drafts.
+
+An abandoned draft cannot be reopened or resubmitted. If you need to proceed with the same member, create a new application.
+
+---
+
+## Auto-calculated fields
+
+When you submit an application, iLoan automatically calculates the following figures:
+
+| Field | How it's calculated |
+|---|---|
+| **Risk Band (R1–R5)** | Scoring across five factors: employment type and stability, TDSR, LTV (if secured), loan type, and credit history. R1 is the lowest risk; R5 is the highest. |
+| **TDSR** | (Total monthly debt payments) ÷ (Gross monthly income). Includes the proposed new loan repayment. |
+| **LTV** | (Requested loan amount) ÷ (Collateral value). Applies to Cash-Secured, Auto, and Mortgage loans only. |
+| **Monthly payment** | Calculated using the applicable rate from the loan product's rate table and the requested term. |
+| **Residual income** | Gross monthly income minus all monthly obligations (existing debts + new loan payment + living expenses). |
+| **Share requirement** | Mandatory shares purchase amount, calculated per your credit union's product configuration. |
+| **Creditor life insurance premium** | Estimated premium based on the loan amount and term. |
+
+These figures are calculated at the point of submission and stored as part of the risk assessment record. The Adjudicator reviews them when making a decision.

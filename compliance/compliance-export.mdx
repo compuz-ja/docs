@@ -1,0 +1,117 @@
+---
+title: "Generate a compliance export bundle for regulatory review"
+sidebarTitle: "Compliance Export"
+description: "Generate a cryptographically-verified compliance export bundle in iLoan for BoJ examiners or auditors — a self-contained ZIP archive verifiable offline."
+---
+
+iLoan can generate a self-contained, cryptographically-signed compliance export bundle — a ZIP archive containing your audit records, hash-chain proof, and a signed manifest. Regulators can verify the bundle offline without needing access to your iLoan system. The bundle is designed to answer questions like _"every loan decision over JMD $5M last year with the full input data and decision rationale"_ in under five minutes.
+
+## Who can generate a compliance export
+
+The **Credit Manager** and **Tenant Administrator** roles can generate compliance export bundles. You need the `reports.view` capability. Branch Managers cannot generate compliance exports.
+
+## How to generate an export bundle
+
+<Steps>
+  <Step title="Go to Admin → Audit Viewer">
+    From the main navigation, select **Admin**, then click **Audit Viewer**.
+  </Step>
+  <Step title="Filter to the records you need">
+    Use the filter bar to narrow the audit records to the time range and scope you want to export. For a BoJ examination of loan decisions, you might filter by:
+    - **Event type:** `adjudication.decision.recorded`
+    - **Time range:** the calendar year under review
+    - **Minimum amount:** the loan amount threshold (for example, JMD $5,000,000)
+
+    The export bundle will contain exactly the records shown in the filtered view.
+  </Step>
+  <Step title="Click Compliance Export">
+    In the audit viewer toolbar, click the **Compliance Export** button. iLoan begins generating the bundle — this typically takes a few seconds.
+  </Step>
+  <Step title="Download the bundle">
+    When generation is complete, a dialog displays your download link along with the row count and a manifest hash for reference. Click **Download** to save the ZIP file.
+  </Step>
+  <Step title="Provide the bundle to the examiner">
+    Share the downloaded ZIP file with the BoJ examiner or auditor. They can verify it completely offline using the instructions in the [Verifying a bundle](#verifying-a-bundle) section below — no access to your iLoan system is required.
+  </Step>
+</Steps>
+
+<Warning>
+  The download link expires **1 hour** after generation. Download the bundle immediately and store it in a secure location. If the link expires before you download it, you can generate a new bundle — the underlying records are retained for seven years.
+</Warning>
+
+## What the bundle contains
+
+Every compliance export bundle is a ZIP archive with four files. The files are stored uncompressed inside the archive so each file's SHA-256 hash is stable and can be verified by any standard tool.
+
+<CardGroup cols={2}>
+  <Card title="manifest.json" icon="file-shield">
+    The signed envelope for the entire bundle. Lists every file in the archive with its SHA-256 hash, and carries an RSA-SHA256 digital signature from iLoan. Verifiers check the signature first, then re-hash each file to confirm nothing has been altered.
+  </Card>
+  <Card title="audit-entries.csv" icon="table">
+    A flat 22-column spreadsheet view of the audit records in a stable, documented column order. Ideal for spot-checks, quick searches in Excel, and ad-hoc queries. Does not include the full event payload — use the JSONL file for that.
+  </Card>
+  <Card title="audit-entries.jsonl" icon="code">
+    The full audit records in newline-delimited JSON format, one object per line. Includes complete event payloads, decision rationales, and the input snapshots captured at the time of each decision. Supports streaming queries with tools like `jq` without loading the entire file into memory.
+  </Card>
+  <Card title="chain-proof.json" icon="link">
+    The hash-chain bracket for the exported range: the start sequence number, end sequence number, start hash, and end hash. Proves that the exported records are a contiguous, unmodified slice of the audit log.
+  </Card>
+</CardGroup>
+
+The CSV column order is fixed at 22 columns:
+
+```
+sequence_number, tenant_id, event_name, resource_type, resource_id,
+actor_user_id, actor_role_id, actor_caps_snapshot, actor_ip,
+actor_user_agent, actor_auth_method, actor_mfa_satisfied, session_id,
+request_id, trace_id, span_id, payload_hash, previous_chain_hash,
+chain_hash, decision_rationale, schema_version, created_at
+```
+
+## Verifying a bundle
+
+An examiner or auditor can verify the bundle completely offline. Verification proves four things: the bundle structure is valid, every file is unmodified since iLoan signed it, the audit rows form an unbroken hash chain, and the manifest was signed with iLoan's key.
+
+<Steps>
+  <Step title="Extract the ZIP archive">
+    Unzip the bundle to a local directory:
+    ```bash
+    unzip bundle.zip -d /tmp/bundle/
+    ```
+  </Step>
+  <Step title="Re-hash each file and compare to the manifest">
+    For each file listed in `manifest.json`, compute its SHA-256 hash and compare it to the value in `manifest.files`:
+    ```bash
+    sha256sum /tmp/bundle/audit-entries.csv
+    sha256sum /tmp/bundle/audit-entries.jsonl
+    sha256sum /tmp/bundle/chain-proof.json
+    ```
+    Each computed hash must match the corresponding `sha256` value in `manifest.json`. A mismatch means a file was altered after the bundle was signed.
+  </Step>
+  <Step title="Verify the RSA-SHA256 signature on the manifest">
+    The `manifest.json` file contains iLoan's public key (`signature.publicKeyPem`) and the base64-encoded signature (`signature.value`). To verify:
+    1. Parse `manifest.json` and remove the `signature` field.
+    2. Serialize the remaining body as canonical JSON (keys sorted at every level).
+    3. Decode `signature.value` from base64.
+    4. Verify the decoded bytes against `signature.publicKeyPem` using RSA-SHA256.
+
+    The public key is embedded directly in the manifest — no internet connection or iLoan API access is needed.
+  </Step>
+  <Step title="Walk the hash chain">
+    Check that the audit rows form an unbroken chain across the export range. For each row in `audit-entries.jsonl` in sequence order:
+    - Recompute `payloadHash = SHA-256(canonicalJson(payloadJson))`; confirm it matches the row's `payloadHash` field.
+    - Recompute `chainHash = SHA-256(payloadHash + previousChainHash)`; confirm it matches the row's `chainHash` field.
+
+    The final `chainHash` must match `endChainHash` in `chain-proof.json`. Any mismatch means records were tampered with after the bundle was generated.
+  </Step>
+</Steps>
+
+## Retention
+
+All compliance export bundles are stored in iLoan's secure cloud storage with a **7-year compliance-mode retention lock** — the Bank of Jamaica minimum for loan records. The retention lock is set when the bundle is created and **cannot be shortened retroactively**. Even iLoan administrators cannot delete a bundle before its retention period expires.
+
+The 7-year retention applies to the stored bundle in cloud storage. Your downloaded copy is yours to manage according to your own data retention policies.
+
+<Note>
+  The act of generating a compliance export is itself recorded as an audit event (`audit.exported`) in the immutable audit log. The record shows which user generated the export, when they generated it, what filters they applied, and how many rows were included. This means the export chain of custody is itself auditable.
+</Note>

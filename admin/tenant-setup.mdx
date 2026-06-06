@@ -1,0 +1,96 @@
+---
+title: "Configure your iLoan credit union workspace settings"
+sidebarTitle: "Tenant Setup"
+description: "Learn how to configure your iLoan workspace — update branding, manage branches, and understand what can and cannot be changed after initial setup."
+---
+
+Each credit union in iLoan has its own isolated workspace called a **tenant**. Your workspace is identified by a unique slug that appears in every URL and every audit record. As a Tenant Administrator, you can configure branding, manage branches, and update your organization's details — but a small number of settings are fixed at onboarding and cannot be changed afterward.
+
+## Your tenant slug
+
+Your tenant slug is the short, URL-safe identifier that iLoan assigns to your credit union at onboarding. It appears in every URL your team uses, for example:
+
+```
+/my-credit-union/loans
+/my-credit-union/admin/products
+```
+
+The slug also appears in every loan ID (e.g. `MDVL-AUTO-00001`) and in every audit record written on behalf of your workspace. Because it is baked into so many permanent records, **the slug cannot be changed after onboarding**.
+
+<Warning>
+  Your tenant slug cannot be changed after onboarding. Every audit record, loan
+  ID, and URL references this value. If you believe your slug needs to change,
+  contact iLoan support before going live — it is far simpler to correct before
+  any loans are created.
+</Warning>
+
+## Updating branding
+
+Navigate to **Admin → Tenant → Branding** to update your credit union's visual identity and communication settings. Changes take effect immediately — new emails and newly generated loan agreement PDFs will use the updated values.
+
+<Note>
+  Branding changes are not retroactive. Loan agreement PDFs that were already
+  generated keep their original branding. Only PDFs generated after you save
+  the change will reflect the new settings.
+</Note>
+
+The following fields are available on the Branding page:
+
+<CardGroup cols={2}>
+  <Card title="Credit union name" icon="building">
+    The full name of your credit union. This appears in the iLoan UI and is
+    used as a prefix in outbound email subject lines.
+  </Card>
+  <Card title="Primary color" icon="palette">
+    A hex color code (e.g. `#003366`) used as the accent color in email
+    templates and in the letterhead background of PDF loan agreements.
+  </Card>
+  <Card title="Email sender name" icon="envelope">
+    The display name that members and staff see in the **From** field of
+    notification emails — for example, `My Credit Union`. The sending address
+    itself is managed by iLoan.
+  </Card>
+  <Card title="Agreement letterhead text" icon="file-lines">
+    A short text header that appears at the top of every PDF loan agreement
+    generated in your workspace (e.g. `Example Credit Union — Member Loan
+    Agreement`). Up to 2,000 characters.
+  </Card>
+</CardGroup>
+
+### Uploading your logo
+
+On the Branding page you can also upload your credit union's logo. Accepted formats are PNG, JPEG, and WebP (maximum 2 MB). Your logo appears in PDF loan agreements and in outbound email notifications. To replace an existing logo, simply upload a new file — the old one is removed automatically.
+
+## Branches
+
+Branches represent the physical locations of your credit union. Each branch is set up at onboarding with a short **branch code** — for example, `MDVL` for a Mandeville branch. That code is embedded in every loan ID created at that branch:
+
+```
+MDVL-AUTO-00001   (Auto loan, Mandeville branch, first loan)
+MAIN-UNS-00047    (Unsecured loan, Main branch)
+```
+
+<Warning>
+  Branch codes are permanent. They are embedded in loan IDs and officer
+  account references and cannot be changed after onboarding.
+</Warning>
+
+If your credit union opens a new branch after going live, contact iLoan support to have it added. You cannot add branches yourself through the admin UI in the current version.
+
+## Initial administrator account
+
+The first Tenant Administrator account is created during onboarding using the email address provided in the setup configuration. Once you are signed in with that account, you can invite additional administrators and staff from **Admin → Invitations**.
+
+<Accordion title="What roles can I invite?">
+  The roles available in your workspace are configured at onboarding. Common
+  roles include:
+
+  | Role | What they can do |
+  |---|---|
+  | **Tenant Administrator** | Full access to all admin settings, including branding, products, rates, and invitations |
+  | **Credit Manager** | Manage loan products and rate tables, view all-branch analytics, adjudicate loans |
+  | **Branch Manager** | View analytics scoped to their branch, manage loans in their branch |
+  | **Loan Officer** | Create and manage their own loan applications |
+
+  Contact iLoan support if you need to adjust the roles available in your workspace.
+</Accordion>

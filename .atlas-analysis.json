@@ -1,0 +1,116 @@
+{
+  "projectType": "saas",
+  "projectName": "iLoan",
+  "projectDescription": "A multi-tenant loan origination platform for credit unions, covering the full loan lifecycle from application capture through adjudication, securities review, and disbursement.",
+  "theme": "almond",
+  "primaryColor": "#1E4D8C",
+  "lightColor": "#EBF1FA",
+  "darkColor": "#0F2A52",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "key-concepts"
+            ]
+          },
+          {
+            "group": "Account & Access",
+            "pages": [
+              "access/signing-in",
+              "access/mfa",
+              "access/roles-and-permissions",
+              "access/inviting-team-members"
+            ]
+          },
+          {
+            "group": "Member Management",
+            "pages": [
+              "members/overview",
+              "members/creating-members",
+              "members/kyc-verification",
+              "members/documents"
+            ]
+          },
+          {
+            "group": "Loan Origination",
+            "pages": [
+              "loans/overview",
+              "loans/creating-an-application",
+              "loans/loan-types",
+              "loans/workflow-states"
+            ]
+          },
+          {
+            "group": "Departmental Workflows",
+            "pages": [
+              "workflows/adjudication",
+              "workflows/securities",
+              "workflows/disbursement",
+              "workflows/notifications"
+            ]
+          },
+          {
+            "group": "Audit & Compliance",
+            "pages": [
+              "compliance/audit-trail",
+              "compliance/compliance-export",
+              "compliance/data-security"
+            ]
+          },
+          {
+            "group": "Administration",
+            "pages": [
+              "admin/tenant-setup",
+              "admin/rate-tables",
+              "admin/loan-products",
+              "admin/analytics-dashboards"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Multi-tenant architecture supporting multiple credit union organizations on a single platform",
+    "Full loan lifecycle management: capture, adjudication, securities review, disbursement, and filing",
+    "Four loan types: Unsecured, Cash-Secured, Auto, and Mortgage",
+    "Role-based access control with fine-grained capabilities per department",
+    "Automated risk scoring and rate calculation aligned to credit union benchmarks",
+    "Loan agreement PDF generation for all loan types",
+    "KYC identity verification with document upload and manual review workflow",
+    "Hash-chained, tamper-evident audit trail with cryptographic compliance export bundles",
+    "Email notifications at every workflow transition, scoped to assigned team members",
+    "Per-tenant branding, rate tables, loan products, and workflow configuration",
+    "Multi-factor authentication (TOTP) for all users",
+    "Analytics and department dashboards for Credit Officers, Adjudicators, and Managers"
+  ],
+  "publicApiSurface": [
+    "POST /{tenantSlug}/loans — create loan application",
+    "GET /{tenantSlug}/loans — list loan applications",
+    "GET /{tenantSlug}/loans/{appId} — view loan application detail",
+    "POST /{tenantSlug}/loans/{appId}/draft-actions — save draft",
+    "POST /{tenantSlug}/loans/{appId}/guarantor-actions — add/remove guarantor",
+    "POST /{tenantSlug}/loans/{appId}/collateral-actions — manage collateral",
+    "POST /{tenantSlug}/loans/{appId}/claim-actions — claim loan assignment",
+    "GET /{tenantSlug}/admin/adjudication — adjudication queue",
+    "POST /{tenantSlug}/admin/adjudication/{appId}/decision — approve/decline/request-info",
+    "GET /{tenantSlug}/admin/securities — securities review queue",
+    "GET /{tenantSlug}/admin/disbursement — disbursement queue",
+    "POST /{tenantSlug}/admin/disbursement/{appId}/execute-form — execute disbursement",
+    "GET /{tenantSlug}/members — list members",
+    "POST /{tenantSlug}/members — create member",
+    "GET /{tenantSlug}/admin/audit-viewer — view audit trail",
+    "POST /{tenantSlug}/admin/audit-viewer — export compliance bundle",
+    "GET /{tenantSlug}/admin/analytics — analytics dashboard",
+    "GET /{tenantSlug}/admin/rates — rate tables",
+    "GET /{tenantSlug}/admin/products — loan products",
+    "GET /{tenantSlug}/admin/kyc-review — KYC review queue",
+    "pnpm db:onboard-tenant — CLI to onboard a new credit union tenant"
+  ]
+}

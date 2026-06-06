@@ -1,0 +1,107 @@
+---
+title: "Invite staff and assign roles in your iLoan workspace"
+sidebarTitle: "Inviting Team Members"
+description: "Learn how to invite Credit Officers, Adjudicators, and other staff to your iLoan workspace and assign them the right roles for their department."
+---
+
+As a Tenant Administrator, you can invite staff to join your credit union workspace in iLoan. Each invitation specifies the staff member's role, so they have the right access from the moment they first sign in — no separate permissions step required. Invitations are sent by email and accepted via a secure one-time link.
+
+<Note>
+  Only Tenant Administrators can send invitations or manage team member access. If you need to invite someone and do not see the **Admin** menu, contact your Tenant Administrator.
+</Note>
+
+## Sending an invitation
+
+<Steps>
+  <Step title="Go to Admin → Invitations">
+    In the left navigation bar, click **Admin**, then select **Invitations** from the submenu.
+  </Step>
+  <Step title="Click Invite Member">
+    Click the **Invite Member** button in the top-right corner of the Invitations page.
+  </Step>
+  <Step title="Enter the staff member's email address">
+    Type the work email address of the person you are inviting. iLoan will send the invitation to this address. Make sure the address is correct before continuing — invitation links are tied to the email they were sent to.
+  </Step>
+  <Step title="Select their role">
+    Choose the role that matches their responsibilities from the dropdown (for example, **Credit Officer**, **Adjudicator**, or **Branch Manager**). If you are unsure which role to assign, see [Roles & Permissions](/access/roles-and-permissions) for a full description of each role.
+  </Step>
+  <Step title="Click Send Invitation">
+    Click **Send Invitation** to dispatch the email. The invitation will appear in your **Pending Invitations** list immediately.
+  </Step>
+  <Step title="Staff member receives the email and clicks the link">
+    Your colleague will receive an email with a secure **Accept invitation** link. The link is valid for **24 hours**. Clicking it takes them directly to the account creation page, where they set a password and gain immediate access to the workspace.
+  </Step>
+  <Step title="Staff member is taken to the workspace dashboard">
+    Once they have created their password, iLoan logs them in automatically and lands them on the workspace dashboard with their assigned role already active.
+  </Step>
+</Steps>
+
+<Warning>
+  Invitation links are single-use and expire after 24 hours. If a link expires before it is used, find the invitation in **Admin → Invitations** and click **Resend** to issue a fresh link.
+</Warning>
+
+## Managing pending invitations
+
+You can track the status of all outstanding invitations from **Admin → Invitations**.
+
+<CardGroup cols={2}>
+  <Card title="Pending" icon="clock">
+    The invitation has been sent but not yet accepted. You can resend a pending invitation at any time — useful if the email was missed or the link expired.
+  </Card>
+  <Card title="Accepted" icon="circle-check">
+    The invitee has created their account and joined the workspace. You can find their membership record in **Admin → Members**.
+  </Card>
+  <Card title="Expired" icon="calendar-xmark">
+    The 24-hour window passed before the invitation was accepted. Click **Resend** to generate a new link with a fresh expiry.
+  </Card>
+  <Card title="Revoked" icon="ban">
+    An administrator manually cancelled the invitation before it was accepted. Revoked invitations cannot be reactivated — send a new invitation if access should still be granted.
+  </Card>
+</CardGroup>
+
+To revoke an invitation that has not yet been accepted, find it in the Pending list and click **Revoke**. This immediately invalidates the link in the invitee's inbox.
+
+## Changing a team member's role
+
+If a staff member's responsibilities change, you can update their role at any time.
+
+<Steps>
+  <Step title="Go to Admin → Members">
+    Click **Admin** in the left navigation bar, then select **Members**.
+  </Step>
+  <Step title="Find the team member">
+    Search by name or email address to locate the member record.
+  </Step>
+  <Step title="Click Change Role">
+    Click the **⋯** menu next to their name and select **Change Role**.
+  </Step>
+  <Step title="Select the new role and confirm">
+    Choose the new role from the dropdown and click **Save**. The change takes effect on the member's next page load — there is no need to notify them manually, though it is good practice to let them know their access has changed.
+  </Step>
+</Steps>
+
+<Note>
+  You can assign multiple roles to the same user if your credit union's workflow requires it. Repeat the **Change Role** step or ask iLoan support if you need guidance on multi-role configurations.
+</Note>
+
+## Suspending a team member's access
+
+When a staff member leaves the credit union or is placed on leave, you can suspend their access without deleting their account. Suspension preserves all of their history — loan records, audit logs, and previous actions remain intact.
+
+<Steps>
+  <Step title="Go to Admin → Members">
+    Navigate to **Admin → Members** and search for the team member.
+  </Step>
+  <Step title="Click Suspend">
+    Click the **⋯** menu next to their name and select **Suspend Member**. You may be prompted to enter a reason for the suspension — this is recorded in the audit log.
+  </Step>
+  <Step title="Confirm the suspension">
+    Click **Confirm**. The member's access is revoked immediately. Any sessions they currently have open will be blocked on their next request.
+  </Step>
+</Steps>
+
+To reinstate a suspended member, follow the same steps and click **Reactivate Member** instead.
+
+<Warning>
+  Suspension takes effect immediately. The user will not be able to sign in to this workspace until an administrator reactivates them. Their account and all historical data are preserved throughout.
+</Warning>

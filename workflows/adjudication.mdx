@@ -1,0 +1,99 @@
+---
+title: "Review and decide on loan applications in Adjudication"
+sidebarTitle: "Adjudication"
+description: "Work the adjudication queue in iLoan — claim applications, review risk scores and loan details, then approve, decline, or request more information."
+---
+
+The Adjudication queue is where loan applications are reviewed and decided. As an Adjudicator, you'll see applications submitted by Credit Officers, review the risk assessment and financial details, and make a decision. Each application you claim becomes your sole responsibility until you record a decision — no other Adjudicator can act on it at the same time.
+
+## What you need
+
+You must have the **Adjudicator** role, which includes the `loans.adjudicate` capability. If you can reach the Adjudication queue but the **Claim** button is missing, contact your Tenant Administrator to confirm your role assignment.
+
+## Processing an application
+
+<Steps>
+  <Step title="Open the Adjudication queue">
+    Go to **Admin → Adjudication**. You'll see a list of applications in **SUBMITTED** and **ADJUDICATION** status. Use the **All / My queue / Unassigned** tabs to filter the list to work you own or work that hasn't been claimed yet.
+  </Step>
+  <Step title="Claim the application">
+    Click on any row to open the application, then click **Claim**. The application status moves from **SUBMITTED** to **ADJUDICATION** and is now assigned to you. Until you record a decision, no other Adjudicator can take action on it.
+  </Step>
+  <Step title="Review the full application">
+    Read through all sections of the application before deciding:
+
+    - **Applicant details** — name, contact information, and branch
+    - **Employment and income** — employer, tenure, monthly earnings
+    - **Statement of affairs** — assets, liabilities, and existing debt obligations
+    - **Collateral** — for secured loans, the collateral type, estimated value, and any attached supporting documents
+    - **Risk band and score** — the auto-calculated risk band (R1 through R5) and the underlying risk score produced by the platform's risk engine; lower bands indicate lower risk
+    - **Rate and monthly payment** — the auto-calculated interest rate and estimated monthly repayment amount based on the approved product
+  </Step>
+  <Step title="Record your decision">
+    Select one of the three outcomes in the decision panel on the right side of the screen, enter your rationale, and click **Record decision**.
+  </Step>
+</Steps>
+
+## Decision outcomes
+
+### Approve
+
+Select **Approve** when the application meets your credit union's lending criteria and the risk band is within the acceptable range for the product.
+
+- Enter your rationale (at least 20 characters — this is stored on the audit record).
+- Optionally, use the **Route Securities review to** picker to hand the file directly to a specific Securities reviewer. Leave this blank to drop the file into the Securities team queue for anyone to claim.
+- Click **Record decision**.
+
+After approval, the loan routes automatically:
+- **Secured loans** (Auto, Mortgage, Cash-Secured) → **Securities** queue for collateral review
+- **Unsecured loans** → **Disbursement** queue directly
+
+### Decline
+
+Select **Decline** when the application does not meet lending criteria and there is no path forward on this file.
+
+<Warning>
+Declining is a terminal action. Once declined, the application is permanently closed. An adverse action notice is sent to the member, and the file cannot be reopened. If the member wants to reapply, they must submit a brand-new application.
+</Warning>
+
+- Enter your rationale explaining why the loan was declined (required, minimum 20 characters).
+- Click **Record decision**. A confirmation dialog will appear — confirm to proceed.
+
+After declining, the loan moves to **DECLINED** status and is removed from all active queues.
+
+### Request Information
+
+Select **Request more information** when you need the Credit Officer to provide or correct something before you can make a final decision. This is the right choice when the file has a fixable issue — it keeps the same application open rather than forcing a new submission.
+
+- Enter notes describing exactly what is needed, one item per line (required). The Credit Officer sees these notes directly.
+- Click **Record decision**.
+
+The application moves to **INFO_REQUESTED** status and returns to the Credit Officer's workload.
+
+<Note>
+Notes are mandatory for both Decline and Request Information decisions. They are written to the audit record and are visible to the Credit Officer. Be specific — vague notes slow down the resubmission cycle.
+</Note>
+
+## The INFO_REQUESTED cycle
+
+When a Credit Officer receives an INFO_REQUESTED application, they update the relevant sections and resubmit. On resubmission:
+
+1. The risk engine re-runs against the updated form data and produces a new risk assessment.
+2. The application returns to the Adjudication queue with **SUBMITTED** status.
+3. Any Adjudicator (including you) can claim and decide it again.
+
+You may see the same application more than once if multiple rounds of information exchange are needed. The full decision history is visible in the application so you can see what was previously requested and what changed.
+
+## Risk band override
+
+If the risk band exceeds the policy ceiling for the product and your role includes the `loans.override` capability, an **Override required** panel appears on the Approve path. You must enter a separate override rationale (minimum 20 characters) before the decision can be recorded. Your Tenant Administrator controls whether the override capability is enabled for your credit union.
+
+If the risk band is out of range and you do not have the override capability, you cannot approve the application. You can decline it, or use Request Information to ask the Credit Officer to reassess eligibility.
+
+## Adjudication Dashboard
+
+The **Adjudication Dashboard** at **Admin → Adjudication → Dashboard** gives you a summary view of decisions across the team — queue depths, approval and decline rates, and time-in-stage metrics. Use it to monitor pipeline health and identify bottlenecks.
+
+<Tip>
+Claim applications one at a time. Because claiming assigns the file exclusively to you, claiming several at once and then stepping away delays other applications from being processed. Work one file through to a decision before picking up the next.
+</Tip>

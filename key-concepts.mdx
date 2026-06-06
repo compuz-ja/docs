@@ -1,0 +1,151 @@
+---
+title: "Key concepts and terminology — iLoan platform guide"
+sidebarTitle: "Key Concepts"
+description: "Understand the core concepts in iLoan: tenants, roles, loan types, workflow states, risk bands, KYC status, and the audit trail explained."
+---
+
+iLoan is built around a small set of concepts that apply across every part of the platform. Understanding these ideas will help you navigate the system confidently, interpret what you see on screen, and explain decisions to members and regulators. This page covers the vocabulary you will encounter every day.
+
+---
+
+## Tenant
+
+A **tenant** is your credit union's isolated workspace inside iLoan. Every piece of data your team creates — member records, loan applications, audit entries, rate tables, user accounts — belongs to your tenant and is completely invisible to any other credit union using the platform.
+
+Your tenant is identified by a short **slug**, which appears in every URL you use:
+
+```text
+https://app.example.com/{your-slug}/loans
+https://app.example.com/{your-slug}/members
+```
+
+The slug is set when your tenant is created and cannot be changed afterwards. If your credit union's display name changes, only the name shown in the interface is updated — the slug in your URLs stays the same.
+
+---
+
+## Roles & Capabilities
+
+iLoan uses a **role-based access control** system. Every staff member is assigned a role, and each role carries a specific set of capabilities — the actions that role is permitted to perform. You cannot access a screen, submit a form, or trigger a workflow transition unless your role includes the required capability.
+
+The built-in roles for the Credit Department are:
+
+| Role | Primary responsibilities |
+|---|---|
+| **Credit Officer** | Create and manage member records; capture and submit loan applications |
+| **Adjudicator** | Review submitted applications; record approval, decline, or information-request decisions |
+| **Securities Reviewer** | Confirm collateral documentation; resolve or reject securities requests |
+| **Disbursement Officer** | Schedule and execute approved loan disbursements |
+| **Credit Manager** | Read-only oversight of the full pipeline; view reports across all branches |
+| **Branch Manager** | View and monitor loans belonging to their assigned branch |
+| **Tenant Administrator** | Manage users, roles, invitations, and tenant-level configuration |
+
+Your Tenant Administrator assigns your role when they invite you to the platform. If your responsibilities change and you need a different role, contact your administrator.
+
+---
+
+## Loan Application
+
+The **loan application** is the central record in iLoan. It captures everything about a member's loan request — their personal and employment details, income and expenses, collateral information, guarantors, and the decisions made at each stage of review.
+
+Every loan application passes through a defined sequence of statuses:
+
+```text
+DRAFT → SUBMITTED → ADJUDICATION → INFO_REQUESTED → APPROVED
+      → SECURITIES → SECURITIES_ISSUE → DISBURSEMENT → DISBURSED → FILED
+```
+
+<Note>
+  Loan applications are **never deleted** in iLoan. Once created, a loan record exists permanently. If a loan cannot proceed, it reaches a terminal status such as **Declined**, **Cancelled**, or **Draft Abandoned** — but the record remains, fully visible in the audit trail.
+</Note>
+
+The main statuses represent where the loan sits in the workflow. Two statuses mark temporary holds:
+
+- **Info Requested** — the Adjudicator has asked the Credit Officer to supply additional information before the review can continue
+- **Securities Issue** — a gap in the collateral documentation has been identified; the Securities Reviewer must resolve it before the loan can proceed to disbursement
+
+---
+
+## Loan Types
+
+iLoan supports four loan types. The type you select at the start of an application determines which form sections appear and which collateral fields are required.
+
+- **Unsecured** — a personal loan with no collateral. The assessment relies entirely on the member's employment, income, and risk profile.
+- **Cash-Secured** — a loan backed by the member's own savings, shares, or deposit account. The cash collateral is hypothecated (ring-fenced) as security.
+- **Auto** — a vehicle loan secured against the vehicle being purchased or refinanced. Collateral details include the vehicle's make, model, year, and valuation.
+- **Mortgage** — a property loan secured against real estate. Collateral details include the property description, valuation date, and appraiser information.
+
+---
+
+## Risk Band
+
+When you submit a loan application, iLoan automatically calculates a **risk band** based on factors such as the applicant's employment type and length, income, total debt obligations, loan type, and credit history. The result is a single rating from **R1** to **R5**:
+
+| Band | Meaning |
+|---|---|
+| **R1** | Lowest risk |
+| **R2** | Low risk |
+| **R3** | Moderate risk |
+| **R4** | Elevated risk |
+| **R5** | Highest risk |
+
+The risk band directly influences the interest rate that applies to the loan, based on your credit union's rate tables. A higher risk band will generally result in a higher rate. The Adjudicator sees both the band and the underlying score when reviewing an application.
+
+---
+
+## KYC Status
+
+**KYC (Know Your Customer)** status reflects the identity verification state for a member. iLoan requires a member to have a **Verified** KYC status before their loan application can be submitted. This ensures your credit union meets its regulatory obligations for member identification.
+
+KYC status moves through the following states:
+
+| Status | Meaning |
+|---|---|
+| **Unverified** | No verification has been attempted yet |
+| **In Progress** | Verification documents have been submitted and are under review |
+| **Verified** | Identity has been confirmed; the member is eligible to apply for a loan |
+| **Failed** | Verification could not be completed with the documents provided |
+| **Manual Review** | The automated check raised a flag; a reviewer must assess the documents manually |
+
+If a member's KYC fails, you can upload additional documents and retry. Each retry creates a new verification record, so the history of all attempts is preserved.
+
+---
+
+## Audit Trail
+
+iLoan records **every action** taken on the platform in a permanent, tamper-evident audit log. This includes logins, every form save and submission, every status change, every decision, every document upload, and every configuration change.
+
+The audit log is:
+
+- **Immutable** — no entry can ever be edited or deleted, even by an administrator
+- **Hash-chained** — each entry is cryptographically linked to the one before it, so any tampering with historical records would be immediately detectable
+- **Complete** — every entry captures who performed the action, what role they held at that moment, which capabilities they exercised, the time, and the IP address and device
+
+The audit trail is how your credit union can reconstruct the exact sequence of events for any loan, any member record, or any user action — whether for an internal review, a member dispute, or a regulatory examination.
+
+---
+
+## Compliance Export
+
+A **compliance export** is a downloadable package that you can generate from iLoan's audit viewer to share with regulators or external auditors. The export bundle contains:
+
+- Your audit records in a structured format
+- A **hash-chain proof** that demonstrates the records have not been tampered with
+- A **cryptographic signature** from iLoan, verifying the authenticity of the export
+
+The entire bundle is designed to be self-contained and independently verifiable — a regulator does not need access to iLoan itself to confirm the integrity of the records you provide.
+
+---
+
+## Frequently asked questions
+
+<Accordion title="Can I change my credit union's tenant slug?">
+  No. Your tenant slug is set when your credit union is first onboarded onto iLoan and cannot be changed afterwards. The slug is embedded in every URL your staff uses and is tied to the integrity of your audit chain. If your credit union rebrands, your Tenant Administrator can update the display name shown in the interface, but your URL slug remains the same.
+</Accordion>
+
+<Accordion title="What happens if a member fails KYC verification?">
+  If a member's KYC verification fails, their status is set to **Failed** and they cannot be linked to a new loan submission in that state. You can upload different or additional identity documents and resubmit the verification request. If the system flags the submission for closer review rather than outright failing it, the status moves to **Manual Review** — a staff member with the KYC review capability will assess the documents in the review queue and either approve or reject the verification manually.
+</Accordion>
+
+<Accordion title="Is my credit union's data shared with other credit unions on the platform?">
+  No. iLoan is a multi-tenant platform, which means every credit union operates in a completely isolated environment. Your member records, loan applications, staff accounts, rate tables, and audit logs are invisible to every other tenant on the platform. Tenant isolation is enforced at every layer of the system, so there is no pathway for data to cross tenant boundaries.
+</Accordion>

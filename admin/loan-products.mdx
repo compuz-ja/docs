@@ -1,0 +1,117 @@
+---
+title: "Create and manage loan products for your credit union"
+sidebarTitle: "Loan Products"
+description: "Create, edit, and archive the loan products your credit union offers in iLoan — covering rate assignment, term limits, and amount ranges."
+---
+
+Loan products define the specific lending offerings your credit union makes available to members. Credit Officers see only active products when creating a new loan application, so keeping your product list accurate and up to date directly affects what your team can originate. As a Credit Manager or Tenant Administrator, you can create new products, update their parameters, or archive discontinued ones.
+
+**Required role:** Credit Manager or Tenant Administrator (`loans.products.manage` capability)
+
+To access the product catalog, navigate to **Admin → Products**.
+
+<Tip>
+  Assign a descriptive name that Credit Officers will understand — they see
+  this name when selecting a product for a new application. Names like
+  "Civil Servant Go!" or "Home Sweet Home Mortgage" are far more useful than
+  internal codes like "PROD-007".
+</Tip>
+
+## What a loan product contains
+
+Each loan product is defined by the following fields:
+
+| Field | Description |
+|---|---|
+| **Name** | Displayed to Credit Officers in the new loan application dropdown |
+| **Loan type** | The product's behavioral category: Unsecured, Cash-Secured, Auto, or Mortgage. Determines which PDF agreement template is used and which rate engine tiers apply |
+| **Rate formula** | How the interest rate is calculated for this product (Flat, Risk-band, Collateral-type, or Vehicle-age). See [Rate Tables](/admin/rate-tables) for details |
+| **Default rate** | For Flat-rate products, the fixed annual interest rate as a percentage (e.g. `12.00` for 12.00%). Not used for Risk-band, Collateral-type, or Vehicle-age products — the rate for those is looked up from your rate table at approval time |
+| **Minimum amount** | The lowest loan amount a Credit Officer can request for this product |
+| **Maximum amount** | The highest loan amount a Credit Officer can request for this product |
+| **Minimum term** | The shortest repayment period, in months |
+| **Maximum term** | The longest repayment period, in months |
+| **Description** | Optional. A short note displayed to Credit Officers when they select the product — useful for eligibility reminders or product highlights |
+
+## Creating a product
+
+<Steps>
+  <Step title="Go to Admin → Products">
+    The Products page lists all active and archived products for your workspace.
+  </Step>
+  <Step title="Click New Product">
+    The new product form opens.
+  </Step>
+  <Step title="Enter a product code and name">
+    The **code** is a short internal identifier (e.g. `CIVIL-GO`, `MORTGAGE-STD`). It must be unique within your workspace and can only contain uppercase letters, numbers, and dashes. The **name** is what Credit Officers see in the dropdown.
+  </Step>
+  <Step title="Select the loan type">
+    Choose the behavioral type that best describes this product: **Unsecured**, **Cash-Secured**, **Auto**, or **Mortgage**. This cannot be changed after applications have been created using this product.
+  </Step>
+  <Step title="Select the rate formula">
+    Choose how this product's interest rate is calculated. If you select **Flat rate**, enter the fixed rate in the Default Rate field. For all other formulas, the rate is looked up from your rate table at loan approval time.
+  </Step>
+  <Step title="Set amount limits">
+    Enter the minimum and maximum loan amounts in your local currency. Leave these blank if you do not want to enforce limits for this product. The minimum cannot exceed the maximum.
+  </Step>
+  <Step title="Set term limits">
+    Enter the minimum and maximum repayment terms in months. For example, enter `12` and `60` for a 1-to-5-year product. Leave blank if you do not want to enforce term limits.
+  </Step>
+  <Step title="Add an optional description">
+    Enter a short description for Credit Officers (up to 500 characters). This is a good place to note eligibility criteria or product-specific conditions.
+  </Step>
+  <Step title="Click Save">
+    The product is created and immediately appears in the new loan application dropdown for Credit Officers.
+  </Step>
+</Steps>
+
+## Editing a product
+
+To update an existing product:
+
+1. Go to **Admin → Products**.
+2. Find the product in the list and click its name to open it.
+3. Click **Edit**.
+4. Update the fields you want to change, then click **Save**.
+
+Changes take effect immediately for new applications. Applications that were already created using this product are not affected by the change.
+
+<Note>
+  The new loan application form shows only active (non-archived) products.
+  Archive discontinued products to keep the dropdown clean for Credit Officers.
+</Note>
+
+## Archiving and restoring a product
+
+When your credit union stops offering a product, archive it rather than deleting it. Archiving hides the product from the new loan application dropdown without affecting any existing loans that used it.
+
+**To archive a product:**
+
+1. Go to **Admin → Products**.
+2. Find the product and click **Archive**.
+
+The product moves to the **Archived** tab. It no longer appears to Credit Officers.
+
+**To restore an archived product:**
+
+1. Go to **Admin → Products** and open the **Archived** tab.
+2. Find the product and click **Restore**.
+
+The product becomes active again and reappears in the new loan application dropdown.
+
+<Accordion title="What happens to loans created with an archived product?">
+  Existing loans are not affected when you archive a product. Archiving only
+  prevents new applications from being created with that product. All
+  historical loans — including those in progress — continue to use the product
+  definition that was active when they were created, and the archived product
+  remains visible on those loan records.
+</Accordion>
+
+## Rate sources at a glance
+
+| Rate formula | Best for | How rate is determined |
+|---|---|---|
+| **Flat** | Simple fixed-rate products | The rate you enter on the product is applied to every loan |
+| **Risk-band** | Unsecured personal loans | Rate is looked up from your rate table based on the borrower's R1–R5 risk band |
+| **Collateral-type** | Cash-secured loans | Rate is looked up based on the collateral type (cash shares, hypothecation, etc.) |
+| **Vehicle-age** | Auto loans | Rate is looked up based on the vehicle's age in years |

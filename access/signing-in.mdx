@@ -1,0 +1,85 @@
+---
+title: "Sign in to iLoan and access your credit union"
+sidebarTitle: "Signing In"
+description: "Learn how to sign in to iLoan, navigate to your credit union workspace, switch between tenants, and recover your account if needed."
+---
+
+iLoan uses email and password authentication. Every credit union has its own dedicated workspace URL that includes a unique identifier — for example, `https://app.iloan.io/riverfront-cu`. Bookmark your credit union's URL so you always land in the right workspace. If you are not sure what your URL is, ask your Tenant Administrator.
+
+## Signing in
+
+<Steps>
+  <Step title="Navigate to your credit union's workspace URL">
+    Open your browser and go to the URL your administrator provided (for example, `https://app.iloan.io/my-credit-union`). Going to the root domain without a credit union slug will take you to the tenant picker instead.
+  </Step>
+  <Step title="Enter your email address and password">
+    Type the email address and password associated with your iLoan account. Both fields are case-sensitive for the password.
+  </Step>
+  <Step title="Complete multi-factor authentication (if enabled)">
+    If MFA is enabled on your account, you will be prompted to enter the 6-digit code from your authenticator app before being admitted to the workspace. See [MFA](/access/mfa) for setup instructions.
+  </Step>
+  <Step title="You're in">
+    After a successful sign-in you will land on your workspace dashboard. The active credit union is shown in the top navigation bar.
+  </Step>
+</Steps>
+
+## Email verification for new accounts
+
+When your Tenant Administrator sends you an invitation, iLoan creates your account and sends a verification email to the address on record. You must verify your email before you can sign in for the first time.
+
+Check your inbox for a message from iLoan and click the **Verify email** link. Once verified, return to your credit union's sign-in page and proceed normally. If you do not receive the email within a few minutes, check your spam folder. If the link has expired, sign in — iLoan will prompt you to resend the verification email.
+
+<Note>
+  Invitation links automatically verify your email address on click, so if you joined via an invitation you will not need a separate verification step.
+</Note>
+
+## Forgot your password
+
+If you cannot remember your password, you can reset it from the sign-in page.
+
+<Steps>
+  <Step title="Click Forgot password">
+    On the sign-in page, click the **Forgot password?** link below the password field.
+  </Step>
+  <Step title="Enter your email address">
+    Type the email address associated with your iLoan account and click **Send reset link**.
+  </Step>
+  <Step title="Check your inbox">
+    iLoan will send a password-reset email if that address exists in the system. For security, the page shows the same confirmation message regardless of whether the email was found — this prevents third parties from guessing which addresses have accounts.
+  </Step>
+  <Step title="Click the reset link and choose a new password">
+    Open the email, click **Reset password**, and enter a new password. Reset links are valid for **1 hour**. If yours has expired, repeat the process to request a new one.
+  </Step>
+</Steps>
+
+<Note>
+  Resetting your password signs out all of your other active sessions automatically. Any browsers or devices still using your old session will be required to sign in again.
+</Note>
+
+## Switching between credit unions
+
+If you are a member of more than one credit union workspace — for example, if you work across branches that are set up as separate tenants — you can switch workspaces without signing out.
+
+<Steps>
+  <Step title="Open the account menu">
+    Click your name or avatar in the top-right corner of the navigation bar.
+  </Step>
+  <Step title="Select a workspace">
+    Under **Your credit unions**, you will see all the workspaces you belong to. Click the name of the credit union you want to switch to.
+  </Step>
+  <Step title="Confirm the switch">
+    iLoan loads the selected workspace. Your role and permissions are specific to each credit union, so the available menus and queues may look different.
+  </Step>
+</Steps>
+
+<Note>
+  Only workspaces where your membership is active appear in the switcher. If a workspace you expect to see is missing, contact the Tenant Administrator for that credit union.
+</Note>
+
+## Account suspended
+
+If your account has been suspended by your administrator, you will see an error message when you attempt to sign in. Suspended accounts cannot access any workspace until the suspension is lifted. Contact your **Tenant Administrator** to request reactivation.
+
+<Warning>
+  Never share your iLoan credentials with a colleague. Each person must have their own account. Shared accounts make it impossible to maintain accurate audit trails of who approved, submitted, or modified a loan — which is a compliance requirement for most credit unions.
+</Warning>

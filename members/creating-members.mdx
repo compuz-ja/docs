@@ -1,0 +1,113 @@
+---
+title: "Create and manage credit union member profiles in iLoan"
+sidebarTitle: "Creating Members"
+description: "Learn how to create a member profile, fill in required fields, update member details, and manage member status in your iLoan workspace."
+---
+
+Member profiles are the starting point for every loan in iLoan. Before you can open a loan application, the borrower must have a member record in your workspace. This page walks you through creating a new member, searching for existing members, editing profile details, and managing a member's status over time.
+
+<Tip>
+  Always search for a member before creating a new one. Duplicate records can cause confusion when linking loan applications and tracking KYC history. Use the search bar on the Members list to check whether a member already exists.
+</Tip>
+
+## Who can create members
+
+You need the **members.create** capability to add new member profiles. This capability is granted to Credit Officers and all roles above. If you cannot see the **New Member** button, ask your Administrator to check your role assignment.
+
+## Creating a new member
+
+<Steps>
+  <Step title="Open the New Member form">
+    Go to **Members** in the main navigation, then click **New Member** in the top-right corner of the Members list.
+  </Step>
+  <Step title="Enter personal details">
+    Fill in the member's core identifying information:
+
+    - **First name** and **last name** (required)
+    - **Middle name** (optional)
+    - **Date of birth** (required for KYC verification)
+    - **Email address**
+    - **Phone number**
+  </Step>
+  <Step title="Enter identity details">
+    Fill in the member's government-issued identity numbers. These fields are **encrypted at rest** and are never exported in plain text:
+
+    - **TRN** (Tax Registration Number) — used as the primary identifier for KYC verification
+    - **Driver's licence number** — used as an alternative KYC identifier
+    - **Passport number** — used as an additional identity reference
+  </Step>
+  <Step title="Enter address details">
+    Fill in the member's mailing address:
+
+    - Address line 1 and address line 2
+    - City
+    - Parish
+    - Postal code
+  </Step>
+  <Step title="Add bank account details (optional)">
+    If you have the member's bank account information, enter it now. This field is encrypted at rest. You can also add or update it later by editing the member's profile.
+  </Step>
+  <Step title="Save the member">
+    Click **Save**. iLoan creates the member record and opens the member's profile page. The member's KYC status will be **UNVERIFIED** until you run a verification check.
+  </Step>
+</Steps>
+
+<Warning>
+  Identity fields — TRN, driver's licence number, passport number, and bank account number — are encrypted at rest as a compliance requirement. They cannot be exported or copied in plain text from iLoan. To view a stored value, use the **Reveal** function on the member's profile, which requires the appropriate capability and is recorded in the audit log.
+</Warning>
+
+---
+
+## Searching for members
+
+The Members list includes a search bar at the top of the page. As you type, iLoan searches member names using type-ahead matching — results update in real time. You can also filter by KYC status or member status using the filter controls alongside the search bar.
+
+Click any result row to open that member's profile.
+
+---
+
+## Editing a member
+
+<Steps>
+  <Step title="Open the member's profile">
+    Find the member using search, then click their name to open their profile page.
+  </Step>
+  <Step title="Click Edit">
+    Click the **Edit** button in the top-right area of the profile header. You need the **members.edit** capability to see this button.
+  </Step>
+  <Step title="Update the fields">
+    Change any fields as needed — personal details, contact information, address, identity numbers, or bank account details.
+  </Step>
+  <Step title="Save your changes">
+    Click **Save**. The changes are applied immediately and recorded in the audit log.
+  </Step>
+</Steps>
+
+---
+
+## Member status
+
+A member's status reflects the current state of their account with your credit union.
+
+<AccordionGroup>
+  <Accordion title="ACTIVE — default status">
+    New members are created with **ACTIVE** status. An active member is in good standing and can be linked to loan applications (once KYC is also VERIFIED).
+  </Accordion>
+  <Accordion title="INACTIVE — account closed">
+    Set a member to **INACTIVE** when their account has been formally closed. Their profile and all associated records — loans, documents, KYC history — are preserved for audit purposes. An inactive member cannot be linked to new loan applications.
+  </Accordion>
+  <Accordion title="DECEASED — terminal status">
+    The **DECEASED** status is a terminal state that signals the member has passed away. All records are fully preserved. This status cannot be reversed. Contact your Administrator before applying this status.
+  </Accordion>
+  <Accordion title="Suspending a member">
+    Suspending a member is an administrative action (requires the **members.suspend** capability) used when an account needs to be placed under review — for example, due to suspected fraud or a compliance hold. A suspended member's profile remains visible to staff but cannot be used for new loan origination until reactivated. The suspension reason is recorded in the member's status history.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Soft deletion
+
+Deleting a member requires the **members.delete** capability, which is typically restricted to Administrators. When a member is deleted, they are hidden from the standard Members list and search results. Their record is not permanently erased — it is preserved in full for regulatory audit purposes and can be restored by an Administrator if needed.
+
+If you need to remove a member from active use without deleting them, set their status to **INACTIVE** instead.

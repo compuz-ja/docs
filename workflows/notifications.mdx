@@ -1,0 +1,82 @@
+---
+title: "Email notifications for loan workflow events in iLoan"
+sidebarTitle: "Notifications"
+description: "iLoan sends email notifications at major loan lifecycle events. Learn which events trigger emails, who receives them, and how notification routing works."
+---
+
+iLoan automatically sends email notifications when a loan changes state. Notifications are scoped to the person responsible for the file — if a loan is assigned to a specific staff member, only that person is notified. If the loan has no owner yet, the entire team for that stage receives the notice so nothing falls through the cracks.
+
+## How routing works
+
+<CardGroup cols={3}>
+  <Card title="Assigned loan" icon="user-check">
+    Only the assigned staff member receives the notification. Once you claim or are assigned a file, you are the single point of contact for all stage events on that loan.
+  </Card>
+  <Card title="Unassigned loan" icon="users">
+    The whole team for that stage receives the notification — every Adjudicator, every Securities Reviewer, or every Disbursement Officer as appropriate. This ensures that unowned work is never silently missed.
+  </Card>
+  <Card title="Claiming a loan" icon="hand-pointer">
+    Claiming a loan for yourself does **not** trigger an email. Claiming is a self-service action; only explicit assignment by a Credit Manager or Lead sends an "assigned to you" notification.
+  </Card>
+</CardGroup>
+
+## Notification event table
+
+| Event | Recipient(s) |
+|---|---|
+| Loan submitted — routes to Adjudication | Assigned adjudicator, or all adjudicators if unassigned |
+| Loan assigned to a staff member | The newly assigned staff member |
+| Loan approved | Credit Officer who originated the application |
+| Loan declined | Credit Officer + Member (if member email notifications are enabled by your Tenant Administrator) |
+| Information requested | Credit Officer |
+| Loan returned to Draft (full rebuild) | Credit Officer |
+| Loan stepped back to a previous stage | Destination team + Credit Officer (FYI) |
+| Security request created | Credit Officer |
+| Security request documents submitted by officer | Assigned Securities reviewer, or all Securities reviewers if unassigned |
+| Security request resolved | Credit Officer |
+| Security request rejected | Credit Officer |
+| Ready for Disbursement | Assigned Disbursement Officer (or all Disbursement Officers if unassigned) + Credit Officer (FYI) |
+| Disbursement scheduled | Assigned Disbursement Officer, or all Disbursement Officers if unassigned |
+| Disbursement executed | Credit Officer + Member (if member email notifications are enabled by your Tenant Administrator) |
+| Loan filed | Credit Officer |
+| Loan cancelled | Assigned owner + Credit Officer (or team fan-out if unassigned) |
+
+## Member notifications
+
+Emails to borrowers are controlled by a setting your Tenant Administrator manages. By default, member notifications are **off**. When enabled, members receive emails for two events only:
+
+- **Loan declined** — an adverse action notice informing them the application was unsuccessful
+- **Disbursement executed** — a confirmation that funds have been released
+
+Members never receive internal workflow notifications (such as Information Requested or Ready for Disbursement) — those are staff-facing events.
+
+<Note>
+Your credit union's name and branding, as configured by your Tenant Administrator, are included in every email notification sent from iLoan — to staff and to members.
+</Note>
+
+## Assignment notifications
+
+When a Credit Manager or Lead uses the Assignment panel to route a loan to a specific person, that person receives a **"A loan needs your attention"** email immediately. This is separate from the event-based notifications in the table above.
+
+Assignment notifications fire for:
+- Direct assignment by a manager or lead (`loans.assign` capability)
+- Reassignment from one person to another
+
+They do **not** fire when you claim a loan yourself. Self-claiming is logged in the audit trail but does not generate an email.
+
+## Noise reduction — scoped vs. broadcast
+
+iLoan's notification system is designed to reduce inbox noise as loan ownership is established. The comparison below shows the difference between a fully unassigned pipeline and one where loans are actively assigned:
+
+| Event | Unassigned (worst case) | Assigned (scoped) |
+|---|---|---|
+| Loan routed to Adjudication | Every adjudicator in the tenant | The one assigned adjudicator |
+| Security request documents submitted | Every Securities reviewer | The one assigned reviewer |
+| Ready for Disbursement / scheduled | Every Disbursement Officer | The one assigned officer |
+| Loan filed | Credit Officer + all Credit Managers + all Branch Managers | Credit Officer only |
+
+Assigning loans promptly — either through the Assignment panel or by claiming — keeps your team's inboxes manageable and makes it clear who is accountable for each file.
+
+<Tip>
+If you are not receiving notifications you expect, check two things: (1) confirm with your Tenant Administrator that your role is correctly configured and includes the right capabilities; and (2) check whether the loan is assigned to someone else — if it is, that person is the only one receiving stage notifications for that file.
+</Tip>

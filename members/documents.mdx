@@ -1,0 +1,111 @@
+---
+title: "Upload and manage member documents in your iLoan workspace"
+sidebarTitle: "Documents"
+description: "Learn how to upload identity and supporting documents to a member's profile in iLoan, including accepted file types, size limits, and document categories."
+---
+
+iLoan lets you attach documents directly to a member's profile — identity documents, proof of address, income verification, collateral paperwork, and anything else needed to support the origination process. Every file you upload is automatically virus-scanned before it is stored, and all access to documents is recorded in the audit log. Having a complete document library on the member's profile makes KYC reviews faster and keeps all supporting materials in one place throughout the loan lifecycle.
+
+<Tip>
+  Upload the member's identity documents before starting the KYC verification process. Having the TRN card or driver's licence already on file gives KYC reviewers everything they need without additional back-and-forth.
+</Tip>
+
+## Accepted file types and size limits
+
+| Detail | Requirement |
+|---|---|
+| **Accepted formats** | PDF, JPEG, PNG, HEIC |
+| **Maximum file size** | 10 MB per file |
+| **File type validation** | iLoan checks each file's actual content, not just its name or extension |
+
+<Warning>
+  If an upload fails with an **"Unsupported file type"** error, verify that you are uploading a PDF, JPEG, PNG, or HEIC file. iLoan checks the actual file content, not just the file extension. Files disguised with a misleading name — for example, an executable renamed to `.pdf` — are automatically rejected during the security scan.
+</Warning>
+
+---
+
+## Document categories
+
+iLoan organises documents into five categories. Select the correct category when uploading so that documents are easy to find and so the loan origination system can locate them automatically when needed.
+
+<AccordionGroup>
+  <Accordion title="ID_PRIMARY — Government-issued identity">
+    Primary identity documents issued by a government authority. Examples:
+
+    - TRN card
+    - National ID
+    - Passport
+    - Driver's licence
+
+    Upload ID_PRIMARY documents before running KYC verification — they appear directly in the KYC Verification tab as supporting evidence.
+  </Accordion>
+  <Accordion title="PROOF_OF_ADDRESS — Address verification">
+    Documents that confirm the member's current residential address. Examples:
+
+    - Utility bill (electricity, water, telephone)
+    - Bank statement showing the member's address
+    - Lease or rental agreement
+  </Accordion>
+  <Accordion title="PROOF_OF_INCOME — Income verification">
+    Documents that demonstrate the member's income and ability to repay. Examples:
+
+    - Recent pay stub or payslip
+    - Employment letter from the member's employer
+    - Tax return
+  </Accordion>
+  <Accordion title="COLLATERAL_DOCS — Collateral documentation">
+    Documents related to assets offered as security for a loan. Examples:
+
+    - Vehicle title or registration
+    - Property deed or certificate of title
+    - Insurance certificate
+  </Accordion>
+  <Accordion title="OTHER — General supporting documents">
+    Any document that does not fit the categories above. Use this category for supplementary materials requested during the application or adjudication process.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Uploading a document
+
+You need the **members.documents.upload** capability to add files to a member's profile. Credit Officers and above are typically granted this capability.
+
+<Steps>
+  <Step title="Open the member's profile">
+    Search for the member on the Members list and click their name to open their profile.
+  </Step>
+  <Step title="Go to the Documents tab">
+    Click the **Documents** button in the profile header, or navigate to the Documents tab. You will see the member's current document library and any outstanding document requests linked to their loan applications.
+  </Step>
+  <Step title="Click Upload Document">
+    Click the **Upload Document** button to open the upload form.
+  </Step>
+  <Step title="Select the document category and subtype">
+    Choose the appropriate **document category** from the list (for example, ID_PRIMARY or PROOF_OF_INCOME), then select the specific **subtype** that best describes the document (for example, "Driver's licence" or "Pay stub"). Selecting the correct subtype ensures the document appears in the right place during KYC review and loan processing.
+  </Step>
+  <Step title="Choose the file">
+    Click **Choose file** and select the document from your computer. The file must be a PDF, JPEG, PNG, or HEIC and no larger than 10 MB.
+  </Step>
+  <Step title="Click Upload">
+    Click **Upload**. iLoan scans the file for viruses, verifies its content type, and then stores it securely. The document appears in the member's document library once the scan completes successfully.
+  </Step>
+</Steps>
+
+---
+
+## Viewing documents
+
+Every document in the member's library is listed on the Documents tab, showing the document name, category, upload date, uploader, and current scan status. Click any document row to preview it. PDFs open in an inline viewer; images display directly on the page.
+
+Access to document content is recorded in the audit log each time a file is opened, so you will always have a record of who viewed sensitive materials.
+
+---
+
+## Deleting documents
+
+Deleting a document requires the **members.documents.delete** capability, which is typically restricted to Credit Managers and Administrators.
+
+When you delete a document, it is marked as removed and hidden from the standard document list — but it is not permanently erased. The file and its metadata are retained in full for regulatory audit purposes, and an Administrator can restore a deleted document if needed.
+
+To delete a document, open the Documents tab, find the document you want to remove, click the actions menu (⋯) on that row, and select **Delete**. You will be prompted to confirm the action and optionally enter a reason for the deletion.

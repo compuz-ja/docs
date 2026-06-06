@@ -1,0 +1,130 @@
+---
+title: "Analytics and reporting dashboards for iLoan managers"
+sidebarTitle: "Analytics Dashboards"
+description: "Use iLoan's analytics dashboards to monitor loan volume, credit quality, cycle times, and team performance across your credit union branches."
+---
+
+iLoan provides analytics dashboards that give Credit Managers and Branch Managers a real-time view of loan pipeline activity, credit quality, and operational performance. Dashboards refresh automatically whenever the page loads and can be filtered by time period. All data is scoped to your credit union's workspace — you will never see data from another tenant.
+
+**Required role:** Credit Manager (all branches) or Branch Manager (their branch only)
+
+To access analytics, navigate to **Admin → Analytics**.
+
+<Note>
+  Analytics data reflects the current state of your workspace. For a
+  point-in-time historical record suitable for regulators or auditors, use the
+  **Audit Trail** and **Compliance Export** features instead.
+</Note>
+
+## Branch scoping
+
+The analytics dashboards respect your role's branch access:
+
+- **Credit Managers** and **Tenant Administrators** see data across all branches.
+- **Branch Managers** see only the metrics for their own branch. Loans and members from other branches are excluded from all charts and totals.
+
+This scoping is automatic — you do not need to set a filter. A Branch Manager cannot see another branch's data regardless of the date range selected.
+
+## Operations dashboard
+
+The Operations dashboard gives you a high-level view of your credit union's lending activity over the selected period.
+
+**Key metrics:**
+
+- Total loan applications submitted, broken down by current status (Draft, Submitted, Adjudication, Approved, Declined, Disbursed, Filed)
+- Loan application volume and total requested value by branch
+- Applications submitted and closed per week or month (auto-bucketed based on the date range you select)
+- Approval rate and pull-through rate (percentage of applications that reached Disbursed)
+
+**Funnel view:** The Operations dashboard includes a funnel chart showing how many applications reached each stage — Created → Submitted → Approved → Disbursed → Filed. Click any funnel stage to open a drill-down list of the individual loans in that stage.
+
+**Loan mix:** A breakdown of application volume and value by loan type (Unsecured, Cash-Secured, Auto, Mortgage).
+
+## Credit Quality dashboard
+
+The Credit Quality dashboard helps you understand the risk profile of the loans your credit union is approving.
+
+**Key metrics:**
+
+- Weighted average interest rate across approved loans in the period
+- Rate override rate (percentage of approved loans where a Credit Manager manually overrode the system rate)
+- Approval rate for adjudicated applications
+- Total number of adjudication decisions in the period
+
+**Risk-band distribution:** A breakdown of approved loans by risk band (R1 through R5), showing how much of your approved portfolio sits in each risk tier. R1 represents the lowest-risk borrowers; R5 represents the highest.
+
+**Decision outcomes:** A breakdown of adjudication decisions — Approved, Declined, and Info Requested — for the selected period.
+
+<Tip>
+  A high proportion of R4 and R5 approvals alongside a high override rate may
+  indicate that your policy rules need review, or that Credit Managers are
+  approving outside the rate table. Use the drill-down to inspect individual
+  decisions.
+</Tip>
+
+## Cycle Time dashboard
+
+The Cycle Time dashboard shows how long loans take to move through each stage of the origination workflow. Use it to identify stages where applications are stalling.
+
+**Key metrics:**
+
+| Metric | What it measures |
+|---|---|
+| **Decision time (avg / P95)** | Days from SUBMITTED to an adjudication decision (APPROVED or DECLINED) |
+| **Cash-to-close time (avg / P95)** | Days from APPROVED to DISBURSED |
+| **End-to-end time (avg)** | Days from SUBMITTED to FILED |
+| **Rework rate** | Percentage of applications that passed through INFO\_REQUESTED at least once |
+
+**Stage dwell times:** A bar chart showing the average number of days applications spent in each pipeline stage — Draft, Submitted, Adjudication, Info Requested, Approved, Securities, and Disbursement. Only closed segments are counted (stages that the loan has already left).
+
+<Tip>
+  Use the Cycle Time dashboard to identify bottlenecks. If the Adjudication
+  stage shows a high average dwell time, consider reviewing how quickly loans
+  are being assigned to Credit Managers after submission. If the Disbursement
+  stage is slow, check for outstanding securities requirements or dual-control
+  approval queues.
+</Tip>
+
+## Members dashboard
+
+The Members dashboard tracks member growth and KYC (Know Your Customer) verification health.
+
+**Key metrics:**
+
+- New members registered in the selected period
+- Total active members in your workspace
+- KYC verification rate (percentage of members with a Verified KYC status)
+- Members currently awaiting KYC review
+
+**KYC status breakdown:** A breakdown of your member population by KYC status — Unverified, In Progress, Manual Review, Verified, and Failed. A large Manual Review count may indicate a backlog in your KYC review queue.
+
+**Member growth chart:** A time-series chart showing new member registrations over the selected period, auto-bucketed by day, week, or month.
+
+## Exporting data
+
+Every dashboard section includes a **Download CSV** button that exports the filtered data currently displayed on screen. The export respects your branch scope — a Branch Manager's export will only contain records from their branch.
+
+CSV exports include up to 5,000 rows per download. If your date range produces more than 5,000 records, narrow the range and run multiple exports.
+
+**Typical CSV fields (Operations export):**
+
+| Column | Description |
+|---|---|
+| Loan ID | The unique loan identifier (e.g. `MDVL-AUTO-00001`) |
+| Status | Current loan status |
+| Loan type | Unsecured, Cash-Secured, Auto, or Mortgage |
+| Product | The loan product name |
+| Branch | The branch code where the loan was originated |
+| Member CIF | The member's account number |
+| Member name | Full name of the member |
+| Requested amount | Amount in JMD |
+| Term (months) | Requested repayment term |
+| Created at | ISO timestamp when the application was created |
+| Submitted at | ISO timestamp when the application was submitted |
+
+<Accordion title="How often does analytics data refresh?">
+  Analytics data reflects the live state of your workspace. The dashboard
+  reloads data each time you navigate to the Analytics page or change the date
+  range filter. There is no scheduled refresh interval — the numbers you see
+  are current as of the moment the page loaded.
+</Accordion>

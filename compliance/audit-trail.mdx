@@ -1,0 +1,113 @@
+---
+title: "View and search the iLoan audit trail for your credit union"
+sidebarTitle: "Audit Trail"
+description: "iLoan's immutable, hash-chained audit trail records every action in your credit union workspace — searchable by actor, resource, action, or time range."
+---
+
+iLoan maintains a complete, tamper-evident audit record of every action taken in your credit union workspace. The audit trail is a legal-grade record that cannot be modified or deleted — it is the source of truth for regulatory inquiries, internal investigations, and dispute resolution.
+
+## What the audit trail records
+
+Every meaningful event in iLoan is captured automatically. You do not need to configure anything — recording is always on.
+
+<CardGroup cols={2}>
+  <Card title="Loan lifecycle events" icon="file-contract">
+    Every loan state change — application submitted, adjudication decision recorded, securities resolved, disbursement executed — is logged with the full before/after context.
+  </Card>
+  <Card title="Member and document activity" icon="user">
+    Every member record update, document upload, and identity verification attempt is recorded, including the actor who performed it and when.
+  </Card>
+  <Card title="Access and authentication" icon="lock">
+    Every login, logout, failed login attempt, session creation, and permission-denied event is captured — so unauthorized access attempts are visible.
+  </Card>
+  <Card title="Configuration changes" icon="gear">
+    Every change to rates, workflow configuration, user roles, and tenant settings is logged — including who made the change and what it was before.
+  </Card>
+</CardGroup>
+
+## Non-repudiation: who did what
+
+Every audit entry captures a complete picture of the actor at the exact moment of the action. This ensures there is no ambiguity about who performed an action, under what authority, and from where.
+
+Each entry records:
+
+- **Actor identity** — the user's ID, name, and email address
+- **Role at the time** — the role the user held when they performed the action (a snapshot, so role changes later do not affect historical records)
+- **Capabilities at the time** — the exact permissions the user held at that moment
+- **IP address** — the network address the request originated from
+- **User agent** — the browser or client used
+- **Authentication method** — how the user authenticated (password, SSO, etc.)
+- **MFA status** — whether multi-factor authentication was satisfied for that session
+- **Session and request IDs** — for cross-referencing with other systems
+
+## Accessing the audit viewer
+
+<Note>
+  You need the **Credit Manager** or **Tenant Administrator** role to access the audit viewer. Both roles carry the `reports.view` capability, which is required to view and search audit records. Branch Managers can view a branch-scoped subset of the audit trail.
+</Note>
+
+<Steps>
+  <Step title="Go to Admin → Audit Viewer">
+    From the main navigation, select **Admin**, then click **Audit Viewer**. You will see the audit trail for your entire credit union workspace, with the most recent events at the top.
+  </Step>
+  <Step title="Apply filters to narrow the results">
+    Use the filter bar to search by resource, actor, action type, time range, or correlation ID (see the five search patterns below).
+  </Step>
+  <Step title="Click any row to expand it">
+    Click on any audit entry row to see the full event payload — including the complete before/after state, decision rationale (for adjudication events), and all non-repudiation fields.
+  </Step>
+</Steps>
+
+## Five ways to search the audit trail
+
+<Accordion title="By resource — find all events for a specific loan or member">
+  Select a **Resource type** from the dropdown (for example, `LoanApplication` or `Member`) and enter the resource's ID in the **Resource ID** field. This returns every event that touched that specific record.
+
+  **Example:** To reconstruct the complete history of a loan application for a regulatory inquiry, select `LoanApplication` and enter the Loan ID. You will see every state change, decision, document upload, and access event for that loan in chronological order.
+</Accordion>
+
+<Accordion title="By actor — find all actions taken by a specific staff member">
+  Enter a staff member's name, email address, or user ID in the **Actor** field. iLoan will return every action that person performed across the workspace during the selected time range.
+
+  **Example:** If a staff member's credentials may have been compromised, search by their user ID to review every action taken under their account.
+</Accordion>
+
+<Accordion title="By action type — filter by a specific event">
+  Use the **Event type** dropdown to filter by a specific event name. The dropdown lists every event type the platform can emit, so you can search for an event even before it has occurred in your workspace.
+
+  Common event types include:
+  - `loan_application.submitted`
+  - `adjudication.decision.recorded`
+  - `disbursement.executed`
+  - `member.updated`
+  - `permission.denied`
+  - `audit.exported`
+</Accordion>
+
+<Accordion title="By time range — filter by date and time">
+  Set a **From** and **To** date and time to restrict results to a specific window. Combine with other filters — for example, all `adjudication.decision.recorded` events in the past calendar year — to produce a focused record for a regulatory inquiry.
+</Accordion>
+
+<Accordion title="By correlation ID — trace a complete request chain">
+  Enter a **Request ID** or **Trace ID** to find every audit event generated by a single request or workflow execution. This is useful when you need to understand the exact sequence of events that produced a particular outcome — for example, why a specific loan decision was recorded.
+</Accordion>
+
+<Tip>
+  Use the time-range filter together with a specific Loan ID to quickly reconstruct the complete history of a loan application for a regulatory inquiry. Select the `LoanApplication` resource type, enter the Loan ID, and set the date range to cover the application period — you will see every event from submission to disbursement in a single view.
+</Tip>
+
+## Hash-chain integrity
+
+iLoan's audit log is **hash-chained**: each entry stores a SHA-256 cryptographic hash that links it to the previous entry. This means:
+
+- If anyone modifies, deletes, or reorders any audit entry — even a single character — the chain breaks at that point and every subsequent entry becomes invalid.
+- The break is detectable automatically. iLoan runs an integrity verification job every hour and alerts immediately if the chain is broken.
+- Every day, the latest chain state is pushed to external immutable cloud storage (with compliance-mode object lock). Even an attacker with direct database access cannot rewrite history without breaking the external anchors.
+
+This architecture means the audit log is not just protected by application-layer access controls — it is mathematically verifiable.
+
+<Note>
+  The audit log is append-only and cannot be modified or deleted. This is enforced at the **storage level** — not merely an application-layer restriction. No iLoan interface or administrative action can alter or remove an existing audit entry.
+</Note>
+
+To provide a cryptographically-signed, verifiable record to regulators or auditors, use the [Compliance Export](/compliance/compliance-export) feature.
