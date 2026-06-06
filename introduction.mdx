@@ -1,51 +1,52 @@
 ---
-title: "iLoan: Loan Origination Platform for Credit Unions"
+title: "Loan Origination System for credit unions"
 sidebarTitle: "Introduction"
-description: "iLoan is a loan origination platform for credit unions. Manage the full lifecycle from application capture through adjudication, disbursement, and filing."
+description: "Take a loan from application capture through adjudication, securities, disbursement, and filing, with every action on the record."
+icon: "book-open"
 ---
 
-iLoan is a loan origination platform built specifically for credit unions. It gives your team a single, structured workspace to take a loan from first enquiry all the way through to disbursement and regulatory filing — with every action recorded automatically and every department seeing exactly what they need to see. Whether you are a Credit Officer capturing a new application, an Adjudicator reviewing risk, a Securities Reviewer confirming collateral, or a Credit Manager watching the pipeline, iLoan keeps the process moving and the record straight.
+The Loan Origination System (LOS) takes a loan from first enquiry to disbursement and filing in one workspace. Credit Officers capture. Adjudicators decide. The Securities team checks collateral. The Disbursement team releases funds. Every action is recorded as it happens, and each department sees exactly what it needs to.
 
 ## Key features
 
 <CardGroup cols={2}>
-  <Card title="Loan Lifecycle Management" icon="arrows-spin">
-    Track every loan from initial draft through adjudication, securities review, disbursement, and final filing. Status updates happen automatically as each department completes their work, so nothing falls through the gaps.
+  <Card title="Loan lifecycle management" icon="workflow">
+    Track every loan from draft through adjudication, securities review, disbursement, and filing. When a department records its decision, the loan routes itself to the next department's queue, so no loan stalls between stages.
   </Card>
-  <Card title="Member Management & KYC" icon="id-card">
-    Maintain a complete member registry with contact details, identity documents, and KYC verification status. A member must be verified before a loan application can be submitted, keeping your process compliant from the start.
+  <Card title="Member management and KYC" icon="user-check">
+    Keep a complete member registry with contact details, identity documents, and KYC status. The draft to submitted transition is blocked unless the member's KYC status is Verified.
   </Card>
-  <Card title="Role-Based Workflows" icon="sitemap">
-    Each staff member sees only the queues, actions, and data relevant to their role. Credit Officers capture; Adjudicators decide; Securities Reviewers check collateral; Disbursement Officers execute. No role can skip or override another department's step.
+  <Card title="Role-based workflows" icon="lock">
+    Each staff member sees only the queues, actions, and data their role allows. Credit Officers capture, Adjudicators decide, the Securities team checks collateral, the Disbursement team executes. No role skips or overrides another department's step.
   </Card>
-  <Card title="Audit & Compliance" icon="shield-check">
-    Every action — every status change, every decision, every document upload — is recorded in a tamper-evident, hash-chained audit log. Generate a compliance export bundle at any time for regulatory review.
+  <Card title="Audit and compliance" icon="shield-check">
+    Every status change, decision, and document upload lands in a tamper-evident, hash-chained audit log. Generate a compliance export bundle at any time for regulatory review.
   </Card>
 </CardGroup>
 
-## Departments covered
+## The seven roles
 
-iLoan is designed around the way credit union loan departments actually work. The following roles are built into the platform:
+Seven roles ship built in, one per credit union loan department job:
 
-- **Credit Officer** — captures loan applications, manages member records, and submits applications for adjudication
-- **Adjudicator** — reviews submitted applications, assesses risk scores and rates, and records approval, decline, or information-request decisions
-- **Securities Reviewer** — confirms that collateral documentation is in order before a loan proceeds to disbursement
-- **Disbursement Officer** — executes approved and secured loans and records disbursement instructions
-- **Credit Manager** — monitors the full in-flight pipeline across all statuses and branches; read-only oversight view
-- **Branch Manager** — views and tracks loans belonging to their assigned branch
-- **Tenant Administrator** — manages users, role assignments, invitations, and tenant-level configuration
+- **Credit Officer** captures loan applications, manages member records, and submits applications for adjudication.
+- **Adjudicator** reviews submitted applications, weighs the risk score and rate, and records an approve, decline, or information-request decision.
+- **Securities** confirms that collateral is perfected before a loan moves to disbursement.
+- **Disbursement** schedules and executes approved, secured loans and releases the funds.
+- **Credit Manager** oversees the full in-flight pipeline across every branch, approves high-value disbursements, and reads reports.
+- **Branch Manager** views and tracks the loans belonging to their assigned branch.
+- **Tenant Administrator** manages users, role assignments, invitations, and tenant configuration.
 
-Each role has a tailored dashboard and can only perform the actions their role permits.
+Each role gets a tailored dashboard and can only take the actions its role permits.
 
 ## How it works
 
-iLoan moves a loan through four departments in sequence. At each step the appropriate team acts, and the loan advances automatically to the next stage.
+A loan moves through four departments in sequence. At each step the right team acts, and the loan routes to the next queue. Only the move from securities to disbursement happens automatically, once collateral clears.
 
-1. **Capture** — A Credit Officer creates a member record, completes KYC verification, then fills out a loan application including employment details, income and expenses, and collateral information where applicable. The platform auto-calculates the applicant's TDSR, risk band, and indicative interest rate.
-2. **Adjudication** — The application enters the Adjudication queue. An Adjudicator reviews the risk assessment, may request additional information from the Credit Officer, and ultimately records an approval or decline decision.
-3. **Securities** — Approved applications move to the Securities queue. A Securities Reviewer confirms that all collateral is perfected (title transferred, property registered, or cash hypothecated). Any documentation gaps raise a securities issue, which must be resolved before the loan can proceed.
-4. **Disbursement & Filing** — Once securities are clear, a Disbursement Officer schedules and executes the funds release. After disbursement is confirmed, the loan is filed and archived in a terminal state.
+1. **Capture.** A Credit Officer creates a member record, submits the member for KYC, then fills out a loan application with employment, income and expenses, and any collateral. The platform auto-calculates the applicant's TDSR, risk band, and indicative rate.
+2. **Adjudication.** The application enters the Adjudication queue. An Adjudicator reviews the risk assessment, can ask the Credit Officer for more information, and records an approval or decline. An information request moves the application to Info requested, routes it back to the Credit Officer as a draft, and re-runs the risk assessment when they resubmit.
+3. **Securities.** Approved applications move to the Securities queue. The Securities team confirms every piece of collateral is perfected: title transferred, property registered, or cash hypothecated. A documentation gap raises a securities issue that has to clear before the loan proceeds.
+4. **Disbursement and filing.** Once securities are clear, the Disbursement team applies fees and GCT, schedules the payees, and executes the funds release. After disbursement settles, the loan is filed and archived.
 
 <Note>
-  iLoan is a **multi-tenant** platform. Your credit union is a separate, fully isolated tenant — your members, loans, staff accounts, rate tables, and audit records are never visible to or shared with any other credit union on the platform. Your tenant has its own URL path (for example, `https://app.example.com/your-slug`), and every piece of data is scoped exclusively to your organisation.
+  The platform is **multi-tenant**. Your credit union is a separate, fully isolated tenant. Your members, loans, staff accounts, rate tables, and audit records are never visible to any other credit union on the platform. Your tenant has its own URL path, like `https://loan.compuzign.com/your-slug`, and every record is scoped to your organisation alone.
 </Note>

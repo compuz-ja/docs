@@ -1,107 +1,141 @@
 ---
-title: "Invite staff and assign roles in your iLoan workspace"
-sidebarTitle: "Inviting Team Members"
-description: "Learn how to invite Credit Officers, Adjudicators, and other staff to your iLoan workspace and assign them the right roles for their department."
+title: "Invite staff and assign roles"
+sidebarTitle: "Inviting team members"
+description: "Invite Credit Officers, Adjudicators, and other staff to your workspace and assign them the right roles for their department."
+icon: "user-plus"
 ---
 
-As a Tenant Administrator, you can invite staff to join your credit union workspace in iLoan. Each invitation specifies the staff member's role, so they have the right access from the moment they first sign in — no separate permissions step required. Invitations are sent by email and accepted via a secure one-time link.
+As a **Tenant Administrator**, you can invite staff to join your credit union workspace. Each invitation specifies the staff member's role, so their access is live the first time they sign in. Invitations are sent by email and accepted through a secure one-time link.
 
 <Note>
-  Only Tenant Administrators can send invitations or manage team member access. If you need to invite someone and do not see the **Admin** menu, contact your Tenant Administrator.
+  Only **Tenant Administrators** can send invitations or manage team member access. If you need to invite someone and do not see the **Administration** group in the sidebar, contact your **Tenant Administrator**.
 </Note>
 
 ## Sending an invitation
 
 <Steps>
-  <Step title="Go to Admin → Invitations">
-    In the left navigation bar, click **Admin**, then select **Invitations** from the submenu.
+  <Step title="Go to Administration → Invitations">
+    In the left sidebar, open the **Administration** group and select **Invitations**.
   </Step>
-  <Step title="Click Invite Member">
-    Click the **Invite Member** button in the top-right corner of the Invitations page.
-  </Step>
-  <Step title="Enter the staff member's email address">
-    Type the work email address of the person you are inviting. iLoan will send the invitation to this address. Make sure the address is correct before continuing — invitation links are tied to the email they were sent to.
+  <Step title="Enter one or more email addresses">
+    In the **Send invitations** card, type the work email addresses of the people you are inviting. You can add several at once, separated by commas, semicolons, spaces, or new lines. Every address in the card receives the same role. Make sure the addresses are correct, because each invitation link is tied to the email it was sent to.
   </Step>
   <Step title="Select their role">
-    Choose the role that matches their responsibilities from the dropdown (for example, **Credit Officer**, **Adjudicator**, or **Branch Manager**). If you are unsure which role to assign, see [Roles & Permissions](/access/roles-and-permissions) for a full description of each role.
+    Pick the role that matches their responsibilities, for example **Credit Officer**, **Adjudicator**, or **Branch Manager**. If you are unsure which role to assign, see [Roles & Permissions](/access/roles-and-permissions) for a full description of each role.
   </Step>
-  <Step title="Click Send Invitation">
-    Click **Send Invitation** to dispatch the email. The invitation will appear in your **Pending Invitations** list immediately.
+  <Step title="Click Send invitations">
+    Click **Send invitations**. Each new invitation appears in the list below with a **Pending** status, and the platform confirms how many were sent.
   </Step>
-  <Step title="Staff member receives the email and clicks the link">
-    Your colleague will receive an email with a secure **Accept invitation** link. The link is valid for **24 hours**. Clicking it takes them directly to the account creation page, where they set a password and gain immediate access to the workspace.
+  <Step title="The staff member receives the email and clicks the link">
+    Your colleague receives an email with a secure **Accept invitation** link. The link is valid for **72 hours**. New users are taken to sign-up to create their account. People who already have an account are taken to sign-in first, then straight into the workspace.
   </Step>
-  <Step title="Staff member is taken to the workspace dashboard">
-    Once they have created their password, iLoan logs them in automatically and lands them on the workspace dashboard with their assigned role already active.
-  </Step>
-</Steps>
-
-<Warning>
-  Invitation links are single-use and expire after 24 hours. If a link expires before it is used, find the invitation in **Admin → Invitations** and click **Resend** to issue a fresh link.
-</Warning>
-
-## Managing pending invitations
-
-You can track the status of all outstanding invitations from **Admin → Invitations**.
-
-<CardGroup cols={2}>
-  <Card title="Pending" icon="clock">
-    The invitation has been sent but not yet accepted. You can resend a pending invitation at any time — useful if the email was missed or the link expired.
-  </Card>
-  <Card title="Accepted" icon="circle-check">
-    The invitee has created their account and joined the workspace. You can find their membership record in **Admin → Members**.
-  </Card>
-  <Card title="Expired" icon="calendar-xmark">
-    The 24-hour window passed before the invitation was accepted. Click **Resend** to generate a new link with a fresh expiry.
-  </Card>
-  <Card title="Revoked" icon="ban">
-    An administrator manually cancelled the invitation before it was accepted. Revoked invitations cannot be reactivated — send a new invitation if access should still be granted.
-  </Card>
-</CardGroup>
-
-To revoke an invitation that has not yet been accepted, find it in the Pending list and click **Revoke**. This immediately invalidates the link in the invitee's inbox.
-
-## Changing a team member's role
-
-If a staff member's responsibilities change, you can update their role at any time.
-
-<Steps>
-  <Step title="Go to Admin → Members">
-    Click **Admin** in the left navigation bar, then select **Members**.
-  </Step>
-  <Step title="Find the team member">
-    Search by name or email address to locate the member record.
-  </Step>
-  <Step title="Click Change Role">
-    Click the **⋯** menu next to their name and select **Change Role**.
-  </Step>
-  <Step title="Select the new role and confirm">
-    Choose the new role from the dropdown and click **Save**. The change takes effect on the member's next page load — there is no need to notify them manually, though it is good practice to let them know their access has changed.
+  <Step title="The staff member lands in the workspace">
+    Once a new user has created their password and verified their email, the platform signs them in and lands them on the workspace dashboard with their assigned role already active.
   </Step>
 </Steps>
 
 <Note>
-  You can assign multiple roles to the same user if your credit union's workflow requires it. Repeat the **Change Role** step or ask iLoan support if you need guidance on multi-role configurations.
+  Some addresses can be skipped, and the platform tells you why. An address is skipped when it is not a valid email, when it already belongs to an active member of this workspace, or when it already has a live pending invitation. A member you previously suspended or revoked can be re-invited. Their existing record is reactivated when they accept.
 </Note>
 
-## Suspending a team member's access
+<Warning>
+  Invitation links are single-use and expire after 72 hours. If a link expires before it is used, find the invitation in **Administration → Invitations** and use **Resend** to issue a fresh link.
+</Warning>
 
-When a staff member leaves the credit union or is placed on leave, you can suspend their access without deleting their account. Suspension preserves all of their history — loan records, audit logs, and previous actions remain intact.
+### What the invitee sees
+
+The invitation link is bound to the address it was sent to. If someone who is signed in under a different email clicks the link, they are blocked and shown an email-mismatch page rather than being added under the wrong account. Ask them to sign out, or to open the link in a session for the invited address.
+
+## Bulk import from a CSV
+
+When you need to onboard many people at once, import a CSV instead of typing addresses by hand.
 
 <Steps>
-  <Step title="Go to Admin → Members">
-    Navigate to **Admin → Members** and search for the team member.
+  <Step title="Open the import dialog">
+    On the **Invitations** page, click **Import** in the top-right corner.
   </Step>
-  <Step title="Click Suspend">
-    Click the **⋯** menu next to their name and select **Suspend Member**. You may be prompted to enter a reason for the suspension — this is recorded in the audit log.
+  <Step title="Upload your CSV">
+    Provide a CSV with a header row. Two columns are required: **email** (header `email`, `email address`, or `e-mail`) and **role** (header `role` or `role name`). You can also include optional **first name**, **last name**, and **branch** columns (the branch header can be `branch` or `branch code`). The file is capped at 500 rows and 1 MB, whichever comes first, so a file with long rows can hit the size limit below 500 rows. Every upload is checked: the contents must read as CSV text, the file passes a virus scan, and rows with formula-like values are sanitized.
   </Step>
-  <Step title="Confirm the suspension">
-    Click **Confirm**. The member's access is revoked immediately. Any sessions they currently have open will be blocked on their next request.
+  <Step title="Review the preview">
+    The platform parses the file and shows a preview that classifies every row as ready, invalid, duplicate, already a member, or already invited. Nothing is sent at this stage.
+  </Step>
+  <Step title="Commit the import">
+    Confirm to send invitations to the ready rows. Each one becomes a pending invitation exactly as if you had entered it by hand.
   </Step>
 </Steps>
 
-To reinstate a suspended member, follow the same steps and click **Reactivate Member** instead.
+<Note>
+  Bulk imports are rate-limited to 5 committed runs per hour per workspace. Every import is recorded in the workspace's import history and the audit log, including previews, rejections, and commits, so there is always a trail of who imported what.
+</Note>
+
+## Managing pending invitations
+
+You can track the status of all outstanding invitations from **Administration → Invitations**.
+
+<CardGroup cols={2}>
+  <Card title="Pending" icon="clock">
+    The invitation has been sent but not yet accepted. Resend a pending invitation to send a fresh link.
+  </Card>
+  <Card title="Accepted" icon="circle-check">
+    The invitee has created their account and joined the workspace. You can find their membership record in **Administration → Team & roles**.
+  </Card>
+  <Card title="Expired" icon="calendar-x">
+    The 72-hour window passed before the invitation was accepted. Click **Resend** to generate a new link with a fresh expiry.
+  </Card>
+  <Card title="Revoked" icon="lock">
+    An administrator manually cancelled the invitation before it was accepted. Revoked invitations cannot be reactivated. Send a new invitation if access should still be granted.
+  </Card>
+</CardGroup>
+
+To act on an invitation, open the **⋯** menu at the end of its row. Pending and expired invitations offer **Resend** and **Revoke**.
+
+**Resend** invalidates the previous link and issues a brand-new one. The old link stops working, so the invitee should always use the most recent email. **Revoke** immediately invalidates the link in the invitee's inbox.
+
+## Changing a team member's role
+
+If a staff member's responsibilities change, you can update their role at any time. Each member holds exactly one role, so changing it replaces the previous role.
+
+<Steps>
+  <Step title="Go to Administration → Team & roles">
+    In the left sidebar, open the **Administration** group and select **Team & roles**.
+  </Step>
+  <Step title="Find the team member">
+    Search by name or email address to locate the member.
+  </Step>
+  <Step title="Pick the new role">
+    Open the role dropdown in the member's row and choose the new role. The change applies the moment you select it. There is no separate save step. It takes effect on the member's next page load.
+  </Step>
+</Steps>
+
+## Suspending a team member's access
+
+When a staff member leaves the credit union or is placed on leave, you can suspend their access without deleting their account. Suspension preserves all of their history. Loan records, audit logs, and previous actions remain intact.
+
+<Steps>
+  <Step title="Go to Administration → Team & roles">
+    Navigate to **Administration → Team & roles** and search for the team member.
+  </Step>
+  <Step title="Open the actions menu and click Suspend">
+    Open the **⋯** menu at the end of the member's row and click **Suspend**.
+  </Step>
+  <Step title="Confirm the suspension">
+    Click **Suspend member**. The member's access is revoked immediately. Any sessions they currently have open are blocked on their next request.
+  </Step>
+</Steps>
+
+To reinstate a suspended member, open the same **⋯** menu and click **Reactivate**.
 
 <Warning>
-  Suspension takes effect immediately. The user will not be able to sign in to this workspace until an administrator reactivates them. Their account and all historical data are preserved throughout.
+  Suspension takes effect immediately. The member cannot sign in to this workspace until an administrator reactivates them. Their account and all historical data are preserved throughout.
 </Warning>
+
+## The capabilities behind these actions
+
+These admin actions are each gated by a specific capability, all held by the **Tenant Administrator** role:
+
+- `admin.tenant.invite.create` sends and resends invitations and runs the CSV import.
+- `admin.tenant.invite.revoke` revokes invitations.
+- `admin.tenant.invite.list` views the invitations list.
+- `admin.tenant.member.role.set` changes a member's role.
+- `admin.tenant.member.deactivate` suspends and reactivates members.

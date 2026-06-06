@@ -1,12 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
-  "name": "iLoan",
-  "description": "Documentation for iLoan — the multi-tenant loan origination platform for credit unions.",
+  "name": "CNS",
+  "description": "CNS product documentation. The Loan Origination System (LOS) lives here, with room for every Compuzign product that follows.",
   "colors": {
-    "primary": "#1E4D8C",
-    "light": "#EBF1FA",
-    "dark": "#0F2A52"
+    "primary": "#F59E0B",
+    "light": "#FBBF24",
+    "dark": "#D97706"
   },
   "favicon": "/favicon.ico",
   "icons": {
@@ -29,74 +29,105 @@
       ]
     },
     "directory": "card",
-    "groups": [
+    "tabs": [
       {
-        "group": "Get Started",
-        "icon": "rocket",
-        "expanded": true,
-        "pages": [
-          "introduction",
-          "quickstart",
-          "key-concepts"
-        ]
-      },
-      {
-        "group": "Account & Access",
-        "icon": "shield-check",
-        "pages": [
-          "access/signing-in",
-          "access/mfa",
-          "access/roles-and-permissions",
-          "access/inviting-team-members"
-        ]
-      },
-      {
-        "group": "Member Management",
-        "icon": "users",
-        "pages": [
-          "members/overview",
-          "members/creating-members",
-          "members/kyc-verification",
-          "members/documents"
-        ]
-      },
-      {
-        "group": "Loan Origination",
-        "icon": "file-text",
-        "pages": [
-          "loans/overview",
-          "loans/creating-an-application",
-          "loans/loan-types",
-          "loans/workflow-states"
-        ]
-      },
-      {
-        "group": "Departmental Workflows",
-        "icon": "git-branch",
-        "pages": [
-          "workflows/adjudication",
-          "workflows/securities",
-          "workflows/disbursement",
-          "workflows/notifications"
-        ]
-      },
-      {
-        "group": "Audit & Compliance",
-        "icon": "shield",
-        "pages": [
-          "compliance/audit-trail",
-          "compliance/compliance-export",
-          "compliance/data-security"
-        ]
-      },
-      {
-        "group": "Administration",
-        "icon": "settings",
-        "pages": [
-          "admin/tenant-setup",
-          "admin/rate-tables",
-          "admin/loan-products",
-          "admin/analytics-dashboards"
+        "tab": "LOS",
+        "icon": "banknote",
+        "groups": [
+          {
+            "group": "Get started",
+            "icon": "rocket",
+            "expanded": true,
+            "pages": [
+              "introduction",
+              "quickstart",
+              "key-concepts"
+            ]
+          },
+          {
+            "group": "Account & access",
+            "icon": "shield-check",
+            "pages": [
+              "access/signing-in",
+              "access/mfa",
+              "access/roles-and-permissions",
+              "access/inviting-team-members",
+              "account/your-profile",
+              "account/notification-preferences"
+            ]
+          },
+          {
+            "group": "Members & KYC",
+            "icon": "users",
+            "pages": [
+              "members/overview",
+              "members/creating-members",
+              "members/kyc-verification",
+              "members/documents",
+              "members/bulk-import"
+            ]
+          },
+          {
+            "group": "Loan origination",
+            "icon": "file-text",
+            "pages": [
+              "loans/overview",
+              "loans/creating-an-application",
+              "loans/loan-assignment",
+              "loans/loan-types",
+              "loans/workflow-states",
+              "loans/loan-agreements"
+            ]
+          },
+          {
+            "group": "Adjudication & securities",
+            "icon": "gavel",
+            "pages": [
+              "workflows/adjudication",
+              "workflows/securities"
+            ]
+          },
+          {
+            "group": "Disbursement",
+            "icon": "banknote",
+            "pages": [
+              "workflows/disbursement",
+              "disbursement/payment-methods",
+              "disbursement/fees-and-gct",
+              "disbursement/saved-payees",
+              "disbursement/controls",
+              "disbursement/settlement"
+            ]
+          },
+          {
+            "group": "Notifications",
+            "icon": "bell",
+            "pages": [
+              "workflows/notifications"
+            ]
+          },
+          {
+            "group": "Audit & compliance",
+            "icon": "shield",
+            "pages": [
+              "compliance/audit-trail",
+              "compliance/compliance-export",
+              "compliance/data-security"
+            ]
+          },
+          {
+            "group": "Administration",
+            "icon": "settings",
+            "pages": [
+              "admin/tenant-setup",
+              "admin/tenant-configuration",
+              "admin/loan-products",
+              "admin/loan-types",
+              "admin/rate-tables",
+              "admin/analytics-dashboards",
+              "admin/identity-verification-health"
+            ]
+          }
         ]
       }
     ]
@@ -110,13 +141,7 @@
     "primary": {
       "type": "button",
       "label": "Sign In",
-      "href": "https://app.iloan.compuzign.com"
-    }
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/compuzign",
-      "linkedin": "https://linkedin.com/company/compuzign"
+      "href": "https://loan.compuzign.com"
     }
   }
 }

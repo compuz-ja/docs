@@ -1,39 +1,43 @@
 ---
-title: "Set up multi-factor authentication on your iLoan account"
+title: "Set up multi-factor authentication"
 sidebarTitle: "MFA"
-description: "Enable TOTP-based two-factor authentication on your iLoan account to protect access to sensitive loan and member data from unauthorised access."
+description: "Enable TOTP-based two-factor authentication on your account to protect access to sensitive loan and member data."
+icon: "shield-check"
 ---
 
-iLoan supports Time-based One-Time Password (TOTP) multi-factor authentication — the same standard used by apps like Google Authenticator, Authy, and 1Password. Once enabled, anyone signing in to your account must supply both your password and a fresh 6-digit code from your authenticator app. This prevents unauthorised access even if your password is compromised.
+The Loan Origination System supports Time-based One-Time Password (TOTP) multi-factor authentication. Once enabled, signing in asks for a fresh 6-digit code from your authenticator app on top of your password, unless you have trusted the device for 30 days at a previous sign-in. The platform uses the standard TOTP protocol, so any authenticator app works: Google Authenticator, Microsoft Authenticator, Authy, 1Password, and others.
 
 <Tip>
-  MFA is strongly recommended for every iLoan user, and is essential for anyone with administrative access. Loan and member data is highly sensitive — a second factor is one of the most effective safeguards available.
+  Enable MFA on every account. It matters most for **Tenant Administrators** and anyone who can adjudicate, disburse, or change roles, since those accounts can move money and grant access.
 </Tip>
 
 ## Enabling MFA on your account
 
-Before you start, install an authenticator app on your phone or desktop. Any TOTP-compatible app works — popular choices include Google Authenticator, Microsoft Authenticator, Authy, and 1Password.
+Before you start, install an authenticator app on your phone or desktop. Any TOTP-compatible app works. Popular choices include Google Authenticator, Microsoft Authenticator, Authy, and 1Password.
 
 <Steps>
-  <Step title="Open your profile settings">
-    Click your name or avatar in the top-right corner of the navigation bar, then select **Profile & Security** from the menu.
+  <Step title="Open the Authentication page">
+    Click your avatar in the top-right corner, then select **Authentication** from the menu. You can also open **Profile** and pick **Authentication** in the profile sidebar.
   </Step>
-  <Step title="Find the Security section and click Enable Two-Factor Auth">
-    Scroll to the **Security** section. If MFA is not yet enabled, you will see an **Enable Two-Factor Auth** button. Click it to begin setup.
+  <Step title="Click Enable under Two-factor authentication">
+    The **Two-factor authentication** row shows an **INACTIVE** badge with an **Enable** button. Click **Enable** to open the setup flow.
+  </Step>
+  <Step title="Confirm your password">
+    The setup flow first asks you to confirm your current password. Type it and click **Continue**.
   </Step>
   <Step title="Scan the QR code with your authenticator app">
-    iLoan displays a QR code. Open your authenticator app, add a new account, and scan the code. The app will immediately start generating 6-digit codes that refresh every 30 seconds. If you cannot scan the QR code, tap **Can't scan?** to reveal a manual setup key you can type into your app instead.
+    The platform displays a QR code. Open your authenticator app, add a new account, and scan the code. The app starts generating 6-digit codes that refresh every 30 seconds. If you cannot scan it, click **Can't scan? Enter the key manually** to reveal a setup key you can type into your app instead.
   </Step>
   <Step title="Enter the 6-digit code to confirm setup">
-    Type the current 6-digit code shown in your authenticator app into the confirmation field on screen, then click **Verify and enable**. This confirms that your app is correctly synced to your account.
+    Type the current 6-digit code from your authenticator app into the six boxes on screen. There is no separate submit button: the code verifies the moment you enter the sixth digit, and the flow advances to your backup codes. Pasting a copied code fills all six boxes and verifies in one step, so a code from a desktop authenticator does not need retyping. If the code is wrong, the boxes clear so you can try again.
   </Step>
   <Step title="Save your backup codes in a safe place">
-    iLoan generates a set of one-time backup codes. Copy them and store them somewhere secure — a password manager, a printed sheet in a locked drawer, or an encrypted file. Each code can only be used once.
+    The platform shows 10 one-time backup codes. Use **Copy all** or **Download** to save them somewhere secure, such as a password manager, a printed sheet in a locked drawer, or an encrypted file. Each code works once. Click **I've saved my codes** to finish.
   </Step>
 </Steps>
 
 <Warning>
-  Save your backup codes before closing the setup screen. If you ever lose access to your authenticator app and do not have your backup codes, you will be locked out of your account and will need your Tenant Administrator to reset your MFA manually.
+  Backup codes are shown once, during setup. Save all 10 before you finish. They are your only self-service way back in if you lose your authenticator app, so store them where you can find them later.
 </Warning>
 
 ## Signing in when MFA is enabled
@@ -45,25 +49,28 @@ Once MFA is active, the sign-in flow has one extra step.
     Navigate to your credit union's workspace URL and sign in with your credentials.
   </Step>
   <Step title="Enter the 6-digit code from your authenticator app">
-    After your password is accepted, iLoan redirects you to a verification screen. Open your authenticator app, read the current code for your iLoan account, and type it into the field. Codes are valid for 30 seconds — if the code is about to expire, wait for the next one.
+    After your password is accepted, the platform sends you to a verification screen. Open your authenticator app, read the current code for your account, and type it into the six boxes. Codes are valid for 30 seconds. If the code is about to expire, wait for the next one.
+  </Step>
+  <Step title="Trust the device if it is your own">
+    Tick **Trust this device for 30 days** before you verify if this is a device only you use. The platform then skips the code on that device for 30 days. Leave it unchecked on shared or public computers.
   </Step>
   <Step title="Use a backup code if needed">
-    If you do not have access to your authenticator app, click **Use a backup code** and enter one of the single-use codes you saved during setup.
+    If you do not have your authenticator app, click **Use a backup code** and enter one of the single-use codes you saved during setup.
   </Step>
 </Steps>
 
 ## Lost access to your authenticator app
 
-If you have lost your phone or uninstalled your authenticator app and no longer have your backup codes, you cannot complete MFA on your own.
+A backup code is how you get back in. On the verification screen, click **Use a backup code** and enter one of the 10 codes you saved during setup. Each works once. Once you are in, open the **Authentication** page from your profile to set up a new authenticator app.
 
-Contact your **Tenant Administrator** and ask them to disable MFA on your account. Once they have reset it, you can sign in with your password alone and set up a new authenticator app from your profile settings.
+<Warning>
+  If you have lost your authenticator app **and** have no backup codes left, there is no self-service path back in and no administrator reset. The platform has no MFA-reset control for one user to clear another user's two-factor. Contact platform support to recover the account. This is why saving your backup codes during setup matters.
+</Warning>
 
-<Note>
-  If you are a Tenant Administrator who has lost MFA access, contact iLoan support directly. Another administrator at your credit union can also reset your MFA from the **Admin → Members** page if you have a colleague with administrator access.
-</Note>
+## Managing MFA after setup
 
-## Disabling MFA
+Once MFA is on, the **Two-factor authentication** row on the **Authentication** page shows an **ENABLED** badge with a **Manage** button instead of **Enable**. There is no in-product button to turn two-factor off, so treat enrollment as a standing change and keep your backup codes safe.
 
-If you need to remove MFA from your account (for example, when switching to a new authenticator app), go to **Profile & Security**, scroll to the **Security** section, and click **Disable Two-Factor Auth**. You will be asked to enter a current code from your app to confirm the change.
-
-Disabling MFA signs out all of your other active sessions automatically as a security measure.
+<Warning>
+  **Manage** is not a settings panel. It opens the same setup flow as **Enable** and re-enrolls you from scratch: a fresh password confirmation, a new QR code with a new secret, and a new set of 10 backup codes. Completing it invalidates the backup codes you saved earlier and replaces the secret in your authenticator app. Only use **Manage** when you intend to start MFA over, such as moving to a new phone.
+</Warning>

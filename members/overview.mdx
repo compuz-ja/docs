@@ -1,47 +1,58 @@
 ---
-title: "Member management overview for iLoan credit unions"
+title: "Member management overview"
 sidebarTitle: "Overview"
-description: "iLoan's member directory stores borrower profiles, tracks KYC status, and links members to their loan applications throughout the origination process."
+description: "The member directory stores borrower profiles, tracks KYC status, and links members to their loan applications throughout origination."
+icon: "users"
 ---
 
-The Members section is the central directory for everyone who borrows from your credit union. Every loan application in iLoan belongs to a member record, so keeping member profiles accurate and their identity verification up to date is the foundation of your origination workflow. You can search, create, update, and manage members directly from the Members list, and navigate to a member's linked loans and uploaded documents from their profile page.
+The Members section is the central directory for everyone who borrows from your credit union. Every loan application belongs to a member record, and a member's KYC status must be VERIFIED before any loan can be submitted for them. You can search, create, update, and manage members from the Members list, then jump to a member's linked loans and uploaded documents from their profile page.
 
 ## What a member record contains
 
-Each member profile stores the following information:
+Each member profile stores the following information.
 
 | Field | Notes |
 |---|---|
-| First name, middle name, last name | Used for search and display throughout iLoan |
-| Date of birth | Required for identity verification |
-| Email address | Primary contact; used for correspondence |
-| Phone number | Primary contact number |
-| Address | Street, city, parish, and postal code |
-| TRN | Tax Registration Number — encrypted at rest |
+| Salutation, first name, middle name, last name | Used for search and display across the platform |
+| Date of birth | Required. The verification flow keys off the TRN, not this field |
+| Gender | Chosen from Male, Female, or Other. Optional |
+| Email address | Primary contact. Optional |
+| Phone number | Primary contact number. Optional |
+| Address | Street, city, parish, and postal code, plus residential status, years at address, previous address, and years at the previous address. A separate mailing address can be recorded; it defaults to the same as the residential address |
+| Marital status, dependents, education | Captured for the applicant profile the risk engine reads |
+| TRN | Tax Registration Number, encrypted at rest |
 | Driver's licence number | Encrypted at rest |
 | Passport number | Encrypted at rest |
 | Bank account number | Encrypted at rest |
+| Government ID type, number, and issuer | The generic identity document fields. The number is encrypted at rest |
+| Mother's maiden name | Encrypted at rest |
+| Internal notes | Free text, encrypted at rest |
+| Next of kin | Name, relationship, contact details, and address for the nearest relative |
 | Employment status | Used in loan risk assessment |
-| Branch | The credit union branch this member belongs to |
-| Member account number (CIF) | Your internal identifier for this member |
+| Branch | The credit union branch this member belongs to. Fixed once the member is created |
+| Member account number (CIF) | The member's primary identifier within the credit union, unique per workspace |
 
-Members can also have additional contacts (secondary phone numbers, email addresses, or mailing addresses) attached to their profile.
+Branch, Member account number (CIF), first name, last name, and date of birth are required at create. Email and phone are optional. The TRN, driver's licence, passport, bank account, government ID number, mother's maiden name, and notes columns are all encrypted at rest with the per-tenant key. Reading any of these decrypted values on the member profile is a separate action: the reader clicks a reveal control that requires the **members.edit** capability, and each reveal is recorded in the audit log as a `member.pii.revealed` event.
+
+Members can also have additional contacts beyond their primary email, phone, and address. The three contact types are alternate phone (`PHONE_ALT`), alternate email (`EMAIL_ALT`), and alternate address (`ADDRESS_ALT`). One contact of each type can be marked as primary, enforced by a single-primary-per-type constraint. You manage contacts from the member's profile: add a contact, remove one, or promote an existing contact to primary, which demotes the current primary of that type. Managing contacts requires the **members.edit** capability, and adding or removing one records a `member.contact.added` or `member.contact.removed` audit event.
 
 ## Member status tracks
 
 Every member record carries two independent status fields that serve different purposes.
 
-### MemberStatus — lifecycle
+### MemberStatus, the account lifecycle
 
 This tracks whether the member's account is open and eligible for new loans.
 
 | Status | Meaning |
 |---|---|
 | **ACTIVE** | Default status. The member is in good standing and can apply for loans. |
-| **INACTIVE** | The member account has been closed. Records are preserved for audit purposes. |
-| **DECEASED** | A terminal status indicating the member is deceased. Records are fully preserved. |
+| **INACTIVE** | The member is suspended. They cannot apply for new loans, but the record can be reactivated to ACTIVE at any time. |
+| **DECEASED** | Indicates the member is deceased. The value exists on the record but the platform has no in-app control to set it, and bulk CSV import does not set it either; it appears only through a direct data migration. DECEASED remains a selectable option in the Members list status filter. |
 
-### KycStatus — identity verification
+Suspend and reactivate are the two operations that drive this status: suspending a member sets it to **INACTIVE**, and reactivating sets it back to **ACTIVE**. Separately, a member can be soft-deleted, which hides the record from the Members list and search without losing it. The platform stores a deletion reason and timestamp on the record, and a soft-deleted member can be restored, which clears both and returns the record to the list.
+
+### KycStatus, identity verification
 
 This tracks whether the member's identity has been verified through the Know Your Customer process.
 
@@ -49,21 +60,21 @@ This tracks whether the member's identity has been verified through the Know You
 |---|---|
 | **UNVERIFIED** | No verification check has been run yet. |
 | **IN_PROGRESS** | A verification request has been submitted and is awaiting a result. |
-| **VERIFIED** | Identity confirmed — the member is eligible for loan applications. |
+| **VERIFIED** | Identity confirmed. The member is eligible for loan applications. |
 | **FAILED** | Verification was rejected. Review and correct the member's details, then resubmit. |
-| **MANUAL_REVIEW** | The automated check could not reach a conclusion. A KYC Reviewer must approve or reject manually. |
+| **MANUAL_REVIEW** | The automated check could not reach a conclusion. A reviewer must approve or reject manually. |
 
 <Note>
-  A member's KYC status must be **VERIFIED** before a loan application can be submitted for that member. A member can be ACTIVE with an UNVERIFIED KYC status — you can create and edit the profile at any time, but you will not be able to submit a loan until KYC is complete.
+  A member's KYC status must be **VERIFIED** before a loan application can be submitted for that member. A member can be ACTIVE with an UNVERIFIED KYC status. You can create and edit the profile at any time, but you cannot submit a loan until KYC is complete.
 </Note>
 
 ## Members and loan applications
 
-One member can have multiple loan applications over time. On each member's profile page you will see a summary of their loan history — the total number of applications and the three most recent, with links to view the full details of each. Conversely, every loan application page shows the member it belongs to, so you can navigate between the two in either direction.
+One member can have multiple loan applications over time. Each member's profile page shows a summary of their loan history: the total number of applications and the three most recent, with links to the full details of each. Every loan application page shows the member it belongs to, so you can navigate between the two in either direction.
 
 ## Finding the Members section
 
-Navigate to **/{your-credit-union}/members** to open the Members list. You can also reach it from the main navigation sidebar. From there you can search for existing members, open a member's profile, or create a new member.
+Navigate to **`/your-slug/members`** to open the Members list. You can also reach it from the main navigation sidebar. From there you can search for existing members, open a member's profile, or create a new member.
 
 ---
 
@@ -76,10 +87,10 @@ Navigate to **/{your-credit-union}/members** to open the Members list. You can a
   <Card title="KYC Verification" icon="shield-check" href="/members/kyc-verification">
     Submit a member for identity verification, understand each KYC status, and handle manual review cases.
   </Card>
-  <Card title="Documents" icon="file-lines" href="/members/documents">
+  <Card title="Documents" icon="file-text" href="/members/documents">
     Upload identity and supporting documents to a member's profile, and manage the document library.
   </Card>
-  <Card title="Loan Applications" icon="file-contract" href="/loans/overview">
+  <Card title="Loan Applications" icon="file-check" href="/loans/overview">
     Understand how member records connect to the loan origination workflow.
   </Card>
 </CardGroup>

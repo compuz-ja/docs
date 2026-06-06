@@ -1,0 +1,79 @@
+---
+title: "Generate and download the loan agreement PDF"
+sidebarTitle: "Loan agreements"
+description: "The platform generates a loan agreement PDF after approval. A loan must have a generated agreement before it can be disbursed, and regenerating supersedes the prior version."
+icon: "file-text"
+---
+
+The loan agreement is the signed PDF contract between your credit union and the borrower. The platform generates it automatically once a loan is approved, stores it with a fixed retention period, and requires it on file before any funds can be released. Every agreement is tied to the approved loan and to the exact figures that were approved.
+
+## The four agreement templates
+
+The platform picks the template that matches the loan type. Each one carries the legal clauses and collateral section appropriate to that kind of loan.
+
+| Loan type | Template | What it covers |
+|---|---|---|
+| Cash-Secured | `cash-secured` | The loan secured against the member's savings, including the hypothecation of the secured deposit. |
+| Unsecured | `unsecured` | A personal loan with no collateral section. |
+| Auto | `auto` | The chattel mortgage over the vehicle, the registered lien, and the insurance requirement. |
+| Mortgage | `mortgage` | The mortgage over the real property, the title custody terms, and the property insurance requirement. |
+
+Each generated PDF records its template name and version, the approved principal, term, rate, monthly payment, and approval date, the member's name and address, and the approving officer. The template version is 3 today; it shows as **Version** on the agreement card and in the download filename (`loan-agreement-<id>-v3.pdf`). The approving officer is the Adjudicator who recorded the approval; the agreement shows their name with the title "Adjudicator". The figures come from the approved decision and its rate computation, so the agreement always reflects what was actually approved.
+
+## When the agreement is generated
+
+The agreement is generated as part of disbursement readiness. When a loan is approved, the platform queues a job that renders the PDF, uploads it to secure storage, and writes an agreement record against the loan. This happens in the background, so the agreement is ready by the time the loan reaches the Disbursement team.
+
+<Warning>
+  A loan cannot be disbursed without a generated agreement. The disbursement readiness check refuses to schedule or execute a disbursement while the agreement is missing, with the reason "The signed loan agreement has not been generated yet." The agreement is one of three readiness gates: the member's KYC must be VERIFIED, every security request must be resolved, and the agreement must be on file. This is a server-side guard, not just a hidden button, so it holds even against a stale page.
+</Warning>
+
+## Regenerating an agreement
+
+If the agreement needs to be reissued, for example after a correction, you can regenerate it from the loan detail page. Regenerating queues a fresh PDF render and writes a new agreement record. The prior agreement is kept and the new one supersedes it, so the full history is preserved for audit.
+
+The newest agreement in the chain, the one nothing supersedes, is the canonical version. It is the one the download link serves. The readiness check requires at least one agreement on file for the loan, regardless of which version is canonical. Older versions stay on file and remain in the audit trail.
+
+<Steps>
+  <Step title="Open the loan">
+    Go to the loan on the adjudication or disbursement detail page. The agreement card shows whether an agreement has been generated.
+  </Step>
+  <Step title="Regenerate">
+    Click the regenerate action. The platform finds the loan's latest approved decision, queues the render against it, and waits for the job to finish. A regeneration from an existing agreement supersedes that agreement; a first generation simply creates the first record.
+  </Step>
+  <Step title="Confirm the result">
+    When the job completes, the page refreshes and the new agreement becomes the canonical version. If the render fails, the page shows the reason and the technical detail is captured in the audit log. Two failures are worth knowing: an agreement generates only against an APPROVED decision, and an Auto or Mortgage agreement needs a collateral record on file. If the collateral record is missing, the reason reads "The agreement could not be generated because the loan has no collateral record on file. Open the loan and capture the collateral details, then retry."
+  </Step>
+</Steps>
+
+Who can regenerate depends on the surface. Any oversight role that holds **reports.view** regenerates through that access: Tenant Administrator, Credit Manager, and Branch Manager. The Disbursement team can also retry generation (**loans.disburse**) when the post-approval job failed silently and is blocking their pre-execution checklist.
+
+## Downloading the agreement
+
+The agreement download is capability-gated. Five capabilities can download it, so everyone working the loan in its pipeline can read the agreement that backs the file:
+
+| Capability | Who holds it |
+|---|---|
+| **reports.view** | Oversight roles: Tenant Administrator, Credit Manager, and Branch Manager |
+| **loans.read.own** | The officer who created the loan |
+| **loans.adjudicate** | Adjudicator |
+| **securities.review** | Securities team |
+| **loans.disburse** | Disbursement team |
+
+The download serves the canonical agreement for the loan. You can open it inline in a new tab to read it first, or request it as an attachment to save it directly. If no agreement has been generated yet, the download returns a clear "not generated yet" response rather than an empty file.
+
+The agreement links the Adjudicator, the Securities team, and the Disbursement team see on their detail pages all point at this same download endpoint.
+
+<Note>
+  The scoping of **loans.read.own** to the loan's creator is a planned refinement; today any holder of the capability can download. Agreement PDFs are stored with a 7-year retention period, the Bank of Jamaica minimum for loan records, and cannot be altered or deleted within that window. Every download is logged.
+</Note>
+
+## Events recorded
+
+The agreement lifecycle is logged. The generated and failed events are also written to the immutable audit trail; the start of a render is a log line only.
+
+| Event | When it fires | Where it lands |
+|---|---|---|
+| `loan_agreement.generation.started` | A render job began for an approved loan. | Log only |
+| `loan_agreement.generated` | The PDF was rendered, stored, and recorded against the loan. | Audit trail and log |
+| `loan_agreement.generation.failed` | The render or storage step failed. The reason is captured for investigation. | Audit trail and log |

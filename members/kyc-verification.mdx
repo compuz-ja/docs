@@ -1,76 +1,95 @@
 ---
 title: "KYC identity verification for credit union members"
-sidebarTitle: "KYC Verification"
-description: "Learn how to submit a member for KYC identity verification in iLoan, understand the verification statuses, and handle manual review cases."
+sidebarTitle: "KYC verification"
+description: "Submit a member for KYC identity verification, understand the verification statuses, and handle manual review cases."
+icon: "user-check"
 ---
 
-KYC (Know Your Customer) identity verification is the regulatory check that confirms a member is who they say they are before your credit union advances a loan. iLoan verifies a member's TRN, driver's licence, or passport details against the identity verification service and records the result permanently in the member's profile. Every verification attempt — successful or not — is preserved in the KYC history, giving you a complete audit trail.
+KYC (Know Your Customer) identity verification is the regulatory check that confirms a member is who they say they are before your credit union advances a loan. The platform verifies a member's TRN or driver's licence against the identity verification service and records the result permanently on the member's profile. Every verification attempt, successful or not, is preserved in the KYC history, giving you a complete audit trail.
+
+<Note>
+  The platform currently runs against the mock provider with no live registry configured. While the automated registry integration is being set up, the day-to-day flow is manual attestation, described below. Officers can still submit an automated check, but it resolves against the mock service.
+</Note>
 
 <Warning>
-  A loan application cannot be submitted if the member's KYC status is not **VERIFIED**. Complete this step before you begin the loan origination process for any member.
+  A loan application cannot be submitted if the member's KYC status is not **VERIFIED**. Complete this step before you begin loan origination for any member.
 </Warning>
 
 ## KYC status lifecycle
 
-A member's KYC status moves through the following states as you work through the verification process.
+A member's KYC status moves through the following states as you work through verification.
 
 | Status | What it means |
 |---|---|
-| **UNVERIFIED** | No verification check has been run for this member yet. This is the default status for all newly created members. |
-| **IN_PROGRESS** | A verification request has been submitted and iLoan is awaiting a result from the identity verification service. This usually resolves within seconds. |
+| **UNVERIFIED** | No verification check has been run for this member yet. This is the default status for newly created members. |
+| **IN_PROGRESS** | A verification request has been submitted and the platform is awaiting a result from the identity verification service. This resolves within seconds. |
 | **VERIFIED** | The member's identity has been confirmed. They are eligible to be linked to a loan application. |
-| **FAILED** | The verification was rejected — the identity details submitted did not pass the check. Review the member's TRN, driver's licence, or passport number for errors and resubmit. |
-| **MANUAL_REVIEW** | The automated check could not reach a definitive conclusion. The verification has been escalated to the KYC Review queue for a human decision. The member remains ineligible for loans until a reviewer approves or rejects the case. |
+| **FAILED** | The verification was rejected. The identity details submitted did not pass the check. Review the member's TRN or driver's licence number for errors and resubmit. |
+| **MANUAL_REVIEW** | The automated check could not reach a definitive conclusion. The verification is escalated to the KYC review queue for a human decision. The member remains ineligible for loans until a reviewer resolves the case. |
 
 <Note>
-  KYC history is permanent. Every verification attempt creates a new record on the member's profile showing the date, time, result, and the staff member who submitted it. This history is visible on the KYC Verification tab and cannot be edited or deleted.
+  KYC history is permanent. Every verification attempt creates a new record on the member's profile showing the date, time, result, and the staff member who submitted it. This history is visible on the KYC page and cannot be edited or deleted.
 </Note>
 
 ---
 
 ## Submitting a member for KYC verification
 
-You need the **members.kyc.submit** capability to submit verification requests. Credit Officers and above are typically granted this capability.
+You need the **members.kyc.submit** capability to submit verification requests. The Credit Officer and the Tenant Administrator hold this capability, so either can run an automated check or record a manual attestation.
 
 <Steps>
   <Step title="Open the member's profile">
     Search for the member on the Members list and click their name to open their profile.
   </Step>
-  <Step title="Go to the KYC Verification tab">
-    Click the **KYC** button in the profile header, or navigate directly to the KYC Verification tab on the member's profile page. You will see the member's current KYC status and the full verification history.
+  <Step title="Open the KYC page">
+    Click the **KYC** button in the profile header. This opens a dedicated page headed "KYC for {name}" showing the member's current KYC status and the full verification history.
   </Step>
   <Step title="Confirm the identifier you are verifying">
-    The KYC page shows two identity panels side by side: one for the member's **TRN** and one for their **Driver's licence**. Each panel displays whether a number is on file and lists any identity documents already uploaded for that identifier.
+    The KYC page shows two identity panels side by side: one for the member's **TRN** and one for their **Driver's licence**. Each panel shows whether a number is on file and lists any identity documents already uploaded for that identifier.
 
-    Confirm that the relevant number is on file (shown as encrypted). If a number is missing, click **Edit** to return to the member's profile and add it before proceeding.
+    Confirm that the relevant number is on file, shown as encrypted. If a number is missing, use the inline **Add number** control on the panel to set it without leaving the page. The TRN must be nine digits in the format 000-000-000, and a driver's licence number must be 4 to 12 letters or digits.
   </Step>
-  <Step title="Click Submit for Verification">
-    Select the identifier type you want to verify — **TRN** or **Driver's licence** — and click **Submit for Verification**. iLoan sends the details to the identity verification service and sets the member's KYC status to **IN_PROGRESS**.
+  <Step title="Submit for verification">
+    In the **Verification type** dropdown, choose **TRN** or **Driver's licence**, then click **Submit for verification**. An identifier with no number on file is disabled in the dropdown. The platform sends the details to the identity verification service and sets the member's KYC status to **IN_PROGRESS**.
   </Step>
   <Step title="Wait for the result">
-    Results usually come back within seconds. The page will reflect the new status once the check completes:
+    Results come back within seconds. The page reflects the new status once the check completes:
 
-    - **VERIFIED** — the check passed. The member is now eligible for loan applications.
-    - **FAILED** — the check was rejected. See the section below on retrying.
-    - **MANUAL_REVIEW** — the check was escalated. See the section below on manual review.
+    - **VERIFIED**: the check passed. The member is now eligible for loan applications.
+    - **FAILED**: the check was rejected. See the section below on retrying.
+    - **MANUAL_REVIEW**: the check was escalated. See the section below on manual review.
   </Step>
 </Steps>
 
 ---
 
+## Record an in-person verification
+
+Anyone with the **members.kyc.submit** capability, which the Credit Officer and the Tenant Administrator hold, can record a manual, in-person identity check instead of running the automated service. This is the default flow today while the automated registry integration is being configured. Use it when the member presents their identification at the branch and a staff member confirms it against the person.
+
+To submit a manual attestation you must provide all three of the following:
+
+- At least one identifier type you checked (TRN or driver's licence). The number must already be on file.
+- At least one supporting document linked from the member's file. Each linked document must belong to the member and be in **UPLOADED** or **SCANNED_CLEAN** status. Only those two statuses qualify, so a document that is infected, expired, or archived cannot be attested against.
+- An attestation note between 10 and 500 characters describing what you confirmed, for example "Customer in branch, IDs match photo, DOB matches."
+
+On submission the member's KYC status moves to **VERIFIED** and the platform emits the `member.kyc.manually_verified` audit event, recording the officer, the attested documents, and a preview of the attestation note (its first 200 characters).
+
+---
+
 ## Retrying a failed verification
 
-If a member's KYC status is **FAILED**, it means the identity details submitted did not match the records held by the verification service. Before resubmitting, correct the underlying cause.
+If a member's KYC status is **FAILED**, the identity details submitted did not match the records held by the verification service. Correct the underlying cause before resubmitting.
 
 <Steps>
   <Step title="Review the member's identity details">
-    Go to the member's profile and click **Edit**. Check the TRN, driver's licence number, and passport number carefully for typos, transposed digits, or missing characters.
+    Go to the member's profile and click **Edit**. Check the TRN and driver's licence number carefully for typos, transposed digits, or missing characters. Only these two identifiers are sent to the verifier, so a typo elsewhere cannot cause a FAILED result.
   </Step>
   <Step title="Correct any errors and save">
     Update the relevant field and save the profile.
   </Step>
   <Step title="Resubmit the verification">
-    Return to the KYC Verification tab and click **Submit for Verification** again. Each new submission creates a fresh verification record — your previous attempts and their results remain in the history.
+    Return to the KYC page and click **Submit for verification** again. Each new submission creates a fresh verification record. Your previous attempts and their results remain in the history.
   </Step>
 </Steps>
 
@@ -78,11 +97,12 @@ If a member's KYC status is **FAILED**, it means the identity details submitted 
 
 ## Manual review
 
-When a member's KYC status is **MANUAL_REVIEW**, the automated check could not reach a conclusion — for example, because the records returned an ambiguous match. iLoan automatically creates a task in the **KYC Review queue** (found under **Admin → KYC Review**).
+When a member's KYC status is **MANUAL_REVIEW**, the automated check could not reach a conclusion, for example because the records returned an ambiguous match. The platform automatically creates a task in the **KYC review** queue, found in the sidebar under **Review queue** then **KYC review**.
 
-A staff member with the **members.kyc.review** capability — typically a KYC Reviewer or Administrator — must open the queued task and either **approve** or **reject** the verification based on the documents and information on file.
+A staff member with the **members.kyc.review** capability, which the Credit Manager and Tenant Administrator hold, works the queued task. They first **claim** the task onto themselves, which moves it from the open queue into their hands, then submit one of three decisions based on the documents and information on file:
 
-- If **approved**, the member's KYC status moves to **VERIFIED** and they become eligible for loan applications.
-- If **rejected**, the member's KYC status moves to **FAILED** and you can correct their details and resubmit.
+- **Approve**: the member's KYC status moves to **VERIFIED** and they become eligible for loan applications.
+- **Reject**: the member's KYC status moves to **FAILED**, and you can correct their details and resubmit.
+- **Escalate to senior reviewer**: this closes the review as Escalated and records the chosen senior reviewer (Credit Manager or Tenant Administrator) plus a reason code in the audit log. The member's KYC status does not change; they stay in **MANUAL_REVIEW**, but the review task itself is now closed.
 
-While a member is in MANUAL_REVIEW status, their profile remains fully visible and editable — you can continue uploading documents to support the reviewer's decision. However, new loan applications cannot be submitted until the review is resolved.
+While a member is in MANUAL_REVIEW status, their profile remains fully visible and editable. You can keep uploading documents to support the reviewer's decision. New loan applications cannot be submitted until the review is resolved.

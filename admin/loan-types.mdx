@@ -1,0 +1,130 @@
+---
+title: "Managing loan types"
+sidebarTitle: "Loan types"
+description: "Create, edit, archive, and restore the named loan types your credit union offers, each bound to one of four security bases."
+icon: "tags"
+---
+
+Loan types are the named lending categories your staff pick when starting a new application, each bound to one of four built-in security bases.
+
+A loan type pairs a name your team recognizes, such as "Civil Servant Auto," with a fixed **security basis** that the rate engine, risk engine, forms, and PDF templates switch on. The UI labels this field "Security basis"; internally it is the loan archetype enum, and this guide uses the two words interchangeably. Each basis is a fixed engine path, so you can add any number of named types without code changes. As a **Tenant Administrator** or **Credit Manager** you create, edit, archive, and restore these types.
+
+**Required role:** Tenant Administrator or Credit Manager (`loans.types.manage` capability). Viewing the list requires `loans.types.read`.
+
+To manage loan types, navigate to `/{tenantSlug}/admin/loan-types`. For example, `https://loan.compuzign.com/your-slug/admin/loan-types`.
+
+<Note>
+  This is the admin page for configuring loan types. For an explanation of what
+  each type means for borrowers, including the form sections and collateral
+  requirements of each one, see the borrower-facing
+  [Loan types](/loans/loan-types) guide.
+</Note>
+
+## The four built-in security bases
+
+Every loan type binds to one of four security bases (the underlying archetype enum is shown in the first column). Each workspace is seeded with one default loan type per basis at onboarding.
+
+| Security basis | Archetype enum | Seeded code | Seeded name | Used for |
+|---|---|---|---|---|
+| Unsecured | `UNSECURED` | `UNS` | Unsecured | Personal loans with no collateral |
+| Cash secured | `CASH_SECURED` | `CASH` | Cash secured | Loans secured against cash shares or savings |
+| Motor vehicle | `AUTO` | `AUTO` | Motor vehicle | Loans secured by a motor vehicle |
+| Real estate | `MORTGAGE` | `MORT` | Real estate | Loans secured by real property |
+
+The security basis determines which rate engine tiers apply, which risk calculations run, which form sections the Credit Officer completes, and which PDF agreement template is used. You can create as many named loan types as you like on top of these four bases.
+
+## What a loan type contains
+
+| Field | Description |
+|---|---|
+| **Code** | A short, unique identifier such as `CSA` or `DIASPORA`. Two to twenty characters, uppercase letters, numbers, and dashes only |
+| **Name** | The display name staff see when selecting a loan type. Two to eighty characters |
+| **Security basis** | The behavioral family this type belongs to, picked by label: Unsecured, Cash secured, Motor vehicle (`AUTO`), or Real estate (`MORTGAGE`). Internally the underlying enum is the archetype. Set at creation and never editable afterward |
+| **Sort order** | A number from `0` to `9999` controlling where the type appears in lists. Lower numbers appear first |
+| **Description** | Optional note up to 500 characters |
+
+<Warning>
+  The security basis is set when you create a loan type and cannot be changed
+  afterward. Changing it on a type already in use would mis-route the rate
+  engine, risk engine, forms, and PDF templates. If you need a different basis,
+  create a new loan type instead.
+</Warning>
+
+## Creating a loan type
+
+<Steps>
+  <Step title="Go to the loan types page">
+    Navigate to `/{tenantSlug}/admin/loan-types`. The header shows the total
+    count and active count (for example, "8 loan types · 6 active"), and All,
+    Active, and Archived filter tabs each show their own count. The Archived
+    view is reached via the Archived tab. The toolbar also has a code-or-name
+    search box and an **All security bases** filter (one option per basis) to
+    narrow the list.
+  </Step>
+  <Step title="Click New loan type">
+    The new loan type form opens.
+  </Step>
+  <Step title="Enter a code and name">
+    The **code** must be unique within your workspace and can contain only
+    uppercase letters, numbers, and dashes. The **name** is what staff see when
+    they select a type.
+  </Step>
+  <Step title="Choose the security basis">
+    Pick **Unsecured**, **Cash secured**, **Motor vehicle** (the `AUTO`
+    archetype), or **Real estate** (the `MORTGAGE` archetype). Choose carefully.
+    This cannot be changed once the type is created.
+  </Step>
+  <Step title="Set the sort order and optional description">
+    Enter a sort order from `0` to `9999`, then an optional description.
+  </Step>
+  <Step title="Click Create loan type">
+    The loan type is created and records a `loan_type.created` audit event.
+  </Step>
+</Steps>
+
+## Editing a loan type
+
+To update an existing loan type:
+
+1. Go to `/{tenantSlug}/admin/loan-types`.
+2. Open the loan type and click **Edit**.
+3. Update the code, name, sort order, or description, then click **Save changes**.
+
+Editing records a `loan_type.updated` audit event. The security basis is shown read-only and cannot be changed. If you also hold a products-catalog capability (`loans.products.read` or `loans.products.manage`), the edit page lists the loan products tagged to this type, each with its application count and rate source. If you hold `loans.products.manage`, you can create and archive products for this type right there, so the edit page doubles as where you manage that type's products.
+
+## Archiving and restoring a loan type
+
+When your credit union stops offering a named type, archive it rather than deleting it. Archiving sets the type inactive and hides it from staff without affecting any loans that already used it.
+
+**To archive a loan type:**
+
+1. Go to `/{tenantSlug}/admin/loan-types`.
+2. Find the type and click **Archive**.
+
+Archiving records a `loan_type.archived` audit event.
+
+**To restore an archived loan type:**
+
+1. Go to `/{tenantSlug}/admin/loan-types` and open the archived view.
+2. Find the type and click **Restore**.
+
+Restoring records a `loan_type.restored` audit event and makes the type selectable again.
+
+<Accordion title="What happens to loans and products tied to an archived type?">
+  Existing loan applications and the products tagged to a type are not affected
+  when you archive it. Archiving only stops staff from selecting that type for
+  new work. The type is never hard-deleted, so its history stays intact and the
+  audit trail remains complete.
+</Accordion>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Loan types (borrower view)" icon="tags" href="/loans/loan-types">
+    What each of the four loan types means, including form sections and
+    collateral requirements.
+  </Card>
+  <Card title="Loan products" icon="file-text" href="/admin/loan-products">
+    Create the specific products that staff offer under each loan type.
+  </Card>
+</CardGroup>

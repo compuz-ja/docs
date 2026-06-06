@@ -1,69 +1,104 @@
 ---
-title: "Configure your iLoan credit union workspace settings"
-sidebarTitle: "Tenant Setup"
-description: "Learn how to configure your iLoan workspace — update branding, manage branches, and understand what can and cannot be changed after initial setup."
+title: "Configure your credit union workspace settings"
+sidebarTitle: "Tenant setup"
+description: "Configure your workspace branding, manage branches, and understand what is fixed at onboarding and what you can change later."
+icon: "building"
 ---
 
-Each credit union in iLoan has its own isolated workspace called a **tenant**. Your workspace is identified by a unique slug that appears in every URL and every audit record. As a Tenant Administrator, you can configure branding, manage branches, and update your organization's details — but a small number of settings are fixed at onboarding and cannot be changed afterward.
+The tenant setup area is where a Tenant Administrator controls your workspace branding, branches, and the settings fixed at onboarding.
+
+Each credit union on the platform has its own isolated workspace called a **tenant**. Your workspace is identified by a unique slug that appears in every URL your team uses. As a **Tenant Administrator** you can configure branding and view your branches. A few settings are fixed at onboarding and cannot be changed afterward.
+
+**Required role:** Tenant Administrator (`admin.tenant.manage` capability)
 
 ## Your tenant slug
 
-Your tenant slug is the short, URL-safe identifier that iLoan assigns to your credit union at onboarding. It appears in every URL your team uses, for example:
+Your tenant slug is the short, URL-safe identifier assigned to your credit union at onboarding. It appears in every URL your team uses, for example:
 
 ```
 /my-credit-union/loans
 /my-credit-union/admin/products
 ```
 
-The slug also appears in every loan ID (e.g. `MDVL-AUTO-00001`) and in every audit record written on behalf of your workspace. Because it is baked into so many permanent records, **the slug cannot be changed after onboarding**.
+The slug appears in every URL your team uses, and it is baked into your onboarding records. Loan IDs do not use the slug: they embed the **branch code** instead, for example `MDVL-AUTO-00001`. Audit records are keyed to your tenant, not to the slug text. Because it is fixed into so many permanent links, **the slug cannot be changed after onboarding**.
 
 <Warning>
-  Your tenant slug cannot be changed after onboarding. Every audit record, loan
-  ID, and URL references this value. If you believe your slug needs to change,
-  contact iLoan support before going live — it is far simpler to correct before
-  any loans are created.
+  Your tenant slug cannot be changed after onboarding. Every URL references this
+  value, and it is baked into your onboarding records. If you believe your slug
+  needs to change, contact support before going live. It is far simpler to
+  correct before any loans are created.
 </Warning>
 
 ## Updating branding
 
-Navigate to **Admin → Tenant → Branding** to update your credit union's visual identity and communication settings. Changes take effect immediately — new emails and newly generated loan agreement PDFs will use the updated values.
+Navigate to **Administration → Settings → Branding** (route `/admin/tenant/branding`) to update your credit union's visual identity and communication settings. Changes take effect immediately. New emails and newly generated loan agreement PDFs use the updated values.
 
 <Note>
   Branding changes are not retroactive. Loan agreement PDFs that were already
   generated keep their original branding. Only PDFs generated after you save
-  the change will reflect the new settings.
+  the change reflect the new settings.
 </Note>
 
-The following fields are available on the Branding page:
+Every branding change writes an audit event: `tenant.branding.updated` for the settings fields, and `tenant.branding.logo.uploaded` / `.logo.removed`, `tenant.branding.letterhead.uploaded` / `.letterhead.removed`, and `tenant.branding.icon.uploaded` / `.icon.removed` for each asset.
+
+The Branding page exposes these fields:
 
 <CardGroup cols={2}>
-  <Card title="Credit union name" icon="building">
-    The full name of your credit union. This appears in the iLoan UI and is
-    used as a prefix in outbound email subject lines.
-  </Card>
   <Card title="Primary color" icon="palette">
-    A hex color code (e.g. `#003366`) used as the accent color in email
-    templates and in the letterhead background of PDF loan agreements.
+    A hex color code such as `#003366`, used across the workspace UI, on
+    outbound emails, on loan agreement PDFs, and on sign-in pages. Stored as
+    `primaryColor`. Defaults to `#6366F1`.
   </Card>
-  <Card title="Email sender name" icon="envelope">
-    The display name that members and staff see in the **From** field of
-    notification emails — for example, `My Credit Union`. The sending address
-    itself is managed by iLoan.
+  <Card title="Email from-name" icon="mail">
+    The display name members and staff see in the **From** field of
+    notification emails, for example `My Credit Union`. Stored as
+    `emailFromName`, 1 to 80 characters. The sending address itself is managed
+    by the platform.
   </Card>
-  <Card title="Agreement letterhead text" icon="file-lines">
-    A short text header that appears at the top of every PDF loan agreement
-    generated in your workspace (e.g. `Example Credit Union — Member Loan
-    Agreement`). Up to 2,000 characters.
+  <Card title="Agreement letterhead text" icon="file-text">
+    A short text header printed at the top of every PDF loan agreement
+    generated in your workspace. Stored as `agreementLetterhead`. Up to 2,000
+    characters.
   </Card>
 </CardGroup>
 
+<Note>
+  Your workspace name appears in the platform UI and as the prefix on outbound
+  email subject lines, but it is the immutable workspace name set at onboarding,
+  not a Branding field. There is no editable credit-union-name input on this
+  page.
+</Note>
+
+<Note>
+  On a brand-new workspace the branding record is created the first time you save
+  a setting or upload an asset, so before that the primary color shows the
+  `#6366F1` default while the email from-name and letterhead text start blank.
+  The from-name field falls back to your workspace name until you set one.
+</Note>
+
 ### Uploading your logo
 
-On the Branding page you can also upload your credit union's logo. Accepted formats are PNG, JPEG, and WebP (maximum 2 MB). Your logo appears in PDF loan agreements and in outbound email notifications. To replace an existing logo, simply upload a new file — the old one is removed automatically.
+On the Branding page you can also upload your credit union's logo. Accepted formats are PNG, JPEG, and WebP (maximum 2 MB). The crop locks to whatever shape you upload, so a square mark or a horizontal banner both work. Your logo appears in the workspace header, on auth pages, in PDF loan agreements, and in outbound email notifications. To replace an existing logo, upload a new file. The old one is removed automatically.
+
+### Agreement letterhead image
+
+Separate from the letterhead **text** field above, you can upload a letterhead **image** that prints as a banner across the top of your loan agreement PDFs. Accepted formats are PNG, JPEG, and WebP (maximum 2 MB). When no image is set, the PDF falls back to the text-only letterhead. Use the Remove button to clear it.
+
+### Browser tab icon
+
+You can upload a favicon shown in browser tabs and bookmarks, accepting PNG, JPEG, WebP, or SVG (maximum 512 KB). Upload a square image: the cropper locks to your upload's shape, so a square source renders sharpest. SVG uploads skip cropping entirely. Transparent backgrounds work best. When unset, the platform default favicon is used.
+
+<Note>
+  Every branding upload is checked server-side before it is stored: the file is
+  verified against its declared type by its magic bytes and run through a virus
+  scan, and a mismatched or infected file is rejected. SVG icons skip the
+  magic-byte check (they are text, not a raster format) but still go through the
+  virus scan.
+</Note>
 
 ## Branches
 
-Branches represent the physical locations of your credit union. Each branch is set up at onboarding with a short **branch code** — for example, `MDVL` for a Mandeville branch. That code is embedded in every loan ID created at that branch:
+Branches represent the physical locations of your credit union. Each branch is set up at onboarding with a short **branch code**, for example `MDVL` for a Mandeville branch. That code is embedded in every loan ID created at that branch:
 
 ```
 MDVL-AUTO-00001   (Auto loan, Mandeville branch, first loan)
@@ -71,26 +106,34 @@ MAIN-UNS-00047    (Unsecured loan, Main branch)
 ```
 
 <Warning>
-  Branch codes are permanent. They are embedded in loan IDs and officer
-  account references and cannot be changed after onboarding.
+  Branch codes are permanent. They are embedded in every loan ID created at that
+  branch and surface in branch-scoped role and account names, and they cannot be
+  changed after onboarding.
 </Warning>
 
-If your credit union opens a new branch after going live, contact iLoan support to have it added. You cannot add branches yourself through the admin UI in the current version.
+If your credit union opens a new branch after going live, contact support to have it added. You cannot add branches yourself through the admin UI in the current version.
 
 ## Initial administrator account
 
-The first Tenant Administrator account is created during onboarding using the email address provided in the setup configuration. Once you are signed in with that account, you can invite additional administrators and staff from **Admin → Invitations**.
+The first Tenant Administrator account is created during onboarding using the email address provided in the setup configuration. Once you are signed in with that account, you can invite additional administrators and staff from **Administration → Invitations**.
 
 <Accordion title="What roles can I invite?">
-  The roles available in your workspace are configured at onboarding. Common
-  roles include:
+  The roles available in your workspace are configured at onboarding. The
+  standard credit department roles are:
 
   | Role | What they can do |
   |---|---|
   | **Tenant Administrator** | Full access to all admin settings, including branding, products, rates, and invitations |
-  | **Credit Manager** | Manage loan products and rate tables, view all-branch analytics, adjudicate loans |
-  | **Branch Manager** | View analytics scoped to their branch, manage loans in their branch |
-  | **Loan Officer** | Create and manage their own loan applications |
+  | **Credit Manager** | Manage loan products and rate tables, view all-branch analytics, oversee the full pipeline |
+  | **Branch Manager** | View analytics scoped to their branch, manage and assign loans in their branch |
+  | **Credit Officer** | Capture and manage loan applications |
+  | **Adjudicator** | Review submitted applications and record approve, decline, or info-requested decisions |
+  | **Securities** | Verify collateral and resolve outstanding security requests |
+  | **Disbursement** | Schedule and execute funding on approved loans |
 
-  Contact iLoan support if you need to adjust the roles available in your workspace.
+  Contact support if you need to adjust the roles available in your workspace.
 </Accordion>
+
+## Deeper operational configuration
+
+Branding and branches are the visual and structural setup. Your workspace also has operational settings such as the **GCT rate**, the **dual-control threshold** for large disbursements, the **AML screening** toggle, and the **audit retention** period. Those live on the separate [Tenant configuration](/admin/tenant-configuration) page so they stay distinct from branding.

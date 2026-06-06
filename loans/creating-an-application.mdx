@@ -1,35 +1,37 @@
 ---
-title: "How to create and submit a loan application in iLoan"
-sidebarTitle: "Creating an Application"
-description: "Step-by-step guide to creating a loan application draft, filling in all required sections, and submitting it for adjudication in iLoan."
+title: "How to create and submit a loan application"
+sidebarTitle: "Creating an application"
+description: "Step-by-step guide to creating a loan application draft, filling in all required sections, and submitting it for adjudication."
+icon: "square-pen"
 ---
 
-Creating a loan application in iLoan is a multi-step process. You work through a series of form sections at your own pace — saving progress along the way — and submit when everything is complete. Once submitted, the application is automatically routed to the Adjudication queue.
+Creating a loan application is a multi-section process. You fill in the sections on the application page, and each section has its own Save button. Submit and Abandon sit at the bottom of the page once the required sections are captured. Once submitted, the application is placed in the Adjudication queue.
 
 ## Before you start
 
-Make sure the following conditions are met before opening a new application:
+Make sure the following conditions are met before opening a new application.
 
-- **Member KYC status is VERIFIED.** iLoan blocks submission for any member whose identity verification is not complete. If KYC is still pending, complete that process first.
-- **You have the Credit Officer role.** You need permission to create and submit loan applications. Contact your system administrator if you're unsure about your role.
+- **The member is ACTIVE.** You cannot draft a loan for a suspended, inactive, or deceased member. Reactivate the member first.
+- **The member's KYC status allows it.** You can draft an application for any member except one whose KYC is UNVERIFIED or FAILED, so a member who is still in progress or in manual review can be drafted. To submit, though, the member's KYC must be exactly VERIFIED. A drafted application for an in-progress or manual-review member is blocked at submission until verification completes.
+- **You have the Credit Officer role.** You need permission to create and submit loan applications. Contact your Tenant Administrator if you are unsure about your role.
 
 ## Steps to create and submit an application
 
 <Steps>
 
-  <Step title="Go to Loans → New Loan Application">
+  <Step title="Go to Loans, then New Loan Application">
     From the main navigation, select **Loans**, then click **New Loan Application** in the top-right corner of the loans list.
   </Step>
 
   <Step title="Search for and select the member">
-    Type the member's name, account number, or TRN into the member search field. Select the correct member from the results. The member's basic details will pre-fill the Applicant Information section.
+    Type the member's name or member account number into the member search field. Select the correct member from the results. The member's basic details pre-fill the Applicant Information section. Encrypted identifiers like the TRN are not part of this loan member search.
   </Step>
 
   <Step title="Select the loan type">
-    Choose one of the four loan types: **Unsecured**, **Cash-Secured**, **Auto**, or **Mortgage**. The loan type determines which form sections appear. See [Loan Types](/loans/loan-types) for a full breakdown.
+    Choose the loan type. The dropdown lists the loan types your credit union has defined, and the visible names are configurable per tenant. Each one maps to one of four fixed archetypes that drive the behaviour: **Unsecured**, **Cash secured**, **Motor vehicle** (AUTO), or **Real estate** (MORTGAGE). The loan type determines which form sections appear. See [Loan Types](/loans/loan-types) for a full breakdown.
 
     <Note>
-      The loan type is locked once the application is submitted. If you select the wrong type, you will need to abandon the draft and start a new application.
+      The loan type is locked once the application is submitted. If you select the wrong type, you must abandon the draft and start a new application.
     </Note>
   </Step>
 
@@ -38,78 +40,77 @@ Make sure the following conditions are met before opening a new application:
   </Step>
 
   <Step title="Fill in Applicant Information">
-    Confirm or complete the applicant's personal details — name, date of birth, contact information, and address.
+    Confirm or complete the applicant's personal details: name, date of birth, contact information, and address. The member record is the source of truth, so you confirm rather than re-enter, and encrypted identifiers such as TRN, driver's licence, and passport are never re-typed in plaintext here.
   </Step>
 
   <Step title="Fill in Employment">
-    Enter the applicant's employment details: employment type (employed, self-employed, retired, etc.), employer name, occupation, length of employment, and gross monthly income. iLoan uses this information to calculate risk and residual income.
+    Enter the applicant's employment details: employment type (employed, self-employed, or pensioner), employment status (permanent, contract, or temporary), employer name, position held, length of employment, and gross monthly income. Employment type and employment status are scored as separate risk factors, so capture both. The platform uses this information to calculate risk and residual income.
   </Step>
 
   <Step title="Fill in Statement of Affairs">
-    List the applicant's existing financial obligations — monthly debt payments, living expenses, and other outgoings. iLoan uses these figures to calculate the Total Debt Service Ratio (TDSR) and residual income.
+    Capture the applicant's income and outflows. At least one income source is required; submission is rejected without one. Each income line carries an applicability percentage, so income that counts only partially toward affordability (a bonus counted at 50%, for example) is weighted accordingly. List the outflows too: monthly debt payments, living expenses, and other outgoings. The platform uses these figures to calculate the Total Debt Service Ratio (TDSR) and residual income.
   </Step>
 
   <Step title="Fill in Loan Purpose">
-    Enter the loan amount requested, the purpose of the loan, and the requested term in months.
+    Enter the loan amount requested and the requested term in months. The term must be between 1 and 360 months. Describe the purpose in free text and tag it with a purpose category, which the adjudication queue uses for filtering. Pick the preferred repayment method (standing order, payroll deduction, or direct debit); standing order is the default.
   </Step>
 
   <Step title="Fill in the collateral section (if applicable)">
-    Depending on the loan type you selected, an additional section will appear:
+    Depending on the loan type you selected, an additional section appears.
 
-    - **Cash-Secured:** Enter the savings account details and balance to be pledged as security.
-    - **Auto:** Enter the vehicle's make, model, year, VIN, estimated valuation, and insurance details.
-    - **Mortgage:** Enter the property address, estimated valuation, title reference, and insurance details.
+    - **Cash-Secured:** Enter one to five qualifying accounts to pledge as security. Each account has a type (Shares, Time Deposit, or Savings Hypothecation), its account number, and the amount held.
+    - **Auto:** Enter the vehicle's make, model, year, VIN, engine number, and estimated valuation, plus optional mileage. Insurance is confirmed during the Securities review, not captured here.
+    - **Mortgage:** Enter the property type, address, estimated valuation, valuation date, security type (First Mortgage, Second Mortgage, Strata Title, or Other), and any registered mortgagees. Title and insurance are Securities-review concerns, not application fields.
 
     This section does not appear for Unsecured loans.
   </Step>
 
   <Step title="Add guarantors (optional)">
-    If the application requires or benefits from a guarantor, click **Add Guarantor** and fill in the guarantor's personal, employment, and income details. You can add more than one guarantor.
+    If the application requires or benefits from a guarantor, click **Add Guarantor** and fill in the guarantor's personal, employment, and income details, along with their relationship to the applicant, which is required. You can add more than one guarantor.
 
     <Tip>
-      You can add or remove guarantors at any time while the application is in DRAFT status.
+      You can add or remove guarantors at any time while you are editing the application.
     </Tip>
   </Step>
 
   <Step title="Review the auto-calculated figures">
-    Before submitting, review the figures iLoan calculates automatically on the Review screen:
+    Before submitting, review the figures the platform calculates automatically on the application page.
 
-    - **Risk Band** (R1–R5) — overall risk score based on employment, income, debt, and loan type
-    - **TDSR** — share of gross income going to all debt repayments
-    - **LTV** — loan amount as a proportion of collateral value (secured loans only)
-    - **Monthly payment** — estimated repayment amount
-    - **Residual income** — take-home income remaining after all obligations
+    - **Risk Band** (R1 to R5): the band mapped from the sum of seven categorical factors (employment type, employment status, length of employment, TDSR, LTV, loan type, and credit history).
+    - **TDSR**: share of gross income going to all debt repayments.
+    - **LTV**: loan amount as a proportion of collateral value (secured loans only).
+    - **Monthly payment**: estimated repayment amount.
+    - **Residual income**: take-home income remaining after all obligations.
+    - **Total monthly payment**: the loan repayment plus compulsory savings plus the creditor life premium.
 
     These are estimates displayed during capture. The authoritative figures are confirmed at Adjudication.
   </Step>
 
   <Step title="Click Submit">
-    When you're satisfied that all sections are complete and the figures look correct, click **Submit**. The application status moves from DRAFT to SUBMITTED, and is automatically placed in the Adjudication queue.
+    When you are satisfied that all sections are complete and the figures look correct, click **Submit**. The application status moves from DRAFT to SUBMITTED, and it is automatically placed in the Adjudication queue.
   </Step>
 
 </Steps>
 
 <Warning>
-  If the member's KYC status is not VERIFIED, the Submit button will be disabled. Complete KYC verification before attempting to submit.
+  If the member's KYC status is not exactly VERIFIED, submission is blocked. The platform stops the submission server-side rather than just hiding a button, so it holds even against a stale page. Complete KYC verification before attempting to submit.
 </Warning>
 
 <Note>
-  Your loan is assigned a unique Loan ID (e.g. MDVL-UNS-00001) when you first save the draft. This ID appears in the application header and in all subsequent notifications.
+  Your loan is assigned a unique Loan ID (for example, MDVL-UNS-00001) when the draft is created, which is the moment you pick the member, loan type, and product. This ID appears in the application header and in all subsequent notifications.
 </Note>
 
 ---
 
 ## Saving a draft
 
-You do not need to complete all sections in a single session. Click **Save Draft** at any point to preserve your progress. The application remains in DRAFT status, and you can return to it from the Loans list at any time.
-
-iLoan also auto-saves your progress as you move between form steps, so you won't lose work if you navigate away unexpectedly.
+You do not need to complete all sections in a single session. Each section has its own save action, with labels like **Save loan parameters**, **Save statement of affairs**, **Save net worth**, **Save cash details**, and **Save vehicle details**. Save the section you are working on to preserve its contents. The application stays in DRAFT status, and you can return to it from the Loans list at any time. Saving is explicit: your progress is preserved when you save a section, so save before navigating away.
 
 ---
 
 ## Abandoning a draft
 
-If you've started an application but decide not to proceed, use the **Abandon Draft** option from the application's action menu. The status changes to **DRAFT\_ABANDONED**, the record is preserved in the audit trail, and the application is removed from your active drafts.
+If you started an application but decide not to proceed, use the **Abandon Draft** option from the application's action menu. The UI confirms with an "Abandon this draft?" dialog before flipping the status. Abandoning runs through the workflow engine and is gated by the `loans.edit` capability. The status changes to **DRAFT_ABANDONED**, the record is preserved in the audit trail, and the application is removed from your active drafts.
 
 An abandoned draft cannot be reopened or resubmitted. If you need to proceed with the same member, create a new application.
 
@@ -117,16 +118,18 @@ An abandoned draft cannot be reopened or resubmitted. If you need to proceed wit
 
 ## Auto-calculated fields
 
-When you submit an application, iLoan automatically calculates the following figures:
+The platform calculates these figures and shows them as you capture the application.
 
 | Field | How it's calculated |
 |---|---|
-| **Risk Band (R1–R5)** | Scoring across five factors: employment type and stability, TDSR, LTV (if secured), loan type, and credit history. R1 is the lowest risk; R5 is the highest. |
-| **TDSR** | (Total monthly debt payments) ÷ (Gross monthly income). Includes the proposed new loan repayment. |
-| **LTV** | (Requested loan amount) ÷ (Collateral value). Applies to Cash-Secured, Auto, and Mortgage loans only. |
+| **Risk Band (R1 to R5)** | The band mapped from the sum of seven categorical factors: employment type, employment status, length of employment, TDSR, LTV, loan type, and credit history. R1 is the lowest risk; R5 is the highest. |
+| **TDSR** | Total monthly debt payments divided by total applicable income. Includes the proposed new loan repayment. |
+| **LTV** | Requested loan amount divided by collateral value. Applies to Cash-Secured, Auto, and Mortgage loans only. |
 | **Monthly payment** | Calculated using the applicable rate from the loan product's rate table and the requested term. |
-| **Residual income** | Gross monthly income minus all monthly obligations (existing debts + new loan payment + living expenses). |
-| **Share requirement** | Mandatory shares purchase amount, calculated per your credit union's product configuration. |
-| **Creditor life insurance premium** | Estimated premium based on the loan amount and term. |
+| **Residual income** | Gross monthly income minus all monthly obligations (existing debts plus new loan payment plus living expenses). |
+| **Mandatory shares** | The required member-equity share purchase: the greater of JMD $2,000 or 15% of the loan amount. |
+| **Compulsory savings** | A savings contribution added to the monthly payment: the greater of JMD $2,000 or 5% of the monthly loan amortization payment. |
+| **Creditor life premium** | An insurance premium drawn from a per-thousand-per-year table keyed by the applicant's age. |
+| **Total monthly payment** | The loan repayment plus compulsory savings plus the creditor life premium. |
 
-These figures are calculated at the point of submission and stored as part of the risk assessment record. The Adjudicator reviews them when making a decision.
+When you submit, the platform persists the risk band, the integer score, the policy flags, the engine version, and a snapshot of the inputs on the risk assessment record. The other figures above are estimates shown during capture, not separate stored fields on that record. The Adjudicator reviews them when making a decision.

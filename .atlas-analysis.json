@@ -1,15 +1,15 @@
 {
   "projectType": "saas",
-  "projectName": "iLoan",
-  "projectDescription": "A multi-tenant loan origination platform for credit unions, covering the full loan lifecycle from application capture through adjudication, securities review, and disbursement.",
+  "projectName": "CNS",
+  "projectDescription": "CNS product documentation. The Loan Origination System (LOS) is a multi-tenant loan origination platform for credit unions, covering the full loan lifecycle from application capture through adjudication, securities review, and disbursement.",
   "theme": "almond",
-  "primaryColor": "#1E4D8C",
-  "lightColor": "#EBF1FA",
-  "darkColor": "#0F2A52",
+  "primaryColor": "#F59E0B",
+  "lightColor": "#FBBF24",
+  "darkColor": "#D97706",
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "LOS",
         "groups": [
           {
             "group": "Get Started",

@@ -1,18 +1,21 @@
 ---
-title: "Review collateral and manage security requests in iLoan"
+title: "Review collateral and manage security requests"
 sidebarTitle: "Securities"
-description: "Learn how the Securities review workflow works in iLoan — reviewing collateral documents, raising security requests, and clearing loans for disbursement."
+description: "Review collateral documents, raise security requests, and clear approved loans for disbursement."
+icon: "shield"
 ---
 
-The Securities team reviews collateral documentation for approved secured loans before funds are released. Your job is to verify that every required document is present, properly executed, and satisfies the credit union's perfection requirements. Once all security requirements are met, the loan moves to Disbursement automatically.
+The **Securities** team reviews collateral documentation for approved secured loans before any funds are released. The review confirms every required document is present, properly executed, and meets the credit union's perfection requirements. Once all security requirements are met, the loan moves to Disbursement automatically.
 
 <Note>
-Unsecured loans skip the Securities stage entirely — they route directly from **APPROVED** to **DISBURSEMENT**. You will only see secured loan types (Auto, Mortgage, and Cash-Secured) in your queue.
+Unsecured loans pass through Securities but are auto-skipped to **DISBURSEMENT** in the same step, because there is no collateral to verify. You only see secured loan types in your queue: Auto, Mortgage, and Cash-Secured.
 </Note>
 
 ## What you need
 
-You must have the **Securities Reviewer** role, which includes the `securities.review` capability. Credit Officers can also access Securities detail pages to upload documents, but they cannot approve or reject security requests — that requires `securities.review`.
+You need the **Securities** role, which carries the `securities.review` capability, to approve, reject, or waive security requests. Credit Officers can open the Securities detail page to work a file, but their actions are scoped: reading the page needs `securities.review` or `loans.edit`, submitting a requested document is gated by `loans.edit`, and uploading the document itself also requires `members.documents.upload`. Officers cannot approve, reject, or waive requests.
+
+Adjudicators can also raise and waive security requests on a file, because both of those actions accept `securities.review` or `loans.adjudicate`.
 
 ## Which loans come to Securities
 
@@ -21,81 +24,108 @@ You must have the **Securities Reviewer** role, which includes the `securities.r
 | Auto | Yes |
 | Mortgage | Yes |
 | Cash-Secured | Yes |
-| Unsecured | No — goes directly to Disbursement |
+| Unsecured | Passes through, then auto-skipped to Disbursement. |
 
 ## Reviewing a loan
 
 <Steps>
   <Step title="Open the Securities queue">
-    Go to **Admin → Securities**. The queue shows approved loans awaiting collateral review. Use the **All / My queue / Unassigned** tabs to filter to your assigned files or unclaimed work.
+    Open **Securities** under the **Review queue** group in the sidebar. Reaching the queue list needs `securities.review` or `reports.view`, which is a wider gate than the detail page. The queue shows approved loans awaiting collateral review. A **Pending / Completed** toggle switches between active requests and resolved or rejected ones, and the **All / My queue / Unassigned** tabs filter to your files or unclaimed work.
   </Step>
   <Step title="Open the application">
     Click a row to open the Securities detail page. You'll see the full application summary, the risk assessment, and the collateral details submitted by the Credit Officer.
   </Step>
   <Step title="Review collateral and documents">
-    Check the **Collateral Summary** card for the collateral type, estimated value, and any documents already attached. Cross-reference what's required for this loan type against what's been provided.
+    Check the **Collateral on file** card for the collateral type, valued amount, valuation date, valuation source, and the loan-to-value ratio. Cross-reference what this loan type requires against what's been provided.
   </Step>
   <Step title="Take action">
-    - If all documents are in order and the collateral is correctly perfected, proceed — the loan will route to Disbursement once all security requests are resolved (see below).
-    - If anything is missing or incomplete, raise a Security Request.
+    - If everything is in order and the collateral is correctly perfected, the loan routes to Disbursement once all security requests are resolved (see below).
+    - If anything is missing or incomplete, raise a security request.
   </Step>
 </Steps>
 
-## Raising a Security Request
+## Raising a security request
 
-A Security Request is a formal sub-workflow that notifies the Credit Officer of a specific document requirement. You can have multiple open requests on the same loan at the same time.
+A **security request** is a formal sub-workflow that notifies the Credit Officer of a specific document requirement. You can have multiple open requests on the same loan at once. Adjudicators can raise requests too, since this action accepts `securities.review` or `loans.adjudicate`.
 
 <Steps>
-  <Step title="Click Raise Security Request">
-    On the Securities detail page, find the **Side Actions** panel and click **Raise Security Request**.
+  <Step title="Open the Request additional documents card">
+    On the Securities detail page, find the **Request additional documents** card and click **Request additional documents** to open the form.
   </Step>
   <Step title="Specify what is needed">
-    Describe the document required — for example: *Vehicle title*, *Insurance binder*, *Property valuation*, or *Survey diagram*. Be precise; the Credit Officer sees your description and uses it to locate or obtain the document.
+    Describe the document required, for example a vehicle title, an insurance binder, a property valuation, or a survey diagram. Be precise. The Credit Officer reads your description and uses it to locate or obtain the document. Click **Create request** to raise it.
   </Step>
-  <Step title="Submit the request">
-    Submit the form. The Credit Officer is notified by email immediately. The loan moves to **SECURITIES_ISSUE** status to signal that action is required.
+  <Step title="The request lands as PENDING">
+    The new request is created in **PENDING** and the Credit Officer is notified by email immediately. Raising a request does **not** change the loan's status. The loan stays in **SECURITIES** while the request is open.
+
+    One shortcut: if every document you ask for is already on the member's file, the platform auto-promotes the request straight to **SUBMITTED** (marked with an **AUTO-DETECTED** pill) instead of waiting on an upload. There is nothing for the officer to submit, and you can review and resolve it right away.
   </Step>
   <Step title="Officer uploads the document">
-    The Credit Officer uploads the requested document against the member's file and marks the request as submitted. You receive a notification to review.
+    When documents are not already on file, the Credit Officer uploads the requested document against the member's file and marks the request submitted. You receive a notification to review.
   </Step>
   <Step title="Review the uploaded documents">
     Return to the Securities detail page. The request card now shows **SUBMITTED** status. Review the uploaded document against the requirement.
 
-    - **Approve** — the document satisfies the requirement. Click **Approve** and add any notes. The request moves to **RESOLVED**.
-    - **Reject** — the document is malformed, incomplete, or doesn't match what was asked for. Click **Reject**, enter a reason (required), and the Officer is notified to resubmit.
+    - **Approve.** The document satisfies the requirement. Click **Approve** and add any notes. The request moves to **RESOLVED**.
+    - **Reject.** The document is malformed, incomplete, or doesn't match what was asked for. Click **Reject**, enter a reason of at least 10 characters, and the Officer is notified to raise a fresh request.
+    - **Waive.** The document isn't needed on this file (waiver authority, exception policy, or it already sits on the member's record). See [Waiving a security request](#waiving-a-security-request) below.
   </Step>
   <Step title="Loan routes to Disbursement">
-    Once every Security Request on the loan is **RESOLVED**, the loan automatically routes to **DISBURSEMENT** and the Disbursement team is notified. You can optionally use the **Route Disbursement to** picker (shown when you resolve the last request) to hand the file directly to a specific Disbursement Officer.
+    Once every security request on the loan is **RESOLVED**, the loan routes to **DISBURSEMENT** automatically and the Disbursement team is notified. You can optionally use the **Route Disbursement to** picker, shown when you resolve the last request, to hand the file to a specific person on the Disbursement team.
   </Step>
 </Steps>
 
-## Security Request states
+## Waiving a security request
+
+Sometimes a requested document isn't actually needed: you hold waiver authority, an exception policy applies, or the document is already on the member's record. Instead of forcing an upload, you can waive the request and clear it.
+
+To waive, open the request, choose **Waive**, and enter a justification of at least 20 characters. The request flips to **RESOLVED**, shows a **Waived** pill in the queue and on the detail page, and the audit record stamps `waived: true` together with your reason, so compliance can filter for waivers later. The Credit Officer is notified.
+
+Both the **Securities** team (`securities.review`) and an **Adjudicator** (`loans.adjudicate`) can waive a request. A waived request counts as completed, so it clears the way to Disbursement just like a normal approval.
+
+## Security request states
+
+A security request starts at PENDING when raised, moves to SUBMITTED once documents are uploaded, then ends at RESOLVED or REJECTED. A waived request ends at RESOLVED with a distinct **Waived** outcome.
 
 | Status | Meaning |
 |---|---|
-| PENDING | Request raised; Credit Officer has been notified and must upload documents |
-| SUBMITTED | Officer has uploaded documents; awaiting Securities review |
-| RESOLVED | Documents approved; this request is cleared |
-| REJECTED | Documents rejected; Officer must resubmit |
+| PENDING | Request raised. Credit Officer has been notified and must upload documents. |
+| SUBMITTED | Officer has uploaded documents. Awaiting Securities review. |
+| RESOLVED | Documents approved. This request is cleared. |
+| REJECTED | Documents rejected. Officer must raise a fresh request. |
 
-## SECURITIES_ISSUE state
+A **REJECTED** request does not block progression on its own. Advancement to Disbursement is gated only by there being zero open requests, meaning none in **PENDING** or **SUBMITTED**. The count of RESOLVED requests is not part of that gate, so a loan whose only requests were all rejected (no open, none resolved) technically passes the gate. The detail page surfaces a recovery banner for that stranded case, and a fresh rejection of the last request auto-bounces the loan back to Adjudication, covered below.
 
-When one or more Security Requests are open (PENDING or SUBMITTED), the loan sits in **SECURITIES_ISSUE** status. This status signals to the Credit Officer that action is required on their end. The loan automatically returns to **SECURITIES** status when the Officer submits the outstanding documents.
+## While requests are open, the loan stays in SECURITIES
 
-A loan can cycle between SECURITIES and SECURITIES_ISSUE multiple times if successive rounds of requests are needed.
+Open security requests do **not** move the loan to a different status. While one or more requests are in **PENDING** or **SUBMITTED**, the loan stays in **SECURITIES**, which is where the document-request loop plays out. Raising more requests, having the officer submit documents, and you approving or rejecting them all happen with the loan parked in SECURITIES.
 
-## What happens when all requests are rejected
+**SECURITIES_ISSUE** is a separate, Adjudicator-owned state. It is not the per-request signal. It is reached only when someone with `loans.adjudicate` flags a structural problem with the collateral package and sends the file back for the Adjudicator to resolve.
 
-If every Security Request on a loan is rejected with no resolved requests on record, the file cannot proceed from Securities. In this situation, iLoan automatically sends the loan back to **ADJUDICATION** so the Adjudicator can re-evaluate — whether to restructure the collateral plan, request new information from the officer, or decline the loan entirely. Both the Adjudicators and the originating Credit Officer are notified.
+## When the collateral has a structural problem
 
-## After Securities — the Disbursement path
+If something is structurally wrong with the collateral package, a valuation mismatch, ineligible collateral, or an identity mismatch, use the **Send back to Adjudication** card on the detail page. Enter a reason of at least 10 characters and submit.
 
-Once all requests are resolved, iLoan notifies the Disbursement team automatically. Depending on your credit union's configuration, the loan may also return to Securities for a final check after disbursement occurs — your Tenant Administrator controls this setting. If the final check is enabled, you'll see the loan re-appear in the Securities queue at the **DISBURSED** stage before it is filed.
+This fires the **SECURITIES → SECURITIES_ISSUE** transition and requires the `loans.adjudicate` capability, since the Adjudicator owns the SECURITIES_ISSUE state. The file lands back on the Adjudicator's desk, where they can restructure the collateral plan, request new information from the officer, or decline the loan.
+
+<Note>
+The **Send back to Adjudication** card only appears for users who hold `loans.adjudicate`. A member of the Securities team without that capability raises additional document requests or rejects a request instead, rather than escalating to SECURITIES_ISSUE.
+</Note>
+
+## When every request was rejected
+
+If you reject the last open request and the loan is left with no productive path, meaning none of its requests are PENDING, SUBMITTED, or RESOLVED, the platform automatically fires **SECURITIES → ADJUDICATION** and emails the Adjudicators and the Credit Officer. The file goes back to Adjudication for re-review rather than stalling in Securities.
+
+For an older loan that was stranded this way before that auto-bounce was wired in, the detail page shows a recovery banner with a one-click action that sends the file back to Adjudication.
+
+## After Securities, the Disbursement path
+
+Once all requests are resolved, the platform notifies the Disbursement team automatically. A few credit unions also run a security check *after* funds have gone out, for example to confirm vehicle insurance was activated or a lien was filed. That is a separate **DISBURSED → SECURITIES** transition that someone with the `loans.adjudicate` capability initiates; it is not part of filing the loan. The platform only allows it when the tenant's `securitiesFinalCheckRequired` configuration flag is on (a setting on `TenantWorkflowOverride`, defaulting off, with no screen that toggles it). When it fires, you'll see the loan reappear in the Securities queue while its status stays **DISBURSED**, and once the new request is resolved the file returns through Disbursement and can be filed.
 
 <Tip>
-There must be zero open Security Requests (PENDING or SUBMITTED) for the loan to proceed to Disbursement. Resolve or reject all outstanding requests before expecting the loan to advance.
+There must be zero open security requests (PENDING or SUBMITTED) for the loan to proceed to Disbursement. Resolve or reject every outstanding request before expecting the loan to advance.
 </Tip>
 
-## Securities Dashboard
+## Securities dashboard
 
-The **Securities Dashboard** at **Admin → Securities → Dashboard** shows a summary of active and completed requests, request turnaround times, and queue volume by loan type. Use it to track workload and identify loans that have been sitting in SECURITIES_ISSUE for an extended period.
+The **Securities dashboard** lives under the **Dashboards** group in the sidebar (**Dashboards → Securities**). It shows five tiles plus a throughput sparkline: **Pending reviews**, **Outstanding requests**, **Resolved this week**, **Reviews completed**, and **Auto-skipped**, with a **Requests resolved per day** sparkline. Reaching it needs `securities.review` or `reports.view`.

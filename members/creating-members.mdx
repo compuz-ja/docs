@@ -1,18 +1,19 @@
 ---
-title: "Create and manage credit union member profiles in iLoan"
-sidebarTitle: "Creating Members"
-description: "Learn how to create a member profile, fill in required fields, update member details, and manage member status in your iLoan workspace."
+title: "Create and manage credit union member profiles"
+sidebarTitle: "Creating members"
+description: "Create a member profile, fill in required fields, update member details, and manage member status in your workspace."
+icon: "user-plus"
 ---
 
-Member profiles are the starting point for every loan in iLoan. Before you can open a loan application, the borrower must have a member record in your workspace. This page walks you through creating a new member, searching for existing members, editing profile details, and managing a member's status over time.
+A member profile is the customer record a loan application links to. No member record, no loan application. Before you can open a loan application, the borrower must have a member record in your workspace.
 
 <Tip>
-  Always search for a member before creating a new one. Duplicate records can cause confusion when linking loan applications and tracking KYC history. Use the search bar on the Members list to check whether a member already exists.
+  Always search for a member before creating a new one. Duplicate records cause confusion when linking loan applications and tracking KYC history. Use the search bar on the Members list to check whether a member already exists.
 </Tip>
 
 ## Who can create members
 
-You need the **members.create** capability to add new member profiles. This capability is granted to Credit Officers and all roles above. If you cannot see the **New Member** button, ask your Administrator to check your role assignment.
+You need the **members.create** capability to add new member profiles. This capability is held by the Credit Officer and the Tenant Administrator. If you cannot see the **New Member** button, ask your Tenant Administrator to check your role assignment.
 
 ## Creating a new member
 
@@ -20,47 +21,55 @@ You need the **members.create** capability to add new member profiles. This capa
   <Step title="Open the New Member form">
     Go to **Members** in the main navigation, then click **New Member** in the top-right corner of the Members list.
   </Step>
+  <Step title="Choose the branch and CIF number">
+    Two fields block the save and the form will not let you continue without them:
+
+    - **Branch** (required): the credit union branch this member belongs to. It is fixed once the member is created.
+    - **Member CIF number** (required): the Customer Information File number, the member's primary identifier within the credit union. One CIF per person, and it must be unique within your workspace.
+  </Step>
   <Step title="Enter personal details">
     Fill in the member's core identifying information:
 
     - **First name** and **last name** (required)
-    - **Middle name** (optional)
-    - **Date of birth** (required for KYC verification)
-    - **Email address**
-    - **Phone number**
+    - **Salutation** and **middle name** (optional)
+    - **Date of birth** (required)
+    - **Gender** and **employment status** (optional)
+    - **Email address** and **phone number** (both optional)
+    - **Marital status**, **dependents**, and **education** (optional)
   </Step>
   <Step title="Enter identity details">
-    Fill in the member's government-issued identity numbers. These fields are **encrypted at rest** and are never exported in plain text:
+    Fill in the member's identity numbers. These fields are **all optional at creation** and you can add or update them later by editing the profile. The TRN, driver's licence, passport, government ID number, and mother's maiden name are **encrypted at rest** and are never exported in plain text:
 
-    - **TRN** (Tax Registration Number) — used as the primary identifier for KYC verification
-    - **Driver's licence number** — used as an alternative KYC identifier
-    - **Passport number** — used as an additional identity reference
+    - **TRN** (Tax Registration Number), used as the primary identifier for KYC verification
+    - **Driver's licence number**, used as an alternative KYC identifier
+    - **Passport number**, stored as an additional identity reference
+    - **Government ID type, number, and issuer**, for any other identity document
+    - **Mother's maiden name** and **internal notes**, both stored encrypted
   </Step>
-  <Step title="Enter address details">
-    Fill in the member's mailing address:
+  <Step title="Enter address and residence details">
+    Fill in the member's address and living situation. All of these are optional:
 
     - Address line 1 and address line 2
-    - City
-    - Parish
-    - Postal code
+    - City, parish, and postal code
+    - Residential status, years at the address, and previous address
   </Step>
-  <Step title="Add bank account details (optional)">
-    If you have the member's bank account information, enter it now. This field is encrypted at rest. You can also add or update it later by editing the member's profile.
+  <Step title="Add next-of-kin and bank account details (optional)">
+    Capture the member's nearest relative (name, relationship, contact details, and address) and, if you have it, their bank account number. The bank account number is encrypted at rest. You can add or update any of this later by editing the member's profile.
   </Step>
   <Step title="Save the member">
-    Click **Save**. iLoan creates the member record and opens the member's profile page. The member's KYC status will be **UNVERIFIED** until you run a verification check.
+    Click **Create member**. The platform creates the member record and opens the member's profile page. The member's KYC status stays **UNVERIFIED** until you run a verification check.
   </Step>
 </Steps>
 
 <Warning>
-  Identity fields — TRN, driver's licence number, passport number, and bank account number — are encrypted at rest as a compliance requirement. They cannot be exported or copied in plain text from iLoan. To view a stored value, use the **Reveal** function on the member's profile, which requires the appropriate capability and is recorded in the audit log.
+  Several identity fields are encrypted at rest with a per-tenant AES-256-GCM key as a compliance requirement: TRN, driver's licence number, passport number, bank account number, government ID number, mother's maiden name, and internal notes. They cannot be exported or copied in plain text. The **Reveal** control, which decrypts a stored value in place, is available only when editing an existing member, not on the create form, and only for five of these fields: TRN, driver's licence, passport, bank account, and internal notes. The government ID number and mother's maiden name are encrypted but have no Reveal path; they show as blank edit inputs. Reveal requires the **members.edit** capability, and each reveal emits a `member.pii.revealed` audit event recording who revealed which field. The decrypted value itself is never written to the audit log.
 </Warning>
 
 ---
 
 ## Searching for members
 
-The Members list includes a search bar at the top of the page. As you type, iLoan searches member names using type-ahead matching — results update in real time. You can also filter by KYC status or member status using the filter controls alongside the search bar.
+The Members list includes a search bar at the top of the page. As you type, the platform searches member names using type-ahead matching, so results update in real time. You can also filter by KYC status, member status, or a created-date range using the controls alongside the search bar. An **Export** control on the toolbar downloads the currently filtered list as a CSV.
 
 Click any result row to open that member's profile.
 
@@ -76,10 +85,10 @@ Click any result row to open that member's profile.
     Click the **Edit** button in the top-right area of the profile header. You need the **members.edit** capability to see this button.
   </Step>
   <Step title="Update the fields">
-    Change any fields as needed — personal details, contact information, address, identity numbers, or bank account details.
+    Change any fields as needed: personal details, contact information, address, identity numbers, or bank account details.
   </Step>
   <Step title="Save your changes">
-    Click **Save**. The changes are applied immediately and recorded in the audit log.
+    Click **Save changes**. The changes are applied immediately and recorded in the audit log.
   </Step>
 </Steps>
 
@@ -90,17 +99,17 @@ Click any result row to open that member's profile.
 A member's status reflects the current state of their account with your credit union.
 
 <AccordionGroup>
-  <Accordion title="ACTIVE — default status">
-    New members are created with **ACTIVE** status. An active member is in good standing and can be linked to loan applications (once KYC is also VERIFIED).
+  <Accordion title="ACTIVE, the default status">
+    New members are created with **ACTIVE** status. An active member can be linked to a loan application once KYC is past the initial stage. The platform blocks loan drafting only when KYC is **UNVERIFIED** or **FAILED**; **VERIFIED**, **IN_PROGRESS**, and **MANUAL_REVIEW** all allow it. Submitting the loan still requires KYC **VERIFIED**.
   </Accordion>
-  <Accordion title="INACTIVE — account closed">
-    Set a member to **INACTIVE** when their account has been formally closed. Their profile and all associated records — loans, documents, KYC history — are preserved for audit purposes. An inactive member cannot be linked to new loan applications.
+  <Accordion title="INACTIVE, suspended">
+    A member becomes **INACTIVE** when you suspend them; there is no separate "close account" control. Their profile and all associated records, like loans, documents, and KYC history, stay in place. An inactive member cannot be linked to new loan applications, and you reactivate them to return the status to ACTIVE.
   </Accordion>
-  <Accordion title="DECEASED — terminal status">
-    The **DECEASED** status is a terminal state that signals the member has passed away. All records are fully preserved. This status cannot be reversed. Contact your Administrator before applying this status.
+  <Accordion title="DECEASED">
+    The **DECEASED** value exists on the record, but the platform has no in-app control to set it, and bulk CSV import does not set it either (imported members default to ACTIVE). It appears only through a direct data migration. Day to day, the statuses you set are ACTIVE and INACTIVE.
   </Accordion>
-  <Accordion title="Suspending a member">
-    Suspending a member is an administrative action (requires the **members.suspend** capability) used when an account needs to be placed under review — for example, due to suspected fraud or a compliance hold. A suspended member's profile remains visible to staff but cannot be used for new loan origination until reactivated. The suspension reason is recorded in the member's status history.
+  <Accordion title="Suspending and reactivating a member">
+    Suspend and reactivate both require the **members.suspend** capability, which is restricted to the Tenant Administrator. Suspending sets the member to **INACTIVE**, the same status described above; use it when an account needs to be placed under review, for example due to suspected fraud or a compliance hold. The suspension form requires a reason of at least three characters, which is stored on the record and emitted with the `member.suspended` audit event. A suspended member's profile remains visible to staff but cannot be used for new loan origination until you reactivate them, which sets the status back to **ACTIVE** and clears the stored reason.
   </Accordion>
 </AccordionGroup>
 
@@ -108,6 +117,6 @@ A member's status reflects the current state of their account with your credit u
 
 ## Soft deletion
 
-Deleting a member requires the **members.delete** capability, which is typically restricted to Administrators. When a member is deleted, they are hidden from the standard Members list and search results. Their record is not permanently erased — it is preserved in full for regulatory audit purposes and can be restored by an Administrator if needed.
+Deleting a member requires the **members.delete** capability, which is restricted to the Tenant Administrator. When a member is deleted, they are hidden from the standard Members list and search results. Their record is not permanently erased. It is preserved in full for regulatory audit purposes and can be restored by a Tenant Administrator if needed.
 
-If you need to remove a member from active use without deleting them, set their status to **INACTIVE** instead.
+If you need to remove a member from active use without deleting them, suspend the member instead.

@@ -1,0 +1,43 @@
+---
+title: "Notification preferences"
+description: "Control which email alerts you receive from the Notifications page in your profile. Preferences are per-user and apply across every workspace you belong to."
+sidebarTitle: "Notification preferences"
+icon: "bell"
+---
+
+The **Notifications** page in your profile lets you suppress specific email alerts you would otherwise receive. Preferences are per-user. They live on your account and apply across every workspace you belong to, not just one. The page is not tenant-scoped: it lives at `https://loan.compuzign.com/profile/notifications`, with no workspace slug in the path.
+
+## Opening notification preferences
+
+Click your avatar in the top-right corner, then choose **Profile**. That opens the profile area, whose sidebar lists three pages: **Settings**, **Authentication**, and **Notifications**. Select **Notifications**.
+
+## What you can control
+
+The page currently has one preference.
+
+| Preference | What it controls |
+|---|---|
+| **New invitations sent by other admins** | When another admin in a workspace you belong to sends a member invitation, you get an email heads-up so you can revoke it if it was a mistake. Turn this off to stop those alerts. |
+
+This preference is **on by default**, so every eligible admin gets the alert until they turn it off here.
+
+The setting is a toggle. Changes save immediately. A short confirmation toast reads "Enabled invitation alerts" or "Disabled invitation alerts" when the new setting is stored. If a save fails, the toggle bounces back to its previous position and an error toast appears, so a bounced toggle means the change did not save.
+
+<Note>
+  This is the only notification preference in the current release. More preferences will appear here as the platform adds them. The page documents only what exists today.
+</Note>
+
+## How preferences relate to your role
+
+A preference can only suppress an email you are otherwise eligible to receive. Your eligibility comes from your role and your assignments, not from this page.
+
+<CardGroup cols={2}>
+  <Card title="Eligibility comes from your role" icon="user-check">
+    Capabilities decide whether you can receive a given alert at all. The invitation heads-up reaches only peers with an active membership who hold the `admin.tenant.invite.list` capability. The admin who sent the invitation never gets their own alert, and suspended or revoked members are skipped. Turning the toggle off suppresses the email without changing your capability.
+  </Card>
+  <Card title="Workflow emails follow ownership" icon="bell">
+    For loan lifecycle events, you are notified about loans you own or that land in your queue. Claiming or being assigned a file makes you the point of contact for its stage events.
+  </Card>
+</CardGroup>
+
+For the full picture of which loan events send email and who receives each one, see [Email notifications for loan workflow events](/workflows/notifications).

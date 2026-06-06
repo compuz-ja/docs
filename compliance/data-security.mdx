@@ -1,103 +1,109 @@
 ---
-title: "Data security and privacy in iLoan for credit unions"
-sidebarTitle: "Data Security"
-description: "Learn how iLoan protects member data at your credit union — tenant isolation, AES-256-GCM encryption, PII redaction, and role-based access controls."
+title: "Data security and privacy for credit unions"
+sidebarTitle: "Data security"
+description: "How the platform protects member data: tenant isolation, AES-256-GCM encryption, PII redaction, and role-based access controls."
+icon: "shield-check"
 ---
 
-iLoan is built for the security requirements of regulated financial institutions. Member PII is encrypted at rest before it ever touches the database, all data is isolated per credit union, and every access event — including every permission denial — is recorded in an immutable, hash-chained audit log. The sections below explain each protection layer in plain terms.
+The Loan Origination System is built for the security requirements of regulated financial institutions. Member PII is encrypted at rest before it ever touches the database. All data is isolated per credit union. Every mutating action and every permission denial is recorded in an immutable, hash-chained audit log.
 
 ## Tenant isolation
 
-Every credit union on iLoan is a fully separate **tenant**. A user in one credit union cannot access any data belonging to another, regardless of their role or permissions.
+Every credit union on the platform is a fully separate **tenant**. A user in one credit union cannot access any data belonging to another, regardless of their role or permissions.
 
 Isolation is enforced at multiple layers:
 
-- **Application layer** — every query is scoped to the authenticated tenant; the application never constructs cross-tenant queries.
-- **Data layer** — every data query is automatically scoped to the authenticated tenant's data; cross-tenant data access is structurally prevented.
-- **Encryption layer** — per-tenant encryption keys mean that even at the storage level, one tenant's encrypted data is keyed separately from all others.
+- **Application layer:** every query is scoped to the authenticated tenant. The application never constructs cross-tenant queries.
+- **Data layer:** Postgres row-level security scopes every query to the authenticated tenant's data. Cross-tenant access is structurally prevented.
+- **Encryption layer:** each tenant has its own encryption key. Even at the storage level, one tenant's encrypted data is keyed separately from all others.
 
-There is no configuration required on your part — isolation is the default and cannot be turned off.
+Nothing is required on your part. Isolation is the default and cannot be turned off.
 
 ## Encryption at rest
 
-Sensitive member identity fields are encrypted using **AES-256-GCM** before they are stored in the database. Each credit union has its own encryption key — so your members' data is encrypted with a key that belongs exclusively to your workspace.
+Sensitive identity fields are encrypted with **AES-256-GCM** before they are stored in the database. Each credit union has its own per-tenant data encryption key, derived from a master key using HKDF at the moment data is read or written. Your members' data is encrypted with a key that belongs exclusively to your credit union.
 
-The following fields are always encrypted at rest:
+These member identity fields are always encrypted at rest:
 
 <CardGroup cols={2}>
-  <Card title="Tax Registration Number (TRN)" icon="id-card" />
+  <Card title="Tax Registration Number (TRN)" icon="contact" />
   <Card title="Driver's licence number" icon="car" />
-  <Card title="Passport number" icon="passport" />
-  <Card title="Bank account numbers" icon="building-columns" />
+  <Card title="Passport number" icon="book-user" />
+  <Card title="Bank account number" icon="landmark" />
+  <Card title="Government ID number" icon="id-card" />
+  <Card title="Mother's maiden name" icon="user-round" />
+  <Card title="Member notes" icon="notebook-pen" />
 </CardGroup>
 
-These values are never stored in plain text. They cannot be exported in bulk through any reporting feature — access to them requires authentication, appropriate role permissions, and is recorded in the audit log.
+The same AES-256-GCM, per-tenant scheme also encrypts identity numbers on **guarantor** records (TRN and driver's licence), the **payee account number** on a disbursement, and each tenant's stored **integration credentials**.
+
+These values are never stored in plain text. They cannot be exported in bulk through any reporting feature. Access requires authentication and appropriate role permissions, and every access is recorded in the audit log.
 
 ## Document storage
 
-Member documents — PDFs, identity images, and supporting materials — are stored in secure cloud storage, not in the application database. Access to documents requires:
+Member documents are stored in secure cloud storage, not in the application database. That covers PDFs, identity images, and supporting materials. Access to a document requires:
 
 1. A valid authenticated session
-2. The `member.documents.view` capability (held by Credit Managers and Tenant Administrators by default)
+2. The `members.documents.view` capability, held by the staff who work loans (Credit Officer, Adjudicator, Securities, and Disbursement) and by the Tenant Administrator
 3. The document belonging to a member within your credit union's tenant
 
-Every document access event is recorded in the audit trail. If someone views, downloads, or uploads a document, that action is logged with the full actor identity and timestamp.
+Document uploads and deletions are recorded in the audit trail with the full actor identity and timestamp. Every download requires the `members.documents.view` capability and an active tenant membership.
 
 ## PII in operational logs
 
-iLoan produces two distinct types of records, and they handle PII differently:
+The platform produces two distinct types of records, and they handle PII differently.
 
 | Record type | PII treatment | Who can access |
 |---|---|---|
-| **Operational logs** (monitoring, debugging) | PII is automatically redacted — values are replaced with `[REDACTED]` before writing | Engineering and operations teams |
-| **Legal audit log** (the audit trail) | Full PII is present — this is the complete, unredacted record | Users with the `reports.view` capability (Credit Manager, Tenant Administrator) |
+| **Operational logs** for monitoring and debugging | PII is automatically redacted. PII keys are replaced with `[REDACTED]` at write time. | Engineering and operations teams |
+| **Legal audit log**, the audit trail | Full PII is present. This is the complete, unredacted record. | Users with the `reports.view` capability: Tenant Administrator, Credit Manager, and Branch Manager |
 
-This separation means that routine system monitoring does not expose member PII, while the legal record available to compliance officers and regulators retains the full detail needed for regulatory inquiries.
+Operational logs replace PII keys with `[REDACTED]` at write time, so routine system monitoring never carries member PII. The legal audit log retains the full detail needed for regulatory inquiries. In-app access to it requires the `reports.view` capability (Tenant Administrator, Credit Manager, Branch Manager); regulators receive that detail through a signed compliance export bundle rather than direct access to the log.
 
 ## Access controls
 
 <Accordion title="Authentication and multi-factor authentication">
-  Every user must authenticate with a valid username and password before accessing any data in iLoan. There are no anonymous access paths.
+  Every user must authenticate with a valid email and password before accessing any data. There are no anonymous access paths.
 
-  Multi-factor authentication (MFA) is available for all user accounts. We strongly recommend enabling MFA for every user with administrative access — Credit Managers and Tenant Administrators in particular. See the tip at the bottom of this page.
+  Multi-factor authentication (MFA) is available for all user accounts. Enable MFA for every user with administrative access, especially Credit Managers and Tenant Administrators. Each user enables it themselves under Profile then Authentication. See [Set up multi-factor authentication](/access/mfa).
 
   Each audit entry records whether MFA was satisfied for the session, so you can verify that sensitive actions were performed by properly-authenticated users.
 </Accordion>
 
 <Accordion title="Role-based capability controls">
-  Access to data and actions is controlled by capabilities assigned to roles. No user can access data or perform actions beyond what their assigned role permits. Every permission-denied event is recorded in the audit trail — so if a user attempts something outside their role, you will see it.
+  Access to data and actions is controlled by capabilities assigned to roles. No user can access data or perform actions beyond what their assigned role permits. Every permission-denied event is recorded in the audit trail, so an attempt outside a user's role is visible.
 
   Common roles and their scope:
-  - **Tenant Administrator** — full workspace access, user management, configuration
-  - **Credit Manager** — full loan pipeline visibility, audit viewer, compliance export
-  - **Branch Manager** — read-only access scoped to their assigned branch
-  - **Adjudicator** — adjudication queue and decision recording
+  - **Tenant Administrator:** full workspace access, user management, configuration, compliance export
+  - **Credit Manager:** full loan pipeline visibility, audit viewer
+  - **Branch Manager:** read-only access scoped to their assigned branch
+  - **Adjudicator:** adjudication queue and decision recording
 </Accordion>
 
 <Accordion title="Session security and CSRF protection">
-  iLoan session cookies are issued with `Secure` and `HttpOnly` flags — they cannot be accessed by JavaScript and are never transmitted over an unencrypted connection.
+  Session cookies are issued with `Secure` and `HttpOnly` flags. They cannot be read by JavaScript and are never transmitted over an unencrypted connection.
 
-  All data-mutating actions (form submissions, state changes, exports) are protected against Cross-Site Request Forgery (CSRF). A forged request from another site cannot trigger actions in iLoan on behalf of a logged-in user.
+  All data-mutating actions, such as form submissions, state changes, and exports, are protected against Cross-Site Request Forgery (CSRF). A forged request from another site cannot trigger actions on behalf of a logged-in user.
 </Accordion>
 
 <Accordion title="Account suspension">
-  A Tenant Administrator can suspend any user account immediately. Suspension takes effect for the user's next request — active sessions are invalidated. This allows you to respond to a potential credential compromise or a departing staff member without delay.
+  A Tenant Administrator can suspend any user account immediately. Suspension takes effect on the user's next request: the membership capability check fails and access to the tenant is blocked. You can respond to a potential credential compromise or a departing staff member without delay.
 </Accordion>
 
 ## Audit completeness as a security control
 
-Because every action in iLoan is recorded in the hash-chained audit log, unauthorized access or data modification is **detectable**. You can:
+Every action is recorded in the hash-chained audit log, so unauthorized access or data modification is **detectable**. You can:
 
 - Search the audit trail for all actions performed by a specific user during a time window
 - Identify every record that was accessed or changed during a suspected incident
 - Confirm that the audit chain itself is unbroken using the [Compliance Export](/compliance/compliance-export) bundle's chain-proof verification
 
-The hash-chain integrity means that even if someone attempted to delete or alter audit entries after the fact, the break would be detected by iLoan's hourly integrity verification job — and the discrepancy would be visible to any examiner who verifies the chain proof in an exported bundle.
+The hash-chain integrity means that even if someone deleted or altered audit entries after the fact, the break would be caught by the hourly integrity verification job. The discrepancy would also be visible to any examiner who verifies the chain proof in an exported bundle.
 
 <Note>
-  iLoan does not expose raw database access to any user through the application. All data access — whether reading a loan record, viewing a document, or searching the audit trail — goes through the application's access-control layer. There is no SQL console, data export API, or bulk-download feature that bypasses role and capability checks.
+  The platform does not expose raw database access to any user through the application. All data access goes through the access-control layer, whether reading a loan record, viewing a document, or searching the audit trail. There is no SQL console, data export API, or bulk-download feature that bypasses role and capability checks.
 </Note>
 
 <Tip>
-  Enable MFA for all users with administrative access — Credit Managers and Tenant Administrators. Go to **Admin → Users**, open each user's profile, and confirm MFA is enrolled. These roles can access the full audit trail and generate compliance export bundles, so protecting them against credential theft is a high-priority step.
+  Enable MFA for all users with administrative access, especially Credit Managers and Tenant Administrators. Each user enables multi-factor authentication themselves under **Profile** then **Authentication**, as described in [Multi-factor authentication](/access/mfa). An administrator can only reset or disable a user's MFA, not enroll it for them. These roles can access the full audit trail and generate compliance export bundles, so protecting them against credential theft is a high-priority step.
 </Tip>

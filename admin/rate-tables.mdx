@@ -1,98 +1,137 @@
 ---
-title: "Manage loan interest rate tables in your iLoan workspace"
-sidebarTitle: "Rate Tables"
-description: "Learn how to view and update loan interest rate tables in iLoan, schedule future rate changes, and understand the rate formula types for each loan product."
+title: "Manage loan interest rate tables"
+sidebarTitle: "Rate tables"
+description: "View and update loan interest rate tables, schedule future rate changes, and understand the four rate formula types."
+icon: "percent"
 ---
 
-Rate tables configure the interest rates applied to each loan product in your credit union. iLoan supports **versioned rate tables** — you can schedule a new rate to take effect on a future date while the current rates remain active until then. Every past version is preserved, so the system can always reconstruct exactly what rate applied to any loan on any given date.
+Rate tables hold the interest rate values the platform applies to each loan product in your credit union.
 
-**Required role:** Credit Manager or Tenant Administrator (`rates.manage` capability)
+Rate tables are **versioned**. You can schedule a new rate to take effect on a future date while the current rates stay active until then. Every past version is preserved, so the system can always reconstruct exactly what rate applied to any loan on any given date.
 
-To access rate tables, navigate to **Admin → Rates**.
+**Required role:** Credit Manager or Tenant Administrator (`rates.manage` capability). Viewing the editor requires `rates.read` or `rates.manage`.
+
+To access rate tables, navigate to **Administration → Loan rates**. The nav item and the page heading both read **Loan rates**, and the route is `/admin/rates`.
 
 ## Rate formula types
 
-iLoan supports four rate formula types. When you create a loan product, you select which formula that product uses. The formula determines how the rate engine calculates the interest rate for a given loan application.
+The platform supports four rate formula types: **FLAT**, **RISK_BAND**, **COLLATERAL_TYPE**, and **VEHICLE_AGE**. When you create a loan product you select which formula that product uses. The formula determines how the rate engine calculates the interest rate for a given loan application.
 
 <CardGroup cols={2}>
-  <Card title="Flat rate" icon="equals">
+  <Card title="FLAT" icon="equal">
     A single fixed interest rate applied to every loan of this product,
     regardless of the borrower's risk profile or collateral. Use this for
-    simple products where you want one consistent rate — for example, 12.00%
-    for all standard personal loans.
+    simple products where you want one consistent rate, for example 12.00%
+    on all standard personal loans. A FLAT product's rate is set per product on
+    the Products page, not in this rate-table editor.
   </Card>
-  <Card title="Risk-band rate" icon="chart-bar">
-    The rate varies by the borrower's risk score. iLoan assigns risk bands
-    R1 through R5, where R1 is the lowest-risk borrower and R5 is the
-    highest-risk. Lower-risk borrowers receive a better rate.
+  <Card title="RISK_BAND" icon="scale">
+    The rate varies by the borrower's risk score. The platform assigns risk
+    bands R1 through R5, where R1 is the lowest-risk borrower and R5 is the
+    highest. Lower-risk borrowers receive a better rate.
+
+    RISK_BAND uses two separate band tables. Most products read the **Risk band
+    rates** table; mortgage (real estate) products read the **Real estate
+    (mortgage) rates** table instead, which is priced lower because
+    the loan is secured by property. The editor exposes both.
 
     **Example:** R1 = 9.00%, R2 = 11.00%, R3 = 13.00%, R4 = 15.00%, R5 = 18.00%
   </Card>
-  <Card title="Collateral-type rate" icon="vault">
+  <Card title="COLLATERAL_TYPE" icon="landmark">
     The rate varies by the type of collateral securing the loan. Cash-secured
-    loans typically attract the lowest rates because the collateral is liquid
-    and low-risk. Vehicle and property collateral carry higher rates.
+    loans attract the lowest rates because the collateral is liquid and
+    low-risk. Vehicle and property collateral carry higher rates. The four
+    collateral labels in the editor are Vehicle, Shares, Cash hypothecation, and
+    Property.
 
-    **Example:** Cash shares = 7.00%, Cash hypothecation = 7.50%, Vehicle = 9.50%, Property = 8.25%
+    **Example:** Shares = 7.00%, Cash hypothecation = 7.50%, Vehicle = 9.50%, Property = 8.25%
   </Card>
-  <Card title="Vehicle-age rate" icon="car">
+  <Card title="VEHICLE_AGE" icon="car">
     For auto loans, the rate is tiered by the vehicle's age. Older vehicles
     carry higher rates because their collateral value depreciates faster and
-    the residual risk to the credit union is greater.
+    the residual risk to the credit union is greater. Tiers are freeform: each
+    is entered as "Up to N years old" with a rate, where the age limit is a whole
+    number from 0 to 100. A vehicle gets the first tier whose age limit it falls
+    within, and vehicles older than the largest tier use the last (highest) tier.
+    Age is the current year minus the vehicle year.
 
-    **Example:** New (0–4 yrs) = 9.50%, Mid-age (5–9 yrs) = 11.50%, Older (10+ yrs) = 14.50%
+    **Example:** Up to 4 years old = 9.50%, up to 9 years old = 11.50%, up to 30 years old = 14.50%
   </Card>
 </CardGroup>
 
+<Note>
+  Rates are stored internally as whole basis points, where 14.50% is `1450`. The
+  editor always shows and accepts percentages, so you enter `14.50` and the
+  platform handles the conversion. Because values must be whole basis points,
+  the editor only accepts two decimal places, so a third decimal like `14.505`
+  cannot be entered.
+</Note>
+
 ## How rates are applied
 
-When a Credit Manager approves a loan, the rate engine looks up the rate table that was active on the approval date and locks the resulting rate onto the loan record. That locked rate is permanent — it does not change if you later update the rate table.
+When an **Adjudicator** approves a loan (gated by the `loans.adjudicate` capability, with the decision recorded as APPROVED), the rate engine looks up the rate table that was active on the approval date and locks the resulting rate onto the loan record. The rate is fixed at that moment. It does not change if you later update the rate table.
 
 This means:
 
-- **New approvals** always use the rate table currently in effect on the date of approval.
-- **Existing approved loans** keep the rate that was applied at the time of their approval, regardless of any subsequent rate table changes.
+- **New approvals** always use the rate table in effect on the date the Adjudicator approves the loan.
+- **Existing approved loans** keep the rate that was locked at approval, regardless of any later rate table changes.
 - **Historic reporting** can always recalculate the correct rate for any past loan because every version of the rate table is retained with its effective date.
 
 <Warning>
-  A rate change takes effect for all new loan approvals on or after the
-  Effective From date. Loans that were already approved are not retroactively
-  affected — the rate is locked at the moment of approval and cannot be
-  changed by a rate table update.
+  A rate change takes effect for all loans approved on or after the date it goes
+  live. Loans that were already approved are not retroactively affected. The
+  rate is locked at the moment the Adjudicator approves and cannot be changed by
+  a rate table update.
 </Warning>
+
+## Manual rate override
+
+A Credit Manager who holds the `loans.override` capability can override the computed rate on an individual loan, for staff loans, promotional pricing, or retention offers. The override is set on the loan's own detail page (`/loans/[appId]`), not on the Loan rates admin page.
+
+An override can only be set while the application is in **DRAFT** status. Once the loan leaves draft, the override is locked; the platform rejects a set or clear with "Rate overrides can only be set while the application is a draft." A justification reason is required (3 to 280 characters), and the override value must be 0 to 10000 basis points (0 to 100 percent).
+
+The override is stored in basis points on the loan's `overrideRateBp` field, and the rate engine uses that value verbatim instead of the product's rate-source lookup when the Adjudicator approves. The engine still computes and persists a rate computation row recording what it would have returned, for audit replay; the override only changes the final rate locked on the decision. Setting an override records a `loan_application.rate.overridden` audit event, and clearing it records `loan_application.rate.override_cleared`, so every divergence from the rate table is traceable.
 
 ## Scheduling a rate change
 
-To update your credit union's rates, you publish a new rate version. You can apply the change immediately or schedule it for a future date — useful when you know a rate environment shift is coming and want to stage the change in advance.
+To update your credit union's rates, you publish a new rate version. You can apply the change immediately or schedule it for a future date, which is useful when you know a rate environment shift is coming and want to stage the change in advance.
 
 <Steps>
-  <Step title="Go to Admin → Rates">
-    Open the Rates page. The current active rate matrix is displayed with all
-    rate values shown as percentages.
+  <Step title="Go to Administration → Loan rates">
+    Open the Loan rates page. The current active rate matrix is displayed with
+    all rate values shown as percentages.
   </Step>
   <Step title="Edit the rate values">
-    Update the rate fields you want to change. Enter rates as a percentage
-    with up to two decimal places — for example, enter `14.50` for 14.50%.
-    The editor always displays rates as percentages.
+    Update the rate fields you want to change. Enter rates as a percentage with
+    up to two decimal places, for example `14.50` for 14.50%. Vehicle-age tiers
+    are edited as add and remove rows: use **Add tier** (up to 12 tiers, at
+    least one required) and enter each as "Up to N years old" with a rate.
   </Step>
-  <Step title="Set an Effective From date (optional)">
-    To schedule the change for a future date, enter a date and time in the
-    **Effective From** field. Leave this blank to apply the change immediately.
-    You cannot back-date a rate change — the effective date must be in the
-    future.
+  <Step title="Choose when to apply">
+    In the **When to apply** section, leave the radio on **Immediately** to
+    apply the change now, or select **Schedule for** and pick a future date. You
+    cannot back-date a rate change; a scheduled date must be in the future.
   </Step>
   <Step title="Publish the new version">
-    Click **Publish**. The new rate version is saved and becomes active on the
-    Effective From date. The previous version remains active until that moment
-    and is then superseded — it is never deleted.
+    Click **Publish new rates** (or **Schedule rate change** if you picked a
+    future date). The confirm dialog button reads **Publish** or **Schedule**.
+    The new version is saved, and the previous version stays active until the
+    change takes effect, then is superseded. It is never deleted.
   </Step>
 </Steps>
 
 <Note>
   Rate changes are versioned and never deleted. You can always see what rate
-  applied on any given date by scrolling down to the **Rate history** table on
-  the Rates page, which lists every published version, who published it, and
-  when it took effect.
+  applied on any given date by scrolling down to the **Version history** table
+  on the Loan rates page, which lists every published version, who published it
+  and their role, when it took effect, and a per-version change diff.
+</Note>
+
+<Note>
+  Publishing merges only the tables you edited over the version currently in
+  effect and carries the rest forward unchanged. Editing the Risk band table, for
+  example, does not blank the Real estate, Vehicle-age, or Collateral tables, so
+  a publish never wipes a table you did not touch.
 </Note>
 
 ## Rate format reference
@@ -103,15 +142,15 @@ To update your credit union's rates, you publish a new rate version. You can app
 | `12.50` | 12.50% per annum |
 | `18.00` | 18.00% per annum |
 
-Rates cannot be negative and cannot exceed 100.00%. The system will reject any value outside this range.
+Rates cannot be negative and cannot exceed 100.00%. The system rejects any value outside this range, and every value must be a whole number of basis points (so two decimal places at most).
 
 ## Pending and scheduled changes
 
-If you publish a rate version with a future Effective From date, you will see it listed with **Scheduled** status in the rate history. A scheduled version can be superseded before it takes effect by publishing a new version — the original scheduled version is marked **Cancelled** in the history and is never applied.
+If you schedule a rate version for a future date, it appears with **Scheduled** status in the version history. A scheduled version can be superseded before it takes effect by publishing a new version. The original scheduled version is marked **Cancelled** in the history and is never applied.
 
 <Accordion title="Can I cancel a scheduled rate change?">
   Yes. To cancel a pending scheduled change, publish a new rate version with
-  the correct values. The system will automatically cancel the previously
-  scheduled version and replace it with your new one. Both versions remain
-  visible in the rate history for audit purposes.
+  the correct values. The system automatically cancels the previously
+  scheduled version and replaces it with your new one. Both versions stay
+  visible in the version history for audit purposes.
 </Accordion>

@@ -1,0 +1,121 @@
+---
+title: "Import members in bulk from a CSV file"
+sidebarTitle: "Bulk import"
+description: "Upload a CSV of member records, preview and validate every row, then commit the valid rows to create members in one batch."
+icon: "upload"
+---
+
+Bulk import creates many member profiles at once from a single CSV file. You upload the file, the platform previews and validates every row, and then you commit the rows that pass. No member is written to your workspace until you confirm the preview, so you always see exactly what will be created before anything happens.
+
+<Tip>
+  Bulk import is for onboarding an existing book of members, like a migration from your core banking system. For a single new member, use the **New Member** form instead. See [Creating members](/members/creating-members).
+</Tip>
+
+## Who can import members
+
+You need the **members.bulk_import** capability. This is a separate capability from **members.create** because it carries its own rate limit and validation flow. If you do not see the **Import** button on the Members list, ask your Tenant Administrator to check your role.
+
+## Where to start
+
+Open the Members list at `https://loan.compuzign.com/your-slug/members`, then click **Import**. The import dialog opens with three steps: upload, preview, and result.
+
+## The CSV columns
+
+The platform reads a header row and matches columns by name. Header matching is case-insensitive, and spaces or hyphens are treated as underscores, so both `first_name` and `First Name` are accepted. Columns the platform does not recognise are ignored. A leading UTF-8 byte-order mark, the marker Excel prepends when it exports a CSV, is stripped automatically, so an Excel export imports cleanly.
+
+### Required columns
+
+Every row must have a value in each of these five columns.
+
+| Column | What it holds |
+|---|---|
+| `cif` | The member account number, also called the CIF. Maximum 40 characters. Must be unique within your workspace and within the file. |
+| `first_name` | The member's first name. |
+| `last_name` | The member's last name. |
+| `date_of_birth` | Date of birth in `yyyy-mm-dd` format. The member must be at least 18 years old. |
+| `branch_code` | The code of a branch that already exists in your workspace. |
+
+### Optional columns
+
+These columns are written when present and left blank when omitted.
+
+| Column | What it holds |
+|---|---|
+| `middle_name` | The member's middle name. |
+| `gender` | One of `M`, `F`, or `OTHER`. Any other value is ignored. |
+| `email` | A valid email address. A malformed address fails the row. |
+| `phone` | A contact phone number. Stored exactly as written, with no format validation. |
+| `address_line1` | First line of the mailing address. |
+| `address_line2` | Second line of the mailing address. |
+| `city` | City. |
+| `parish` | Parish. |
+| `postal_code` | Postal code. |
+| `employment_status` | One of `EMPLOYED`, `SELF_EMPLOYED`, `UNEMPLOYED`, `RETIRED`, `STUDENT`, or `OTHER`. Any other value is ignored. |
+| `trn` | Tax Registration Number. Encrypted at rest. |
+| `dl_number` | Driver's licence number. Encrypted at rest. |
+
+<Warning>
+  If your CSV contains TRN or driver's licence numbers, delete the file from your computer after the import finishes. Those values are encrypted at rest in the platform, but the spreadsheet on your machine is plain text.
+</Warning>
+
+### Download a starter template
+
+The upload step has a **Download a starter template** link. It gives you a CSV with the full header row and one well-formed sample row, so you can edit in place rather than build the header by hand.
+
+## Limits
+
+| Limit | Value |
+|---|---|
+| Rows per file | 500 |
+| File size | 1 MB |
+| File type | A CSV the parser can read |
+| Committed imports per hour | 5 per user |
+
+A file with more than 500 data rows is rejected. Split it and import the pieces separately. The hourly limit counts committed imports only, so one credential cannot create thousands of fake records in an hour.
+
+The real gate on file type is the CSV parser, not the extension. When the browser reports a content type, it must be `text/csv`, `application/csv`, or `text/plain`; when no content type is sent, that check is skipped and the file is parsed directly. Either way, a file that does not parse as CSV is rejected.
+
+## How the import works
+
+The flow is preview then commit. You never mutate your workspace from the upload itself.
+
+<Steps>
+  <Step title="Upload the CSV">
+    Drag the file onto the drop zone or browse for it, then click **Continue**. The platform virus-scans the file before parsing, and an infected file is rejected outright. It then parses the header, validates each row, and cross-checks every `cif` and `branch_code` against your workspace. This writes an import record with status `PREVIEWED` and emits `member.import.previewed`. No member rows are created.
+
+    If the file is malformed, the platform records the import with status `REJECTED`, emits `member.import.rejected`, and shows you the reason. Nothing is created. This covers a missing required column or a row count over the limit, and also an empty file, a file with a header but no data rows, and any file that cannot be parsed as CSV.
+  </Step>
+  <Step title="Review the preview">
+    The preview shows every row with a status pill and a summary strip you can click to filter. Each row falls into one of four groups:
+
+    - **Ready** (`creatable`): the row is valid and will be created.
+    - **Already a customer** (`skipped_existing`): an active member with this `cif` already exists in your workspace. The existing-CIF check ignores soft-deleted members, so a CIF that belonged to a previously deleted member can be reused on import.
+    - **Duplicate in file** (`skipped_duplicate_in_file`): the same `cif` appears in an earlier row of this file.
+    - **Invalid** (`errored`): the row failed validation. The pill shows the reason, for example `missing first_name` or `branch_code does not exist in this tenant`.
+
+    Only **Ready** rows are committed. Everything else is skipped with a reason you can see.
+  </Step>
+  <Step title="Commit the valid rows">
+    Click **Create N members**. The platform re-reads the same file, verifies it matches the file you previewed, re-validates against your current workspace, and creates a member for every still-valid row. It flips the import record to `COMMITTED` and emits `member.import.committed`.
+
+    The result step shows how many members were created and lists any rows skipped at commit time, with a reason for each.
+  </Step>
+</Steps>
+
+<Note>
+  Between preview and commit, a row can change. If another staff member creates a member with the same `cif` in the meantime, that row is skipped at commit and reported in the result, rather than failing the whole batch.
+</Note>
+
+## After the import
+
+Imported members are created with KYC status `UNVERIFIED`. They are ready to use, but each member must still pass identity verification before a loan can be disbursed against their profile. See [KYC verification](/members/kyc-verification).
+
+## Events recorded
+
+Every import is recorded in the audit trail, separate from the per-member `member.created` events the commit produces.
+
+| Event | When it fires |
+|---|---|
+| `member.import.previewed` | A file was uploaded and validated. The preview is ready. |
+| `member.import.committed` | The valid rows were committed and members were created. |
+| `member.import.rejected` | The file was malformed and could not be previewed. |

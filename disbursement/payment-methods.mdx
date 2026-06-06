@@ -1,0 +1,89 @@
+---
+title: "Payment methods and bank routing"
+sidebarTitle: "Payment methods"
+description: "The six payment rails a disbursement payee can use, the routing fields each one needs, and the Bank of Jamaica rule that pushes large transfers onto RTGS."
+icon: "send"
+---
+
+Each disbursement payee picks one of six payment rails, and the rail decides which bank routing fields the form shows. At schedule time the platform validates the ACH amount threshold, the payee sequence, and that the payee amounts sum to the net proceeds. The form shows only the routing fields a method needs, but the routing fields themselves are not required at the write boundary.
+
+## The six payment rails
+
+The `DisbursementMethod` enum holds six values. The order below is the display order in the multi-payee form.
+
+| Method | Enum value | What it is |
+| --- | --- | --- |
+| ACH | `ACH` | Batch, deferred net settlement, for smaller value transfers. |
+| RTGS | `RTGS` | JamClear-RTGS large-value, immediate, irrevocable settlement. |
+| Internal transfer | `INTERNAL_TRANSFER` | Move into a member's own share or savings account at the credit union. |
+| Cheque | `CHECK` | A printed cheque made out to the payee. |
+| Manager's cheque | `MANAGERS_CHEQUE` | A banker's draft drawn on the credit union. |
+| Wire | `WIRE` | International or SWIFT wire, chiefly for USD beneficiaries. |
+
+## The J$1,000,000 rule
+
+Electronic transfers above J$1,000,000 must settle through RTGS, not ACH. This is a Bank of Jamaica rule for JamClear-RTGS.
+
+The platform enforces it at validation time, the moment you schedule. The check is strict: a payee using `ACH` is rejected only when its amount is **strictly greater than** J$1,000,000. The boundary constant is `ACH_MAX_CENTS = 100_000_000` cents, which is exactly J$1,000,000.
+
+<Warning>
+A J$1,000,000 ACH payee passes. A payee of J$1,000,000.01 or more on `ACH` is refused with a `METHOD_THRESHOLD` error that tells you to use RTGS. The comparison is `amountCents > ACH_MAX_CENTS`, so the exact J$1,000,000 figure is allowed on ACH; only amounts above it are forced onto RTGS.
+</Warning>
+
+The rule is per payee, not per disbursement. A loan that splits J$1,500,000 across two J$750,000 ACH payees is fine, because each individual ACH leg is at or below the limit.
+
+## Routing fields by method
+
+A payee carries non-secret routing fields. The account **number** is never one of them. The number is entered per disbursement and encrypted at rest. The routing fields are which bank, which branch, which account type, and where the payee is.
+
+| Field | Meaning |
+| --- | --- |
+| `bankCode` | The 3-digit domestic ACH/JETS bank code. |
+| `branchCode` | The branch transit code at that bank. |
+| `routingNumber` | A single routing or ABA number. Offered on ACH, RTGS, and wire, where one applies; on a wire to a US bank this is the ABA number. |
+| `bankName` | The destination bank name, resolved from the bank directory. |
+| `accountType` | One of `CHEQUING`, `SAVINGS`, or `SHARE`. |
+| `swiftBic` | The SWIFT/BIC, 8 or 11 characters, for wires. |
+| `payeeAddress` | The payee's address, for cheque-based methods. |
+
+The form shows only the fields the chosen method needs.
+
+- **ACH and RTGS** show `bankCode`, `branchCode`, `routingNumber`, and `accountType`, plus the bank picker.
+- **Internal transfer** shows `accountType` (the member's share or savings account).
+- **Wire** shows `swiftBic`, `bankCode`, and `routingNumber`, plus the bank picker.
+- **Cheque and manager's cheque** show a `payeeAddress` field, which is optional.
+
+The `accountType` enum is exactly three values: `CHEQUING`, `SAVINGS`, `SHARE`.
+
+<Note>
+Jamaica routes a domestic payment two different ways depending on the rail. ACH/JETS addresses a payment by `bankCode` plus `branchCode`. JamClear-RTGS addresses it by SWIFT/BIC. The platform models both.
+</Note>
+
+## The seeded bank directory
+
+The platform ships a global bank directory of Bank of Jamaica supervised deposit-taking institutions. It is shared across every tenant, not tenant-scoped. The picker appears for ACH, RTGS, and wire, and only when the directory is non-empty. Pick a bank and one action fills its name and SWIFT/BIC onto the payee; it also fills the 3-digit ACH bank code once those codes are loaded (they ship NULL).
+
+The directory holds the supervised set: eight commercial banks, two building societies, one merchant bank, and the central bank.
+
+| Institution | SWIFT / BIC |
+| --- | --- |
+| National Commercial Bank Jamaica Limited | `JNCBJMKX` |
+| The Bank of Nova Scotia Jamaica Limited | `NOSCJMKN` |
+| Sagicor Bank Jamaica Limited | `SAJAJMKN` |
+| CIBC Caribbean Bank (Jamaica) Limited | `FCIBJMKN` |
+| Citibank, N.A. (Jamaica) | `CITIJMK1` |
+| First Global Bank Limited | `FILBJMKN` |
+| JMMB Bank (Jamaica) Limited | `JMJAJMKN` |
+| JN Bank Limited | `JNBSJMKN` |
+| Victoria Mutual Building Society | `VMBSJMKN` |
+| Scotia Jamaica Building Society | route via Scotiabank `NOSCJMKN` |
+| Barita Merchant Bank Limited | none widely published |
+| Bank of Jamaica | `BAJAJMKN` |
+
+Every SWIFT/BIC above is cross-verified from independent sources. NCB's BIC is `JNCBJMKX`, not the wrong `NCBJJMKX` that appears in some older directories.
+
+The 3-digit ACH bank code and 5-digit branch transit code are deliberately **not** shipped in the app. They live in a controlled operator file, the JETS Branch Code Listing, which the credit union loads from its ACH sponsor or directly from JETS. Branches open and close, so this file is loaded and refreshed from the system of record rather than hardcoded.
+
+<Note>
+Citibank, N.A. (Jamaica) uses a passive BIC. USD wires route via a correspondent bank, Citibank N.A. New York (`CITIUS33`). Scotia Jamaica Building Society routes through Scotiabank rather than as a standalone target. Confirm any correspondent path with the bank before wiring live funds.
+</Note>

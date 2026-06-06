@@ -1,130 +1,197 @@
 ---
-title: "Analytics and reporting dashboards for iLoan managers"
-sidebarTitle: "Analytics Dashboards"
-description: "Use iLoan's analytics dashboards to monitor loan volume, credit quality, cycle times, and team performance across your credit union branches."
+title: "Analytics and reporting dashboards"
+sidebarTitle: "Analytics dashboards"
+description: "Monitor production volume, cycle time, credit quality, operations, and member health across your credit union, with branch-scoped views and CSV export."
+icon: "trending-up"
 ---
 
-iLoan provides analytics dashboards that give Credit Managers and Branch Managers a real-time view of loan pipeline activity, credit quality, and operational performance. Dashboards refresh automatically whenever the page loads and can be filtered by time period. All data is scoped to your credit union's workspace — you will never see data from another tenant.
+The analytics page gives any role with `reports.view` (Credit Managers, Branch Managers, and Tenant Administrators) a live view of loan production, cycle time, credit quality, operations, and member health.
 
-**Required role:** Credit Manager (all branches) or Branch Manager (their branch only)
+Every section reads a single shared **date range** at the top of the page, and the numbers reflect the current state of your workspace each time the page loads. All data is scoped to your credit union's workspace, so you never see another tenant's data. The default range is the last 12 months. A badge on the page notes that every monetary figure is in Jamaican dollars (JMD).
 
-To access analytics, navigate to **Admin → Analytics**.
+**Required role:** any role with `reports.view`. Credit Managers and Tenant Administrators see all branches; Branch Managers see only their own branch.
+
+To open analytics, navigate to **Dashboards → Analytics** (the page is titled **Loan production**). Without `reports.view` you are redirected back to your dashboard.
 
 <Note>
-  Analytics data reflects the current state of your workspace. For a
-  point-in-time historical record suitable for regulators or auditors, use the
-  **Audit Trail** and **Compliance Export** features instead.
+  Analytics reflect the live state of your workspace. For a point-in-time
+  historical record suitable for regulators or auditors, use the **Audit Trail**
+  and **Compliance Export** features instead.
 </Note>
 
 ## Branch scoping
 
-The analytics dashboards respect your role's branch access:
+The analytics page respects your role's branch access:
 
 - **Credit Managers** and **Tenant Administrators** see data across all branches.
-- **Branch Managers** see only the metrics for their own branch. Loans and members from other branches are excluded from all charts and totals.
+- **Branch Managers** see only the metrics for their own branch. Loans and members from other branches are excluded from every chart, total, and CSV export.
 
-This scoping is automatic — you do not need to set a filter. A Branch Manager cannot see another branch's data regardless of the date range selected.
+This scoping is automatic. You do not set a filter, and a Branch Manager cannot reach another branch's data regardless of the date range selected.
 
-## Operations dashboard
+## The five panels
 
-The Operations dashboard gives you a high-level view of your credit union's lending activity over the selected period.
+The Analytics page stacks five panels in this order: Production, Cycle time, Credit quality & pricing, Operations & compliance, and Members. Each loads its own data against the shared date range and each has its own drill-down and CSV export.
 
-**Key metrics:**
+<CardGroup cols={2}>
+  <Card title="Production" icon="trending-up">
+    Five KPI tiles (Applications, Disbursed, Approval rate, Pull-through, Avg
+    loan size), production volume over time, a drillable **application funnel**
+    (Created → Submitted → Approved → Disbursed → Filed), and a **loan mix**
+    breakdown by loan type.
+  </Card>
+  <Card title="Cycle time" icon="timer">
+    Time to decision, time to cash, end to end, and re-work rate, plus a
+    per-stage dwell chart showing the average days loans spend in each stage.
+  </Card>
+  <Card title="Credit quality & pricing" icon="scale">
+    The risk profile and pricing of your loans: weighted-average rate, override
+    rate, approval rate, risk-band distribution, and decision outcomes.
+  </Card>
+  <Card title="Operations & compliance" icon="list">
+    Disbursement settlement health: cleared rate, dual-control approval rate,
+    AML-flagged rate, fee revenue, GCT collected, and a settlement-status
+    breakdown.
+  </Card>
+  <Card title="Members" icon="users">
+    Member growth and KYC verification health: new members, total members, KYC
+    verification rate, pending KYC, and the KYC status breakdown.
+  </Card>
+</CardGroup>
 
-- Total loan applications submitted, broken down by current status (Draft, Submitted, Adjudication, Approved, Declined, Disbursed, Filed)
-- Loan application volume and total requested value by branch
-- Applications submitted and closed per week or month (auto-bucketed based on the date range you select)
-- Approval rate and pull-through rate (percentage of applications that reached Disbursed)
+### Production panel
 
-**Funnel view:** The Operations dashboard includes a funnel chart showing how many applications reached each stage — Created → Submitted → Approved → Disbursed → Filed. Click any funnel stage to open a drill-down list of the individual loans in that stage.
+The Production panel is the page's headline section and the title of the page itself.
 
-**Loan mix:** A breakdown of application volume and value by loan type (Unsecured, Cash-Secured, Auto, Mortgage).
+It opens with five KPI tiles:
 
-## Credit Quality dashboard
-
-The Credit Quality dashboard helps you understand the risk profile of the loans your credit union is approving.
-
-**Key metrics:**
-
-- Weighted average interest rate across approved loans in the period
-- Rate override rate (percentage of approved loans where a Credit Manager manually overrode the system rate)
-- Approval rate for adjudicated applications
-- Total number of adjudication decisions in the period
-
-**Risk-band distribution:** A breakdown of approved loans by risk band (R1 through R5), showing how much of your approved portfolio sits in each risk tier. R1 represents the lowest-risk borrowers; R5 represents the highest.
-
-**Decision outcomes:** A breakdown of adjudication decisions — Approved, Declined, and Info Requested — for the selected period.
-
-<Tip>
-  A high proportion of R4 and R5 approvals alongside a high override rate may
-  indicate that your policy rules need review, or that Credit Managers are
-  approving outside the rate table. Use the drill-down to inspect individual
-  decisions.
-</Tip>
-
-## Cycle Time dashboard
-
-The Cycle Time dashboard shows how long loans take to move through each stage of the origination workflow. Use it to identify stages where applications are stalling.
-
-**Key metrics:**
-
-| Metric | What it measures |
+| Tile | What it measures |
 |---|---|
-| **Decision time (avg / P95)** | Days from SUBMITTED to an adjudication decision (APPROVED or DECLINED) |
-| **Cash-to-close time (avg / P95)** | Days from APPROVED to DISBURSED |
-| **End-to-end time (avg)** | Days from SUBMITTED to FILED |
-| **Rework rate** | Percentage of applications that passed through INFO\_REQUESTED at least once |
+| **Applications** | Count of applications created in range, with total requested value |
+| **Disbursed** | Total disbursed value in range, with the loan count |
+| **Approval rate** | Approved share of decided applications |
+| **Pull-through** | Share of applications created in range that reached Disbursed |
+| **Avg loan size** | Average requested amount per application |
 
-**Stage dwell times:** A bar chart showing the average number of days applications spent in each pipeline stage — Draft, Submitted, Adjudication, Info Requested, Approved, Securities, and Disbursement. Only closed segments are counted (stages that the loan has already left).
+Below the tiles:
+
+- Production volume over the selected period, with a metric toggle between **Applications** and **Disbursed**, auto-bucketed by day, week, or month.
+- A drillable **application funnel** showing how many loans reached each stage: Created → Submitted → Approved → Disbursed → Filed. Click a stage to open the list of loans in it.
+- A **loan mix** segmented bar breaking volume down by loan type (Unsecured, Cash secured, Auto, Mortgage). Click a segment to drill into those loans.
+
+### Cycle time panel
+
+Shows how long loans spend in each stage of origination. Use it to find where applications stall. The on-screen tile labels are below.
+
+| Tile | What it measures |
+|---|---|
+| **Time to decision** (avg and p95) | Days from SUBMITTED to an adjudication decision (APPROVED or DECLINED) |
+| **Time to cash** (avg and p95) | Days from SUBMITTED to DISBURSED |
+| **End to end** (avg) | Days from creation (the moment the application is started, in DRAFT) to FILED |
+| **Re-work rate** | Percentage of applications that passed through INFO_REQUESTED or SECURITIES_ISSUE at least once |
+
+A stage-dwell bar chart shows the average days applications spent in each stage. Only closed segments are counted (stages the loan has already left).
+
+### Credit quality & pricing panel
+
+Helps you understand the risk profile and pricing of the loans your credit union writes. Its four KPI tiles are Weighted-avg rate, Override rate, Approval rate, and Decisions.
+
+- **Weighted-avg rate**, the amount-weighted average interest rate across loans created in the period. The override rate wins over the computed rate where one is set.
+- **Override rate**, the share of loans in the period where a manual rate override was set.
+- **Approval rate** (approved share of decided) and the total number of decisions recorded in range.
+- A **risk-band distribution** across R1 to R5, where R1 is the lowest risk and R5 the highest.
+- A **decision-outcomes** breakdown of Approved, Declined, and Info requested.
 
 <Tip>
-  Use the Cycle Time dashboard to identify bottlenecks. If the Adjudication
-  stage shows a high average dwell time, consider reviewing how quickly loans
-  are being assigned to Credit Managers after submission. If the Disbursement
-  stage is slow, check for outstanding securities requirements or dual-control
-  approval queues.
+  The override-rate tile counts every loan in the period where a manual rate was
+  set instead of the rate-table lookup. Read it next to the risk-band
+  distribution: a high share of R4 and R5 loans alongside a high override rate
+  shows where pricing is diverging from the rate table. Use the drill-down to
+  inspect individual decisions.
 </Tip>
 
-## Members dashboard
+### Operations & compliance panel
 
-The Members dashboard tracks member growth and KYC (Know Your Customer) verification health.
+Tracks the health of disbursement settlement and the compliance gates that protect it. It reads from the disbursements executed in the selected period, not from application status. Its five KPI tiles are:
 
-**Key metrics:**
+| Tile | What it measures |
+|---|---|
+| **Cleared rate** | Share of executed disbursements that reached a Cleared settlement status |
+| **Dual-control** | Share of disbursement approvals that were approved |
+| **AML flagged** | Share of payee screenings that came back Review or Blocked |
+| **Fee revenue** | Sum of fees charged on disbursements executed in range |
+| **GCT collected** | Sum of GCT collected on taxable fees in range |
 
-- New members registered in the selected period
-- Total active members in your workspace
-- KYC verification rate (percentage of members with a Verified KYC status)
-- Members currently awaiting KYC review
+Below the tiles, a **settlement-status** segmented bar covers every executed disbursement, split across Scheduled, Sent, Cleared, Returned, Failed, and Reversed. Click a slice to drill into the loans behind that status.
 
-**KYC status breakdown:** A breakdown of your member population by KYC status — Unverified, In Progress, Manual Review, Verified, and Failed. A large Manual Review count may indicate a backlog in your KYC review queue.
+(Application status by stage lives on the Credit Manager dashboard as Pipeline by state, not here. Approval rate and pull-through are tiles on the Production panel.)
 
-**Member growth chart:** A time-series chart showing new member registrations over the selected period, auto-bucketed by day, week, or month.
+### Members panel
+
+Tracks member growth and KYC (Know Your Customer) verification health. Its four KPI tiles are:
+
+| Tile | What it measures |
+|---|---|
+| **New members** | Members created in range |
+| **Total members** | All non-deleted member records, regardless of status |
+| **KYC verified** | Share of members with a Verified KYC status |
+| **Pending KYC** | Members in In progress plus Manual review |
+
+Below the tiles:
+
+- A **KYC funnel** across Unverified, In progress, Manual review, Verified, and Failed.
+- A member-growth time series, auto-bucketed by day, week, or month.
+
+Unlike the other panels, the member figures are not all range-bound. Total members, KYC verified, Pending KYC, and the KYC funnel count every current member regardless of when they joined. Only New members and the member-growth series respect the selected date range.
+
+Drill-downs on this panel open the member record rather than a loan.
+
+## The Dashboards hub
+
+Analytics is one of several dashboards. The **Dashboards** hub at `/{tenantSlug}/dashboards` lists every dashboard in the platform as a directory, marking each one open or locked for your role with a hint on which role unlocks it. From the hub you can reach:
+
+| Dashboard | What it shows | Gated by |
+|---|---|---|
+| **Overview** | Action queues, recent activity, and a trends snapshot, branch-scoped for Branch Managers | Any seat |
+| **Loan production** | The five analytics panels described above | `reports.view` |
+| **Credit Manager** | Full pipeline by state, range throughput, and the unassigned backlog | `reports.view` |
+| **Adjudication** | Pending decisions, weekly approvals and declines, time to decision | `loans.adjudicate` or `reports.view` |
+| **Securities** | Loans awaiting collateral verification, outstanding requests, resolution velocity | `securities.review` or `reports.view` |
+| **Disbursement** | Approved loans ready to fund, weekly totals, approval-to-fund turnaround | `loans.disburse` or `reports.view` |
+| **Audit log** | Searchable, chain-verified view of every audited event | `audit.export` |
+
+### The Credit Manager dashboard
+
+At `/{tenantSlug}/admin/dashboard`, the Credit Manager dashboard gives a workspace-wide pipeline view. A range selector (**week**, **month**, or **quarter**, via the `?range=` query param, default week) drives three throughput tiles: Approved, Declined, and Disbursed this period. An Active loans tile counts everything not in a terminal state. A **Pipeline by state** breakdown lists each active state with a count and percentage bar, and each row drills into the matching loans list. When active loans are sitting with no owner, an **unassigned backlog** callout surfaces so the Credit Manager can route them. The page has its own full-pipeline CSV export.
+
+### Per-queue dashboards
+
+The **Adjudication**, **Securities**, and **Disbursement** dashboards are each the home page for the team that works that queue. They live at `/{tenantSlug}/admin/adjudication/dashboard`, `/{tenantSlug}/admin/securities/dashboard`, and `/{tenantSlug}/admin/disbursement/dashboard`. Each opens with KPI tiles and a per-day throughput sparkline, and each has its own team CSV export button.
+
+- **Adjudication**: Pending decision, Approved this week, Declined this week, Avg time to decision, and a decisions-per-day sparkline.
+- **Securities**: Pending reviews, Outstanding requests, Resolved this week, Reviews completed, Auto-skipped (unsecured loans routed past securities), and a requests-resolved-per-day sparkline.
+- **Disbursement**: Awaiting disbursement, Disbursed this week, Total disbursed, Avg approval to fund, and a disbursements-per-day sparkline.
+
+Each of these headers also carries an **Audit trail** button that opens the audit viewer pre-filtered to that team's key event: Adjudication to `adjudication.decision.recorded`, Securities to `securities.request.resolved`, Disbursement to `disbursement.executed`. The Credit Manager dashboard's Audit trail button opens the viewer unfiltered.
+
+## Drilling into the numbers
+
+Click any funnel stage, mix segment, chart bar, or settlement slice to open a drill-down drawer listing the loans (or members) behind it. The drawer is searchable and shows up to 50 rows at a time, so for a full extract use the CSV export instead.
 
 ## Exporting data
 
-Every dashboard section includes a **Download CSV** button that exports the filtered data currently displayed on screen. The export respects your branch scope — a Branch Manager's export will only contain records from their branch.
+Every analytics panel has its own **Export CSV** button that exports the cohort behind that section. The columns differ per panel: Production exports loan ID, status, type, product, branch, member CIF and name, requested amount, term, and the created and submitted timestamps; Operations exports settlement, approval, and screening status plus gross, fees, GCT, and net-to-member; Members exports CIF, name, status, KYC status, and created date. The export respects your branch scope, so a Branch Manager's export contains only records from their branch, and every export writes a `reports.viewed` audit event.
 
-CSV exports include up to 5,000 rows per download. If your date range produces more than 5,000 records, narrow the range and run multiple exports.
+The per-team dashboards each have their own export button too. A team export carries one fixed column set: Loan ID, Status, Loan type, Product code, Branch code, Member CIF, Member name, Requested amount (JMD), Term (months), Approval level, Submitted at, and Updated at. Each kind exports only the statuses that team works:
 
-**Typical CSV fields (Operations export):**
+- **Adjudication**: ADJUDICATION, INFO_REQUESTED, APPROVED, DECLINED.
+- **Securities**: SECURITIES, SECURITIES_ISSUE.
+- **Disbursement**: DISBURSEMENT, DISBURSED.
 
-| Column | Description |
-|---|---|
-| Loan ID | The unique loan identifier (e.g. `MDVL-AUTO-00001`) |
-| Status | Current loan status |
-| Loan type | Unsecured, Cash-Secured, Auto, or Mortgage |
-| Product | The loan product name |
-| Branch | The branch code where the loan was originated |
-| Member CIF | The member's account number |
-| Member name | Full name of the member |
-| Requested amount | Amount in JMD |
-| Term (months) | Requested repayment term |
-| Created at | ISO timestamp when the application was created |
-| Submitted at | ISO timestamp when the application was submitted |
+CSV exports return up to 5,000 rows per download. If your date range produces more than 5,000 records, narrow the range and run multiple exports.
 
 <Accordion title="How often does analytics data refresh?">
-  Analytics data reflects the live state of your workspace. The dashboard
-  reloads data each time you navigate to the Analytics page or change the date
-  range filter. There is no scheduled refresh interval — the numbers you see
-  are current as of the moment the page loaded.
+  Analytics reflect the live state of your workspace. Each panel reloads its
+  data when you navigate to the Analytics page or change the date range. There
+  is no scheduled refresh interval. The numbers are current as of the moment
+  the page loaded.
 </Accordion>

@@ -1,87 +1,73 @@
 ---
-title: "Loan origination in iLoan: from application to disbursement"
+title: "How a loan moves from application to disbursement"
 sidebarTitle: "Overview"
-description: "iLoan manages the full loan lifecycle — from draft application through adjudication, collateral review, and disbursement — with a complete audit trail."
+description: "The Loan Origination System manages the full loan lifecycle, from draft application through adjudication, collateral review, and disbursement, with a complete audit trail."
+icon: "banknote"
 ---
 
-iLoan handles the entire loan origination process for your credit union in a single, audited workflow — from the moment a Credit Officer opens a new application through adjudication, collateral review, and the final release of funds. Every application follows a defined path of statuses, with each department picking up the application exactly when it's their turn to act.
+The Loan Origination System runs the entire loan process for your credit union in one audited workflow. A Credit Officer opens a new application, an Adjudicator decides it, Securities clears any collateral, and Disbursement releases the funds. Every application follows a defined path of statuses. Each department picks up the application exactly when it is their turn to act.
 
-## How a loan moves through iLoan
+## How a loan moves through the platform
 
-Every application starts as a **DRAFT** and ends in one of four terminal states: **FILED** (completed), **DECLINED**, **CANCELLED**, or **DRAFT\_ABANDONED**. Between those bookends, the application passes through a series of states that track where it is and who is responsible for it.
+Every application starts as **DRAFT** and ends in one of four terminal states: **FILED** (completed), **DECLINED**, **CANCELLED**, or **DRAFT_ABANDONED**. Between those bookends, the application passes through a series of states that track where it is and who owns it.
 
-**Primary path (unsecured loan):**
+A Credit Officer captures the application in **DRAFT** and submits it. A draft can be submitted only once the member's KYC is VERIFIED. It becomes **SUBMITTED**, then **ADJUDICATION** when an Adjudicator picks it up. Once approved it becomes **APPROVED**, then moves to **SECURITIES** for collateral review, and from there to **DISBURSEMENT** for funding. After funds are released it becomes **DISBURSED** and finally **FILED**. Every loan passes through SECURITIES on its way to DISBURSEMENT. Unsecured loans have nothing to perfect, so they are auto-skipped through SECURITIES rather than jumping straight from APPROVED to DISBURSEMENT.
 
-DRAFT → SUBMITTED → ADJUDICATION → APPROVED → DISBURSEMENT → DISBURSED → FILED
+Several states send the application backward. From ADJUDICATION an Adjudicator can move it to **INFO_REQUESTED**; it returns to DRAFT for the officer to update, and resubmitting routes it back through SUBMITTED to ADJUDICATION. From SECURITIES a structural collateral problem sends the file to **SECURITIES_ISSUE**, which the Adjudicator owns; the Adjudicator resolves it and returns the file to SECURITIES. Beyond these, an Adjudicator can send a file straight back to DRAFT, Securities can revert to DRAFT or back to ADJUDICATION, and Disbursement can revert to SECURITIES. A file can also be cancelled from SUBMITTED or from DISBURSEMENT. The full set of return and cancel paths is on the [Workflow states](/loans/workflow-states) page.
 
-**With collateral review (Auto, Mortgage, Cash-Secured):**
-
-DRAFT → SUBMITTED → ADJUDICATION → APPROVED → SECURITIES → DISBURSEMENT → DISBURSED → FILED
-
-**Branch states (return to officer for action):**
-
-- ADJUDICATION → **INFO_REQUESTED** → officer updates and resubmits → ADJUDICATION
-- SECURITIES → **SECURITIES_ISSUE** → officer resolves documents → SECURITIES
-
-**Terminal states (no further action):**
-
-FILED · DECLINED · CANCELLED · DRAFT_ABANDONED
-
-No application is ever deleted. iLoan preserves every record — including declined and abandoned applications — for your audit trail.
+No application is ever deleted. The platform preserves every record, including declined and abandoned applications, for your audit trail. For the full state machine, including every transition and who owns each state, see [Workflow states](/loans/workflow-states).
 
 ## The four loan types
 
-iLoan supports four loan types, each with its own collateral requirements and form sections:
+The platform supports four loan types, each with its own collateral requirements and form sections.
 
-| Loan type | Collateral | Typical use |
+| Loan type | Collateral | Use |
 |---|---|---|
 | **Unsecured** | None | Personal expenses, education, home improvements |
 | **Cash-Secured** | Member's savings account (up to 95%) | Lower-rate borrowing backed by deposits |
-| **Auto** | Vehicle (make, model, valuation, insurance) | Vehicle purchase |
-| **Mortgage** | Property (address, valuation, title documents) | Home purchase, equity release, land |
+| **Auto** | Vehicle (make, model, year, valuation) | Vehicle purchase |
+| **Mortgage** | Property (type, address, valuation, security type) | Home purchase, equity release, land |
 
 ## Who does what
 
-Four roles work together to move a loan from draft to disbursement:
+Four roles work together to move a loan from draft to disbursement.
 
 | Role | Responsibility |
 |---|---|
 | **Credit Officer** | Creates the draft, fills in all form sections, submits for adjudication, responds to information requests and collateral issues |
 | **Adjudicator** | Reviews the submitted application, makes the approval or decline decision, requests additional information when needed |
-| **Securities Reviewer** | Reviews and clears collateral documentation for secured loans |
-| **Disbursement Officer** | Schedules and executes the release of approved funds to payees |
+| **Securities** | Reviews and clears collateral documentation for secured loans |
+| **Disbursement** | Schedules and executes the release of approved funds to payees |
 
 ## Loan ID format
 
-Every application is assigned a unique Loan ID when the draft is first saved. The ID follows the format **BRANCH–TYPE–NUMBER**:
+Every application is assigned a unique Loan ID when the draft is created. The ID is built from three segments: the branch code, the loan-type code, and a 5-digit sequence number, joined by hyphens. For example, **MDVL-AUTO-00042** is the 42nd Auto loan opened at the Mandeville branch.
 
-```
-MDVL-AUTO-00042
-│    │    │
-│    │    └─ 5-digit sequence (per branch and loan type)
-│    └─────── loan type code (AUTO, UNS, CASH, MORT)
-└──────────── branch code
-```
+| Segment | Example | Meaning |
+|---|---|---|
+| Branch code | `MDVL` | The branch where the application was opened |
+| Loan-type code | `AUTO` | The loan type (AUTO, UNS, CASH, MORT) |
+| Sequence number | `00042` | 5-digit running count, per branch and loan type |
 
-You'll see this ID on the application header, in search results, and in all notification emails.
+You see this ID on the application header, in search results, and in every notification email.
 
 ## Explore the loan module
 
 <CardGroup cols={2}>
-  <Card title="Creating an Application" icon="file-pen" href="/loans/creating-an-application">
+  <Card title="Creating an application" icon="square-pen" href="/loans/creating-an-application">
     Step-by-step guide to filling in and submitting a new loan application.
   </Card>
-  <Card title="Loan Types" icon="tags" href="/loans/loan-types">
+  <Card title="Loan types" icon="tags" href="/loans/loan-types">
     Requirements, collateral rules, and form sections for each of the four loan types.
   </Card>
-  <Card title="Workflow States" icon="arrow-right-arrow-left" href="/loans/workflow-states">
+  <Card title="Workflow states" icon="list" href="/loans/workflow-states">
     Every status a loan can hold, who owns it, and what happens next.
   </Card>
-  <Card title="Adjudication" icon="scale-balanced" href="/workflows/adjudication">
+  <Card title="Adjudication" icon="scale" href="/workflows/adjudication">
     How adjudicators review applications, make decisions, and request more information.
   </Card>
 </CardGroup>
 
 <Note>
-  Loans are never deleted in iLoan. Every application reaches a terminal status (FILED, DECLINED, CANCELLED, or DRAFT\_ABANDONED) and is preserved for the audit record.
+  Loans are never deleted. Every application reaches a terminal status (FILED, DECLINED, CANCELLED, or DRAFT_ABANDONED) and is preserved for the audit record.
 </Note>

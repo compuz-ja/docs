@@ -1,0 +1,110 @@
+---
+title: "Fees, deductions, and GCT"
+sidebarTitle: "Fees and GCT"
+description: "How fee, tax, and deduction lines reduce the gross loan amount to the net the member receives, how GCT is applied, and what an officer can add, edit, or waive."
+icon: "receipt"
+---
+
+Fee, tax, and deduction lines reduce the gross approved loan amount down to `netToMemberCents`, the figure the payees must distribute. The multi-payee SUM invariant is checked against that **net**, not against the gross.
+
+## Gross to net
+
+The gross is the approved loan amount from the most recent `APPROVED` adjudication decision. Each fee line is computed (percentage and per-thousand lines against the gross, a `FLAT_CENTS` line as a fixed amount), GCT is applied to the taxable lines, and only the lines treated as `DEDUCT` reduce the cash the member receives.
+
+The flow runs in order:
+
+1. Start from the gross approved amount.
+2. Compute each fee line. Percentage, per-thousand, and `STAMP_DUTY_FORMULA` lines are computed against the gross; a `FLAT_CENTS` line is a fixed amount.
+3. Add GCT to every taxable line.
+4. Subtract the non-waived `DEDUCT` lines, each including its GCT.
+5. Arrive at the net to member.
+
+When you add a payee, the sum of all payee amounts must equal the net to member exactly. If deductions ever exceed the gross, scheduling is refused with a `NET_NEGATIVE` error.
+
+## How a fee amount is computed
+
+The `calcKind` field decides how a line's amount is worked out. There are four kinds.
+
+| `calcKind` | How the amount is computed |
+| --- | --- |
+| `FLAT_CENTS` | A fixed amount in cents. |
+| `PERCENT_BPS` | A percentage of the gross, in basis points. 200 bps is 2.00%. |
+| `PER_THOUSAND` | A rate per J$1,000 of the gross. |
+| `STAMP_DUTY_FORMULA` | The Jamaica stamp/mortgage duty formula. |
+
+## How a line is treated
+
+The `treatment` field decides whether a line reduces the disbursed cash. There are three treatments.
+
+| `treatment` | Effect on net to member |
+| --- | --- |
+| `DEDUCT` | Reduces the net the member receives. |
+| `PAID_SEPARATELY` | The member settles it out of band. Does not reduce the net. |
+| `CAPITALIZE` | Added to principal. None of the seeded Jamaica defaults use it. |
+
+## Who a line is owed to
+
+The `remitTo` field records who the fee, tax, or deduction is owed to. There are seven values.
+
+| `remitTo` | Recipient |
+| --- | --- |
+| `CU` | The credit union. |
+| `TAJ` | Tax Administration Jamaica. |
+| `GOVERNMENT` | A government office. |
+| `INSURER` | An insurer. |
+| `ATTORNEY` | An attorney. |
+| `LENDER` | Another lender. |
+| `OTHER` | Anyone else. |
+
+## GCT
+
+Each fee line carries a `taxable` flag. GCT applies only to lines flagged taxable. Financial-service and insurance-service fees are GCT-exempt, so a processing fee is not taxable. Legal and valuation fees are taxable and carry GCT.
+
+The tenant default GCT rate is `gctRateBps`, which defaults to `1500`, that is 15%, the Jamaica standard. It is stored on the tenant configuration.
+
+A **Disbursement** officer can override the GCT rate for a single disbursement. The override is passed per schedule and clamped to the range 0 to 10000 basis points. When omitted, the tenant default applies. This covers a special rate or a zero-rated case without changing the tenant default.
+
+## The two fee tables
+
+Fees live in two places: an editable per-tenant catalogue, and an immutable snapshot on each instruction.
+
+| Table | What it is |
+| --- | --- |
+| `TenantFeeScheduleItem` | The editable per-tenant fee/tax catalogue. Officers read these as defaults per loan type, and a tenant edits them. |
+| `DisbursementFee` | The immutable applied line on a `DisbursementInstruction`, captured at schedule time. Never deleted. |
+
+The catalogue is the configurable source. The snapshot is the legal record of exactly what was charged on a specific disbursement.
+
+### Seeded Jamaica defaults
+
+A tenant created through the demo seed gets ten Jamaica fee items spread across the loan types. The defaults are starting points; a tenant edits them.
+
+| Code | Label | Loan type | Calc | Treatment | Remit to | Taxable |
+| --- | --- | --- | --- | --- | --- | --- |
+| `PROCESSING` | Processing fee | Unsecured | 2.00% | `DEDUCT` | `CU` | No |
+| `PROCESSING` | Processing fee | Cash-secured | 1.00% | `DEDUCT` | `CU` | No |
+| `PROCESSING` | Processing fee | Auto | 2.00% | `DEDUCT` | `CU` | No |
+| `TITLE_LIEN` | Title / lien registration | Auto | J$5,000 | `DEDUCT` | `GOVERNMENT` | No |
+| `INSURANCE_COMP` | Comprehensive insurance (1st premium) | Auto | per quote | `PAID_SEPARATELY` | `INSURER` | No |
+| `PROCESSING` | Processing fee | Mortgage | 1.00% | `DEDUCT` | `CU` | No |
+| `LEGAL` | Legal fee | Mortgage | 1.50% | `PAID_SEPARATELY` | `ATTORNEY` | Yes |
+| `STAMP_DUTY` | Stamp / mortgage duty | Mortgage | formula | `PAID_SEPARATELY` | `GOVERNMENT` | No |
+| `VALUATION` | Valuation / appraisal | Mortgage | J$35,000 | `PAID_SEPARATELY` | `OTHER` | Yes |
+| `REGISTRATION` | Title registration | Mortgage | J$5,000 | `PAID_SEPARATELY` | `GOVERNMENT` | No |
+
+## What an officer can change
+
+A **Disbursement** officer can add, edit, and waive fee lines at schedule time. Every change is audited.
+
+- **Add** a custom line that is not in the schedule.
+- **Edit** a schedule line for this loan.
+- **Waive** a line, with a reason of at least 3 characters, so it does not reduce the net.
+
+Each snapshot line records its `source`: `SCHEDULE` for a line drawn from the catalogue, `MANUAL` for a custom line the officer added. An instruction carries at most 20 fee lines.
+
+The audit events are exact:
+
+- `disbursement.fees.applied` records the full fee, GCT, and net breakdown for the instruction.
+- `disbursement.fee.waived` records each waived line and its reason.
+
+Both fire inside `scheduleDisbursement`. The `tenant.fee_schedule.updated` event is registered for catalogue edits, but no in-app catalogue editor ships yet, so catalogue changes are made out of band and that event is not emitted today.

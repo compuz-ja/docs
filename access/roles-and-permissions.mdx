@@ -1,38 +1,39 @@
 ---
-title: "Roles and permissions for iLoan credit union staff"
-sidebarTitle: "Roles & Permissions"
-description: "Understand the built-in roles in iLoan — what each role can do, which department they belong to, and how permissions are assigned per credit union."
+title: "Roles and permissions for credit union staff"
+sidebarTitle: "Roles & permissions"
+description: "Understand the built-in roles, what each role can do, which department they belong to, and how permissions are assigned per credit union."
+icon: "users"
 ---
 
-iLoan uses role-based access control. Every user is assigned one or more roles within your credit union, and those roles determine which pages, queues, and actions are available to you. Roles are configured per credit union — the same person could hold a Credit Officer role in one workspace and an Adjudicator role in another.
+The Loan Origination System uses role-based access control. Every user holds exactly one role within a workspace, and that role determines which pages, queues, and actions are available to you. Roles are configured per credit union, so the same person could hold a **Credit Officer** role in one workspace and an **Adjudicator** role in another.
 
 <Note>
-  Roles are assigned by your Tenant Administrator. If you need access to a feature that is not available to you, contact your administrator to discuss a role change.
+  Roles are assigned by your **Tenant Administrator**. If you need access to a feature that is not available to you, contact your administrator to discuss a role change.
 </Note>
 
 ## Built-in roles
 
 <CardGroup cols={2}>
-  <Card title="Credit Officer" icon="file-pen">
+  <Card title="Credit Officer" icon="file-text">
     Captures new loan applications and manages the member relationship at intake. Can search, create, and edit member records, submit KYC information, add or remove guarantors, and submit completed applications for adjudication. Sees only their own loans.
   </Card>
-  <Card title="Adjudicator" icon="scale-balanced">
-    Reviews submitted loan applications and makes credit decisions. Can approve, decline, or request additional information. Has read access to all loans across all branches in the adjudication queue, can claim unassigned loans from the team queue, and can transition loans through workflow stages.
+  <Card title="Adjudicator" icon="gavel">
+    Reviews submitted loan applications and makes credit decisions. Can approve, decline, or request additional information. Has read access to all loans across all branches, can claim unassigned loans from the team queue, and can transition loans through workflow stages.
   </Card>
-  <Card title="Securities Reviewer" icon="shield-check">
+  <Card title="Securities" icon="shield-check">
     Reviews and resolves collateral documentation attached to a loan. Can raise security requests and review and fulfil them, ensuring all pledged assets are properly documented before disbursement proceeds. Can claim unassigned securities work from the team queue.
   </Card>
-  <Card title="Disbursement Officer" icon="money-bill-transfer">
+  <Card title="Disbursement" icon="banknote">
     Executes approved loans by scheduling and releasing funds. Manages the payee directory used to route payments. Can claim unassigned disbursement work from the team queue, and is responsible for confirming that disbursement instructions are complete and accurate before funds leave the credit union.
   </Card>
-  <Card title="Credit Manager" icon="chart-line">
-    Oversees lending operations across all branches. Can view all loans regardless of branch, assign or reassign loans to officers, manage the loan product catalogue, publish updated rate tables, and access analytics and reports.
+  <Card title="Credit Manager" icon="badge-check">
+    Oversees lending operations across all branches. Can view all loans regardless of branch, assign or reassign loans to officers, manage the loan product catalogue, publish updated rate tables, apply manual rate overrides on individual loans, and access analytics and reports. The manual rate override (`loans.override`) is a Credit Manager lever that Adjudicators deliberately do not hold, keeping pricing separate from the approve or decline decision.
   </Card>
-  <Card title="Branch Manager" icon="building-columns">
+  <Card title="Branch Manager" icon="building">
     Manages lending activity within their branch. Can view all loans in their branch, assign loans to officers within that branch, and view branch-level reports.
   </Card>
-  <Card title="Tenant Administrator" icon="gear">
-    Full access to the workspace. Manages users, invitations, roles, branding, loan products, rate tables, and all tenant configuration. The only role that can invite new staff, suspend members, and change role assignments.
+  <Card title="Tenant Administrator" icon="settings">
+    Administers the workspace. Manages users, invitations, roles, branding, loan products, rate tables, and all tenant configuration, and can run the full loan capture flow. The only role that invites new staff, suspends members, and changes role assignments. It does not adjudicate loans, review securities, or disburse funds. Those stages belong to the Adjudicator, Securities, and Disbursement roles.
   </Card>
 </CardGroup>
 
@@ -40,54 +41,62 @@ iLoan uses role-based access control. Every user is assigned one or more roles w
 
 The table below summarises what each role is permitted to do.
 
-| Action | Credit Officer | Adjudicator | Securities Reviewer | Disbursement Officer | Credit Manager | Branch Manager | Tenant Admin |
+| Action | Credit Officer | Adjudicator | Securities | Disbursement | Credit Manager | Branch Manager | Tenant Administrator |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Create & edit loan applications | ✓ | | | | | | ✓ |
+| Create and edit loan applications | ✓ | | | | | | ✓ |
 | Submit loan for adjudication | ✓ | | | | | | ✓ |
-| Adjudicate (approve / decline) loans | | ✓ | | | | | ✓ |
-| View own loans | ✓ | | | | | | ✓ |
-| View all loans (all branches) | | ✓ | | | ✓ | | ✓ |
-| View branch loans | | | | | ✓ | ✓ | ✓ |
+| Adjudicate (approve or decline) loans | | ✓ | | | | | |
+| View own loans | ✓ | | | | | | |
+| View all loans (all branches) | | ✓ | ✓ | ✓ | ✓ | | ✓ |
+| View branch loans | | | | | | ✓ | |
 | Claim loans from team queue | | ✓ | ✓ | ✓ | | | ✓ |
-| Assign / reassign loans to officers | | | | | ✓ | ✓ | ✓ |
-| Review & resolve securities | | | ✓ | | | | ✓ |
-| Disburse funds | | | | ✓ | | | ✓ |
-| Manage payee directory | | | | ✓ | | | ✓ |
-| Search, create & edit member records | ✓ | | | | | | ✓ |
+| Assign or reassign loans to officers | | | | | ✓ | ✓ | ✓ |
+| Review and resolve securities | | | ✓ | | | | |
+| Disburse funds | | | | ✓ | | | |
+| Manage payee directory | | | | ✓ | ✓ | | |
+| View and search member records | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Create and edit member records | ✓ | | | | | | ✓ |
 | Submit member KYC | ✓ | | | | | | ✓ |
-| Manage loan products & rate tables | | | | | ✓ | | ✓ |
-| View reports & analytics | | | | | ✓ | ✓ | ✓ |
-| Invite staff & manage roles | | | | | | | ✓ |
-| Tenant configuration & branding | | | | | | | ✓ |
+| Manage loan products and rate tables | | | | | ✓ | | ✓ |
+| View reports and analytics | | | | | ✓ | ✓ | ✓ |
+| Invite staff and manage roles | | | | | | | ✓ |
+| Tenant configuration and branding | | | | | | | ✓ |
+
+<Note>
+  The Tenant Administrator runs the loan capture flow and sees every loan through its all-loans read, but it holds none of the adjudication (`loans.adjudicate`), securities (`securities.review`), disbursement (`loans.disburse`), or payee-directory (`disbursements.payees.manage`) capabilities. Five roles see loans across all branches through `loans.read.all`: the Adjudicator, Securities, Disbursement, Credit Manager, and Tenant Administrator. That all-branches read is a superset of the branch-scoped view. Only the Branch Manager holds the branch-scoped `loans.read.branch`.
+</Note>
 
 ## How roles are assigned
 
-Roles are chosen at the point of invitation. When a Tenant Administrator sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
+Roles are chosen at the point of invitation. When a **Tenant Administrator** sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
 
-If someone's responsibilities change — for example, a Credit Officer is promoted to Credit Manager — an administrator can update the role at any time from **Admin → Members**. The change takes effect on the user's next page load.
+Each user holds exactly one role per workspace. If someone's responsibilities change, an administrator updates the role at any time from **Administration → Team & roles**. A **Credit Officer** promoted to **Credit Manager** is one example. Changing the role replaces the previous one rather than adding a second, and the new role takes effect on the user's next page load.
 
-A user can hold multiple roles simultaneously if your credit union requires it. For example, a senior officer might hold both Credit Officer and Branch Manager roles during a transition period. Contact your Tenant Administrator if you need a combined access arrangement.
+The **Administration → Team & roles** page also shows a per-role permissions panel, so an administrator can see exactly which capabilities each role in the workspace holds.
 
 ## Capability stacking
 
-Some actions in iLoan require more than one capability to line up before they succeed. This is by design — it enforces separation of duties and prevents a single role misconfiguration from opening up sensitive actions unexpectedly.
+Some actions require more than one capability to line up before they succeed. Capability stacking enforces separation of duties: gaining one capability is never enough on its own to perform a sensitive action, which keeps a single role misconfiguration from opening up sensitive actions unexpectedly.
 
 <Accordion title="Example: submitting a loan application">
-  Submitting a loan for adjudication requires two things to be true simultaneously:
+  Submitting a loan for adjudication moves it from DRAFT to SUBMITTED, and that transition stacks three capabilities plus a data check:
 
-  1. **The acting user holds `loans.submit`** — granted to Credit Officers and Tenant Administrators.
-  2. **The member's KYC has been submitted** — the `members.kyc.submit` capability must have been exercised on that member record before submission is allowed.
+  1. **`workflows.transition`**, the global workflow engine gate.
+  2. **`loans.transition`**, the loan-domain gate.
+  3. **`loans.submit`**, the per-transition capability, granted to **Credit Officers** and **Tenant Administrators**.
+  4. **The member's KYC is Verified.** The member's `kycStatus` must equal `VERIFIED` before submission is allowed.
 
-  If either condition is missing, the **Submit** button remains unavailable and iLoan shows a clear message about what still needs to be completed.
+  If any capability or the KYC check is missing, the **Submit** button is hidden or the action is rejected, and the platform shows a clear message about what still needs to be completed.
 </Accordion>
 
 <Accordion title="Example: transitioning a loan through a workflow stage">
-  Moving a loan from one stage to the next (for example, from *Adjudication* to *Securities Review*) requires:
+  Moving a loan from one stage to the next, for example from **Adjudication** to **Securities**, requires three layers:
 
-  1. **`workflows.transition`** — the global workflow engine gate, held by Adjudicators.
-  2. **`loans.transition`** — the loan-domain gate, ensuring the transition request is for a loan workflow and not another workflow type.
+  1. **`workflows.transition`**, the global workflow engine gate.
+  2. **`loans.transition`**, the loan-domain gate, which ensures the transition request is for a loan workflow and not another workflow type.
+  3. **The per-transition capability** for that specific move. The adjudication moves and the moves into and through the securities stage (including **Adjudication** to **Securities**) require `loans.adjudicate`. The moves that return a loan from **Securities** back to **Draft** or **Adjudication** require `securities.review`, and the disbursement moves require `loans.disburse`.
 
-  Both must be present. This layered approach means that gaining access to one capability alone is never enough to perform a sensitive action.
+  All three must be present. This layered approach means that gaining access to one capability alone is never enough to perform a sensitive action.
 </Accordion>
 
-These stacking rules are enforced automatically — you do not need to think about them day to day. They are documented here so you understand why an action may be unavailable even when your role looks correct.
+These stacking rules are enforced automatically. The Submit or transition action is hidden, or rejected by the server, whenever any required capability is missing, which is why an action can be unavailable even when your role looks correct.

@@ -1,108 +1,114 @@
 ---
-title: "Schedule and execute loan fund disbursements in iLoan"
+title: "Release approved loan funds in Disbursement"
 sidebarTitle: "Disbursement"
-description: "Learn how to enter payee details, schedule disbursements, and release approved loan funds using the iLoan Disbursement queue and payee directory."
+description: "Enter payee details, verify fees, and execute funds release for approved loans. An overview of the Disbursement queue and its detail topics."
+icon: "banknote"
 ---
 
-The Disbursement queue holds approved loans that are ready for funds release. As a Disbursement Officer, you'll enter the payee details, verify the fee calculations, and execute the disbursement. The loan is only marked **DISBURSED** once you confirm — no funds are scheduled or released until you take action.
+The **Disbursement** queue holds approved loans that are ready for funds release. With the **Disbursement** role, you enter payee details, verify the fee calculations, and execute the disbursement. A loan is only marked **DISBURSED** once you confirm. No funds are scheduled or released until you act.
 
 ## What you need
 
-You must have the **Disbursement Officer** role, which includes the `loans.disburse` capability. If you can view the queue but cannot act on applications, contact your Tenant Administrator to verify your role.
+You need the **Disbursement** role, which carries the `loans.disburse` capability. If you can view the queue but cannot act on applications, ask your Tenant Administrator to verify your role.
 
-## Disbursing a loan
+## How a disbursement works
 
 <Steps>
   <Step title="Open the Disbursement queue">
-    Go to **Admin → Disbursement**. The queue shows loans with **DISBURSEMENT** status that are ready for scheduling. Use the **All / My queue / Unassigned** tabs to filter to your assigned files.
+    Open **Disbursement** under the **Review queue** group in the sidebar. The queue's **Pending** tab shows loans in **DISBURSEMENT** status that are ready for scheduling or execution; the **Completed** tab shows disbursed and filed loans. The **All / My queue / Unassigned** tabs filter to your files or unclaimed work.
   </Step>
   <Step title="Open the application">
     Click a row to open the disbursement detail page. You'll see the approved loan amount, the fee schedule pre-populated from the tenant configuration, and the calculated net-to-member amount.
   </Step>
-  <Step title="Review fees and deductions">
-    The disbursement form shows the **gross approved amount** at the top, followed by a breakdown of fees, taxes, and deductions. Each fee line shows its rate or flat amount, the treatment (Deduct / Paid separately / Capitalize), and the line total including any GCT.
-
-    You can:
-    - Edit a fee amount or rate if an override is needed
-    - Waive a fee line — a waiver reason is required and is recorded on the audit trail
-    - Add a custom fee or deduction line
-    - Adjust the GCT rate if it differs from the tenant default for this disbursement
-
-    The **Net to member** figure updates live as you make changes. This is the amount that must be fully distributed across all payees.
+  <Step title="Review fees and the net to member">
+    The form shows the gross approved amount, the fee and tax breakdown, and the live **Net to member** figure. This is the amount you must distribute in full across all payees.
   </Step>
-  <Step title="Set the scheduled date">
-    Pick the date the funds should clear to the payees. This must be today or a future date.
+  <Step title="Enter payees and amounts">
+    Add one or more payees, each with a payee type, name, payment method, account and routing details, amount, and purpose. The sum of all payee amounts must equal the net-to-member figure exactly before you can schedule.
   </Step>
-  <Step title="Enter payee details">
-    For each payee, provide:
+  <Step title="Schedule the disbursement">
+    Pick a scheduled date of today or later, then click **Schedule disbursement**. This creates the disbursement instruction with all its payees and fee lines. The loan stays in **DISBURSEMENT** status. The Disbursement team, or the file's assignee if one is set, is notified that the disbursement is scheduled.
 
-    - **Payee type** — Member, Third Party, Attorney, Insurer, Government, Loan Payoff, or Other
-    - **Payee name** — the legal name of the recipient
-    - **Payment method** — ACH, RTGS, Internal Transfer, Cheque, Manager's Cheque, or Wire/SWIFT
-    - **Account number** — the destination account (encrypted at write time)
-    - **Routing details** — bank code, branch/transit code, SWIFT/BIC, or account type as required by the selected payment method
-    - **Amount** — the portion of the net routed to this payee
-    - **Purpose** — a brief description (e.g. *Net to member*, *Dealer payment*, *Attorney fees*)
+    Scheduling is refused if an instruction already exists on the loan (re-scheduling means reverting the file back to Securities first), or if the deductions would push the net to member below zero.
+  </Step>
+  <Step title="Execute the release">
+    Return to the instruction and click **Mark disbursed** to release the funds. Only then does the loan move to **DISBURSED**. The Credit Officer is notified, and the member is notified too if member email delivery has been switched on for the platform (the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, off by default). Scheduling and execution are two separate actions, so a file can be scheduled by one officer and released by another.
 
-    Use the bank directory search to auto-fill the bank name and SWIFT/BIC when you type the bank name.
+    Dual control is off until a tenant sets a threshold, so existing tenants are never blocked by it. When it applies, the platform refuses to release the funds while approval is still pending. The block is enforced server-side, not by graying out the button: a net at or above the tenant's dual-control threshold sets the instruction to await a second approver, and a **different** user holding `disbursements.approve` must sign off before the release goes through (the maker cannot be the checker). Until they do, **Mark disbursed** is turned away with an "awaiting a maker-checker approval" message.
+
+    There is one exception to the two-step flow: when auto-disbursement is enabled and the net to member is at or below the configured threshold, scheduling executes the release immediately. Auto-disbursement also requires that no dual-control approval is pending, that the officer is within their personal limit, and that the tenant does not require AML screening.
   </Step>
-  <Step title="Verify the payee total">
-    The **Payees total vs net** panel at the bottom of the form shows you in real time whether the sum of all payee amounts equals the net-to-member figure. The form will not allow scheduling until these figures match exactly.
-  </Step>
-  <Step title="Schedule and execute the disbursement">
-    Click **Schedule disbursement** to record the disbursement instruction. The loan moves to **DISBURSED** status. The Credit Officer is notified, and the member is notified if member email notifications are enabled by your Tenant Administrator.
+  <Step title="File the loan">
+    With the loan in **DISBURSED**, the **File loan** card shows a **File loan (terminal)** button. Clicking it fires the **DISBURSED → FILED** transition (gated by `loans.disburse`) and closes the file at its terminal **FILED** state. Filing always lands on **FILED**; it never routes the loan anywhere else. Filing is a manual step, not automatic.
   </Step>
 </Steps>
 
-## Multi-payee disbursements
+## What the detail page shows
 
-Many loans are paid to more than one party. For example, an auto loan might be split between a payment to the car dealer and a remainder to the member; a mortgage might include a portion to an attorney for title transfer fees.
+The disbursement detail page is also a read-only recap of the whole file, so you can sanity-check it before releasing funds without leaving the page. Alongside the approved amount and the payee form, you'll see:
 
-To add multiple payees, click **Add another payee** below the payee list. Each payee gets its own row with its own name, payment method, amount, and routing details. The sum of all payee amounts must equal the net-to-member figure exactly before you can schedule.
+- **Risk assessment.** The latest risk band, score, engine version, and the same factor breakdown the Adjudicator saw.
+- **Collateral summary.** The most recent collateral record for secured loans, with valued amount and valuation source.
+- **Decision history.** Every adjudication decision in order, each with its rationale, the decider's name, and their role.
+- **KYC status.** The member's identity-verification state, with a link to their documents.
+- **Agreement.** The signed loan agreement to view or download. If the agreement PDF failed to generate, the page surfaces the last generation error so you know why it's missing.
 
-<Warning>
-The total of all payee amounts must equal the net-to-member amount exactly. The form will not allow scheduling if there is any shortfall or excess. Check the **Payees total vs net** panel — it shows you the current total, the required net, and the difference.
-</Warning>
+## Pre-execution checklist
 
-You can also use the **Put net in row 1** shortcut to automatically fill the first payee's amount field with the full net figure — useful for single-payee disbursements.
+Before you can schedule or release a disbursement, the loan has to clear three prerequisites. The detail page shows them as a **Pre-execution checklist** and disables the **Mark disbursed** button until all three pass:
 
-## Payee directory
+- **Member identity verification (KYC) is VERIFIED.**
+- **Zero outstanding security requests.** No request on the loan is in PENDING or SUBMITTED.
+- **A loan agreement has been generated.**
 
-Frequently used payees — such as attorneys, insurance companies, or dealer accounts — can be saved to the **Payee Directory** so you don't have to re-enter their details on every disbursement.
+This is a hard rule, not just a UI gate. The platform re-checks all three inside both scheduling and execution and refuses the action if any is open, even from a stale page or a direct call. If something regresses between scheduling and release, for example a security request reopens or the agreement is revoked, execution is blocked until it clears again.
+
+## Disbursement topics
+
+Disbursement has several detail areas, each covered on its own page.
 
 <CardGroup cols={2}>
-  <Card title="Save a payee" icon="bookmark">
-    On the disbursement form, click **Save to directory** next to any payee row that has a name entered. The payee's name, type, payment method, and routing details are saved to the directory for reuse.
+  <Card title="Payment methods" icon="send" href="/disbursement/payment-methods">
+    Choose a payment rail for each payee: ACH, RTGS, Internal Transfer, Cheque, Manager's Cheque, or Wire/SWIFT. ACH cannot carry more than J$1,000,000 per payee. Use RTGS for larger amounts.
   </Card>
-  <Card title="Use a saved payee" icon="bookmark-check">
-    On the disbursement form, click **Pick saved payee** and select the payee from the list. Their details pre-fill the row; you only need to enter the amount and purpose.
+  <Card title="Fees and GCT" icon="file-text" href="/disbursement/fees-and-gct">
+    Review, edit, waive, or add fee lines, set how each is treated, and adjust the GCT rate. The net-to-member figure updates as you go.
+  </Card>
+  <Card title="Saved payees" icon="bookmark" href="/disbursement/saved-payees">
+    Save frequently used payees such as attorneys, insurers, and dealer accounts to the payee directory, then reuse them without re-entering details.
+  </Card>
+  <Card title="Controls" icon="user-check" href="/disbursement/controls">
+    Dual control sign-off, AML and sanctions screening, per-officer limits, and auto-disburse settings that govern who can release funds and when.
+  </Card>
+  <Card title="Settlement" icon="clock" href="/disbursement/settlement">
+    Track each disbursement through its lifecycle as the payment moves on the rail: sent, cleared, returned, failed, or reversed.
   </Card>
 </CardGroup>
 
-You can also manage the payee directory directly at **Admin → Disbursement → Payees**, where you can create, edit, or remove saved payees outside of the disbursement flow.
+## Multi-payee disbursements
 
-## Payment method rules
+Many loans pay more than one party. An auto loan might split between the car dealer and the member. A mortgage might include a portion to an attorney for title transfer fees. Add payees with **Add another payee**, and the sum of all payee amounts must equal the net-to-member figure exactly before you can schedule.
 
-| Method | Notes |
-|---|---|
-| ACH | Maximum J$1,000,000 per payee per Jamaica RTGS rules. Switch to RTGS for larger amounts. |
-| RTGS | No ceiling; bank code, branch/transit, and routing number required. |
-| Internal Transfer | Routes to a member's account at the credit union; account type required. |
-| Cheque | No bank routing details needed; payee mailing address is optional. |
-| Manager's Cheque | Same as Cheque; mailing address optional. |
-| Wire / SWIFT | SWIFT/BIC required; routing/ABA number required for US wires. |
+A single instruction holds between 1 and 20 payees, and the payee sequence numbers must run as a contiguous 1-to-N list with no gaps or duplicates.
+
+<Warning>
+The total of all payee amounts must equal the net-to-member amount exactly. The form will not allow scheduling if there is any shortfall or excess. Watch the **Payees total vs net** panel for the current total, the required net, and the difference.
+</Warning>
 
 ## After disbursement
 
-Once a loan is marked **DISBURSED**, what happens next depends on your credit union's configuration:
+Marking a loan **DISBURSED** stamps the bank reference number on the instruction and emits the `disbursement.executed` event, which notifies the Credit Officer (and the member, when member emails are enabled). The loan does not file itself. Filing is the separate manual step described above: someone on the Disbursement team clicks **File loan** to mark it **FILED**, and that always lands the loan on **FILED**.
 
-- **Securities final check enabled** — the loan returns to the Securities queue for a post-disbursement review before being filed. The Securities team will review the completed package and mark it ready to file. You will see the loan move back to the Securities queue briefly.
-- **Securities final check not enabled** — the loan moves directly to **FILED** status once disbursement is confirmed.
+### Post-disbursement securities re-check
+
+A few credit unions require a security check *after* funds have gone out, for example to confirm vehicle insurance was activated or a lien was filed. That re-check is a distinct **DISBURSED → SECURITIES** transition, gated by `loans.adjudicate`, that someone holding that capability initiates with a post-disbursement security request. It is not part of the **File loan** button, and clicking **File loan** never triggers it.
+
+When that transition fires, the workflow opens a new security request and moves the file back to the Securities queue for review, while the loan's status stays **DISBURSED**. The platform only allows it when the tenant's `securitiesFinalCheckRequired` configuration flag is on (a setting on `TenantWorkflowOverride`, defaulting off; there is no screen that toggles it). Once the new request is resolved, the file returns through Disbursement and can be filed.
 
 <Note>
-**FILED** is the terminal state. Once a loan is filed, the record is locked from all further editing. The audit trail is complete and preserved. Any future lending activity for the same member requires a new application.
+**FILED** is the terminal state. Once a loan is filed, the record is locked from further editing and the audit trail is complete. Any future lending for the same member requires a new application.
 </Note>
 
-## Disbursement Dashboard
+## Disbursement dashboard
 
-The **Disbursement Dashboard** at **Admin → Disbursement → Dashboard** shows scheduled and executed disbursements, total values by date range, and queue depth by status. Use it to confirm that scheduled disbursements are moving through to execution and to spot any files that have been waiting for an unusual amount of time.
+The **Disbursement dashboard** lives under the **Dashboards** group in the sidebar (**Dashboards → Disbursement**). It shows four tiles plus a throughput sparkline over fixed windows: **Awaiting disbursement** (a single count), **Disbursed this week**, **Total disbursed** (net of fees, last 7 days), and **Avg approval to fund** (last 7 days), with a **Disbursements per day** sparkline over the last 14 days. Reaching it needs `loans.disburse` or `reports.view`.

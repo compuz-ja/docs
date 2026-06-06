@@ -1,0 +1,78 @@
+---
+title: "Your profile and account settings"
+description: "Manage your avatar, view your account details, change your password, and control multi-factor authentication from the Profile area."
+sidebarTitle: "Your profile"
+icon: "user"
+---
+
+Your profile is the account-level area where you manage your avatar, see your account details, change your password, and control multi-factor authentication. These settings belong to you as a person, not to a workspace, so they apply across every tenant you belong to. Open it from any workspace by clicking your avatar in the top-right corner and choosing **Profile**. The profile area is not tenant-scoped: it opens at `https://loan.compuzign.com/profile/settings`, with no workspace slug in the path.
+
+The Profile area has its own left sidebar with three items: **Settings**, **Authentication**, and **Notifications**. The first two are covered below. Notifications has its own page, [Notification preferences](/account/notification-preferences).
+
+## Opening your profile
+
+Click your avatar in the top-right corner of the navigation bar. Select **Profile** to open **Settings**, or **Authentication** to jump straight to security.
+
+You can return to your workspace at any time using the back arrow at the top of the Profile sidebar. If you belong to one workspace, it takes you to that dashboard. If you belong to more than one, it takes you to the workspace picker.
+
+## Settings
+
+The **Settings** page holds your account profile and a few account-level preferences.
+
+### Avatar
+
+Your avatar appears next to your name in the navigation bar and in the user menu. To change it, click the avatar circle or the **Upload** button, pick an image, then crop it in the dialog before saving.
+
+<CardGroup cols={2}>
+  <Card title="Accepted formats" icon="user">
+    PNG, JPEG, or WebP. Maximum file size is 2 MB. Square images look best.
+  </Card>
+  <Card title="Replace or remove" icon="settings">
+    Once you have an avatar, the same controls let you **Replace** it with a new image or **Remove** it to fall back to your initials.
+  </Card>
+</CardGroup>
+
+When you save the crop, the image is re-encoded down to 256 pixels on its longest edge, so a large source file still uploads cleanly. Uploaded images are scanned for the correct file type and for malware before they are stored. If an image fails either check, the upload is rejected and your current avatar stays in place.
+
+### Account details
+
+The Settings page header is titled **Profile** and shows your email and a **Member since** date, the day your account was created. Below it, the page shows the following fields. These are read-only in the current release.
+
+| Field | What it shows |
+|---|---|
+| **Email** | The address you use to sign in. A badge shows whether it is verified. |
+| **Display name** | How your name appears in audit logs and email signatures. |
+| **Language** | The application language. English only for now. |
+| **Timezone** | Used to format dates throughout the app. Set to UTC. |
+
+<Note>
+  Editing your email and display name is not yet available. These fields are read-only and will become editable in a future release.
+</Note>
+
+The Settings page also lists a **Delete your account** action. It is disabled in the current release. When account deletion ships, audit-log entries that reference your past actions stay intact for regulatory replay even after the user is removed.
+
+## Authentication
+
+The **Authentication** page is where you manage how you sign in. It has two sections.
+
+### Two-factor authentication
+
+This section shows whether multi-factor authentication is active on your account and gives you a button to set it up or manage it. When it is on, you enter a 6-digit code from your authenticator app at every sign-in.
+
+For the full setup walkthrough, including authenticator apps, QR codes, and backup codes, see [Set up multi-factor authentication](/access/mfa).
+
+### Password
+
+Change the password you use to sign in. Enter your current password, then your new one. A live strength meter checks each rule as you type. Your new password must be at least 12 characters and include a lowercase letter, an uppercase letter, a number, and a symbol. The **Update password** button stays disabled until you have entered your current password and a new password that satisfies every rule, so a greyed-out button means one of those is still missing.
+
+Leave **Sign out other devices** checked to end every other active session when you change your password. This is the safest option if you think someone else may have signed in as you. It is on by default.
+
+## Switching workspace
+
+The user menu shows a **Switch workspace** item only when you have more than one active membership. If you belong to a single workspace, the item does not appear.
+
+To switch, click your avatar in the top-right corner, then select **Switch workspace**. You land on the "Pick a tenant" page, where you choose which workspace to enter. This is gated by having more than one active membership, not by a role: any role can switch between the workspaces it belongs to.
+
+<Tip>
+  Your profile, avatar, password, and multi-factor settings are the same in every workspace. Switching workspace changes which tenant you are working in, not who you are signed in as.
+</Tip>

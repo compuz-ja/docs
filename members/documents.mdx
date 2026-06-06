@@ -1,67 +1,68 @@
 ---
-title: "Upload and manage member documents in your iLoan workspace"
+title: "Upload and manage member documents"
 sidebarTitle: "Documents"
-description: "Learn how to upload identity and supporting documents to a member's profile in iLoan, including accepted file types, size limits, and document categories."
+description: "Upload identity and supporting documents to a member's profile, including accepted file types, size limits, and document categories."
+icon: "file-text"
 ---
 
-iLoan lets you attach documents directly to a member's profile — identity documents, proof of address, income verification, collateral paperwork, and anything else needed to support the origination process. Every file you upload is automatically virus-scanned before it is stored, and all access to documents is recorded in the audit log. Having a complete document library on the member's profile makes KYC reviews faster and keeps all supporting materials in one place throughout the loan lifecycle.
+The platform lets you attach documents directly to a member's profile: identity documents, proof of address, income verification, collateral paperwork, and anything else needed to support origination. Every file is virus-scanned before it is stored. Uploads, deletions, and restores are recorded in the audit log. The Documents page also surfaces outstanding Securities document requests across the member's loans, so you can see exactly what is still needed.
 
 <Tip>
-  Upload the member's identity documents before starting the KYC verification process. Having the TRN card or driver's licence already on file gives KYC reviewers everything they need without additional back-and-forth.
+  Upload the member's identity documents before starting KYC verification. Having the TRN card or driver's licence already on file gives reviewers everything they need without extra back-and-forth.
 </Tip>
 
 ## Accepted file types and size limits
 
 | Detail | Requirement |
 |---|---|
-| **Accepted formats** | PDF, JPEG, PNG, HEIC |
+| **Accepted formats** | PDF, JPEG, PNG, HEIC, and WebP |
 | **Maximum file size** | 10 MB per file |
-| **File type validation** | iLoan checks each file's actual content, not just its name or extension |
+| **Batch size** | Up to 25 files per upload, uploaded two at a time |
+| **File type validation** | The platform checks each file's actual content (magic bytes), not just its name or extension |
+
+<Note>
+  The upload card on this page accepts the five formats above. The platform also accepts Word (.doc and .docx) and Excel (.xlsx) on the server side, but those types are not selectable from this upload form.
+</Note>
 
 <Warning>
-  If an upload fails with an **"Unsupported file type"** error, verify that you are uploading a PDF, JPEG, PNG, or HEIC file. iLoan checks the actual file content, not just the file extension. Files disguised with a misleading name — for example, an executable renamed to `.pdf` — are automatically rejected during the security scan.
+  If an upload fails with an **"Unsupported file type"** error, confirm that the file is one of the accepted formats. The platform checks the actual file content, not just the file extension. Files disguised with a misleading name, for example an executable renamed to `.pdf`, are rejected during validation and the security scan.
 </Warning>
 
 ---
 
 ## Document categories
 
-iLoan organises documents into five categories. Select the correct category when uploading so that documents are easy to find and so the loan origination system can locate them automatically when needed.
+The platform organises documents into nine categories. Select the correct category when uploading so documents are easy to find and so the loan origination workflow can locate them automatically when needed.
 
 <AccordionGroup>
-  <Accordion title="ID_PRIMARY — Government-issued identity">
-    Primary identity documents issued by a government authority. Examples:
+  <Accordion title="ID_PRIMARY, government-issued identity">
+    Primary identity documents issued by a government authority. Examples include the TRN card, national ID, passport, and driver's licence.
 
-    - TRN card
-    - National ID
-    - Passport
-    - Driver's licence
-
-    Upload ID_PRIMARY documents before running KYC verification — they appear directly in the KYC Verification tab as supporting evidence.
+    Upload the TRN card or driver's licence before running KYC verification. These two subtypes appear directly on the member's KYC page as supporting evidence; other ID_PRIMARY documents, such as a passport or national ID, do not surface there.
   </Accordion>
-  <Accordion title="PROOF_OF_ADDRESS — Address verification">
-    Documents that confirm the member's current residential address. Examples:
-
-    - Utility bill (electricity, water, telephone)
-    - Bank statement showing the member's address
-    - Lease or rental agreement
+  <Accordion title="ID_SECONDARY, secondary identity">
+    Supporting identity documents used alongside a primary ID. Examples include a voter's ID, work ID, school ID, or an expired passport.
   </Accordion>
-  <Accordion title="PROOF_OF_INCOME — Income verification">
-    Documents that demonstrate the member's income and ability to repay. Examples:
-
-    - Recent pay stub or payslip
-    - Employment letter from the member's employer
-    - Tax return
+  <Accordion title="PROOF_OF_ADDRESS, address verification">
+    Documents that confirm the member's current residential address. Examples include a utility bill, lease agreement, mailing-address bank statement, government letter, or insurance statement.
   </Accordion>
-  <Accordion title="COLLATERAL_DOCS — Collateral documentation">
-    Documents related to assets offered as security for a loan. Examples:
-
-    - Vehicle title or registration
-    - Property deed or certificate of title
-    - Insurance certificate
+  <Accordion title="PROOF_OF_INCOME, income verification">
+    Documents that demonstrate income and ability to repay. Examples include a pay stub, tax return, employer letter, or audited financials.
   </Accordion>
-  <Accordion title="OTHER — General supporting documents">
-    Any document that does not fit the categories above. Use this category for supplementary materials requested during the application or adjudication process.
+  <Accordion title="EMPLOYMENT_LETTER, employment confirmation">
+    Documents confirming the member's employment. Examples include an employer letter or a contract of employment.
+  </Accordion>
+  <Accordion title="BANK_STATEMENT, account statements">
+    Member bank statements. Examples include current-account, savings-account, and credit-account statements.
+  </Accordion>
+  <Accordion title="COLLATERAL_VALUATION, collateral valuation">
+    Valuations for assets offered as security for a loan. Examples include a vehicle valuation, property valuation, or general asset valuation.
+  </Accordion>
+  <Accordion title="INSURANCE_CERTIFICATE, insurance coverage">
+    Insurance certificates tied to the member or the collateral. Examples include vehicle insurance, property insurance, and life insurance.
+  </Accordion>
+  <Accordion title="OTHER, general supporting documents">
+    Any document that does not fit the categories above. Use this for supplementary materials requested during application or adjudication.
   </Accordion>
 </AccordionGroup>
 
@@ -69,43 +70,52 @@ iLoan organises documents into five categories. Select the correct category when
 
 ## Uploading a document
 
-You need the **members.documents.upload** capability to add files to a member's profile. Credit Officers and above are typically granted this capability.
+You need the **members.documents.upload** capability to add files to a member's profile. Viewing those files requires the **members.documents.view** capability, held by the Credit Officer, Adjudicator, Securities, Disbursement, and Tenant Administrator roles.
 
 <Steps>
   <Step title="Open the member's profile">
     Search for the member on the Members list and click their name to open their profile.
   </Step>
-  <Step title="Go to the Documents tab">
-    Click the **Documents** button in the profile header, or navigate to the Documents tab. You will see the member's current document library and any outstanding document requests linked to their loan applications.
-  </Step>
-  <Step title="Click Upload Document">
-    Click the **Upload Document** button to open the upload form.
+  <Step title="Open the Documents page">
+    Click the **Documents** button in the profile header. You see the member's current document library. If you hold the upload capability, an **Upload documents** card is shown inline on the page, along with any outstanding Securities document requests linked to their loan applications; there is no separate button that opens a form. A view-only actor sees the document library but not the pending Securities requests.
   </Step>
   <Step title="Select the document category and subtype">
-    Choose the appropriate **document category** from the list (for example, ID_PRIMARY or PROOF_OF_INCOME), then select the specific **subtype** that best describes the document (for example, "Driver's licence" or "Pay stub"). Selecting the correct subtype ensures the document appears in the right place during KYC review and loan processing.
+    Choose the **document category** from the list, for example ID_PRIMARY or PROOF_OF_INCOME, then select the specific **subtype** that best describes the document, for example "drivers-license" or "pay-stub". The correct subtype ensures the document appears in the right place during KYC review and loan processing. Every file in one batch shares the same category and label.
   </Step>
-  <Step title="Choose the file">
-    Click **Choose file** and select the document from your computer. The file must be a PDF, JPEG, PNG, or HEIC and no larger than 10 MB.
+  <Step title="Choose the files">
+    Drag files onto the card or use **Choose files to upload** to pick them. You can add several at once, up to 25 files in a batch. Each file must be one of the accepted formats and no larger than 10 MB.
   </Step>
   <Step title="Click Upload">
-    Click **Upload**. iLoan scans the file for viruses, verifies its content type, and then stores it securely. The document appears in the member's document library once the scan completes successfully.
+    Click **Upload** (the button reads **Upload N files** for a batch). The platform scans each file for viruses, verifies its content type, then stores it securely. Documents appear in the member's library as each one finishes.
   </Step>
 </Steps>
+
+<Warning>
+  An upload can be rejected for several reasons beyond an unsupported file type: a magic-byte mismatch, a detected virus, or an invalid category-and-subtype pairing. Three abuse guardrails also apply. You can run at most **60 successful uploads per hour**, a member can hold at most **100 active documents**, and each workspace has a **5 GB storage quota**. Hitting one of these shows an error such as "Upload rate limit reached", "this member has reached the maximum number of active documents", or "your workspace has reached its document storage quota".
+</Warning>
 
 ---
 
 ## Viewing documents
 
-Every document in the member's library is listed on the Documents tab, showing the document name, category, upload date, uploader, and current scan status. Click any document row to preview it. PDFs open in an inline viewer; images display directly on the page.
+Every document in the member's library is listed on the Documents page, showing the document name, category, upload date, uploader, and current scan status. Each row has two controls: a **preview** icon that opens the file in a new browser tab (the browser renders PDFs and images natively there) and a **download** icon that saves it to your computer. Viewing documents requires the **members.documents.view** capability, held by the Credit Officer, Adjudicator, Securities, Disbursement, and Tenant Administrator roles.
 
-Access to document content is recorded in the audit log each time a file is opened, so you will always have a record of who viewed sensitive materials.
+The scan status badge on each row shows where the file is in its lifecycle:
+
+- **Pending scan**: the file is stored and awaiting its scan result.
+- **Clean**: the virus scan passed. With the current scanner a clean upload lands here right away.
+- **Infected**: the scan flagged the file.
+- **Expired**: the document has passed its retention window.
+- **Archived**: the document has been moved to archival storage.
 
 ---
 
 ## Deleting documents
 
-Deleting a document requires the **members.documents.delete** capability, which is typically restricted to Credit Managers and Administrators.
+Deleting a document requires the **members.documents.delete** capability.
 
-When you delete a document, it is marked as removed and hidden from the standard document list — but it is not permanently erased. The file and its metadata are retained in full for regulatory audit purposes, and an Administrator can restore a deleted document if needed.
+When you delete a document, it is marked as removed and hidden from the standard document list. It is not permanently erased. The file and its metadata are retained in full for regulatory audit purposes. Anyone with the **members.documents.delete** capability can restore a deleted document, as long as its file has not yet been purged. Once the file is purged after its retention period, the document cannot be restored.
 
-To delete a document, open the Documents tab, find the document you want to remove, click the actions menu (⋯) on that row, and select **Delete**. You will be prompted to confirm the action and optionally enter a reason for the deletion.
+To delete a document, open the Documents page, find the document you want to remove, and click the **trash icon** on that row. The icon is visible only to actors with the delete capability. You are prompted to confirm, and a reason is **required**, at least three characters.
+
+Deleted documents stay visible to anyone who holds the delete capability, so they can audit what was removed; a "show deleted" toggle on the page brings them back into view. They are hidden from everyone else.

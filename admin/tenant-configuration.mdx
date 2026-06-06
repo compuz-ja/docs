@@ -1,0 +1,101 @@
+---
+title: "Tenant configuration"
+sidebarTitle: "Tenant configuration"
+description: "Set workspace-wide operational settings such as GCT rate, audit retention, dual-control thresholds, AML screening, and auto-disbursement defaults."
+icon: "sliders-horizontal"
+---
+
+Tenant configuration holds the workspace-wide operational settings that govern tax, audit retention, and how disbursements are controlled.
+
+These settings are stored once per workspace in the `TenantConfig` record. They apply to every loan and every branch in your credit union. Branding and branches are configured separately on the [Tenant setup](/admin/tenant-setup) page.
+
+**Required role:** Tenant Administrator, which holds `admin.tenant.manage`. The Credit Manager holds the `admin.disbursement.config` capability, but no in-product editor currently consumes it for these settings (see below).
+
+## Settings stored in TenantConfig
+
+Every workspace has exactly one `TenantConfig` record. The platform creates it at onboarding with the defaults below.
+
+| Setting | Field | Default | What it does |
+|---|---|---|---|
+| Audit anchor retention | `auditAnchorRetentionYears` | `7` | Years to retain external audit anchors. `7` is the Bank of Jamaica minimum. Configurable at onboarding |
+| GCT rate | `gctRateBps` | `1500` | The General Consumption Tax rate in basis points. `1500` equals 15 percent. Applied only to fee lines flagged taxable |
+| Dual-control threshold | `dualControlThresholdCents` | Not set (NULL) | When a disbursement's net-to-member is at or above this amount, a second approver must sign off before release. Stored in cents. NULL means dual control is off |
+| AML screening required | `amlScreeningRequired` | `false` | When on, every payee must screen `CLEAR` before a disbursement can execute |
+| Auto-disburse enabled | `autoDisburseEnabled` | `false` | When on, a scheduled disbursement that clears every gate releases automatically (see below) |
+| Auto-disburse threshold | `autoDisburseThresholdCents` | Not set (NULL) | The ceiling for auto-disbursement. A disbursement whose net is at or below this amount can auto-release. Stored in cents. NULL means no ceiling is configured, so nothing auto-releases even when the feature is on |
+| Privileged audit viewer | `auditPrivilegedViewerEnabled` | `false` | Reserved for a future separation-of-duties audit role. Ships `false` for every tenant today |
+
+<Warning>
+  Of these, only **audit anchor retention** can be configured (at onboarding).
+  The GCT rate, dual-control threshold, AML screening flag, and both
+  auto-disburse fields currently take their schema defaults shown above, and
+  there is no shipped way to change them per tenant after go-live.
+</Warning>
+
+<Note>
+  Amounts are stored in cents. A dual-control threshold of JMD $5,000,000 is
+  `500000000`.
+</Note>
+
+### Audit anchor retention
+
+`auditAnchorRetentionYears` defaults to `7`, the Bank of Jamaica minimum. The value can be lengthened but cannot be shortened retroactively. External audit anchors are written to COMPLIANCE-mode object-lock storage, which prevents early deletion by design.
+
+### GCT rate
+
+`gctRateBps` is the General Consumption Tax rate in basis points. The default `1500` is 15 percent, the Jamaica standard. The rate applies only to fee lines that are flagged taxable. Changing it affects new disbursement fee calculations going forward. It does not recompute fees on disbursements that already executed.
+
+### Disbursement control settings
+
+Four of these settings govern how disbursements are gated. They are summarized above. The full behavior, including how dual control, AML screening, per-officer limits, and auto-disbursement interact at execution time, is documented on the [Disbursement controls](/disbursement/controls) page.
+
+- **Dual-control threshold** (`dualControlThresholdCents`). A maker-checker gate on large disbursements.
+- **AML screening required** (`amlScreeningRequired`). Forces a `CLEAR` screening result on every payee.
+- **Auto-disburse enabled** (`autoDisburseEnabled`) and **auto-disburse threshold** (`autoDisburseThresholdCents`). Releases small, fully-cleared disbursements without manual action.
+
+Enabling auto-disburse alone does not release anything. A scheduled disbursement auto-releases only when **all five** conditions hold: the feature is on, the net-to-member is at or below the auto-disburse threshold, there is no pending dual-control approval, AML screening is satisfied (when required), and the officer is within their own limit. Anything above the threshold or with an unsatisfied gate still needs manual execution.
+
+Per-officer disbursement limits are not stored in `TenantConfig`. Each individual officer's ceiling is set on their workspace membership and is covered on the [Disbursement controls](/disbursement/controls) page.
+
+## The optional post-disbursement securities re-check
+
+Some credit unions require a final securities verification after funds have already gone out, for example to confirm vehicle insurance was activated or a lien was filed. Most do not.
+
+This behavior is controlled by `securitiesFinalCheckRequired`, a workflow override stored separately from `TenantConfig`. It defaults to off. When off, a disbursed loan moves straight toward filing. When on, the loan returns to the Securities team for a final check after disbursement.
+
+<Note>
+  The post-disbursement re-check is off by default. Leave it off unless your
+  credit union has a documented policy that requires re-verifying collateral
+  after funds are released.
+</Note>
+
+## How configuration is set
+
+The `TenantConfig` record is written in one place today: the tenant onboarding CLI command `db:onboard-tenant`. It validates the configuration file, creates the workspace, writes the `TenantConfig` row, and records a `tenant.onboarded` audit event. See [Tenant setup](/admin/tenant-setup) for the onboarding flow.
+
+The onboarding write only sets `auditAnchorRetentionYears` (from the config file, default `7`) and `auditPrivilegedViewerEnabled` (always `false`). It does not write the GCT rate, dual-control threshold, AML flag, or auto-disburse fields, so those take their schema defaults. There is currently no admin UI or server action that edits any of these after go-live.
+
+<Note>
+  The `admin.disbursement.config` capability exists and is held by the Credit
+  Manager in anticipation of an in-product disbursement-controls editor, but no
+  surface consumes it for `TenantConfig` writes yet. When that editor ships,
+  this page will document how a Credit Manager changes these values.
+</Note>
+
+<Warning>
+  Your tenant slug is fixed at onboarding and is not part of the editable
+  configuration. It is embedded in every URL your team uses and cannot be
+  changed afterward.
+</Warning>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Disbursement controls" icon="lock" href="/disbursement/controls">
+    How dual control, AML screening, per-officer limits, and auto-disbursement
+    behave at execution time.
+  </Card>
+  <Card title="Tenant setup" icon="building" href="/admin/tenant-setup">
+    Branding, branches, and what is fixed at onboarding.
+  </Card>
+</CardGroup>
