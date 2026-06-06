@@ -62,7 +62,7 @@ The agreement download is capability-gated. Five capabilities can download it, s
 
 The download serves the canonical agreement for the loan. You can open it inline in a new tab to read it first, or request it as an attachment to save it directly. If no agreement has been generated yet, the download returns a clear "not generated yet" response rather than an empty file.
 
-The agreement links the Adjudicator, the Securities team, and the Disbursement team see on their detail pages all point at this same download endpoint.
+The agreement-download links on the Adjudicator, Securities, and Disbursement detail pages all point at this same endpoint.
 
 <Note>
   The scoping of **loans.read.own** to the loan's creator is a planned refinement; today any holder of the capability can download. Agreement PDFs are stored with a 7-year retention period, the Bank of Jamaica minimum for loan records, and cannot be altered or deleted within that window. Every download is logged.

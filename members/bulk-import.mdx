@@ -91,7 +91,7 @@ The flow is preview then commit. You never mutate your workspace from the upload
     - **Ready** (`creatable`): the row is valid and will be created.
     - **Already a customer** (`skipped_existing`): an active member with this `cif` already exists in your workspace. The existing-CIF check ignores soft-deleted members, so a CIF that belonged to a previously deleted member can be reused on import.
     - **Duplicate in file** (`skipped_duplicate_in_file`): the same `cif` appears in an earlier row of this file.
-    - **Invalid** (`errored`): the row failed validation. The pill shows the reason, for example `missing first_name` or `branch_code does not exist in this tenant`.
+    - **Invalid** (`errored`): the row failed validation. The pill shows the reason, for example `missing first_name` or `branch_code does not exist in this workspace`.
 
     Only **Ready** rows are committed. Everything else is skipped with a reason you can see.
   </Step>

@@ -37,14 +37,14 @@ Each loan product is defined by these fields:
 |---|---|
 | **Code** | A short, unique internal identifier such as `CIVIL-GO` or `MORTGAGE-STD`. Uppercase letters, numbers, and dashes only, 2 to 20 characters. Shown in the product list and recorded in audit events |
 | **Name** | The display name Credit Officers see in the new loan application dropdown, up to 80 characters |
-| **Loan type** | The workspace-defined loan type this product belongs to, chosen from your Loan types catalog. Each loan type is bound to one behavioral archetype (Unsecured, Cash-Secured, Auto, or Mortgage), which determines the PDF agreement template, collateral fields, and rate engine path |
+| **Loan type** | The workspace-defined loan type this product belongs to, chosen from your Loan types catalog. Each loan type is bound to one behavioral archetype (Unsecured, Cash secured, Motor vehicle, or Real estate), which determines the PDF agreement template, collateral fields, and rate engine path |
 | **Rate source** | How the interest rate is calculated for this product: FLAT, RISK_BAND, COLLATERAL_TYPE, or VEHICLE_AGE. See [Rate Tables](/admin/rate-tables) for details |
 | **Default rate** | For FLAT products, the fixed annual interest rate as a percentage such as `12.00` (0 to 100 percent). Not used for RISK_BAND, COLLATERAL_TYPE, or VEHICLE_AGE products, where the rate is looked up from your rate table at approval time |
 | **Minimum amount** | The lowest loan amount a Credit Officer can request for this product. Non-negative |
 | **Maximum amount** | The highest loan amount a Credit Officer can request for this product. Non-negative |
 | **Minimum term** | The shortest repayment period, 1 to 480 months |
 | **Maximum term** | The longest repayment period, 1 to 480 months |
-| **Description** | Optional. A short note shown to Credit Officers when they select the product, useful for eligibility reminders or product highlights |
+| **Description** | Optional. An internal note kept on the product record; not currently surfaced on the New Loan dropdown |
 
 ## Finding products in the catalog
 
@@ -72,7 +72,7 @@ The Products page lists your products with a search box (by code or name), a loa
   </Step>
   <Step title="Pick the loan type">
     Choose the loan type from your Loan types catalog. The product inherits that
-    type's behavioral archetype (Unsecured, Cash-Secured, Auto, or Mortgage),
+    type's behavioral archetype (Unsecured, Cash secured, Motor vehicle, or Real estate),
     which drives the rate engine path, collateral fields, and PDF template.
   </Step>
   <Step title="Select the rate source">
@@ -92,8 +92,9 @@ The Products page lists your products with a search box (by code or name), a loa
     blank if you do not want to enforce term limits.
   </Step>
   <Step title="Add an optional description">
-    Enter a short description for Credit Officers (up to 500 characters). This
-    is a good place to note eligibility criteria or product-specific conditions.
+    Enter a short description (up to 500 characters). This is an internal note
+    kept on the product record; it is not currently surfaced on the New Loan
+    dropdown.
   </Step>
   <Step title="Click Create product">
     The product is created and immediately appears in the new loan application
@@ -151,5 +152,5 @@ The product becomes active again and reappears in the new loan application dropd
 |---|---|---|
 | **FLAT** | Simple fixed-rate products | The rate you enter on the product is applied to every loan |
 | **RISK_BAND** | Unsecured and mortgage loans | Looked up from your rate table based on the borrower's R1 to R5 risk band. Mortgage products read a separate real-estate band table |
-| **COLLATERAL_TYPE** | Cash-secured and collateral-rated loans | Looked up based on the collateral type (Vehicle, Shares, Cash hypothecation, Property) |
+| **COLLATERAL_TYPE** | Cash secured and collateral-rated loans | Looked up based on the collateral type (Vehicle, Shares, Cash hypothecation, Property) |
 | **VEHICLE_AGE** | Auto loans | Looked up based on the vehicle's age in years |

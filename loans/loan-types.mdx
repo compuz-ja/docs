@@ -9,7 +9,7 @@ The platform supports four loan types, each with specific form sections, collate
 
 The risk engine scores seven categorical factors, each on a categorical scale up to 5: employment type, employment status, length of employment, TDSR, LTV, loan type, and credit history. Most factors range 1 to 3; credit history ranges 1 to 5; and LTV scores 0 for unsecured loans, which carry no collateral. It sums them into a single integer and maps that sum to a risk band: a sum of 9 or below is R1, 12 or below is R2, 15 or below is R3, 18 or below is R4, and anything higher is R5. R1 is the lowest risk and R5 is the highest. Loan type is one of those seven factors: Cash-Secured scores 1, Auto and Mortgage score 2, and Unsecured scores 3.
 
-Guarantors are optional in the base form for every loan type, but a credit union can require them for specific product types through its product configuration, so "optional" is not universal.
+Guarantors are optional for every loan type.
 
 <Note>
   Your credit union can also define its own named loan types in the admin loan-type catalog (under **Administration > Loan types** at `/admin/loan-types`). Viewing the catalog is gated by `loans.types.read`; creating and managing types is gated by `loans.types.manage`. Each named type maps to one of the four archetypes below and carries its own product configuration. The four archetypes here describe the underlying behaviour.

@@ -68,7 +68,7 @@ The table below summarises what each role is permitted to do.
 
 ## How roles are assigned
 
-Roles are chosen at the point of invitation. When a **Administrator** sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
+Roles are chosen at the point of invitation. When an **Administrator** sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
 
 Each user holds exactly one role per workspace. If someone's responsibilities change, an administrator updates the role at any time from **Administration → Team & roles**. A **Credit Officer** promoted to **Credit Manager** is one example. Changing the role replaces the previous one rather than adding a second, and the new role takes effect on the user's next page load.
 
@@ -90,11 +90,11 @@ Some actions require more than one capability to line up before they succeed. Ca
 </Accordion>
 
 <Accordion title="Example: transitioning a loan through a workflow stage">
-  Moving a loan from one stage to the next, for example from **Adjudication** to **Securities**, requires three layers:
+  Moving a loan from one stage to the next, for example from **Approved** to **Securities**, requires three layers:
 
   1. **`workflows.transition`**, the global workflow engine gate.
   2. **`loans.transition`**, the loan-domain gate, which ensures the transition request is for a loan workflow and not another workflow type.
-  3. **The per-transition capability** for that specific move. The adjudication moves and the moves into and through the securities stage (including **Adjudication** to **Securities**) require `loans.adjudicate`. The moves that return a loan from **Securities** back to **Draft** or **Adjudication** require `securities.review`, and the disbursement moves require `loans.disburse`.
+  3. **The per-transition capability** for that specific move. The adjudication moves and the moves into and through the securities stage (including **Approved** to **Securities**) require `loans.adjudicate`. The moves that return a loan from **Securities** back to **Draft** or **Adjudication** require `securities.review`, and the disbursement moves require `loans.disburse`.
 
   All three must be present. This layered approach means that gaining access to one capability alone is never enough to perform a sensitive action.
 </Accordion>
