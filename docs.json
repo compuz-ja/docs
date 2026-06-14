@@ -28,11 +28,6 @@
           "anchor": "Home",
           "icon": "house",
           "href": "/"
-        },
-        {
-          "anchor": "Changelog",
-          "icon": "clock",
-          "href": "/changelog"
         }
       ]
     },
