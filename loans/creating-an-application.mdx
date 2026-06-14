@@ -48,17 +48,23 @@ Make sure the following conditions are met before opening a new application.
   </Step>
 
   <Step title="Fill in Statement of Affairs">
-    Capture the applicant's income and outflows. At least one income source is required; submission is rejected without one. Each income line carries an applicability percentage, so income that counts only partially toward affordability (a bonus counted at 50%, for example) is weighted accordingly. List the outflows too: monthly debt payments, living expenses, and other outgoings. The platform uses these figures to calculate the Total Debt Service Ratio (TDSR) and residual income.
+    Capture the applicant's income and monthly expenses.
+
+    **Income sources.** At least one is required; submission is rejected without one. Each income line carries an applicability percentage, so income that counts only partially toward affordability (a bonus counted at 50%, for example) is weighted accordingly.
+
+    **Monthly expenses.** List every outgoing under a category. The category dropdown covers Statutory Deductions, Pension, Existing Loan Payment, Other Payment, Property-Related, Utility / Household, Personal / Family, Transportation, and Other Expense. **Quick add** chips drop the common ones in with one click: Utility / Household, Transportation, Personal / Family, Existing Loan Payment, and Property-Related. Utility bills go under Utility / Household.
+
+    As you type, the section shows a live **Total income**, **Total expenses**, **Net monthly** (which turns red if it goes negative), and a **TDSR** percentage with a colour-coded band chip. Click **Save statement of affairs**. The platform uses these figures for the Total Debt Service Ratio (TDSR) and residual income.
   </Step>
 
   <Step title="Fill in Loan Purpose">
-    Enter the loan amount requested and the requested term in months. The term must be between 1 and 360 months. Describe the purpose in free text and tag it with a purpose category, which the adjudication queue uses for filtering. Pick the preferred repayment method (standing order, payroll deduction, or direct debit); standing order is the default.
+    Enter the loan amount requested and the requested term in months. The amount and term must fall within the product's configured limits, which the platform enforces. A mortgage product can run up to 480 months; most products cap lower. Describe the purpose in free text and tag it with a purpose category, which the adjudication queue uses for filtering. Pick the preferred repayment method (standing order, payroll deduction, or direct debit); standing order is the default.
   </Step>
 
   <Step title="Fill in the collateral section (if applicable)">
     Depending on the loan type you selected, an additional section appears.
 
-    - **Cash-Secured:** Enter one to five qualifying accounts to pledge as security. Each account has a type (Shares, Time Deposit, or Savings Hypothecation), its account number, and the amount held.
+    - **Cash-Secured:** Pledge one to five accounts as security. You can mix types, for example shares plus a fixed deposit. Each account has a type (Cash / Shares, Fixed / Time Deposit, or Savings Hypothecation), its account number, and the amount held. The card shows the combined total and the most you can borrow against it. The requested loan cannot exceed 95% of the combined pledged cash; the platform warns you and blocks submit if it does.
     - **Auto:** Enter the vehicle's make, model, year, VIN, engine number, and estimated valuation, plus optional mileage. Insurance is confirmed during the Securities review, not captured here.
     - **Mortgage:** Enter the property type, address, estimated valuation, valuation date, security type (First Mortgage, Second Mortgage, Strata Title, or Other), and any registered mortgagees. Title and insurance are Securities-review concerns, not application fields.
 
@@ -68,9 +74,26 @@ Make sure the following conditions are met before opening a new application.
   <Step title="Add guarantors (optional)">
     If the application requires or benefits from a guarantor, click **Add Guarantor** and fill in the guarantor's personal, employment, and income details, along with their relationship to the applicant, which is required. You can add more than one guarantor.
 
+    Each guarantor has its own **Documents** block. Use the **ID**, **Income**, and **Employment** buttons to upload that guarantor's identification, proof of income, and employment letter. You can view a file or remove it later. The documents follow the loan, so the Adjudicator, Securities, and Disbursement reviewers see them downstream. Each upload runs the same checks as any member document: a 10 MB size cap, magic-byte type check, and virus scan.
+
     <Tip>
-      You can add or remove guarantors at any time while you are editing the application.
+      You can add or remove guarantors, and upload or remove their documents, at any time while you are editing the application.
     </Tip>
+  </Step>
+
+  <Step title="Set creditor-life insurance">
+    The application carries creditor-life cover by default. The **Creditor-life insurance** section lets you tune it for this loan.
+
+    - **This loan carries creditor-life cover** is the on/off toggle, on by default. Untick it for a loan with no cover.
+    - **Premium basis** is **Level (full sum, whole term)** or **Declining balance (reduces as repaid)**. Level is the default.
+    - **Sum insured** defaults to the requested principal. Set a different figure when the cover differs from the loan amount.
+    - **Manual annual premium (optional)** lets you enter the premium directly. Leave it blank to use the actuarial table.
+
+    The section shows the **Estimated premium** as a per-year and per-month figure, recomputed when you save. This premium feeds the total monthly payment and the affordability (TDSR) check. Click **Save insurance**. Insurance is editable only while the application is a DRAFT.
+  </Step>
+
+  <Step title="Review the fees that will apply">
+    The **Fees that will apply** card lists the standard fees for this loan: each fee with its **Amount**, its **GCT**, and its **Treatment** (deducted from proceeds, paid separately, or added to the loan), then the **Total fees + GCT** and the **Net to member** after deductions. It is estimated on the requested amount and is read-only here. The Disbursement officer finalises fees at funding. See [Fees, deductions, and GCT](/disbursement/fees-and-gct).
   </Step>
 
   <Step title="Review the auto-calculated figures">
@@ -80,6 +103,7 @@ Make sure the following conditions are met before opening a new application.
     - **TDSR**: share of gross income going to all debt repayments.
     - **LTV**: loan amount as a proportion of collateral value (secured loans only).
     - **Monthly payment**: estimated repayment amount.
+    - **Mandatory shares**: the member equity required to hold the loan, shown as its own tile. The greater of JMD $2,000 or 15% of the loan amount.
     - **Residual income**: take-home income remaining after all obligations.
     - **Total monthly payment**: the loan repayment plus compulsory savings plus the creditor life premium.
 
@@ -104,7 +128,7 @@ Make sure the following conditions are met before opening a new application.
 
 ## Saving a draft
 
-You do not need to complete all sections in a single session. Each section has its own save action, with labels like **Save loan parameters**, **Save statement of affairs**, **Save net worth**, **Save cash details**, and **Save vehicle details**. Save the section you are working on to preserve its contents. The application stays in DRAFT status, and you can return to it from the Loans list at any time. Saving is explicit: your progress is preserved when you save a section, so save before navigating away.
+You do not need to complete all sections in a single session. Each section has its own save action, with labels like **Save loan parameters**, **Save statement of affairs**, **Save net worth**, **Save cash details**, **Save vehicle details**, and **Save insurance**. Save the section you are working on to preserve its contents. The application stays in DRAFT status, and you can return to it from the Loans list at any time. Saving is explicit: your progress is preserved when you save a section, so save before navigating away.
 
 ---
 
@@ -129,7 +153,7 @@ The platform calculates these figures and shows them as you capture the applicat
 | **Residual income** | Gross monthly income minus all monthly obligations (existing debts plus new loan payment plus living expenses). |
 | **Mandatory shares** | The required member-equity share purchase: the greater of JMD $2,000 or 15% of the loan amount. |
 | **Compulsory savings** | A savings contribution added to the monthly payment: the greater of JMD $2,000 or 5% of the monthly loan amortization payment. |
-| **Creditor life premium** | An insurance premium drawn from a per-thousand-per-year table keyed by the applicant's age. |
+| **Creditor life premium** | An insurance premium. Drawn from a per-thousand-per-year table keyed by the applicant's age by default, or from the sum insured, basis, and manual override you set in the Insurance section. |
 | **Total monthly payment** | The loan repayment plus compulsory savings plus the creditor life premium. |
 
 When you submit, the platform persists the risk band, the integer score, the policy flags, the engine version, and a snapshot of the inputs on the risk assessment record. The other figures above are estimates shown during capture, not separate stored fields on that record. The Adjudicator reviews them when making a decision.

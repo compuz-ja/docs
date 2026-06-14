@@ -38,7 +38,7 @@ The platform organises documents into nine categories. Select the correct catego
   <Accordion title="ID_PRIMARY, government-issued identity">
     Primary identity documents issued by a government authority. Examples include the TRN card, national ID, passport, and driver's licence.
 
-    Upload the TRN card or driver's licence before running KYC verification. These two subtypes appear directly on the member's KYC page as supporting evidence; other ID_PRIMARY documents, such as a passport or national ID, do not surface there.
+    Upload the TRN card or driver's licence before running KYC verification. These two subtypes appear on their own panels on the member's KYC page. A passport, national ID, voter's ID, or any other identity document surfaces in the **Other identification** card on the same page, so every piece of identity evidence is in front of the reviewer.
   </Accordion>
   <Accordion title="ID_SECONDARY, secondary identity">
     Supporting identity documents used alongside a primary ID. Examples include a voter's ID, work ID, school ID, or an expired passport.
@@ -84,6 +84,8 @@ You need the **members.documents.upload** capability to add files to a member's 
   </Step>
   <Step title="Choose the files">
     Drag files onto the card or use **Choose files to upload** to pick them. You can add several at once, up to 25 files in a batch. Each file must be one of the accepted formats and no larger than 10 MB.
+
+    A multi-page document, like both sides of a licence or every page of a passport, uploads as a set: add all the pages to the one batch and they share the single batch label. The KYC identity panels handle multi-page differently, adding an automatic "(page 1)", "(page 2)" suffix to each file when you upload, but on this page every file in the batch keeps the same shared label.
   </Step>
   <Step title="Click Upload">
     Click **Upload** (the button reads **Upload N files** for a batch). The platform scans each file for viruses, verifies its content type, then stores it securely. Documents appear in the member's library as each one finishes.

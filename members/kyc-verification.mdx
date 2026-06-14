@@ -48,9 +48,17 @@ You need the **members.kyc.submit** capability to submit verification requests. 
     The KYC page shows two identity panels side by side: one for the member's **TRN** and one for their **Driver's licence**. Each panel shows whether a number is on file and lists any identity documents already uploaded for that identifier.
 
     Confirm that the relevant number is on file, shown as encrypted. If a number is missing, use the inline **Add number** control on the panel to set it without leaving the page. The TRN must be nine digits in the format 000-000-000, and a driver's licence number must be 4 to 12 letters or digits.
+
+    Below the two panels, the **Other identification** card holds every other identity document the member presents: passport, national ID, voter's ID, and the like. Upload them there. A passport number is not added inline on this page the way TRN and driver's licence are; set it on the member's **Edit** page first.
+
+    <Tip>
+      Each **Upload** control accepts several files at once, so you can attach both sides of a licence or every page of a passport in one go.
+    </Tip>
   </Step>
   <Step title="Submit for verification">
     In the **Verification type** dropdown, choose **TRN** or **Driver's licence**, then click **Submit for verification**. An identifier with no number on file is disabled in the dropdown. The platform sends the details to the identity verification service and sets the member's KYC status to **IN_PROGRESS**.
+
+    The automated check covers TRN and driver's licence only. There is no automated passport registry, so a passport is confirmed by manual attestation instead.
   </Step>
   <Step title="Wait for the result">
     Results come back within seconds. The page reflects the new status once the check completes:
@@ -69,9 +77,9 @@ Anyone with the **members.kyc.submit** capability, which the Credit Officer and 
 
 To submit a manual attestation you must provide all three of the following:
 
-- At least one identifier type you checked (TRN or driver's licence). The number must already be on file.
+- At least one identifier type you checked: **TRN**, **Driver's licence**, or **Passport**. The number must already be on file. For a passport, set the passport number on the member's **Edit** page first, since it cannot be added inline on the KYC page.
 - At least one supporting document linked from the member's file. Each linked document must belong to the member and be in **UPLOADED** or **SCANNED_CLEAN** status. Only those two statuses qualify, so a document that is infected, expired, or archived cannot be attested against.
-- An attestation note between 10 and 500 characters describing what you confirmed, for example "Customer in branch, IDs match photo, DOB matches."
+- An attestation note of at least 10 characters describing what you confirmed, for example "Customer in branch, IDs match photo, DOB matches." The field holds up to 500.
 
 On submission the member's KYC status moves to **VERIFIED** and the platform emits the `member.kyc.manually_verified` audit event, recording the officer, the attested documents, and a preview of the attestation note (its first 200 characters).
 

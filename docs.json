@@ -28,6 +28,11 @@
           "anchor": "Home",
           "icon": "house",
           "href": "/"
+        },
+        {
+          "anchor": "Changelog",
+          "icon": "clock",
+          "href": "/changelog"
         }
       ]
     },
@@ -127,6 +132,7 @@
               "admin/loan-products",
               "admin/loan-types",
               "admin/rate-tables",
+              "admin/fee-schedule",
               "admin/analytics-dashboards",
               "admin/identity-verification-health"
             ]
@@ -140,7 +146,12 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [],
+    "links": [
+      {
+        "label": "Changelog",
+        "href": "/changelog"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Sign In",

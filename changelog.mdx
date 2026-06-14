@@ -1,0 +1,97 @@
+---
+title: "Changelog"
+sidebarTitle: "Changelog"
+description: "What changed in the Loan Origination System, by date. The newest release sits at the top."
+icon: "clock"
+---
+
+This is the running history of what changed in the Loan Origination System, organised by date with the newest release at the top. Each entry is what your credit union would notice in day-to-day work, not the internal plumbing. Open an entry to see the detail.
+
+<AccordionGroup>
+  <Accordion title="13 June 2026 · Service fees, insurance, and guarantor documents">
+    The biggest release so far. Fees became real and editable, creditor-life cover is now configurable per loan, guarantors get their own document files, and the capture flow gained the detail a Credit Officer works with day to day.
+
+    **Fees and GCT**
+
+    - The processing fee is now charged at the rate your credit union sets and carries 15% GCT, the same standard rating as the legal and valuation fees. Insurance premiums stay GCT-exempt.
+    - A new **Fee schedule** page under Administration lets an Administrator or Credit Manager change any standing fee in place: its rate, whether GCT applies, how it is treated, and whether it is active. See [Edit the fee schedule](/admin/fee-schedule).
+    - The application page now shows a read-only **Fees that will apply** card so the officer and member can see the total fees, GCT, and the net to the member before anything is submitted.
+
+    **Creditor-life insurance**
+
+    - Creditor-life cover is now configurable on each loan in its own Insurance section: whether cover applies, the sum insured, whether the premium is level or reduces as the loan is repaid, and an optional manual annual premium.
+    - The estimated premium feeds the total monthly payment and the affordability (TDSR) check, so the figure the member sees reflects the cover they are actually taking.
+
+    **Guarantors**
+
+    - Each guarantor now has their own Documents block for identification, proof of income, and an employment letter. The files follow the loan, so the Adjudicator, Securities, and Disbursement reviewers all see them downstream.
+    - Guarantor documents inherit the exact access rules of member documents, so a reviewer who can open a member's file can open the guarantor's file on the same loan, and no wider.
+
+    **Members and KYC**
+
+    - A passport can now back a manual KYC attestation. The automated registry still covers TRN and driver's licence; a passport is confirmed in person and recorded against the member.
+    - The KYC page gained an **Other identification** card for passports, national IDs, voter's IDs, and the like, so every piece of identity evidence sits on one page.
+    - Identity uploads now take several files at once, and a multi-page document like a passport keeps a label per page.
+
+    **Cash-secured loans**
+
+    - A member can now pledge more than one account against a single cash-secured loan, for example shares plus a fixed deposit, including the new Fixed / Time Deposit account kind.
+    - The 95% limit is now enforced against the combined pledged cash. If the requested amount runs over, the application warns the officer and blocks the submit rather than just advising.
+
+    **Capture flow**
+
+    - The Statement of Affairs now captures monthly expenses by category, with quick-add chips for the common ones and a live total income, total expenses, net monthly, and TDSR readout.
+    - The mandatory shares figure now shows as its own tile during capture, and the rate shown reflects the applicant's risk band rather than a flat number.
+    - Mortgage amount and term limits now come from the loan product, which can run a term up to 480 months, and the platform enforces the product's bounds when the officer enters the loan parameters.
+
+    **Roles**
+
+    - Two new sets of permissions landed: `fees.manage` for editing the fee schedule, held by the Administrator and Credit Manager, and the `loans.guarantors.documents.*` set for guarantor files, which mirrors member-document access. See [Roles and permissions](/access/roles-and-permissions).
+  </Accordion>
+
+  <Accordion title="10 June 2026 · Loan agreement PDFs in production">
+    A fix so generated loan agreement PDFs render reliably once a loan is approved, with no missing-dependency failures in the live environment.
+
+    - Loan agreement documents now generate consistently in production.
+  </Accordion>
+
+  <Accordion title="6 June 2026 · Clearer workspace language">
+    A wording pass across the product so the words on screen match how a credit union actually talks about itself.
+
+    - The product now says "workspace" and "your credit union" in place of internal wording, so the language reads the way your team does.
+  </Accordion>
+
+  <Accordion title="5 June 2026 · Analytics dashboard and a refreshed shell">
+    A new reporting view for managers and a cleaner overall look, with the day-to-day navigation tidied up.
+
+    - A new analytics dashboard gives Credit Managers, Branch Managers, and Administrators a read-only view of lending activity and reports.
+    - The application shell was redesigned for a calmer, more consistent look across every page.
+    - General dashboard and navigation polish throughout.
+  </Accordion>
+
+  <Accordion title="3 June 2026 · Disbursement controls and the bank directory">
+    The disbursement side gained real operational controls: a settlement lifecycle, payee screening, a saved-payee directory, and maker-checker separation so the person who releases funds is not the only person involved.
+
+    - A settlement lifecycle tracks each released disbursement through sent, cleared, returned, and failed.
+    - Payees can be screened for AML and sanctions before funds move.
+    - A saved-payee directory holds the destinations a Disbursement officer uses daily, backed by a bank directory so routing details are picked, not retyped.
+    - Maker-checker separation keeps the officer who schedules a disbursement distinct from the one who approves it. See [Disbursement controls](/disbursement/controls) and [Settlement](/disbursement/settlement).
+  </Accordion>
+
+  <Accordion title="2 June 2026 · Fees engine, loan ownership, and the workflow map">
+    The groundwork for everything fees-related, plus loan ownership so the right people are notified, and an in-app map of where a loan sits in its journey.
+
+    - The fees, GCT, and net-to-member engine landed: every fee line reduces the gross loan down to the net the member receives, with GCT applied to the taxable lines. See [Fees, deductions, and GCT](/disbursement/fees-and-gct).
+    - Loans now have an owner, so notifications target the officer actually working the file rather than the whole team.
+    - An in-app workflow map shows where a loan sits across its stages, from draft through filing.
+  </Accordion>
+
+  <Accordion title="1 June 2026 · Loan types, the rate editor, and the audit viewer">
+    The release that opened up configuration: named loan types, an editable rate table, a searchable audit trail, and in-app support.
+
+    - Your credit union can now define its own named loan types, each mapped to one of the four archetypes. See [Loan types](/loans/loan-types).
+    - Rate tables became editable in the app, with every change written to the audit trail. See [Rate tables](/admin/rate-tables).
+    - A new audit viewer makes the trail searchable, so a manager or compliance officer can find exactly what happened and who did it. See [Audit trail](/compliance/audit-trail).
+    - In-app support and a clearer permissions model rounded out the release.
+  </Accordion>
+</AccordionGroup>

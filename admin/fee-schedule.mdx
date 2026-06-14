@@ -1,0 +1,57 @@
+---
+title: "Edit the fee schedule"
+sidebarTitle: "Fee schedule"
+description: "Change the standing fees applied to every loan: the rate, whether GCT applies, how the fee is treated, and whether it is active."
+icon: "receipt"
+---
+
+The fee schedule holds the standing fees applied to every loan of each type in your credit union. The processing fee, the legal fee, valuation, stamp duty, and the rest.
+
+These are the defaults. They pre-fill the disbursement screen when a loan is funded. A Disbursement officer can still waive or adjust a single loan's fees at that point, but the catalogue you set here is where the standard numbers live.
+
+**Required role:** Administrator or Credit Manager (`fees.manage` capability). A Branch Manager cannot edit fees.
+
+To access the fee schedule, navigate to **Administration → Fee schedule**. The route is `/admin/fees`.
+
+## What you can change
+
+Each fee is one row. You edit it in place and save that row on its own.
+
+| Field | What it does |
+| --- | --- |
+| **Label** | The name officers see, for example "Processing fee". |
+| **Rate** | The percentage for a percent-based fee, for example `2` for 2%. |
+| **Amount** | The flat amount in J$ for a fixed fee, for example a J$5,000 registration fee. |
+| **Charge 15% GCT on this fee** | The GCT flag. Tick it and the platform adds 15% GCT to the fee. Leave it off for a GCT-exempt fee like an insurance premium. |
+| **Treatment** | How the fee affects the cash the member receives. One of **Deducted from proceeds**, **Paid separately**, or **Added to loan**. |
+| **Active** | Untick to retire a fee without deleting it. An inactive fee stops pre-filling the disbursement screen. |
+
+Each row also shows the fee's code (like `PROCESSING`) and which loan types it applies to, so you can tell the unsecured processing fee from the mortgage one at a glance.
+
+<Note>
+  The stamp duty fee has no editable rate. Its amount is worked out by the
+  Jamaica stamp and mortgage duty formula, so the row shows "Computed by the
+  Jamaica stamp-duty formula" instead of a rate field. You can still change its
+  label, GCT flag, treatment, and active state.
+</Note>
+
+## Changing the service fee
+
+The processing fee is the one you are most likely to change. It ships at 2% on unsecured and auto loans and 1% on cash-secured and mortgage loans, and it is GCT-taxable. To change it, open **Fee schedule**, find the processing row for the loan type, type the new percentage into **Rate**, and click **Save**.
+
+The new rate takes effect on the next loan funded against that schedule. Loans already disbursed keep the fee that was captured on them; the disbursement record is an immutable snapshot.
+
+## What happens at funding
+
+The fee schedule is the source. The disbursement screen is where a single loan's fees are finalised. When a loan is ready to disburse, its applicable schedule fees pre-fill, and the Disbursement officer can waive or adjust them for that one loan. See [Fees, deductions, and GCT](/disbursement/fees-and-gct) for how a fee reduces the gross loan down to the net the member receives, and how GCT is applied.
+
+## Every save is audited
+
+Each save records a `tenant.fee_schedule.updated` audit event with the before and after values, so every change to a standing fee is traceable to who made it and when.
+
+<Warning>
+  The fee schedule sets the standard for every future loan of that type. A
+  Disbursement officer can waive a fee on one loan, but changing the catalogue
+  here changes it for all loans funded afterward. Confirm the rate before you
+  save.
+</Warning>

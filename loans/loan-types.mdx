@@ -52,12 +52,15 @@ A Cash-Secured loan (the app displays this archetype as **Cash secured**, no hyp
 - Employment
 - Statement of Affairs
 - Loan Purpose
-- **Cash Collateral** *(up to five qualifying accounts of type Shares, Time Deposit, or Savings Hypothecation, each with its account number and amount held)*
+- **Cash Collateral** *(up to five pledged accounts, each one Cash / Shares, Fixed / Time Deposit, or Savings Hypothecation, with its account number and amount held)*
 - Guarantors *(optional)*
 
+You can pledge more than one account against a single loan, for example shares plus a fixed deposit. Add each account on its own row, pick its type, and enter the amount held. The card sums every account and shows the most you can borrow against the combined total.
+
 **Collateral rules:**
-- The maximum loan is **95%** of the total pledged cash security. A loan requested above that is flagged as exceeding the security limit.
-- By policy, the pledged funds are held (not accessible to the member) for the life of the loan. The application captures the pledged account and its type; the hold itself is an operational policy rather than a lock enforced by the credit module.
+- The maximum loan is **95%** of the **combined** pledged cash across every account the member pledges. The 95% rule applies to the total, not to any single account.
+- The limit is enforced, not just advised. If the requested amount runs over 95% of the combined cash, the application shows a red warning before submit, and the platform blocks the submit with "Cash-secured loans can't exceed 95% of the pledged cash." Lower the amount or pledge more cash.
+- By policy, the pledged funds are held (not accessible to the member) for the life of the loan. Each pledged account is captured with its own account number, amount, an optional source of funds, and an optional hypothecation note.
 - LTV is calculated as loan amount divided by collateral value, and feeds the LTV risk factor.
 
 **Risk assessment factors:**
@@ -123,6 +126,18 @@ The property type is one of Residential House, Residential Townhouse, Residentia
 - LTV is calculated against the property valuation: loan amount divided by property valuation.
 - The Securities team reviews valuation reports, title, and mortgage registration paperwork before disbursement. As with Auto loans, the requested-document list is set per request rather than fixed by the system.
 
+<Note>
+  **Amount and term limits come from the product, not the loan type.** A mortgage
+  can run up to 480 months. The mortgage product shipped with a fresh workspace
+  caps at 360 months (30 years), but a product you create yourself takes whatever
+  maximum term you enter, and leaving the maximum blank means no product-level cap
+  beyond the platform's 480-month ceiling. There is no built-in J$500,000 amount
+  cap or 30-month term cap. Both bounds are set per product on the [Loan products](/admin/loan-products)
+  page by an Administrator or Credit Manager, and the platform enforces the
+  product's minimum and maximum amount and term when the officer enters the loan
+  parameters.
+</Note>
+
 **Risk assessment factors:**
 - Employment type and employment status
 - Length of employment
@@ -141,9 +156,9 @@ Three figures the rate engine computes feed into what a member pays and qualifie
 
 - **Mandatory shares** is the required member-equity share purchase, the greater of JMD $2,000 or 15% of the loan amount.
 - **Compulsory savings** is added to the monthly payment, the greater of JMD $2,000 or 5% of the monthly loan amortization payment.
-- **Creditor life premium** is an insurance premium drawn from a per-thousand-per-year actuarial table keyed by the applicant's age.
+- **Creditor life premium** is an insurance premium. By default it is drawn from a per-thousand-per-year actuarial table keyed by the applicant's age and charged on the loan principal. The Credit Officer can configure it per loan in the application's Insurance section: whether cover applies, the sum insured, whether the premium is level or reduces as the loan is repaid, and an optional manual annual premium. See [Creating an application](/loans/creating-an-application).
 
-The total monthly payment combines the loan repayment, compulsory savings, and creditor life premium.
+The total monthly payment combines the loan repayment, compulsory savings, and creditor life premium, and feeds the affordability (TDSR) check.
 
 ---
 

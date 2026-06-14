@@ -15,7 +15,7 @@ The Loan Origination System uses role-based access control. Every user holds exa
 
 <CardGroup cols={2}>
   <Card title="Credit Officer" icon="file-text">
-    Captures new loan applications and manages the member relationship at intake. Can search, create, and edit member records, submit KYC information, add or remove guarantors, and submit completed applications for adjudication. Sees only their own loans.
+    Captures new loan applications and manages the member relationship at intake. Can search, create, and edit member records, submit KYC information, add or remove guarantors and their supporting documents, and submit completed applications for adjudication. Sees only their own loans.
   </Card>
   <Card title="Adjudicator" icon="gavel">
     Reviews submitted loan applications and makes credit decisions. Can approve, decline, or request additional information. Has read access to all loans across all branches, can claim unassigned loans from the team queue, and can transition loans through workflow stages.
@@ -27,13 +27,13 @@ The Loan Origination System uses role-based access control. Every user holds exa
     Executes approved loans by scheduling and releasing funds. Manages the payee directory used to route payments. Can claim unassigned disbursement work from the team queue, and is responsible for confirming that disbursement instructions are complete and accurate before funds leave the credit union.
   </Card>
   <Card title="Credit Manager" icon="badge-check">
-    Oversees lending operations across all branches. Can view all loans regardless of branch, assign or reassign loans to officers, manage the loan product catalogue, publish updated rate tables, apply manual rate overrides on individual loans, and access analytics and reports. The manual rate override (`loans.override`) is a Credit Manager lever that Adjudicators deliberately do not hold, keeping pricing separate from the approve or decline decision.
+    Oversees lending operations across all branches. Can view all loans regardless of branch, assign or reassign loans to officers, manage the loan product catalogue, publish updated rate tables, edit the standing fee schedule, apply manual rate overrides on individual loans, and access analytics and reports. The manual rate override (`loans.override`) is a Credit Manager lever that Adjudicators deliberately do not hold, keeping pricing separate from the approve or decline decision.
   </Card>
   <Card title="Branch Manager" icon="building">
     Manages lending activity within their branch. Can view all loans in their branch, assign loans to officers within that branch, and view branch-level reports.
   </Card>
   <Card title="Administrator" icon="settings">
-    Administers the workspace. Manages users, invitations, roles, branding, loan products, rate tables, and all workspace configuration, and can run the full loan capture flow. The only role that invites new staff, suspends members, and changes role assignments. It does not adjudicate loans, review securities, or disburse funds. Those stages belong to the Adjudicator, Securities, and Disbursement roles.
+    Administers the workspace. Manages users, invitations, roles, branding, loan products, rate tables, the fee schedule, and all workspace configuration, and can run the full loan capture flow. The only role that invites new staff, suspends members, and changes role assignments. It does not adjudicate loans, review securities, or disburse funds. Those stages belong to the Adjudicator, Securities, and Disbursement roles.
   </Card>
 </CardGroup>
 
@@ -53,17 +53,38 @@ The table below summarises what each role is permitted to do.
 | Assign or reassign loans to officers | | | | | ✓ | ✓ | ✓ |
 | Review and resolve securities | | | ✓ | | | | |
 | Disburse funds | | | | ✓ | | | |
+| Run AML or sanctions screening | | | | ✓ | | | |
+| Advance settlement status | | | | ✓ | | | |
+| Reverse a disbursement | | | | ✓ | | | |
+| Approve a held disbursement (maker-checker) | | | | | ✓ | | |
+| Configure disbursement controls | | | | | ✓ | | |
 | Manage payee directory | | | | ✓ | ✓ | | |
 | View and search member records | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Create and edit member records | ✓ | | | | | | ✓ |
 | Submit member KYC | ✓ | | | | | | ✓ |
+| View guarantor documents | ✓ | ✓ | ✓ | ✓ | | | ✓ |
+| Upload guarantor documents | ✓ | | ✓ | | | | ✓ |
+| Remove guarantor documents | ✓ | | | | | | ✓ |
 | Manage loan products and rate tables | | | | | ✓ | | ✓ |
+| Manage fee schedule | | | | | ✓ | | ✓ |
 | View reports and analytics | | | | | ✓ | ✓ | ✓ |
 | Invite staff and manage roles | | | | | | | ✓ |
 | Workspace configuration and branding | | | | | | | ✓ |
 
 <Note>
   The Administrator runs the loan capture flow and sees every loan through its all-loans read, but it holds none of the adjudication (`loans.adjudicate`), securities (`securities.review`), disbursement (`loans.disburse`), or payee-directory (`disbursements.payees.manage`) capabilities. Five roles see loans across all branches through `loans.read.all`: the Adjudicator, Securities, Disbursement, Credit Manager, and Administrator. That all-branches read is a superset of the branch-scoped view. Only the Branch Manager holds the branch-scoped `loans.read.branch`.
+</Note>
+
+<Note>
+  **Disbursement controls split the work across two roles on purpose.** The Disbursement officer is the maker: they screen payees for AML and sanctions (`disbursements.screen`), advance the settlement status (`disbursements.settlement.update`), and reverse a released disbursement (`disbursements.reverse`). The Credit Manager is the checker: they approve a held disbursement (`disbursements.approve`) and configure the control thresholds (`admin.disbursement.config`). Keeping approval out of the Disbursement officer's hands means the person who releases funds is never the only person who signs off, so maker is never checker. See [Disbursement controls](/disbursement/controls) and [Settlement](/disbursement/settlement).
+</Note>
+
+<Note>
+  **Guarantor documents follow the same access as member documents.** The three guarantor-document capabilities, `loans.guarantors.documents.view`, `loans.guarantors.documents.upload`, and `loans.guarantors.documents.delete`, are granted to exactly the same roles that hold the matching `members.documents.*` capability. So the Credit Officer, Adjudicator, Securities, Disbursement, and Administrator can view a guarantor's ID, income, and employment files; the Credit Officer, Securities, and Administrator can upload them; and the Credit Officer and Administrator can remove them. A reviewer who can open a member's file can open the guarantor's file on the same loan, and no wider.
+</Note>
+
+<Note>
+  **Editing the fee schedule is held by the Credit Manager and the Administrator** through the `fees.manage` capability. A Branch Manager does not hold it. This is the standing fee catalogue, the processing fee, legal, valuation, stamp duty, and the rest, that pre-fills every disbursement. A Disbursement officer still waives or adjusts a single loan's fees at funding, but the catalogue itself is a manager-level setting. See [Edit the fee schedule](/admin/fee-schedule).
 </Note>
 
 ## How roles are assigned

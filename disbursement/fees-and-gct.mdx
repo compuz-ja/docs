@@ -58,7 +58,7 @@ The `remitTo` field records who the fee, tax, or deduction is owed to. There are
 
 ## GCT
 
-Each fee line carries a `taxable` flag. GCT applies only to lines flagged taxable. Financial-service and insurance-service fees are GCT-exempt, so a processing fee is not taxable. Legal and valuation fees are taxable and carry GCT.
+Each fee line carries a `taxable` flag. GCT applies only to lines flagged taxable. The processing fee is an ancillary loan service, so it is standard-rated and carries GCT, the same as the legal and valuation fees. Insurance-service fees stay GCT-exempt, so a comprehensive-insurance premium carries none.
 
 The workspace default GCT rate is `gctRateBps`, which defaults to `1500`, that is 15%, the Jamaica standard. It is stored on the workspace configuration.
 
@@ -70,23 +70,23 @@ Fees live in two places: an editable per-workspace catalogue, and an immutable s
 
 | Table | What it is |
 | --- | --- |
-| `TenantFeeScheduleItem` | The editable per-workspace fee/tax catalogue. Officers read these as defaults per loan type, and your Administrator edits them. |
+| `TenantFeeScheduleItem` | The editable per-workspace fee/tax catalogue. Officers read these as defaults per loan type. An Administrator or Credit Manager edits them on the [Fee schedule](/admin/fee-schedule) page. |
 | `DisbursementFee` | The immutable applied line on a `DisbursementInstruction`, captured at schedule time. Never deleted. |
 
 The catalogue is the configurable source. The snapshot is the legal record of exactly what was charged on a specific disbursement.
 
 ### Seeded Jamaica defaults
 
-A workspace created through the demo seed gets ten Jamaica fee items spread across the loan types. The defaults are starting points; your Administrator edits them.
+A workspace created through the demo seed gets ten Jamaica fee items spread across the loan types. The defaults are starting points. An Administrator or Credit Manager edits them on the [Fee schedule](/admin/fee-schedule) page.
 
 | Code | Label | Loan type | Calc | Treatment | Remit to | Taxable |
 | --- | --- | --- | --- | --- | --- | --- |
-| `PROCESSING` | Processing fee | Unsecured | 2.00% | `DEDUCT` | `CU` | No |
-| `PROCESSING` | Processing fee | Cash-secured | 1.00% | `DEDUCT` | `CU` | No |
-| `PROCESSING` | Processing fee | Auto | 2.00% | `DEDUCT` | `CU` | No |
+| `PROCESSING` | Processing fee | Unsecured | 2.00% | `DEDUCT` | `CU` | Yes |
+| `PROCESSING` | Processing fee | Cash-secured | 1.00% | `DEDUCT` | `CU` | Yes |
+| `PROCESSING` | Processing fee | Auto | 2.00% | `DEDUCT` | `CU` | Yes |
 | `TITLE_LIEN` | Title / lien registration | Auto | J$5,000 | `DEDUCT` | `GOVERNMENT` | No |
 | `INSURANCE_COMP` | Comprehensive insurance (1st premium) | Auto | per quote | `PAID_SEPARATELY` | `INSURER` | No |
-| `PROCESSING` | Processing fee | Mortgage | 1.00% | `DEDUCT` | `CU` | No |
+| `PROCESSING` | Processing fee | Mortgage | 1.00% | `DEDUCT` | `CU` | Yes |
 | `LEGAL` | Legal fee | Mortgage | 1.50% | `PAID_SEPARATELY` | `ATTORNEY` | Yes |
 | `STAMP_DUTY` | Stamp / mortgage duty | Mortgage | formula | `PAID_SEPARATELY` | `GOVERNMENT` | No |
 | `VALUATION` | Valuation / appraisal | Mortgage | J$35,000 | `PAID_SEPARATELY` | `OTHER` | Yes |
@@ -107,4 +107,4 @@ The audit events are exact:
 - `disbursement.fees.applied` records the full fee, GCT, and net breakdown for the instruction.
 - `disbursement.fee.waived` records each waived line and its reason.
 
-Both fire inside `scheduleDisbursement`. The `tenant.fee_schedule.updated` event is registered for catalogue edits, but no in-app catalogue editor ships yet, so catalogue changes are made out of band and that event is not emitted today.
+Both fire inside `scheduleDisbursement`. Catalogue edits are audited too: the `tenant.fee_schedule.updated` event fires on every save from the [Fee schedule](/admin/fee-schedule) page.
