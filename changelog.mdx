@@ -8,6 +8,26 @@ icon: "clock"
 This is the running history of what changed in the Loan Origination System, organised by date with the newest release at the top. Each entry is what your credit union would notice in day-to-day work, not the internal plumbing. Open an entry to see the detail.
 
 <AccordionGroup>
+  <Accordion title="18 June 2026 · My work dashboard and stage timing by officer">
+    Two views built for the people doing the work: a personal home that shows each officer exactly what is theirs, and a manager view of how long loans sit with each person at each stage.
+
+    **My work**
+
+    - A new **My work** dashboard gives every officer one home for their own work: what is on their plate now, what they have completed, and what they have touched in the selected period. Open it from **Dashboards → My work**.
+    - The completed tiles shape themselves to your role. A Credit Officer sees applications submitted, an Adjudicator sees approvals and declines, Securities sees resolutions, and Disbursement sees loans disbursed, each with a count and the net value where it applies.
+    - Four signals sit across the top for every role: how many loans are on your plate and how long the oldest has waited, the requested value of that pipeline, your average claim-to-completion time, and how many loans you touched in the period.
+    - A week, month, or quarter selector sets the period, a recent-activity list shows your latest actions, and an **Export CSV** button downloads your plate and completions.
+    - The dashboard is private to you. Every figure is pinned to your own sign-in, so one officer never sees another's numbers. It needs no special permission, so everyone with a sign-in has it, whatever their role.
+
+    **Stage timing by officer**
+
+    - The Analytics page gained a new panel, **Stage timing by officer**, that shows how long loans sit with each person at each stage and which specific officer held each one. See [Analytics dashboards](/admin/analytics-dashboards).
+    - A **Time in each stage, by officer** table groups by officer, with the loans handled, the average, and the p95 for each stage they worked. Search by name, filter by stage or role, sort by most time, most loans, or slowest stage, and click a stage to see the loans behind it. Rows with fewer than three loans are dimmed as a small sample.
+    - A **Per-loan timelines** view draws each loan as a proportional bar showing who held each stage and for how long, with a colour legend. Search by loan ID or member, filter by stage, and click any segment to open that loan's full stage breakdown with the dates and durations.
+    - Durations read in whole units, so a stage shows as 13d or 3h rather than 13.3d, while quick steps stay in minutes and seconds.
+    - It sits on the Analytics page, so it is available to Credit Managers, Branch Managers, and Administrators (any role with `reports.view`). Branch Managers see only their own branch. The panel has its own **Export CSV**.
+  </Accordion>
+
   <Accordion title="13 June 2026 · Service fees, insurance, and guarantor documents">
     The biggest release so far. Fees became real and editable, creditor-life cover is now configurable per loan, guarantors get their own document files, and the capture flow gained the detail a Credit Officer works with day to day.
 

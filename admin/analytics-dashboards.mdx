@@ -5,7 +5,7 @@ description: "Monitor production volume, cycle time, credit quality, operations,
 icon: "trending-up"
 ---
 
-The analytics page gives any role with `reports.view` (Credit Managers, Branch Managers, and Administrators) a live view of loan production, cycle time, credit quality, operations, and member health.
+The analytics page gives any role with `reports.view` (Credit Managers, Branch Managers, and Administrators) a live view of loan production, cycle time, stage timing by officer, credit quality, operations, and member health.
 
 Every section reads a single shared **date range** at the top of the page, and the numbers reflect the current state of your workspace each time the page loads. All data is scoped to your credit union's workspace, so you never see another credit union's data. The default range is the last 12 months. A badge on the page notes that every monetary figure is in Jamaican dollars (JMD).
 
@@ -28,9 +28,9 @@ The analytics page respects your role's branch access:
 
 This scoping is automatic. You do not set a filter, and a Branch Manager cannot reach another branch's data regardless of the date range selected.
 
-## The five panels
+## The six panels
 
-The Analytics page stacks five panels in this order: Production, Cycle time, Credit quality & pricing, Operations & compliance, and Members. Each loads its own data against the shared date range and each has its own drill-down and CSV export.
+The Analytics page stacks six panels in this order: Production, Cycle time, Stage timing by officer, Credit quality & pricing, Operations & compliance, and Members. Each loads its own data against the shared date range and each has its own drill-down and CSV export.
 
 <CardGroup cols={2}>
   <Card title="Production" icon="trending-up">
@@ -42,6 +42,11 @@ The Analytics page stacks five panels in this order: Production, Cycle time, Cre
   <Card title="Cycle time" icon="timer">
     Time to decision, time to cash, end to end, and re-work rate, plus a
     per-stage dwell chart showing the average days loans spend in each stage.
+  </Card>
+  <Card title="Stage timing by officer" icon="clock">
+    How long loans sit with each person at each stage, and which officer held
+    each one. A by-officer table of averages and p95s, plus a per-loan timeline
+    of who held each stage and for how long.
   </Card>
   <Card title="Credit quality & pricing" icon="scale">
     The risk profile and pricing of your loans: weighted-average rate, override
@@ -90,6 +95,20 @@ Shows how long loans spend in each stage of origination. Use it to find where ap
 | **Re-work rate** | Percentage of applications that passed through INFO_REQUESTED or SECURITIES_ISSUE at least once |
 
 A stage-dwell bar chart shows the average days applications spent in each stage. Only closed segments are counted (stages the loan has already left).
+
+### Stage timing by officer panel
+
+Cycle time tells you how long a stage takes on average. This panel tells you who was holding the loan, and for how long. It answers a manager's question directly: this application sat two days with the Credit Officer, then three hours with the Adjudicator, and here is who they were.
+
+A loan is credited to a stage from the moment it enters until someone advances it, and the officer who advanced it is the one who held it. The current open stage is held by whoever it is assigned to now. The cohort is loans created in the selected date range.
+
+The panel has two views.
+
+**Time in each stage, by officer.** A table grouped by officer, so each person appears once with their stages nested underneath. For every stage they worked you see the loans handled, the average time, and the p95. Search by name, filter to one stage or one role, and sort by most total time, most loans, or slowest single stage. Click any stage row to open the loans that officer handled in it. Rows with fewer than three loans are dimmed, so a single slow outlier does not read as a pattern.
+
+**Per-loan timelines.** Each loan drawn as a single bar, split into segments sized by how long it sat in each stage and coloured by stage, with the officer's name and the duration on each segment. A legend names the colours. Search by loan ID or member, filter to loans that passed through a stage, and sort slowest, fastest, or newest first. Click any segment to open that one loan's full breakdown: every stage in order, who held it, the dates it entered and left, and how long it took.
+
+Durations roll to whole units a manager actually reads, so a stage shows as **13d** or **3h** rather than 13.3d, while quick steps stay in minutes and seconds. Like every panel on this page, it needs `reports.view`, so Credit Managers, Branch Managers, and Administrators see it, and a Branch Manager sees only their own branch. It has its own **Export CSV**, which writes one row per stage per loan.
 
 ### Credit quality & pricing panel
 
@@ -151,13 +170,20 @@ Analytics is one of several dashboards. The **Dashboards** hub at `/{tenantSlug}
 
 | Dashboard | What it shows | Gated by |
 |---|---|---|
+| **My work** | Your own plate, completions, recent activity, and cycle time for the selected period | Any seat |
 | **Overview** | Action queues, recent activity, and a trends snapshot, branch-scoped for Branch Managers | Any seat |
-| **Loan production** | The five analytics panels described above | `reports.view` |
+| **Loan production** | The six analytics panels described above | `reports.view` |
 | **Credit Manager** | Full pipeline by state, range throughput, and the unassigned backlog | `reports.view` |
 | **Adjudication** | Pending decisions, weekly approvals and declines, time to decision | `loans.adjudicate` or `reports.view` |
 | **Securities** | Loans awaiting collateral verification, outstanding requests, resolution velocity | `securities.review` or `reports.view` |
 | **Disbursement** | Approved loans ready to fund, weekly totals, approval-to-fund turnaround | `loans.disburse` or `reports.view` |
 | **Audit log** | Searchable, chain-verified view of every audited event | `audit.export` |
+
+### The My work dashboard
+
+At `/{tenantSlug}/my-work`, **My work** is each officer's personal home. It answers one question: what is mine right now, and what have I done lately. Every figure is pinned to your own sign-in, so one officer never sees another's numbers, and it needs no special permission beyond a seat.
+
+A week, month, or quarter selector (default week) sets the period. Four signals sit across the top for every role: how many loans are waiting on you right now and how long the oldest has waited (the tile reads **Needs your action** for a Credit Officer and **On your plate** for the queue roles), the **pipeline value** of what you are holding, your **average cycle time** from claim to completion, and how many loans you **touched** in the period. Below them, a **Completed** block shapes itself to your role. A Credit Officer sees applications submitted, an Adjudicator sees approvals and declines, Securities sees resolutions, and Disbursement sees loans disbursed, each with a count and the net value where it applies, alongside a **Returned to you** counter for anything that bounced back. A recent-activity list shows your latest actions, the plate, touched, and completed tiles link into the matching loans, and an **Export CSV** button downloads your plate and completions.
 
 ### The Credit Manager dashboard
 
