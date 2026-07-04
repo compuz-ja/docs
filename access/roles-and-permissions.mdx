@@ -8,7 +8,7 @@ icon: "users"
 The Loan Origination System uses role-based access control. Every user holds exactly one role within a workspace, and that role determines which pages, queues, and actions are available to you. Roles are configured per credit union, so the same person could hold a **Credit Officer** role in one workspace and an **Adjudicator** role in another.
 
 <Note>
-  Roles are assigned by your **Administrator**. If you need access to a feature that is not available to you, contact your administrator to discuss a role change.
+  Roles are assigned by your **Administrator** or your **HR** team. If you need access to a feature that is not available to you, contact them to discuss a role change.
 </Note>
 
 ## Built-in roles
@@ -33,7 +33,13 @@ The Loan Origination System uses role-based access control. Every user holds exa
     Manages lending activity within their branch. Can view all loans in their branch, assign loans to officers within that branch, and view branch-level reports.
   </Card>
   <Card title="Administrator" icon="settings">
-    Administers the workspace. Manages users, invitations, roles, branding, loan products, rate tables, the fee schedule, and all workspace configuration, and can run the full loan capture flow. The only role that invites new staff, suspends members, and changes role assignments. It does not adjudicate loans, review securities, or disburse funds. Those stages belong to the Adjudicator, Securities, and Disbursement roles.
+    Administers the workspace. Manages users, invitations, roles, branding, loan products, rate tables, the fee schedule, and all workspace configuration, and can run the full loan capture flow. Alongside the HR role, it invites new staff and changes role assignments; unlike HR, it also suspends members, manages lending configuration, and runs the loan capture flow. It does not adjudicate loans, review securities, or disburse funds. Those stages belong to the Adjudicator, Securities, and Disbursement roles.
+  </Card>
+  <Card title="HR" icon="user-cog">
+    Handles workspace staff administration. Invites new team members, assigns and changes their roles, and deactivates departing accounts, the same user management an Administrator does. HR is deliberately walled off from lending: it cannot open member records, view or decide loans, or move funds. Keeping the person who provisions accounts away from money and member data is a segregation-of-duties safeguard your regulator expects.
+  </Card>
+  <Card title="Staff" icon="search">
+    A front-desk lookup role with the lightest footprint. Staff can search the member directory to confirm a member's branch and status, and nothing more. They never see contact or demographic details, never see the sensitive identifiers such as TRN, licence, or bank account, and hold no loan, disbursement, or administration access.
   </Card>
 </CardGroup>
 
@@ -87,13 +93,36 @@ The table below summarises what each role is permitted to do.
   **Editing the fee schedule is held by the Credit Manager and the Administrator** through the `fees.manage` capability. A Branch Manager does not hold it. This is the standing fee catalogue, the processing fee, legal, valuation, stamp duty, and the rest, that pre-fills every disbursement. A Disbursement officer still waives or adjusts a single loan's fees at funding, but the catalogue itself is a manager-level setting. See [Edit the fee schedule](/admin/fee-schedule).
 </Note>
 
+## HR and Staff
+
+The lending roles above all work loans and member records. Two more roles sit outside that flow: one runs staff administration, the other is a light front-desk lookup. Both are walled off from lending and member data by design.
+
+The **HR** role does the same user administration an Administrator does, and nothing else. HR invites and manages staff accounts and assigns their roles, so a credit union can hand employee onboarding and offboarding to its people team without also handing over member records or the ability to move money. This separation is deliberate. Because HR grants roles, letting HR also approve disbursements or read member files would give one person both sides of a sensitive action, so those capabilities are kept out of HR entirely.
+
+The **Staff** role is the least-privilege front-desk lookup. Its only access is a masked member directory: search for a member and see their name, member number, branch, and active or suspended status. That is enough to confirm you are talking to the right member and route them to the right person. It never reveals contact details, dates of birth, employment, next of kin, or the encrypted identifiers, and it holds no create, edit, loan, disbursement, or administration power.
+
+| Action | HR | Staff |
+|---|:---:|:---:|
+| Invite staff and manage their roles | ✓ | |
+| Deactivate a departing staff account | ✓ | |
+| Look up members in the masked directory (name, number, branch, status) | | ✓ |
+| Open a full member record or reveal sensitive details | | |
+| View, decide, or work on loans | | |
+| Screen, approve, or release disbursements | | |
+| View reports, analytics, or the audit log | | |
+| Change workspace or lending configuration | | |
+
+<Note>
+  **HR provisions accounts but never touches money or member data.** This is segregation of duties. The role that can assign other people's roles is deliberately blocked from disbursement approval and from reading member records, so no single person can both grant themselves a path and use it. The Administrator remains the all-in-one workspace owner; HR is the narrower, staff-only administrator.
+</Note>
+
 ## How roles are assigned
 
-Roles are chosen at the point of invitation. When an **Administrator** sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
+Roles are chosen at the point of invitation. When an **Administrator** or an **HR** user sends an invitation, they select the appropriate role before the email is sent. The new team member joins with that role active from their very first sign-in.
 
-Each user holds exactly one role per workspace. If someone's responsibilities change, an administrator updates the role at any time from **Administration → Team & roles**. A **Credit Officer** promoted to **Credit Manager** is one example. Changing the role replaces the previous one rather than adding a second, and the new role takes effect on the user's next page load.
+Each user holds exactly one role per workspace. If someone's responsibilities change, an Administrator or HR updates the role at any time from **Administration → Team & roles**. A **Credit Officer** promoted to **Credit Manager** is one example. Changing the role replaces the previous one rather than adding a second, and the new role takes effect on the user's next page load.
 
-The **Administration → Team & roles** page also shows a per-role permissions panel, so an administrator can see exactly which capabilities each role in the workspace holds.
+The **Administration → Team & roles** page also shows a per-role permissions panel, so an administrator can see exactly which capabilities each role in the workspace holds, including the HR and Staff roles.
 
 ## Capability stacking
 
