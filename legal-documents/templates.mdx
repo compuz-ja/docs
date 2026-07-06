@@ -1,0 +1,99 @@
+---
+title: "Build and manage your form templates"
+sidebarTitle: "Document templates"
+description: "Upload your credit union's own forms once, map each field to the loan data that fills it, and activate them. From then on the platform prepares that form for every loan. Adding a new form is configuration, not a code change."
+icon: "layout-template"
+---
+
+A document template is your credit union's own version of a form: the consent, the guarantee, the security agreement, the disbursement sheet, or any other document you put in front of a member. You upload it once and map each blank on it to the loan data that fills it. From then on, the platform prepares that exact form for every loan, filled with the right figures.
+
+Adding a new form to the platform is configuration. No release, no code. This page is where you do it.
+
+<Note>
+  Managing templates needs the `documents.templates.manage` capability, held by the **Administrator** and the **Credit Manager** only. A Branch Manager and the money-moving roles do not hold it: the template catalogue is a configuration setting, kept alongside products, rates, and the fee schedule. Find it under **Administration → Document templates**.
+</Note>
+
+## The three engines
+
+How a template gets filled depends on the shape of your source form. The platform has three engines, and you pick one when you register a template.
+
+<CardGroup cols={1}>
+  <Card title="PDF form fields (ACROFORM)" icon="file-check">
+    Your form is a fillable PDF with named form fields. The engine writes each value into its named field. Use this when you already have an interactive PDF from your legal team.
+  </Card>
+  <Card title="PDF overlay (OVERLAY)" icon="file-text">
+    Your form is a flat PDF, like a scan or a pre-printed form with no fillable fields. The engine draws each value as text at the exact spot on the page you mark. Use this for a pre-printed form you cannot alter.
+  </Card>
+  <Card title="Structured layout (STRUCTURED)" icon="list">
+    There is no source PDF. The platform renders the whole document from your layout: headings, fields, repeating tables, and running totals. This is how the Loan Disbursement Sheet builds its double-entry table and the Declaration lays out its lines.
+  </Card>
+</CardGroup>
+
+## Register a template
+
+<Steps>
+  <Step title="Open the register form">
+    On **Administration → Document templates**, open **Register a template**. Give it a slug and a name, and choose the **document kind** it fulfils, for example Personal Credit Consent or Guarantee & Indemnity.
+  </Step>
+  <Step title="Pick the engine and upload the source">
+    Choose the **engine**. For the two PDF engines, upload the **source PDF**. The platform hardens every uploaded PDF before it stores it: it confirms the file really is a PDF, strips any active content, then virus-scans it. A file that is not a PDF, is larger than 20 MB, is encrypted, or is corrupt is rejected with a clear reason. A STRUCTURED template needs no source.
+  </Step>
+  <Step title="Map the fields">
+    Author the **field mapping**: which loan value fills which blank. You can edit the mapping as JSON directly, or, for a PDF template, use the **Visual editor** to click each spot on the page and pick the loan value that lands there. The mapping can only reference the loan data the platform allows for that form. A mapping that points at anything outside that fence is rejected with "The field mapping is invalid."
+  </Step>
+  <Step title="Preview it">
+    Every template has a **Preview**, which renders it against sample data so you can see the fields land in the right places before you commit. Preview a draft as many times as you need.
+  </Step>
+  <Step title="Activate it">
+    When it looks right, click **Activate**. The template becomes the **active** version for that form, and staff can prepare it on loans straight away. See [Legal documents](/legal-documents/overview) for how they use it.
+  </Step>
+</Steps>
+
+## Draft, active, archived
+
+A template is always in one of three states, shown as a badge on each row.
+
+| State | What it means |
+|---|---|
+| **Draft** | Being built. You can edit the mapping, use the visual editor, and preview it. It does not appear on any loan yet. |
+| **Active** | Live. The platform prepares this version on loans. |
+| **Archived** | Retired. It no longer prepares on new work. |
+
+Only a draft can be edited. Once you activate a template, that version is fixed. To change an active form, you register and activate a **new version**, which supersedes the previous one. The row shows the version as **v2**, **v3**, and so on. The prior versions stay on file, so the exact template behind any document a member already signed can always be reproduced.
+
+<Warning>
+  Activating a new version does not touch documents that were already prepared or executed. A member who signed against v2 has a v2 document forever; new documents prepare against the version that is active when you press **Prepare**. This is what keeps the audit trail honest.
+</Warning>
+
+## The PII fence
+
+A template can only pull the loan data the platform allows for that form. Each form kind has a fixed set of fields it may reference, its name, the amounts, the dates, the specific parties, and no more. The mapping is checked against that allowlist both when you save it and again each time a document is prepared. A template can never be pointed at data it has no business printing, which keeps sensitive member data off a form that should not carry it.
+
+This is why the mapping is validated, not free text. It is the guardrail that lets you author your own forms without opening a path to the wrong data.
+
+## Adding a form is configuration, not code
+
+Because a form is a template plus a mapping, bringing a new one online never touches the platform's code. The forms your credit union runs today, the consent, the declaration, the guarantee, the NSIPP security agreement, and the disbursement sheet, were all onboarded this way. So were the **Mortgage Deed** and the **Insurance Assignment**, which map only to existing loan fields and render through the same engines with zero new engineering.
+
+When your credit union needs a new form, register it, map it, preview it, and activate it. It is available on the next loan that needs it. No waiting on a release.
+
+| Form kind | Typical engine | Notes |
+|---|---|---|
+| Personal Credit Consent | STRUCTURED | The borrower's, plus one per guarantor. |
+| Declaration of Purpose | STRUCTURED | Required when the net disbursement is below J$1,000,000. |
+| Guarantee & Indemnity | PDF form fields or overlay | One per guarantor. |
+| NSIPP Security Agreement | PDF form fields or overlay | Auto loans. |
+| Loan Disbursement Sheet | STRUCTURED | Builds the double-entry table and the running totals. |
+| Mortgage Deed | PDF form fields or overlay | Onboarded as pure configuration. |
+| Insurance Assignment | PDF form fields or overlay | Onboarded as pure configuration. |
+
+## Events recorded
+
+Template changes are written to the immutable audit trail and the operational log, so who registered, activated, or archived a form, and when, is always on record.
+
+| Event | When it fires |
+|---|---|
+| `document_template.created` | A template was registered as a draft. |
+| `document_template.activated` | A draft was activated as the live version. |
+| `document_template.archived` | A template was archived. |
+| `document_template.superseded` | A newer version replaced this one as the active template. |

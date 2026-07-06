@@ -8,6 +8,28 @@ icon: "clock"
 This is the running history of what changed in the Loan Origination System, organised by date with the newest release at the top. Each entry is what your credit union would notice in day-to-day work, not the internal plumbing. Open an entry to see the detail.
 
 <AccordionGroup>
+  <Accordion title="5 July 2026 · Loan legal documents and configurable form templates">
+    Your credit union's own legal forms now live in the platform. Upload each form once, map its blanks to loan data, and the platform prepares it for every loan, filled with the right figures, ready to sign and file. Adding a new form is configuration, not a code change.
+
+    **Legal documents on the loan**
+
+    - Every loan now carries a **Legal documents** card that opens with exactly the forms that loan needs: the Personal Credit Consent for the borrower and each guarantor, the Guarantee & Indemnity per guarantor, the NSIPP Security Agreement on auto loans, the Declaration of Purpose when the net disbursement is below J$1,000,000, and the Loan Disbursement Sheet.
+    - Each form follows a two-step lifecycle. **Prepare** fills your template with the loan's own data and produces the PDF; **Upload signed** files the wet-signed scan back against the loan. The row tracks the state: required, prepared and awaiting signature, or executed.
+    - The paperwork gates the workflow. Securities cannot hand a loan to Disbursement until the guarantee and, on an auto loan, the security agreement are signed; Disbursement cannot mark a loan disbursed until the Loan Disbursement Sheet is signed. See [Legal documents](/legal-documents/overview).
+    - The Loan Disbursement Sheet enforces maker is never checker: the person recorded as checking the sheet must differ from the one who prepared it and the one disbursing.
+
+    **Document templates**
+
+    - A new **Document templates** page under Administration lets an Administrator or Credit Manager bring your credit union's own forms onto the platform. Register a form, choose how it fills (PDF form fields, an overlay on a flat PDF, or a fully rendered structured layout), map its fields, preview it against sample data, and activate it. See [Document templates](/legal-documents/templates).
+    - Templates are versioned and immutable once active. A new version supersedes the old one, and prior versions stay on file, so the exact form behind any signed document can always be reproduced.
+    - A field mapping can only reference the loan data allowed for that form, checked when you save it and again each time a document is prepared, so a form can never be pointed at data it should not print.
+    - Mortgage deeds and insurance assignments ship ready to configure, proof that a new form is pure configuration with no engineering.
+
+    **Permissions**
+
+    - The stage operators prepare and file the documents for their stage; voiding a document is a supervisory control held by the Adjudicator and Credit Manager; everyone in the pipeline can view. Managing the template catalogue sits with the Administrator and Credit Manager. See [Roles and permissions](/access/roles-and-permissions).
+  </Accordion>
+
   <Accordion title="18 June 2026 · My work dashboard, stage timing, and clearer creditor-life premiums">
     Two views built for the people doing the work: a personal home that shows each officer exactly what is theirs, and a manager view of how long loans sit with each person at each stage. Plus the creditor-life premium estimate now reads cleanly.
 

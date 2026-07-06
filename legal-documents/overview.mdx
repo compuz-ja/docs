@@ -1,0 +1,110 @@
+---
+title: "Prepare, sign, and file loan legal documents"
+sidebarTitle: "Legal documents"
+description: "Every loan carries the legal paperwork it needs: consent forms, guarantees, security agreements, and the disbursement sheet. Prepare each one from the loan's own figures, upload the signed copy, and let the workflow hold the loan until the paperwork is done."
+icon: "file-check"
+---
+
+Legal documents are the forms your credit union puts in front of a member and their guarantors to make a loan enforceable: the credit consent, the declaration of purpose, the guarantee, the security agreement, and the disbursement sheet. The platform prepares each one from the loan's own figures, files the signed copy against the loan, and refuses to advance the loan until the paperwork that matters is signed and on file.
+
+These are your credit union's own forms, not a generic pack. Your Administrator or Credit Manager uploads each form once, and from then on the platform fills it for every loan. See [Document templates](/legal-documents/templates) for how a form becomes available.
+
+<Note>
+  The **legal documents** on this page are separate from the **loan agreement**. The loan agreement is the single contract the platform generates automatically after approval, from one of four built-in templates. Legal documents are the configurable forms your credit union brings: consent, guarantee, security, disbursement, and the rest. See [Loan agreements](/loans/loan-agreements) for the agreement.
+</Note>
+
+## The forms a loan needs
+
+The platform works out which documents a loan requires from the loan's own shape: its type, its guarantors, and its net disbursement. You never pick from a list. The **Legal documents** card on the loan opens with exactly the forms that loan needs, one row each.
+
+| Form | When a loan needs it | Subject |
+|---|---|---|
+| **Personal Credit Consent** | Always. | The borrower, and one for each guarantor. |
+| **Declaration of Purpose** | Only when the net disbursement is below J$1,000,000. | The borrower. |
+| **Guarantee & Indemnity** | One for each guarantor on the loan. | Each guarantor. |
+| **NSIPP Security Agreement** | Auto loans only. | The borrower. |
+| **Loan Disbursement Sheet** | Always. | The borrower. |
+
+A loan with two guarantors, for example, shows two consent forms for the guarantors plus the borrower's own, two guarantees, and the disbursement sheet. Remove a guarantor and their rows drop off the next time the card loads.
+
+<Note>
+  Your credit union can add more forms than the five above. A **Mortgage Deed** and an **Insurance Assignment** ship ready to configure, and any other form your Administrator uploads becomes available the same way. Adding a form is configuration, not a code change. See [Document templates](/legal-documents/templates).
+</Note>
+
+## The lifecycle: prepare, then execute
+
+Every legal document moves through the same two steps. **Prepare** generates the PDF from the loan's figures. **Execute** files the wet-signed scan back against the loan. The card shows where each form stands.
+
+<Steps>
+  <Step title="Prepare the document">
+    Click **Prepare** on the form's row. The platform fills your credit union's template with the loan's own data, the member's name, the amounts, the dates, the rate, and produces the finished PDF. The row moves to **Prepared, awaiting signature**. Preparing needs the `loans.legal_documents.prepare` capability.
+  </Step>
+  <Step title="Download and take it for signature">
+    Click **Download** to open the prepared PDF in a new tab. Print it, or send it, and have the member and any guarantors sign it. Viewing and downloading needs the `loans.legal_documents.view` capability, which every role in the loan's pipeline holds.
+  </Step>
+  <Step title="Upload the signed copy">
+    Click **Upload signed**, drop the wet-signed scan onto the card, and click **Mark executed**. The scan can be a PDF or an image, up to 10 MB. The row moves to **Executed**, and the download link now reads **View signed** and serves the signed copy. Uploading the signed copy needs the `loans.legal_documents.execute` capability.
+  </Step>
+</Steps>
+
+The status on each row tells you what is left to do:
+
+- **Required**: the document has not been prepared yet.
+- **Prepared, awaiting signature**: the PDF is generated and ready to sign.
+- **Executed**: the signed copy is on file.
+
+<Note>
+  If a form's row shows **Template not configured**, your credit union has not uploaded an active template for that form yet, so there is nothing to prepare. The loan is not held up by a form that has never been set up. Once an Administrator activates the template, the **Prepare** button appears. See [Document templates](/legal-documents/templates).
+</Note>
+
+## The paperwork gates the workflow
+
+Two points in the loan's journey will not proceed until the right documents are signed and filed. These are server-side gates, not just hidden buttons, so they hold even against a stale page.
+
+| Move | What must be executed first |
+|---|---|
+| **Securities to Disbursement** | The **Guarantee & Indemnity** for each guarantor and, on an auto loan, the **NSIPP Security Agreement**. |
+| **Disbursement to Disbursed** | The **Loan Disbursement Sheet**. |
+
+A gate only applies to a form your credit union has actually set up. If there is no active template for a form, that form does not hold the loan. This is deliberate: onboard a new form when you are ready for it, and no loan already in flight is blocked by a form that was never configured.
+
+<Warning>
+  The disbursement gate is what keeps a loan from being funded on unsigned paperwork. Disbursement cannot mark a loan disbursed while the Loan Disbursement Sheet is still unsigned. The reason is shown on the loan, and the same check runs on the server, so the block holds no matter how the page was reached.
+</Warning>
+
+## Maker is never checker on the disbursement sheet
+
+The Loan Disbursement Sheet carries a three-way sign-off: prepared by, disbursed by, and checked by. When you upload the signed sheet, the platform requires a **Checked by** signer, and that signer must be different from the person who prepared the sheet and from the person recorded as disbursing.
+
+The person who releases the funds is never the only person who signs the sheet off. This is segregation of duties on the document itself, alongside the separate maker-checker on the money movement described in [Disbursement controls](/disbursement/controls). If the checker is the same person as the preparer or the disburser, the upload is rejected with "The checker must be different from the person who prepared the sheet."
+
+## Documents stay honest when a loan changes
+
+If a guarantor is removed from a loan after their guarantee or consent was already prepared, and the loan is later reverted or re-submitted, the document pinned to that removed guarantor is **superseded** automatically. A signed form for someone who is no longer on the loan never travels with it. The superseded document stays on file for the audit trail; it is simply no longer the live copy.
+
+Preparing the same loan twice produces the same document, byte for byte. The output is a pure function of the loan's data and the template, so an auditor can reproduce exactly what a member signed.
+
+## Who can do what
+
+Legal-document work is split so the person who prepares a document is not the only person with authority over it.
+
+| Action | Capability | Who holds it |
+|---|---|---|
+| **Prepare** a document | `loans.legal_documents.prepare` | Credit Officer, Securities, Disbursement, Administrator |
+| **Upload the signed copy** | `loans.legal_documents.execute` | Credit Officer, Securities, Disbursement, Administrator |
+| **View and download** | `loans.legal_documents.view` | Every role in the pipeline: Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Branch Manager, Administrator |
+| **Void** a document | `loans.legal_documents.void` | Adjudicator, Credit Manager, Administrator |
+
+The stage operators prepare and file the documents for their own stage. A Credit Officer handles the draft-stage consent and declaration, Securities handles the guarantee and the security agreement, and Disbursement handles the disbursement sheet. Voiding a prepared or executed document is a supervisory control held by the Adjudicator and the Credit Manager, so the person who prepared a document is never the one who reverses it. See [Roles and permissions](/access/roles-and-permissions) for the full picture.
+
+## Events recorded
+
+Every step on a legal document is written to the immutable audit trail and to the operational log, so the full history of what was prepared, signed, and reversed is reconstructable.
+
+| Event | When it fires |
+|---|---|
+| `loan.legal_document.prepared` | A document was generated from a template and the loan's data. |
+| `loan.legal_document.executed` | The wet-signed copy was uploaded and filed. |
+| `loan.legal_document.voided` | A supervisor reversed a prepared or executed document. |
+| `loan.legal_document.superseded` | A document was superseded, for example after its guarantor was removed. |
+| `loan.legal_document.generation.failed` | A prepare step failed. The reason is captured for investigation. |

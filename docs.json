@@ -103,6 +103,14 @@
             ]
           },
           {
+            "group": "Legal documents",
+            "icon": "file-check",
+            "pages": [
+              "legal-documents/overview",
+              "legal-documents/templates"
+            ]
+          },
+          {
             "group": "Notifications",
             "icon": "bell",
             "pages": [

@@ -71,6 +71,11 @@ The table below summarises what each role is permitted to do.
 | View guarantor documents | ✓ | ✓ | ✓ | ✓ | | | ✓ |
 | Upload guarantor documents | ✓ | | ✓ | | | | ✓ |
 | Remove guarantor documents | ✓ | | | | | | ✓ |
+| Prepare a loan legal document | ✓ | | ✓ | ✓ | | | ✓ |
+| Upload a signed legal document | ✓ | | ✓ | ✓ | | | ✓ |
+| View loan legal documents | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Void a loan legal document | | ✓ | | | ✓ | | ✓ |
+| Manage document templates | | | | | ✓ | | ✓ |
 | Manage loan products and rate tables | | | | | ✓ | | ✓ |
 | Manage fee schedule | | | | | ✓ | | ✓ |
 | View reports and analytics | | | | | ✓ | ✓ | ✓ |
@@ -91,6 +96,10 @@ The table below summarises what each role is permitted to do.
 
 <Note>
   **Editing the fee schedule is held by the Credit Manager and the Administrator** through the `fees.manage` capability. A Branch Manager does not hold it. This is the standing fee catalogue, the processing fee, legal, valuation, stamp duty, and the rest, that pre-fills every disbursement. A Disbursement officer still waives or adjusts a single loan's fees at funding, but the catalogue itself is a manager-level setting. See [Edit the fee schedule](/admin/fee-schedule).
+</Note>
+
+<Note>
+  **Legal documents split preparing from reversing.** The stage operators prepare and file the documents for their own stage: a **Credit Officer** handles the draft-stage consent and declaration, **Securities** handles the guarantee and the security agreement, and **Disbursement** handles the disbursement sheet, all through `loans.legal_documents.prepare` and `loans.legal_documents.execute`. Voiding a prepared or executed document is a supervisory control (`loans.legal_documents.void`) held by the **Adjudicator**, the **Credit Manager**, and the **Administrator**, so the person who prepares a document is never the one who reverses it. Everyone in the loan's pipeline can view legal documents (`loans.legal_documents.view`). The template catalogue itself (`documents.templates.manage`) is a Credit Manager and Administrator setting, alongside products, rates, and fees. See [Legal documents](/legal-documents/overview) and [Document templates](/legal-documents/templates).
 </Note>
 
 ## HR and Staff
