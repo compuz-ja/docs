@@ -8,6 +8,34 @@ icon: "clock"
 This is the running history of what changed in the Loan Origination System, organised by date with the newest release at the top. Each entry is what your credit union would notice in day-to-day work, not the internal plumbing. Open an entry to see the detail.
 
 <AccordionGroup>
+  <Accordion title="13 July 2026 · Migrate your existing loan book onto the platform">
+    Bring the loans you already have onto the platform, each one recorded just as it was originally made and landing at its true historical stage. Import a whole book from a spreadsheet, or key a single paper loan at a time, with the right people attributed to each stage and a signed record of exactly what came in. This is a one-time import of loans you already made, not a new origination: no servicing, no repayment, no balances.
+
+    **Two ways in**
+
+    - A **bulk workbook import** takes a spreadsheet of your loans, one row per loan, with linked sheets for guarantors, collateral, and payees. See [The workbook](/migration/workbook) for the columns.
+    - **Guided single-loan entry** keys one paper loan at a time and attaches a photo or scan of the file, for the one-offs that do not warrant a spreadsheet. There is no OCR: the scan is filed as the source record.
+
+    **The batch console**
+
+    - Every import becomes a batch under **Administration → Migrations**. You upload and stage the loans, review each one and attribute its officers, reconcile against the count and total you expected, then commit. See [Loan migration](/migration/overview).
+    - Staged rows are encrypted while you review them, and money and dates are echoed back in plain form, like `J$1,250,000.00` and `14 Mar 2021`, so a scale or date mistake is caught before anything commits.
+    - Commit imports every ready loan, or only the ones you tick, and it resumes safely if a large book is interrupted. Loans that still need review stay staged for a later pass.
+
+    **Historical people, kept honest**
+
+    - A former officer who has left is recorded as a historical actor: credited for the work in attribution and analytics, but with no login and no way to be assigned new work.
+    - Every migrated loan is classified and date-bucketed in analytics for its true historical year, so a loan disbursed in 2021 counts in 2021, not the month you imported it.
+
+    **Signed compliance attestation**
+
+    - After a batch commits, you seal a tamper-proof, cryptographically signed certificate of exactly what came in: how many loans, their total value, whether the totals reconciled, and who uploaded and signed off. It is stored in write-once compliance storage for seven years and downloadable from the batch. See [Audit trail](/compliance/audit-trail).
+
+    **Who can run it**
+
+    - Four roles hold migration access: the Administrator, the Credit Manager, the Credit Officer, and the Branch Manager. Sign-off is optional, and there is no maker-checker on import: anyone with access can commit the ready loans. See [Roles and permissions](/access/roles-and-permissions).
+  </Accordion>
+
   <Accordion title="5 July 2026 · Loan legal documents and configurable form templates">
     Your credit union's own legal forms now live in the platform. Upload each form once, map its blanks to loan data, and the platform prepares it for every loan, filled with the right figures, ready to sign and file. Adding a new form is configuration, not a code change.
 

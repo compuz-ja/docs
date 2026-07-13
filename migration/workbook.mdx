@@ -1,0 +1,197 @@
+---
+title: "Fill in the migration workbook"
+sidebarTitle: "The workbook"
+description: "The spreadsheet format for a bulk loan import: the five linked sheets, every column, how to write money and dates, and how to name the borrower and the officers who handled each loan."
+icon: "file-spreadsheet"
+---
+
+The migration workbook is the spreadsheet you fill in to import a book of loans at once. This page is the column reference: what each sheet holds, which columns are required, and how to write the values so every loan parses cleanly.
+
+A legacy loan is more than one row of data. It has a header, and it can have several guarantors, several pieces of collateral, and several disbursement payees. A single flat file cannot hold that, so the workbook is **five linked sheets**.
+
+| Sheet | Holds | One row is |
+|---|---|---|
+| `loans` | The loan header, the decision values, and the historical dates | One loan |
+| `guarantors` | The guarantors standing for a loan | One guarantor on one loan |
+| `collateral` | The security recorded against a loan | One collateral item |
+| `payees` | The disbursement payees | One payee line |
+| `fees` | The disbursement fee lines | One fee line |
+
+Only the `loans` sheet is required. Add the child sheets only for loans that have guarantors, collateral, split payees, or itemised fees.
+
+<Tip>
+  The upload dialog has two starter templates. **Download the loan template** gives you a single-sheet file, one row per loan, which is all most books need. The **advanced template** gives you the full five-sheet workbook. Start from a template so the column headers line up.
+</Tip>
+
+## How the sheets link: `external_ref`
+
+Every loan needs an `external_ref`, a stable identifier that is the loan's link key within the workbook. Use the legacy paper loan number when you have one. When a loan has no number, use any stable temporary key like `ROW-1`.
+
+Every child row, in `guarantors`, `collateral`, `payees`, and `fees`, carries an `external_ref` too, set to the `external_ref` of the loan it belongs to. That is the only link between the sheets. A child row whose `external_ref` matches no loan is flagged for the reviewer, never silently attached or dropped. An `external_ref` used on two loan rows is a duplicate and errors both.
+
+Header names are matched loosely: case does not matter, and spaces or hyphens are read as underscores, so `External Ref`, `external-ref`, and `external_ref` are the same column. Columns the platform does not recognise are ignored.
+
+## How to write money
+
+Money is written in plain form and the platform normalises it. You declare **one scale** for the whole workbook when you upload, and every money column follows it.
+
+| Scale | Write it as | Example |
+|---|---|---|
+| **Dollars** (the usual choice) | A dollar amount. A leading `$`, `JMD`, or `J$`, thousands commas, and spaces are all fine. | `$1,250,000.00` becomes J$1,250,000 |
+| **Cents** | A whole number of cents, no decimal point. | `125000000` becomes J$1,250,000 |
+
+Under the dollars scale, at most two decimal places are allowed. A value with three or more decimals is rejected as a likely scale mistake, so a figure that is off by a factor of a hundred is caught before it lands. Negative and empty amounts are always rejected. Every amount is echoed back in human form in the dry-run, like `J$1,250,000.00`, so you confirm the scale is right before you commit.
+
+## How to write dates
+
+Dates are written day, month, year: `DD/MM/YYYY` or `DD-MM-YYYY`. A value already in ISO form, `YYYY-MM-DD`, is accepted as-is. An impossible date, like a month past 12 or a day past the month length, is rejected.
+
+When both the day and the month are 12 or less, a date could be read either way. `03/04/2023` could mean 3 April or 4 March. The platform reads it as day-month (3 April) and flags the loan as **needs review** so you confirm it. A date whose day is above 12 is unambiguous and passes. Every date is echoed in the dry-run, like `14 Mar 2023`, for you to check.
+
+## Currency
+
+JMD only. A `currency` value other than `JMD` rejects the row, rather than letting a foreign-currency loan land as Jamaican dollars.
+
+## How to name the borrower
+
+Put the borrower's account number, also called the CIF, in `member_account_number`. The platform matches it to a member in your workspace during review.
+
+When you do not have the account number, a unique full name can identify the borrower instead. If a name is unique in your workspace, it resolves to that member. If a name matches more than one member, the loan is flagged for review and you pick the right borrower from a list. Bring your members onto the platform first, through [Bulk import](/members/bulk-import), so a migrated loan has someone to match to.
+
+## How to name the officers
+
+The officer columns, like `created_by_officer` and `adjudicated_by_officer`, take a person, and you can write them three ways: a full name, an email address, or the platform user id. A name is the easiest for a spreadsheet filled in by hand, and it is matched to your staff automatically.
+
+An officer who has left and is no longer on the platform is still attributed. Name them in the workbook, and during review they are recorded as a historical actor, credited for the work without being given a login. See [Loan migration](/migration/overview#historical-people-attributed-without-a-login).
+
+## Sheet: `loans`
+
+One row per loan. These columns are required.
+
+| Column | What it holds |
+|---|---|
+| `external_ref` | The loan's link key. Every child row references it. |
+| `member_account_number` | The borrower's account number (CIF), matched to a member. |
+| `loan_type` | One of `UNSECURED`, `CASH_SECURED`, `AUTO`, `MORTGAGE`. |
+| `target_status` | The real stage the loan lands at. See [Target stage values](#target-stage-values). |
+| `requested_amount` | The principal, as money. |
+| `term_months` | The loan term in months. |
+| `purpose` | Free text describing the loan purpose. |
+| `origination_date` | The historical origination date. This seeds the reporting period. |
+| `created_by_officer` | The Credit Officer who captured the loan. |
+
+These columns are optional. Write them when you have them, leave them blank when you do not.
+
+| Column | What it holds |
+|---|---|
+| `currency` | JMD only. Any other value rejects the row. |
+| `loan_product_ref` | Your product code, matched to a loan product. |
+| `loan_type_def_ref` | Your loan-type-definition code. |
+| `submitted_date` | The paper submission date. |
+| `decided_date` | The adjudication decision date. |
+| `scheduled_date` | The date disbursement was scheduled. |
+| `executed_date` | The date disbursement was executed. |
+| `first_payment_date` | The first scheduled payment date. |
+| `recommended_by_officer` | The officer who recommended the loan. |
+| `adjudicated_by_officer` | The adjudicator who decided the loan. |
+| `approved_by_manager` | The Credit Manager who approved the loan historically. |
+| `scheduled_by_officer` | The disbursement officer who scheduled it. |
+| `executed_by_officer` | The disbursement officer who executed it. |
+| `risk_band` | The historical risk band, `R1` to `R5`. Stored as written, never recalculated. |
+| `risk_score` | The historical risk score, as written. |
+| `rate_bps` | The historical rate in basis points, for example `1450` for 14.50%. |
+| `monthly_payment` | The paper's actual monthly payment, as money. |
+| `adjudication_decision` | One of `APPROVED`, `DECLINED`, `INFO_REQUESTED`. |
+| `adjudication_rationale` | The recorded decision rationale. |
+| `gross_amount` | The disbursement gross, as money. |
+| `total_fees` | The total disbursement fees, as money. |
+| `total_gct` | The total GCT on fees, as money. |
+| `total_deducted` | The total deducted from the gross, as money. |
+| `net_to_member` | The net amount disbursed. The payee rows must sum to this. |
+| `co_applicant_account_number` | A joint borrower's account number. |
+| `refinanced_from_ref` | The `external_ref` of the loan this one refinances. |
+
+## Target stage values
+
+`target_status` is the real lifecycle stage the loan had reached. Your book is a mix, and you set each loan's own stage. Use one of:
+
+`DRAFT`, `SUBMITTED`, `ADJUDICATION`, `INFO_REQUESTED`, `APPROVED`, `DECLINED`, `SECURITIES`, `SECURITIES_ISSUE`, `DISBURSEMENT`, `DISBURSED`, `FILED`, `DRAFT_ABANDONED`, `CANCELLED`.
+
+A later stage expects the dates and people that go with it. A `DISBURSED` loan, for example, wants its disbursement dates and the officers who scheduled and executed it, and its payee rows should sum to `net_to_member`.
+
+## Sheet: `guarantors`
+
+One row per guarantor on a loan. Required: `external_ref`, `first_name`, `last_name`, and `relationship` (how they relate to the borrower). Optional: `middle_name`, `date_of_birth`, `email`, `phone`, `address_line1`, `city`, `parish`, and `account_number` (the guarantor's own member account, if they have one).
+
+## Sheet: `collateral`
+
+One row per piece of security. Required: `external_ref`, `collateral_type`, `valued_amount` (as money), `valuation_date`, and `valuation_source` (who or what valued it). Optional: `details`, free text like a VIN, a title number, or a property description.
+
+`collateral_type` is one of `VEHICLE`, `CASH_SHARES`, `CASH_HYPOTHECATION`, `PROPERTY`, or `OTHER`. Use `OTHER` for real security that does not fit the four standard kinds; it records the collateral without changing any calculation.
+
+## Sheet: `payees`
+
+One row per disbursement payee. Required: `external_ref`, `sequence_no` (the order within the disbursement), `payee_name`, `purpose`, `amount` (as money), and `method`. Optional: `payee_type` (defaults to `MEMBER`), `bank_name`, and `account_type`.
+
+The payee amounts must sum to the loan's `net_to_member`.
+
+| Column | Allowed values |
+|---|---|
+| `method` | `ACH`, `CHECK`, `INTERNAL_TRANSFER`, `WIRE`, `RTGS`, `MANAGERS_CHEQUE` |
+| `payee_type` | `MEMBER`, `THIRD_PARTY`, `GOVERNMENT`, `INSURER`, `ATTORNEY`, `LENDER_PAYOFF`, `OTHER` |
+
+## Sheet: `fees`
+
+One row per fee line. Required: `external_ref`, `sequence_no`, `code` (like `PROCESSING` or `LEGAL`), `label`, `base_amount` (as money), `amount` (as money), `treatment`, and `remit_to`. Optional: `taxable` (`true` or `false`, also `yes` or `no`, `1` or `0`), `gct_rate_bps`, `gct_amount` (as money), `source`, and `note`.
+
+| Column | Allowed values |
+|---|---|
+| `treatment` | `DEDUCT`, `PAID_SEPARATELY`, `CAPITALIZE` |
+| `remit_to` | `CU`, `TAJ`, `GOVERNMENT`, `INSURER`, `ATTORNEY`, `LENDER`, `OTHER` |
+| `source` | `SCHEDULE`, `MANUAL` |
+
+## What each loan resolves to
+
+After parsing, every loan lands on one of three statuses, which you see on the review screen.
+
+- **Ready**: no errors and no ambiguous dates. Safe to commit.
+- **Needs review**: no errors, but something to confirm, like an ambiguous date or a borrower to match.
+- **Errored**: a cell problem on the loan or one of its child rows.
+
+An errored loan never fails the whole batch. Errored rows are collected into a downloadable report, with the reason on each, so you fix them and re-upload as a fresh batch.
+
+## A worked example
+
+One disbursed auto loan, linked across the sheets by the shared `external_ref` `LEGACY-000123`, with the dollars scale and day-month-year dates.
+
+**`loans`**
+
+| external_ref | member_account_number | loan_type | target_status | requested_amount | term_months | purpose | origination_date | executed_date | created_by_officer | adjudicated_by_officer | rate_bps | net_to_member |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| LEGACY-000123 | ACC-000123 | AUTO | DISBURSED | $1,250,000.00 | 48 | Motor vehicle purchase | 14/03/2021 | 28/03/2021 | J. Officer | A. Adjudicator | 1450 | $1,200,000.00 |
+
+**`guarantors`**
+
+| external_ref | first_name | last_name | relationship |
+|---|---|---|---|
+| LEGACY-000123 | Gina | Guarantor | Sister |
+
+**`collateral`**
+
+| external_ref | collateral_type | valued_amount | valuation_date | valuation_source | details |
+|---|---|---|---|---|---|
+| LEGACY-000123 | VEHICLE | $2,000,000.00 | 13/03/2021 | Dealer appraisal | VIN ABC123 |
+
+**`payees`**
+
+| external_ref | sequence_no | payee_name | purpose | amount | method |
+|---|---|---|---|---|---|
+| LEGACY-000123 | 1 | Dealer Ltd | Vehicle | $1,200,000.00 | CHECK |
+
+This one loan lands ready. The guarantor, the collateral, and the payee link under it by `external_ref`, and the dry-run echoes `J$1,250,000.00` and `14 Mar 2021` for you to confirm before you commit.
+
+## Saving the file
+
+Save each sheet as CSV. You can upload one CSV per sheet, or, for the multi-sheet workbook, one text file whose sheets are introduced by a marker line like `===SHEET:loans===`, each block running to the next marker. A workbook holds up to 2,000 loans and the file is capped at 5 MB. For more loans than that, split the book and import the pieces as separate batches.
+
+Once your file is ready, head to [Loan migration](/migration/overview) to upload, review, and commit it.

@@ -1,0 +1,135 @@
+---
+title: "Bring your existing loan book onto the platform"
+sidebarTitle: "Loan migration"
+description: "Import a credit union's legacy and paper loans just as they were originally made, each one landing at its true historical stage with the right people attributed and a signed record of what came in."
+icon: "archive"
+---
+
+Loan migration imports your credit union's existing loan book onto the platform, each loan recorded just as it was originally made and landing at its true historical stage. You bring the loans you already have, so a member's file, their officer's decisions, and the loan's real position all live in one place from day one.
+
+This is a one-time import of loans you already made, not a new origination. It records the human decisions as they stood: the rate, the risk band, the adjudication outcome, and the disbursement figures are stored exactly as a person set them on paper. The platform never recalculates them through its rate, risk, or fee engines, so a migrated number is what someone decided, not what the engine would compute today.
+
+<Note>
+  Loan migration imports **loans**. To import **member** records in bulk, use [Bulk import](/members/bulk-import) instead. The two are separate: bring your members in first so a migrated loan can be matched to the borrower who holds it.
+</Note>
+
+## What is out of scope
+
+Migration does not bring servicing, repayment schedules, or running balances. The platform is origination-only, so a migrated loan carries its origination history and its final figures, and nothing about ongoing repayment. You are recording how each loan was made, not how it is being paid.
+
+## Two ways in
+
+There are two paths, and both land a loan the same way underneath.
+
+<CardGroup cols={2}>
+  <Card title="Bulk workbook import" icon="file-spreadsheet">
+    Upload a spreadsheet of your loans, one row per loan, with linked sheets for guarantors, collateral, and disbursement payees. Best for importing a whole book at once. See [The migration workbook](/migration/workbook) for the exact columns.
+  </Card>
+  <Card title="Guided single-loan entry" icon="pen-line">
+    Key one paper loan at a time and attach a photo or scan of the paper file. Best for the messy long tail: a one-off loan, or a single file that does not warrant a spreadsheet. There is no OCR: the scan is filed as the source record, never read by a machine.
+  </Card>
+</CardGroup>
+
+Both paths live under **Administration → Migrations**, at `/your-slug/admin/migrations`.
+
+## The batch console
+
+Every import, bulk or guided, becomes a **batch** on the migrations console. Each batch shows its status, its counts (staged, committed, errored), who uploaded it, and who signed it off. Open a batch to work through it.
+
+<Steps>
+  <Step title="Upload and stage">
+    Click **Upload a batch**, drop your spreadsheet in, and set two things: whether amounts are written in dollars or whole cents, and the control totals you expect (how many loans and their total principal). The platform virus-scans the file, parses every row, and stages each loan. Staging encrypts every staged row at rest, so sensitive borrower data is never held in the clear while you review it. Nothing is written to the loan ledger yet.
+
+    Each loan comes back as **Ready**, **Needs review**, or **Errored**. A parse error on one loan never fails the batch: errored rows are collected into a downloadable report you fix and re-upload.
+  </Step>
+  <Step title="Review and attribute each loan">
+    Open the batch to see every staged loan. Confirm the borrower for each one, and set the people who handled it at each stage: the officer who captured it, the adjudicator who decided it, the disbursement officer who released it, and so on. Money and dates are echoed back in human form, like `J$1,250,000.00` and `14 Mar 2021`, so a scale or date mistake is caught before anything commits.
+
+    Attribution saves as you go, so you can stop and come back, and two reviewers can work the same batch. Set one officer across many loans at once by ticking the rows, picking the officer, and clicking **Apply to selected**.
+  </Step>
+  <Step title="Reconcile (dry-run)">
+    Click **Reconcile (dry-run)** to preview the count and total the batch will import, checked against the control totals you entered. Nothing is committed. If you declared expected totals, the report is clean only when the staged count and principal match them exactly. If you declared no totals, it reads as an informational summary of what is about to import, not a pass or fail.
+  </Step>
+  <Step title="Sign off (optional)">
+    Optionally click **Sign off** to record an approver on the batch. Sign-off is not required to import. It stamps who approved the batch for your own record and enables the compliance attestation. See [Sign-off is optional](#sign-off-is-optional) below.
+  </Step>
+  <Step title="Commit">
+    Click **Commit** to write the ready loans as real loans. Commit imports every ready loan by default, or only the ones you tick. Loans that still need review stay staged, so you can finish them and commit them later. Commit is durable and resumable: a large book is imported in chunks, and a run that stops part way picks up where it left off rather than starting over. Re-committing an already-imported loan does nothing, so it is always safe to run again.
+  </Step>
+  <Step title="Generate a compliance attestation">
+    Once the batch is committed, click **Generate attestation** to seal a signed certificate of exactly what came in. It appears in the **Compliance attestations** panel on the batch, with a **Download** button. See [The signed compliance attestation](#the-signed-compliance-attestation).
+  </Step>
+</Steps>
+
+## Every loan lands at its true stage
+
+A migrated loan is placed at the real lifecycle stage it had reached, not reset to draft. Your book is a mix: some loans are `DISBURSED`, some `FILED`, some were `DECLINED`, some are still `IN ADJUDICATION`. You set the stage per loan, and the platform records the loan there with the historical dates behind it.
+
+Because the stage and its dates are real, a migrated loan is classified and date-bucketed correctly in analytics for its true historical year. A loan disbursed in 2021 counts in 2021, not in the month you happened to import it. Your reports read as if the loans had always been on the platform.
+
+## Historical people, attributed without a login
+
+The person who adjudicated a loan five years ago may no longer be on staff. You still attribute the work to them.
+
+A former officer who is not a platform user is recorded as a **historical actor**: a named person with no sign-in and no assignment. They show up in the attribution picker, so migrated work is credited to the right individual, and analytics report their historical work under their name. They never appear in the assignment picker, they are never given a seat, and they cannot sign in. A historical actor is a record of who did the work, not an account.
+
+When two people share a name, a legacy employee id tells them apart, so the same person is reused across the book rather than split into two.
+
+## Reconciliation
+
+Reconciliation is your check that the number of loans and the total value going in match what you expected.
+
+You enter the expected loan count and the expected total principal when you upload. The console then compares those against what actually staged, and, after commit, against what actually landed. When the expected and actual figures line up, the reconciliation is clean. If you enter no expected totals, reconciliation still shows you the staged and committed summary; it just has nothing to check against, so it reads as information rather than a gate.
+
+## Sign-off is optional
+
+Yes, you can commit without a sign-off. Anyone with migration access can commit the ready loans directly, with or without recording an approver first.
+
+There is no maker-checker on import. The person who uploads a batch can also commit it. That dual-control separation, where the person who acts is never the only person who signs off, exists on the live disbursement path where money actually moves, not on migration, where you are recording loans that were already made. See [Disbursement controls](/disbursement/controls) for the maker-checker that does apply to funding.
+
+Sign-off is there when you want it. Recording an approver gives you a named person on the batch and unlocks the compliance attestation. Use it when your own procedure calls for a second set of eyes; skip it when it does not.
+
+## Commit all, or only the loans you tick
+
+Commit imports every ready loan in the batch by default. To import only some, tick those loans first and commit imports exactly those, leaving the rest staged. This lets you bring in the clean loans now and finish the ones that still need a borrower matched or an officer attributed afterward, then commit them in a later pass.
+
+## The signed compliance attestation
+
+A compliance attestation is a tamper-proof, cryptographically signed certificate of exactly what a batch imported: how many loans, their total value, whether the control totals reconciled, and who uploaded and signed it off. It is your regulator-facing proof of the import.
+
+It is sealed in write-once storage that cannot be edited or deleted for seven years. Once generated, an attestation is permanent and independently verifiable, so an auditor can confirm what came in without trusting the screen in front of them.
+
+You generate it from the batch after commit, and every attestation is kept and timestamped. Find them in the **Compliance attestations** panel on the batch page, each with a **Download** button that streams the signed bundle. Generate a fresh one at any time; the old ones stay on file.
+
+## Voiding a batch
+
+If a batch was imported in error, you void the whole batch in one sweep. Voiding requires a reason and marks every loan in the batch as voided.
+
+A voided loan is marked, never deleted. Its record stays permanently for the audit trail, but it is excluded from every live surface: it drops out of the active queues, the dashboards, and the analytics. The compliance export still lists voided loans, with their void marker, so a regulator sees the full picture. To correct a mis-imported batch, void it and re-import a corrected one.
+
+## Who can run migrations
+
+Four roles hold the migration capabilities: the **Administrator**, the **Credit Manager**, the **Credit Officer**, and the **Branch Manager**. Each holds all three, so any of them can upload, review, reconcile, sign off, commit, and void.
+
+| Capability | What it allows |
+|---|---|
+| `loans.import.upload` | Upload and stage a workbook, and drive guided single-loan entry. |
+| `loans.import.review` | Review staged loans, match borrowers, attribute officers, and run the reconciliation dry-run. |
+| `loans.import.signoff` | Record the optional sign-off, commit the batch, void it, and generate the attestation. |
+
+The Adjudicator, Securities, Disbursement, HR, and Staff roles do not hold any migration capability. See [Roles and permissions](/access/roles-and-permissions) for the full matrix.
+
+## Events recorded
+
+Every step of a migration is written to the immutable audit trail and the operational log, so the full history of what was imported, by whom, and when is reconstructable. See [Audit trail](/compliance/audit-trail).
+
+| Event | When it fires |
+|---|---|
+| `loan_application.imported` | A single legacy loan was landed on the platform at its historical stage. |
+| `loan.import.batch.signed_off` | A batch was signed off by an approver (optional). |
+| `loan.import.batch.committed` | A batch's ready loans were committed as real loans. |
+| `loan.import.attestation.generated` | A signed compliance attestation was sealed for a committed batch. |
+| `loan_application.migration_voided` | A migrated loan was voided as part of a whole-batch void. |
+| `historical_actor.created` | A former officer was recorded as a non-login historical actor for attribution. |
+| `member.imported` | A borrower record was created during migration. |
+| `member.kyc.migrated` | A member's KYC was recorded from the migrated paper evidence. |

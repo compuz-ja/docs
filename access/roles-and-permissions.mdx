@@ -57,6 +57,9 @@ The table below summarises what each role is permitted to do.
 | View branch loans | | | | | | ✓ | |
 | Claim loans from team queue | | ✓ | ✓ | ✓ | | | ✓ |
 | Assign or reassign loans to officers | | | | | ✓ | ✓ | ✓ |
+| Upload a loan-migration batch | ✓ | | | | ✓ | ✓ | ✓ |
+| Review and reconcile a migration batch | ✓ | | | | ✓ | ✓ | ✓ |
+| Sign off, commit, or void a migration batch | ✓ | | | | ✓ | ✓ | ✓ |
 | Review and resolve securities | | | ✓ | | | | |
 | Disburse funds | | | | ✓ | | | |
 | Run AML or sanctions screening | | | | ✓ | | | |
@@ -100,6 +103,10 @@ The table below summarises what each role is permitted to do.
 
 <Note>
   **Legal documents split preparing from reversing.** The stage operators prepare and file the documents for their own stage: a **Credit Officer** handles the draft-stage consent and declaration, **Securities** handles the guarantee and the security agreement, and **Disbursement** handles the disbursement sheet, all through `loans.legal_documents.prepare` and `loans.legal_documents.execute`. Voiding a prepared or executed document is a supervisory control (`loans.legal_documents.void`) held by the **Adjudicator**, the **Credit Manager**, and the **Administrator**, so the person who prepares a document is never the one who reverses it. Everyone in the loan's pipeline can view legal documents (`loans.legal_documents.view`). The template catalogue itself (`documents.templates.manage`) is a Credit Manager and Administrator setting, alongside products, rates, and fees. See [Legal documents](/legal-documents/overview) and [Document templates](/legal-documents/templates).
+</Note>
+
+<Note>
+  **Loan migration is open to four roles, and sign-off is optional.** Bringing your existing loan book onto the platform uses three capabilities: `loans.import.upload` to upload and stage a workbook, `loans.import.review` to review, attribute, and reconcile the staged loans, and `loans.import.signoff` to record the sign-off, commit a batch, and void one. All three are held by the **Credit Officer**, the **Credit Manager**, the **Branch Manager**, and the **Administrator**, and no other role holds any of them. There is no maker-checker on import: anyone with migration access can commit the ready loans, with or without a recorded sign-off first. That dual-control separation exists only on the live disbursement path, where money actually moves, not on migration. A former officer who is no longer on staff is recorded as a **historical actor**: they appear in the attribution picker so migrated work is credited to them, but never in the assignment picker, and they cannot sign in. See [Loan migration](/migration/overview).
 </Note>
 
 ## HR and Staff

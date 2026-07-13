@@ -83,6 +83,14 @@
             ]
           },
           {
+            "group": "Loan migration",
+            "icon": "archive",
+            "pages": [
+              "migration/overview",
+              "migration/workbook"
+            ]
+          },
+          {
             "group": "Adjudication & securities",
             "icon": "gavel",
             "pages": [
