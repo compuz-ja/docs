@@ -8,6 +8,49 @@ icon: "clock"
 This is the running history of what changed in the Loan Origination System, organised by date with the newest release at the top. Each entry is what your credit union would notice in day-to-day work, not the internal plumbing. Open an entry to see the detail.
 
 <AccordionGroup>
+  <Accordion title="15 July 2026 · Credit Officer feedback: capture, fees, collateral and faster emails">
+    A wide batch of Credit Officer feedback, worked through end to end. The capture screen now holds more of the detail an officer works with day to day, fees and shares behave the way your credit union expects, Securities and Disbursement gained a place to record collateral and lock a member's pledged funds, and a few quieter fixes made the sign-in emails prompt again.
+
+    **Capture and the Statement of Affairs**
+
+    - A member can now be identified by their **Driver's Licence**, alongside the existing identification types, when you capture or verify them.
+    - The Statement of Affairs now records every money figure to the exact cent, so what the officer keys is what is stored, with no rounding.
+    - The new loan's own monthly repayment now shows in the Statement of Affairs and is counted in the affordability (TDSR) check, so the figure reflects the repayment the member is about to take on.
+    - The estimated **monthly repayment** and the **interest rate** now appear right in the **Loan purpose and type** section, so the officer sees the cost of the loan while capturing it.
+    - Every section of a draft now saves on its own as you go, including the Credit Officer's recommendation, so a part-finished application is never lost and nothing has to be re-keyed at submit.
+
+    **Fees, rates, and shares**
+
+    - Each loan now carries a plain-language explanation of how its interest rate was worked out, so an officer or member can see why the rate is what it is.
+    - While capturing a loan, the Credit Officer can choose how each fee is treated and add ad-hoc fees and charges to that specific loan, on top of the standing fee schedule.
+    - Creditor-life insurance no longer applies to cash-secured loans, since the pledged cash already secures the loan.
+    - A workspace-wide **Mandatory Shares** policy sets the flat share amount a member must hold, and only your **Systems Administrator** can change it.
+    - A separate **Minimum Shares** figure is set as a percentage of the loan and can differ by loan product, so each product can carry its own shares requirement.
+    - Each fee can now be posted to a chosen **General Ledger account** on the disbursement sheet, and the double entry stays balanced automatically, so the sheet reconciles cleanly for your finance team. See [Fees, deductions, and GCT](/disbursement/fees-and-gct).
+
+    **Securities, collateral, and documents**
+
+    - External cash-secured loans, where the pledged cash sits at another institution, can now carry their own supporting documents on the file.
+    - When you raise a security request, the standard perfection items, a vehicle title, an insurance binder, a valuation, and the like, are offered as **quick-add chips**, so the common requests are one tap rather than retyped. See [Securities](/workflows/securities).
+    - Loan reviewers can now view an applicant's identity documents, their TRN, Driver's Licence, and Passport, shown **masked** and with every view written to the audit trail, so a reviewer sees enough to confirm identity without the full number being exposed. See [Audit trail](/compliance/audit-trail).
+    - A member's **income and employment documents** now surface on the review screens and at capture, and a Credit Manager gets a full loan-file view of the supporting documents behind a loan.
+    - A new **Collateral and security holds** section lets the Securities or Disbursement officer record or adjust the collateral on a loan and place a **hold (a lien)** on the member's own shares or savings, so the pledged funds cannot be withdrawn while the loan is outstanding. The hold is released once the loan settles, and it shows on the member's profile the whole time. Who can place or release a hold is set out in [Roles and permissions](/access/roles-and-permissions).
+    - The full **loan product sheet** is now captured as structured repayment and approval settings, so a product's terms live on the loan record.
+
+    **Adjudication**
+
+    - When a loan is returned to the Credit Officer for more information, the adjudicator's name is now hidden, keeping the back-and-forth impartial. See [Adjudication](/workflows/adjudication).
+
+    **Email delivery**
+
+    - Password-reset and email-verification messages now arrive promptly. A queuing delay that could hold them up has been cleared, so a member or officer resetting a password gets the email straight away.
+    - A quiet health check now watches mail delivery in the background, so if messages ever begin to lag, the team notices and can act early.
+
+    **Roles**
+
+    - Recording or adjusting collateral, and placing or releasing a security hold on a member's account, are held by the **Securities** officer, the **Disbursement** officer, the **Credit Manager**, and the **Administrator**. The **Credit Officer**, **Adjudicator**, and **Branch Manager** can view holds but not place or release them. Editing the fee schedule and its General Ledger accounts stays with the **Administrator** and **Credit Manager**, and changing the Mandatory Shares policy is reserved for the **Systems Administrator**. See [Roles and permissions](/access/roles-and-permissions).
+  </Accordion>
+
   <Accordion title="13 July 2026 · Migrate your existing loan book onto the platform">
     Bring the loans you already have onto the platform, each one recorded just as it was originally made and landing at its true historical stage. Import a whole book from a spreadsheet, or key a single paper loan at a time, with the right people attributed to each stage and a signed record of exactly what came in. This is a one-time import of loans you already made, not a new origination: no servicing, no repayment, no balances.
 
