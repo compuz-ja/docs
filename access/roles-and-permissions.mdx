@@ -68,6 +68,9 @@ The table below summarises what each role is permitted to do.
 | Approve a held disbursement (maker-checker) | | | | | ✓ | | |
 | Configure disbursement controls | | | | | ✓ | | |
 | Manage payee directory | | | | ✓ | ✓ | | |
+| Record or adjust loan collateral | | | ✓ | ✓ | ✓ | | ✓ |
+| Place or release a security hold (lien) on a member's account | | | ✓ | ✓ | ✓ | | ✓ |
+| View security holds on a loan | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | View and search member records | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Create and edit member records | ✓ | | | | | | ✓ |
 | Submit member KYC | ✓ | | | | | | ✓ |
@@ -80,7 +83,8 @@ The table below summarises what each role is permitted to do.
 | Void a loan legal document | | ✓ | | | ✓ | | ✓ |
 | Manage document templates | | | | | ✓ | | ✓ |
 | Manage loan products and rate tables | | | | | ✓ | | ✓ |
-| Manage fee schedule | | | | | ✓ | | ✓ |
+| Manage fee schedule and its General Ledger accounts | | | | | ✓ | | ✓ |
+| Change the Mandatory Shares policy | | | | | | | ✓ |
 | View reports and analytics | | | | | ✓ | ✓ | ✓ |
 | Invite staff and manage roles | | | | | | | ✓ |
 | Workspace configuration and branding | | | | | | | ✓ |
@@ -94,11 +98,19 @@ The table below summarises what each role is permitted to do.
 </Note>
 
 <Note>
+  **Recording collateral and holding a member's own funds sit with the securing and disbursing roles.** Recording or adjusting the collateral on a loan, and placing or releasing a **security hold (a lien)** on a member's shares or savings, are held by the **Securities** officer, the **Disbursement** officer, the **Credit Manager**, and the **Administrator**. A hold ring-fences the member's pledged funds so they cannot be withdrawn while the loan is outstanding, and it is released when the loan settles. The **Credit Officer**, the **Adjudicator**, and the **Branch Manager** can view a loan's holds but cannot place or release one, and the **HR** and **Staff** roles hold none of this. A hold stays visible on the member's own profile for as long as it is in force.
+</Note>
+
+<Note>
   **Guarantor documents follow the same access as member documents.** The three guarantor-document capabilities, `loans.guarantors.documents.view`, `loans.guarantors.documents.upload`, and `loans.guarantors.documents.delete`, are granted to exactly the same roles that hold the matching `members.documents.*` capability. So the Credit Officer, Adjudicator, Securities, Disbursement, and Administrator can view a guarantor's ID, income, and employment files; the Credit Officer, Securities, and Administrator can upload them; and the Credit Officer and Administrator can remove them. A reviewer who can open a member's file can open the guarantor's file on the same loan, and no wider.
 </Note>
 
 <Note>
-  **Editing the fee schedule is held by the Credit Manager and the Administrator** through the `fees.manage` capability. A Branch Manager does not hold it. This is the standing fee catalogue, the processing fee, legal, valuation, stamp duty, and the rest, that pre-fills every disbursement. A Disbursement officer still waives or adjusts a single loan's fees at funding, but the catalogue itself is a manager-level setting. See [Edit the fee schedule](/admin/fee-schedule).
+  **Editing the fee schedule is held by the Credit Manager and the Administrator** through the `fees.manage` capability. A Branch Manager does not hold it. This is the standing fee catalogue, the processing fee, legal, valuation, stamp duty, and the rest, that pre-fills every disbursement. A Disbursement officer still waives or adjusts a single loan's fees at funding, but the catalogue itself is a manager-level setting. The same two roles also set the **General Ledger account** each fee posts to on the disbursement sheet, so a fee books to the right account and the double entry stays balanced. See [Edit the fee schedule](/admin/fee-schedule).
+</Note>
+
+<Note>
+  **Changing the Mandatory Shares policy is reserved for the Systems Administrator.** The Mandatory Shares figure is the flat share amount a member must hold, set once for the whole workspace. Only the **Administrator**, your Systems Administrator, can change it. It is deliberately not delegated to the Credit Manager the way the fee schedule is. The separate **Minimum Shares** percentage, which can differ by loan product, is a per-product lending setting changed with the rest of your loan configuration.
 </Note>
 
 <Note>
