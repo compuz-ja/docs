@@ -1,0 +1,98 @@
+---
+title: "Have a member sign electronically or on paper"
+sidebarTitle: "Member signing"
+description: "A member can sign a consent form or accept their loan terms right on screen, in the branch or from a link sent to their phone, or you can still print, wet-sign, and upload. Every signature is embedded in the PDF and kept with a tamper-evident receipt."
+icon: "square-pen"
+---
+
+A member can sign the paperwork on a loan two ways: on paper, the way they always have, or electronically, right on the screen. Both are first-class. Electronic signing is an option, never a requirement, so you can always fall back to print and upload if a member prefers ink.
+
+Electronic signing captures the member's signature into the document itself, stores the signed copy with a tamper-evident receipt of what they agreed to and when, and writes every signature to the audit trail. It works in the branch and remotely, and it covers both the member's consent forms and the loan agreement itself.
+
+<Note>
+  Signing and uploading are two paths to the same place. A document that a member e-signs and a document you upload as a wet-signed scan both land as **Executed** on the loan, with the signed copy on file. See [Legal documents](/legal-documents/overview) for the prepare-then-execute lifecycle.
+</Note>
+
+## What a member can sign electronically
+
+Not every form is e-signable. The member-facing acknowledgement forms are; the deeds are not.
+
+| Document | Can a member e-sign it? | Why |
+|---|---|---|
+| **Personal Credit Consent** | Yes. | A member acknowledgement, no witness required. |
+| **Declaration of Purpose** | Yes. | A member acknowledgement, no witness required. |
+| **The loan agreement (as a draft)** | Yes, to accept the proposed terms before approval. | See [Sign the loan terms before approval](#sign-the-loan-terms-before-approval) below. |
+| **Guarantee & Indemnity** | No. | Needs a witness and wet signatures. Print and upload. |
+| **NSIPP Security Agreement** | No. | Needs a Justice of the Peace. Print and upload. |
+| **Mortgage Deed** and **Insurance Assignment** | No. | Need a Justice of the Peace. Print and upload. |
+| **Loan Disbursement Sheet** | No. | An internal maker-checker sheet, never member-signed. |
+
+Guarantors always sign on paper in this release. E-signing is for the borrower.
+
+## Sign in the branch
+
+When the member is in front of you, hand them the device and let them sign.
+
+<Steps>
+  <Step title="Prepare the document">
+    On the loan's **Legal documents** card, click **Prepare** on the consent form's row. The row moves to **Prepared, awaiting signature**.
+  </Step>
+  <Step title="Click Sign electronically">
+    On the prepared row, click **Sign electronically**. A signature pad opens, with the consent statement the member is agreeing to right above it.
+  </Step>
+  <Step title="Let the member sign and agree">
+    The member signs on the pad and ticks the box to confirm they have read the document and consent to sign it electronically under the Electronic Transactions Act, 2006. Click **Sign electronically** to finish.
+  </Step>
+</Steps>
+
+The document moves straight to **Executed**. The member's signature is embedded into the PDF, the signed copy is stored, and a signed receipt of their consent is filed alongside it. Facilitating an e-signature needs the `loans.esign.request` capability, which the Credit Officer, Securities, Disbursement, and Administrator roles hold.
+
+## Sign the loan terms before approval
+
+The member can review and accept their loan terms before the loan is approved, as a draft.
+
+Generate a **draft loan agreement** from the loan while it is still being worked. It carries a clear **DRAFT, PROPOSED TERMS, NOT YET APPROVED** watermark, and it is built from the loan's current figures, the amount, the term, the rate, and the repayment. The member reads it and e-signs it to say they accept the terms on offer.
+
+This is a draft. Accepting it does not approve the loan, does not move it to the next stage, and does not create the final contract. It is a record that the member saw the numbers and agreed to them. After the loan is approved, the platform generates the real, binding [loan agreement](/loans/loan-agreements) separately, from the final approved figures.
+
+<Note>
+  Regenerating the draft, after a rate change for example, supersedes the earlier one. Only the latest draft is live for signing, and the member accepts the version they were shown.
+</Note>
+
+## Sign remotely, from a link
+
+When the member is not in the branch, send the document to their phone.
+
+Click **Email signing link** on the document or the draft agreement. The member receives an email with a secure, single-use link. Opening it, they confirm a one-time code sent by text message, review the document, and sign on their own device. When they finish, the document lands as **Executed** on the loan, exactly as if they had signed in the branch, and the officer sees the status update.
+
+Remote signing has three requirements, all in the name of proving it was really the member:
+
+- The member must be **identity-verified**. Their KYC status has to be **Verified**. If it is not, sign in the branch instead.
+- The member must have an **email** and a **phone number** on file. The email carries the link; the phone receives the one-time code.
+- The link is **single-use** and expires in **72 hours**. The one-time code expires after a few minutes and allows only a limited number of tries before you have to send a fresh one.
+
+The link never carries the document or the member's data in its address, and a link issued for one loan can only ever sign that one document. A link that has already been used, or has expired, is refused.
+
+## The emails a member receives
+
+Two emails are involved, both sent to the member's address on file. Your workspace controls whether they are switched on.
+
+- **The signing link**, when you send a document for remote signature. It contains the secure link and tells the member to expect a one-time code by text.
+- **A confirmation receipt**, after any successful e-signature, in the branch or remote. It confirms what they signed and that a tamper-evident record was kept.
+
+## What gets recorded
+
+Every e-signature is built to stand up later.
+
+- The captured signature is **embedded into the signed PDF**, and that signed copy is stored with a fixed retention period. The original prepared PDF is never altered.
+- A separate **signed receipt** records the exact consent statement, its version, who signed, and the moment they signed, and it is cryptographically signed so any later tampering is detectable.
+- The signature, the consent, and the method, in branch or remote, are written to the [audit trail](/compliance/audit-trail). The audit entry records that a signature happened and how, never the member's name or the signature image.
+
+## Who can do what
+
+Two capabilities govern member signing.
+
+- **`loans.esign.request`** lets a role facilitate a member signing, in the branch or by sending a link. The **Credit Officer**, **Securities**, **Disbursement**, and **Administrator** roles hold it.
+- **`loans.esign.view`** lets a role see whether a member has signed. Every role in the loan's pipeline holds it, including the **Adjudicator**, the **Credit Manager**, and the **Branch Manager**, so a reviewer can confirm the paperwork without being able to run the signing.
+
+HR and general Staff hold neither. See [Roles and permissions](/access/roles-and-permissions) for the full matrix.

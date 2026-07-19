@@ -115,6 +115,7 @@
             "icon": "file-check",
             "pages": [
               "legal-documents/overview",
+              "legal-documents/signing",
               "legal-documents/templates"
             ]
           },
