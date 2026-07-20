@@ -1,7 +1,7 @@
 ---
 title: "Create and manage loan products"
 sidebarTitle: "Loan products"
-description: "Create, edit, and archive the loan products your credit union offers, including code, loan type, rate source, and amount and term limits."
+description: "Create, edit, and archive the loan products your credit union offers, including code, loan type, rate source, amount and term limits, audience, per-product fees, minimum shares, and required supporting documents."
 icon: "file-text"
 ---
 
@@ -45,6 +45,46 @@ Each loan product is defined by these fields:
 | **Minimum term** | The shortest repayment period, 1 to 480 months |
 | **Maximum term** | The longest repayment period, 1 to 480 months |
 | **Description** | Optional. An internal note kept on the product record; not currently surfaced on the New Loan dropdown |
+
+## The product sheet: audience, shares, fees, and documents
+
+Beyond the basics above, each product carries the rest of its product sheet. These settings are all optional and live on the same New product and Edit product forms.
+
+| Setting | What it does |
+|---|---|
+| **Audience** | Who the product is offered to: **General** (any member) or **Staff**. This is an eligibility label for grouping and filtering, not a loan type. A staff cash secured product, for example, keeps its true security basis (Cash secured) and is simply tagged Staff, so pricing and risk are unchanged |
+| **Repayment method** | How the loan is repaid: Salary deduction, Over-the-counter payment, Automatic transfer, or Standing order. Tap all that apply. Recorded on the product sheet and shown to staff at capture |
+| **Repayment frequency** | How often a repayment falls due: Weekly, Fortnightly, or Monthly. Reference information; the schedule is still calculated as a monthly-blended payment |
+| **Minimum shares** | The share equity a member must hold for this product, as a percentage of the loan. When set, it overrides the loan type's minimum-shares rate for this product only, so two products under the same loan type can differ. Leave it blank to inherit the loan type's rate |
+| **Compulsory savings** | The product's stated compulsory-savings minimum, for example JMD 2,000. Recorded for reference |
+| **Approvals required** | How many approvers a loan on this product needs, for example 2 for approval by two adjudicators. Shown to Adjudication as policy guidance |
+| **Applicable fees** | The fees that apply to this product. See "Setting fees per product" below |
+| **Required supporting documents** | A checklist of the documents this product needs from the member, such as a job letter, recent payslips, or a valuation report. See "Required supporting documents" below |
+| **Product specifications** | Free-form rows (a label and its details) for anything else on the product sheet: loan purpose, target market, special terms, risk notes, and so on. Descriptive only |
+
+<Note>
+  The repayment, approvals, compulsory-savings, and specifications settings are
+  recorded as product-sheet information. They are shown to staff on the loan;
+  they do not change how a loan is priced or how the workflow gates.
+</Note>
+
+### Setting fees per product
+
+By default a product uses the fees configured for its loan type on the [Fees](/admin/fees) page. When you want a product to differ, add per-product fee rows on the product form:
+
+- **Opt a product into specific fees.** Pick a fee from your fee schedule to attach it to this product.
+- **Override the amount.** Enter a different value for this product only. A percentage fee takes a percent, a flat fee takes a JMD amount. Your fee schedule keeps its original value.
+- **Waive a fee.** Keep the fee on the sheet for the record while contributing nothing to the total.
+
+When a product has one or more fee rows, those rows are its fee set. When it has none, the product falls back to the fees configured for its loan type, exactly as before. New fees themselves are still created on the [Fees](/admin/fees) page, where each fee also carries its GL account and tax treatment; the product form only chooses which of those apply and at what amount.
+
+At disbursement, the Credit Officer sees these product fees pre-filled and can still edit or waive them per loan.
+
+### Required supporting documents
+
+Use this to record the supporting documents a product asks for, for example a completed application form, valid photo ID, a job letter, recent payslips, or proof of address. Add each as a row and mark it **Required** or **Recommended**. A one-click button inserts a standard set you can then adjust.
+
+The list appears on the loan as a checklist so the Credit Officer knows what to collect. The documents themselves are uploaded in the member and income document cards on the loan, using the existing upload tools.
 
 ## Finding products in the catalog
 
@@ -95,6 +135,13 @@ The Products page lists your products with a search box (by code or name), a loa
     Enter a short description (up to 500 characters). This is an internal note
     kept on the product record; it is not currently surfaced on the New Loan
     dropdown.
+  </Step>
+  <Step title="Complete the rest of the product sheet (optional)">
+    Set the audience, repayment method and frequency, minimum shares,
+    compulsory savings, approvals required, per-product fees, and required
+    supporting documents as needed. See
+    [The product sheet](#the-product-sheet-audience-shares-fees-and-documents)
+    above. All of these are optional and can change later.
   </Step>
   <Step title="Click Create product">
     The product is created and immediately appears in the new loan application
