@@ -36,6 +36,59 @@ This is the running history of what changed in the Loan Origination System, orga
 
     - You can bring in a Use of Funds Authorization as one of your own forms, so the member signs one document authorizing the fees, the amounts held as security, and any consolidation payoff, together with the interest disclaimer. It is onboarded like the other bring-your-own forms.
   </Accordion>
+  <Accordion title="20 July 2026 · Credit reports and a way to add any of your own forms">
+    Two additions for the Credit Department: a set of ready-to-run management reports, and a way to bring your own credit-union forms into the platform so they fill themselves from the loan.
+
+    **Reports**
+
+    - A new **Reports** area (under Dashboards, for anyone with reporting access) gives you named, period-based reports you can read on screen, print, or download as a spreadsheet: **New Loans**, **Net Cash Disbursed**, the **Branch Managers Monthly Loan Report**, the **Credit Committee Report**, the **HOD Credit Activity Report**, and the annual **AGM Credit Committee Report**. Pick a report and a month or year; a Branch Manager sees only their own branch.
+    - The figures come straight from the loans already in the platform, so a report is always current, with no spreadsheet to maintain by hand.
+
+    **Bring your own forms**
+
+    - Beyond the built-in agreements and deeds, an administrator can now upload **any** of your own forms as a template (for example an Authority to Deliver Motor Vehicle Title, a Salary Deduction Order, an RTGS form, or an Address Verification form), map its blanks to the loan's details once, and the platform fills and generates it per loan.
+    - On the loan, an **Additional forms** card lets the officer generate each of these with one click and download the filled copy. These forms are there when you want them; they never block a loan from moving forward.
+
+    See [Loan products](/admin/loan-products) and the documents templates area. Payoff and delinquency reporting stay in the core banking system, as before.
+  </Accordion>
+  <Accordion title="20 July 2026 · Loan products are now a full product sheet: audience, per-product fees, minimum shares, and required documents">
+    A loan product now holds its whole product sheet, so what you set up in Administration matches the product sheets your credit union already writes. On top of the code, loan type, rate, and amount and term limits, each product carries these settings.
+
+    **Audience: General or Staff**
+
+    - A product can be marked **Staff** so your staff-only offerings are grouped and filtered as their own set. This is an eligibility label, not a loan type: a Staff Cash Secured product keeps its real security basis, so its pricing and risk are unchanged. Everything else stays **General**.
+
+    **Fees, per product**
+
+    - A product can now name its **own fees**. Attach specific fees from your fee schedule, enter a different amount for this product only, or waive a fee while keeping it on the sheet for the record. A product with no fee settings still uses the fees configured for its loan type, exactly as before. At disbursement the officer sees these product fees pre-filled and can still adjust them per loan.
+
+    **Minimum shares, per product**
+
+    - The minimum-shares requirement can now be set **on the product**, overriding the loan type's rate, so two products under the same loan type can differ. Leave it blank to inherit the loan type's rate.
+
+    **Required supporting documents**
+
+    - Record the documents a product asks a member for, such as a job letter, recent payslips, or a valuation report, and mark each Required or Recommended. A one-click button inserts a standard set to adjust. The list shows on the loan as a checklist so the officer knows what to collect; the documents are still uploaded in the member and income document cards.
+
+    See [Loan products](/admin/loan-products). Setting up fees, loan types, and rate tables is unchanged.
+  </Accordion>
+  <Accordion title="20 July 2026 · E-signing, refined: type or upload a signature, codes by email, officers sign the Disbursement Sheet">
+    A round of refinements to electronic signing, on top of the signing that shipped the day before. Members have more ways to give a signature, remote codes now arrive by email, signatures sit on the document's own line, and an officer can e-sign the Disbursement Sheet.
+
+    **More ways to sign**
+
+    - When a member signs, they can now **draw** their signature, **type** their name and pick a signature style from a short list of fonts, or **upload** a photo or scan of their signature. A preview shows exactly what will be placed on the document before they commit.
+    - The signature is now placed on the document's **own signature line**, where a signature belongs, rather than at the foot of the page.
+
+    **Remote codes come by email**
+
+    - The one-time code for remote signing now arrives by **email**, to the same address as the signing link, instead of by text. A member needs only an **email** on file to sign remotely; a phone number is no longer required. The code expires after 10 minutes.
+    - The signing emails carry your workspace's **own name and branding**, so they read as coming from your credit union.
+
+    **Officers sign the Disbursement Sheet**
+
+    - A second officer can now e-sign the **Loan Disbursement Sheet** as the **checker**, on its "Checked by" line. Maker is never checker: the officer who prepared the sheet cannot sign it off, so a different officer always checks the disbursement. See [Member signing](/legal-documents/signing).
+  </Accordion>
   <Accordion title="19 July 2026 · Members can sign electronically, in the branch or from their phone">
     A member no longer has to sign on paper. They can sign a consent form or accept their loan terms right on the screen, either in the branch or from a secure link sent to their phone, and you can still print, wet-sign, and upload whenever a member prefers ink. Signing and uploading are two paths to the same place, so nothing about the old way changes.
 
