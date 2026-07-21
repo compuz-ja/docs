@@ -18,7 +18,25 @@ The platform picks the template that matches the loan type. Each one carries the
 | Auto | `auto` | The chattel mortgage over the vehicle, the registered lien, and the insurance requirement. |
 | Mortgage | `mortgage` | The mortgage over the real property, the title custody terms, and the property insurance requirement. |
 
-Each generated PDF records its template name and version, the approved principal, term, rate, monthly payment, and approval date, the member's name and address, and the approving officer. The template version is 3 today; it shows as **Version** on the agreement card and in the download filename (`loan-agreement-<id>-v3.pdf`). The approving officer is the Adjudicator who recorded the approval; the agreement shows their name with the title "Adjudicator". The figures come from the approved decision and its rate computation, so the agreement always reflects what was actually approved.
+Each generated PDF records its template name and version, the approved principal, term, rate, and approval date, the member's name and address, and the full monthly payment breakdown. The template version is 3 today; it shows as **Version** on the agreement card and in the download filename (`loan-agreement-<id>-v3.pdf`). The figures come from the approved decision and its rate computation, so the agreement always reflects what was actually approved. The agreement is signed by the member, any guarantors, the Loan Officer, and the Branch Manager, each with a date. The Adjudicator who recorded the decision is not a signatory.
+
+## What the agreement contains
+
+The agreement follows the credit union's own legal review. A few things are worth knowing about what a member reads and signs.
+
+**The full monthly payment, itemised.** Rather than a single number, the agreement breaks the monthly payment into its parts: principal and interest, the compulsory savings paid alongside the loan, and the creditor-life premium where it applies. It then shows the total the member pays each month. Creditor-life is not charged on a cash-secured loan, so its line is zero there. The total matches the affordability figure the officer sees at capture.
+
+**The security, stated plainly.** On a secured loan, the agreement leads with the type of security, Cash Secured, Motor Vehicle, or Real Property, and the details of what is pledged, before the legal clause that grants it.
+
+**When the first payment is due.** A cash-secured loan carries an Effective Date and the first payment falls one month after it. The other loan types are not disbursed on the day the agreement is drawn up, so they state instead that the first payment is due thirty days after the loan is disbursed. The Effective Date line appears only on the cash-secured agreement.
+
+**The clauses your members expect.** The agreement includes a credit-bureau consent, under the Credit Reporting Act, 2010, and a change-in-circumstances clause asking the member to tell the credit union promptly of any material change during the term of the loan.
+
+**The signature page.** The required signatories are the member, any guarantor where applicable, the Loan Officer, and the Branch Manager, each with a place to date their signature. Each page also carries the member's initials. The page closes with an acknowledgement by the member, and each guarantor where applicable, that they have read and understood the agreement.
+
+<Note>
+  The name the agreement uses for the credit union as the legal party, in the opening sentence and on the signature lines, is configurable per credit union and is set to the credit union's registered name. It can differ from the display brand shown on the letterhead.
+</Note>
 
 ## When the agreement is generated
 
