@@ -1,0 +1,30 @@
+---
+title: "Service management"
+sidebarTitle: "Service management"
+description: "How change, incident and problem management work on a CompuZign-operated platform, and what rebuild-from-repository means for recovery."
+icon: "clipboard-list"
+---
+
+Service management on a CompuZign platform rests on one property of the architecture: every configuration is declared in code.
+
+## Change
+
+Change flows through a GitOps pipeline. A change is a commit, a review and a sync, which makes it declarative, auditable and reversible. There is no console-only change to reconstruct afterwards.
+
+That has a direct operational consequence. Because the repository is the source of truth, any component, or an entire site, can be rebuilt from it.
+
+## Incident
+
+Incidents are handled by the NOC and SOC with full-stack observability across all seven platforms. The value of running the disciplines together shows up here: there is no question of whose problem an incident is, because one partner operates the whole environment.
+
+## Problem
+
+Operational learning feeds back into the architecture. That is the fifth ATLAS discipline closing the loop on the first, and it is why the framework is a cycle rather than a sequence.
+
+## Backup and disaster recovery
+
+Managed and rehearsed continuously. Recovery is a procedure that has been performed, against the second site, under the same automation that runs production.
+
+<Note>
+  A disaster recovery plan that has never been executed is a document. The distinction this service draws is between rehearsed and documented.
+</Note>

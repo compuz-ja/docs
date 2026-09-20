@@ -1,12 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
-  "name": "CNS",
-  "description": "CNS product documentation. The Loan Origination System (LOS) lives here, with room for every Compuzign product that follows.",
+  "name": "CompuZign",
+  "description": "Documentation for the CompuZign platform portfolio. ATLAS is the delivery framework; KAIROS, APTOS, OMNIA and ARGOS are the platforms delivered under it.",
   "colors": {
-    "primary": "#F59E0B",
-    "light": "#FBBF24",
-    "dark": "#D97706"
+    "primary": "#475569",
+    "light": "#94A3B8",
+    "dark": "#334155"
   },
   "appearance": {
     "default": "light"
@@ -19,7 +19,13 @@
     "eyebrows": "breadcrumbs"
   },
   "contextual": {
-    "options": ["copy", "view", "assistant", "mcp", "add-mcp"]
+    "options": [
+      "copy",
+      "view",
+      "assistant",
+      "mcp",
+      "add-mcp"
+    ]
   },
   "navigation": {
     "global": {
@@ -28,125 +34,266 @@
           "anchor": "Home",
           "icon": "house",
           "href": "/"
+        },
+        {
+          "anchor": "compuzign.com",
+          "icon": "external-link",
+          "href": "https://compuzign.com"
         }
       ]
     },
     "directory": "card",
-    "tabs": [
+    "products": [
       {
-        "tab": "LOS",
-        "icon": "banknote",
+        "product": "ATLAS",
+        "icon": "compass",
+        "description": "The delivery framework every CompuZign platform is built and run under.",
+        "color": {
+          "light": "#475569",
+          "dark": "#94A3B8"
+        },
         "groups": [
           {
-            "group": "Get started",
-            "icon": "rocket",
+            "group": "The framework",
+            "icon": "compass",
             "expanded": true,
             "pages": [
-              "introduction",
-              "quickstart",
-              "key-concepts"
+              "atlas/overview",
+              "atlas/disciplines",
+              "atlas/reference-architecture",
+              "atlas/engagement-phases"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "product": "KAIROS",
+        "icon": "server",
+        "description": "Infrastructure as a service: compute, storage, fabric and the cloud-native runtime.",
+        "color": {
+          "light": "#0E7490",
+          "dark": "#22D3EE"
+        },
+        "groups": [
           {
-            "group": "Account & access",
-            "icon": "shield-check",
+            "group": "Platform",
+            "icon": "server",
+            "expanded": true,
             "pages": [
-              "access/signing-in",
-              "access/mfa",
-              "access/roles-and-permissions",
-              "access/inviting-team-members",
-              "account/your-profile",
-              "account/notification-preferences"
+              "kairos/overview",
+              "kairos/data-centres",
+              "kairos/platform-stack"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "product": "APTOS",
+        "icon": "life-buoy",
+        "description": "Support as a service: managed services, security operations and the round-the-clock envelope.",
+        "color": {
+          "light": "#15803D",
+          "dark": "#4ADE80"
+        },
+        "groups": [
           {
-            "group": "Members & KYC",
-            "icon": "users",
+            "group": "Service",
+            "icon": "life-buoy",
+            "expanded": true,
             "pages": [
-              "members/overview",
-              "members/creating-members",
-              "members/kyc-verification",
-              "members/documents",
-              "members/bulk-import"
+              "aptos/overview",
+              "aptos/service-management"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "product": "OMNIA",
+        "icon": "banknote",
+        "description": "Digital banking: core banking, loan origination, onboarding and member channels.",
+        "color": {
+          "light": "#F59E0B",
+          "dark": "#FBBF24"
+        },
+        "tabs": [
           {
-            "group": "Loan origination",
-            "icon": "file-text",
-            "pages": [
-              "loans/overview",
-              "loans/creating-an-application",
-              "loans/loan-assignment",
-              "loans/loan-types",
-              "loans/workflow-states",
-              "loans/loan-agreements"
-            ]
-          },
-          {
-            "group": "Loan migration",
-            "icon": "archive",
-            "pages": [
-              "migration/overview",
-              "migration/workbook"
-            ]
-          },
-          {
-            "group": "Adjudication & securities",
-            "icon": "gavel",
-            "pages": [
-              "workflows/adjudication",
-              "workflows/securities"
-            ]
-          },
-          {
-            "group": "Disbursement",
+            "tab": "Overview",
             "icon": "banknote",
             "pages": [
-              "workflows/disbursement",
-              "disbursement/payment-methods",
-              "disbursement/fees-and-gct",
-              "disbursement/saved-payees",
-              "disbursement/controls",
-              "disbursement/settlement"
+              "omnia/overview"
             ]
           },
           {
-            "group": "Legal documents",
-            "icon": "file-check",
-            "pages": [
-              "legal-documents/overview",
-              "legal-documents/signing",
-              "legal-documents/templates"
+            "tab": "LOS",
+            "icon": "file-text",
+            "groups": [
+              {
+                "group": "Get started",
+                "icon": "rocket",
+                "expanded": true,
+                "pages": [
+                  "omnia/los/introduction",
+                  "omnia/los/quickstart",
+                  "omnia/los/key-concepts"
+                ]
+              },
+              {
+                "group": "Account & access",
+                "icon": "shield-check",
+                "pages": [
+                  "omnia/los/access/signing-in",
+                  "omnia/los/access/mfa",
+                  "omnia/los/access/roles-and-permissions",
+                  "omnia/los/access/inviting-team-members",
+                  "omnia/los/account/your-profile",
+                  "omnia/los/account/notification-preferences"
+                ]
+              },
+              {
+                "group": "Members & KYC",
+                "icon": "users",
+                "pages": [
+                  "omnia/los/members/overview",
+                  "omnia/los/members/creating-members",
+                  "omnia/los/members/kyc-verification",
+                  "omnia/los/members/documents",
+                  "omnia/los/members/bulk-import"
+                ]
+              },
+              {
+                "group": "Loan origination",
+                "icon": "file-text",
+                "pages": [
+                  "omnia/los/loans/overview",
+                  "omnia/los/loans/creating-an-application",
+                  "omnia/los/loans/loan-assignment",
+                  "omnia/los/loans/loan-types",
+                  "omnia/los/loans/workflow-states",
+                  "omnia/los/loans/loan-agreements"
+                ]
+              },
+              {
+                "group": "Loan migration",
+                "icon": "archive",
+                "pages": [
+                  "omnia/los/migration/overview",
+                  "omnia/los/migration/workbook"
+                ]
+              },
+              {
+                "group": "Adjudication & securities",
+                "icon": "gavel",
+                "pages": [
+                  "omnia/los/workflows/adjudication",
+                  "omnia/los/workflows/securities"
+                ]
+              },
+              {
+                "group": "Disbursement",
+                "icon": "banknote",
+                "pages": [
+                  "omnia/los/workflows/disbursement",
+                  "omnia/los/disbursement/payment-methods",
+                  "omnia/los/disbursement/fees-and-gct",
+                  "omnia/los/disbursement/saved-payees",
+                  "omnia/los/disbursement/controls",
+                  "omnia/los/disbursement/settlement"
+                ]
+              },
+              {
+                "group": "Legal documents",
+                "icon": "file-check",
+                "pages": [
+                  "omnia/los/legal-documents/overview",
+                  "omnia/los/legal-documents/signing",
+                  "omnia/los/legal-documents/templates"
+                ]
+              },
+              {
+                "group": "Notifications",
+                "icon": "bell",
+                "pages": [
+                  "omnia/los/workflows/notifications"
+                ]
+              },
+              {
+                "group": "Audit & compliance",
+                "icon": "shield",
+                "pages": [
+                  "omnia/los/compliance/audit-trail",
+                  "omnia/los/compliance/compliance-export",
+                  "omnia/los/compliance/data-security"
+                ]
+              },
+              {
+                "group": "Administration",
+                "icon": "settings",
+                "pages": [
+                  "omnia/los/admin/workspace-setup",
+                  "omnia/los/admin/workspace-configuration",
+                  "omnia/los/admin/loan-products",
+                  "omnia/los/admin/loan-types",
+                  "omnia/los/admin/rate-tables",
+                  "omnia/los/admin/fee-schedule",
+                  "omnia/los/admin/analytics-dashboards",
+                  "omnia/los/admin/identity-verification-health"
+                ]
+              },
+              {
+                "group": "Release notes",
+                "icon": "clock",
+                "pages": [
+                  "omnia/los/changelog"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "product": "ARGOS",
+        "icon": "database",
+        "description": "The enterprise data warehouse: governed reporting, reconciled to the general ledger.",
+        "color": {
+          "light": "#12355B",
+          "dark": "#7FA8D8"
+        },
+        "tabs": [
+          {
+            "tab": "Platform",
+            "icon": "database",
+            "groups": [
+              {
+                "group": "Get started",
+                "icon": "rocket",
+                "expanded": true,
+                "pages": [
+                  "argos/overview",
+                  "argos/editions",
+                  "argos/reading-a-report"
+                ]
+              }
             ]
           },
           {
-            "group": "Notifications",
-            "icon": "bell",
-            "pages": [
-              "workflows/notifications"
-            ]
-          },
-          {
-            "group": "Audit & compliance",
-            "icon": "shield",
-            "pages": [
-              "compliance/audit-trail",
-              "compliance/compliance-export",
-              "compliance/data-security"
-            ]
-          },
-          {
-            "group": "Administration",
-            "icon": "settings",
-            "pages": [
-              "admin/workspace-setup",
-              "admin/workspace-configuration",
-              "admin/loan-products",
-              "admin/loan-types",
-              "admin/rate-tables",
-              "admin/fee-schedule",
-              "admin/analytics-dashboards",
-              "admin/identity-verification-health"
+            "tab": "Reports",
+            "icon": "table",
+            "groups": [
+              {
+                "group": "Report catalogue",
+                "icon": "library",
+                "expanded": true,
+                "pages": [
+                  "argos/reports/overview"
+                ]
+              },
+              {
+                "group": "Financial close",
+                "icon": "landmark",
+                "pages": [
+                  "argos/reports/financial/combined-trial-balance"
+                ]
+              }
             ]
           }
         ]
@@ -160,14 +307,246 @@
   "navbar": {
     "links": [
       {
-        "label": "Changelog",
-        "href": "/changelog"
+        "label": "LOS sign in",
+        "href": "https://loan.compuzign.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Sign In",
-      "href": "https://loan.compuzign.com"
+      "label": "compuzign.com",
+      "href": "https://compuzign.com"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/access/inviting-team-members",
+      "destination": "/omnia/los/access/inviting-team-members",
+      "permanent": true
+    },
+    {
+      "source": "/access/mfa",
+      "destination": "/omnia/los/access/mfa",
+      "permanent": true
+    },
+    {
+      "source": "/access/roles-and-permissions",
+      "destination": "/omnia/los/access/roles-and-permissions",
+      "permanent": true
+    },
+    {
+      "source": "/access/signing-in",
+      "destination": "/omnia/los/access/signing-in",
+      "permanent": true
+    },
+    {
+      "source": "/account/notification-preferences",
+      "destination": "/omnia/los/account/notification-preferences",
+      "permanent": true
+    },
+    {
+      "source": "/account/your-profile",
+      "destination": "/omnia/los/account/your-profile",
+      "permanent": true
+    },
+    {
+      "source": "/admin/analytics-dashboards",
+      "destination": "/omnia/los/admin/analytics-dashboards",
+      "permanent": true
+    },
+    {
+      "source": "/admin/fee-schedule",
+      "destination": "/omnia/los/admin/fee-schedule",
+      "permanent": true
+    },
+    {
+      "source": "/admin/identity-verification-health",
+      "destination": "/omnia/los/admin/identity-verification-health",
+      "permanent": true
+    },
+    {
+      "source": "/admin/loan-products",
+      "destination": "/omnia/los/admin/loan-products",
+      "permanent": true
+    },
+    {
+      "source": "/admin/loan-types",
+      "destination": "/omnia/los/admin/loan-types",
+      "permanent": true
+    },
+    {
+      "source": "/admin/rate-tables",
+      "destination": "/omnia/los/admin/rate-tables",
+      "permanent": true
+    },
+    {
+      "source": "/admin/workspace-configuration",
+      "destination": "/omnia/los/admin/workspace-configuration",
+      "permanent": true
+    },
+    {
+      "source": "/admin/workspace-setup",
+      "destination": "/omnia/los/admin/workspace-setup",
+      "permanent": true
+    },
+    {
+      "source": "/changelog",
+      "destination": "/omnia/los/changelog",
+      "permanent": true
+    },
+    {
+      "source": "/compliance/audit-trail",
+      "destination": "/omnia/los/compliance/audit-trail",
+      "permanent": true
+    },
+    {
+      "source": "/compliance/compliance-export",
+      "destination": "/omnia/los/compliance/compliance-export",
+      "permanent": true
+    },
+    {
+      "source": "/compliance/data-security",
+      "destination": "/omnia/los/compliance/data-security",
+      "permanent": true
+    },
+    {
+      "source": "/disbursement/controls",
+      "destination": "/omnia/los/disbursement/controls",
+      "permanent": true
+    },
+    {
+      "source": "/disbursement/fees-and-gct",
+      "destination": "/omnia/los/disbursement/fees-and-gct",
+      "permanent": true
+    },
+    {
+      "source": "/disbursement/payment-methods",
+      "destination": "/omnia/los/disbursement/payment-methods",
+      "permanent": true
+    },
+    {
+      "source": "/disbursement/saved-payees",
+      "destination": "/omnia/los/disbursement/saved-payees",
+      "permanent": true
+    },
+    {
+      "source": "/disbursement/settlement",
+      "destination": "/omnia/los/disbursement/settlement",
+      "permanent": true
+    },
+    {
+      "source": "/introduction",
+      "destination": "/omnia/los/introduction",
+      "permanent": true
+    },
+    {
+      "source": "/key-concepts",
+      "destination": "/omnia/los/key-concepts",
+      "permanent": true
+    },
+    {
+      "source": "/legal-documents/overview",
+      "destination": "/omnia/los/legal-documents/overview",
+      "permanent": true
+    },
+    {
+      "source": "/legal-documents/signing",
+      "destination": "/omnia/los/legal-documents/signing",
+      "permanent": true
+    },
+    {
+      "source": "/legal-documents/templates",
+      "destination": "/omnia/los/legal-documents/templates",
+      "permanent": true
+    },
+    {
+      "source": "/loans/creating-an-application",
+      "destination": "/omnia/los/loans/creating-an-application",
+      "permanent": true
+    },
+    {
+      "source": "/loans/loan-agreements",
+      "destination": "/omnia/los/loans/loan-agreements",
+      "permanent": true
+    },
+    {
+      "source": "/loans/loan-assignment",
+      "destination": "/omnia/los/loans/loan-assignment",
+      "permanent": true
+    },
+    {
+      "source": "/loans/loan-types",
+      "destination": "/omnia/los/loans/loan-types",
+      "permanent": true
+    },
+    {
+      "source": "/loans/overview",
+      "destination": "/omnia/los/loans/overview",
+      "permanent": true
+    },
+    {
+      "source": "/loans/workflow-states",
+      "destination": "/omnia/los/loans/workflow-states",
+      "permanent": true
+    },
+    {
+      "source": "/members/bulk-import",
+      "destination": "/omnia/los/members/bulk-import",
+      "permanent": true
+    },
+    {
+      "source": "/members/creating-members",
+      "destination": "/omnia/los/members/creating-members",
+      "permanent": true
+    },
+    {
+      "source": "/members/documents",
+      "destination": "/omnia/los/members/documents",
+      "permanent": true
+    },
+    {
+      "source": "/members/kyc-verification",
+      "destination": "/omnia/los/members/kyc-verification",
+      "permanent": true
+    },
+    {
+      "source": "/members/overview",
+      "destination": "/omnia/los/members/overview",
+      "permanent": true
+    },
+    {
+      "source": "/migration/overview",
+      "destination": "/omnia/los/migration/overview",
+      "permanent": true
+    },
+    {
+      "source": "/migration/workbook",
+      "destination": "/omnia/los/migration/workbook",
+      "permanent": true
+    },
+    {
+      "source": "/quickstart",
+      "destination": "/omnia/los/quickstart",
+      "permanent": true
+    },
+    {
+      "source": "/workflows/adjudication",
+      "destination": "/omnia/los/workflows/adjudication",
+      "permanent": true
+    },
+    {
+      "source": "/workflows/disbursement",
+      "destination": "/omnia/los/workflows/disbursement",
+      "permanent": true
+    },
+    {
+      "source": "/workflows/notifications",
+      "destination": "/omnia/los/workflows/notifications",
+      "permanent": true
+    },
+    {
+      "source": "/workflows/securities",
+      "destination": "/omnia/los/workflows/securities",
+      "permanent": true
+    }
+  ]
 }

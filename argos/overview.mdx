@@ -1,0 +1,63 @@
+---
+title: "What ARGOS is"
+sidebarTitle: "Overview"
+description: "CompuZign ARGOS is the enterprise data warehouse for credit unions. Sixty-six governed reports, reconciled to the general ledger before anyone sees them."
+icon: "database"
+---
+
+CompuZign ARGOS is the enterprise data warehouse for credit unions. It consolidates every core banking module into a single dimensional warehouse and publishes sixty-six governed reports from it.
+
+Regulatory returns, IFRS 9 provisioning, AML surveillance, financial close and board reporting. All reconciled to the general ledger before anyone sees them.
+
+## What makes it different from a reporting tool
+
+<CardGroup cols={2}>
+  <Card title="Reconciled by construction" icon="scale">
+    Every load is balanced to the source control totals and certified before it is published. Four hundred and four reconciliation controls at zero tolerance.
+  </Card>
+  <Card title="Governed definitions" icon="book-lock">
+    A report is a row in the warehouse, not code in the interface. What a user may run, and the capability it required, is a matter of record.
+  </Card>
+  <Card title="Every figure opens" icon="search">
+    Twenty-nine reports open on a clicked figure into a breakdown you choose: the dimension to regroup by, and the measure to see it in.
+  </Card>
+  <Card title="Fully auditable" icon="file-check">
+    Every run, every export and every sign-in is written to the audit trail with the parameters used.
+  </Card>
+</CardGroup>
+
+## Isolation
+
+Each institution's data is isolated by row-level security in the database, not by the application. The account the platform connects as holds neither `SUPERUSER` nor `BYPASSRLS`, and the application refuses to start if it does. A session with no institution context sees no rows at all.
+
+Each institution's encrypted fields are protected by a separate key.
+
+## The four editions
+
+ARGOS is sold in four editions, and a report belongs to exactly one of them. The edition is the depth of the question a report answers, not the subject it covers.
+
+| Edition | Tier | The question | Reports |
+|---|---|---|---|
+| **Comply** | 1 | What happened? | 40 |
+| **Understand** | 2 | Why did it happen? | 18 |
+| **Anticipate** | 3 | What happens next? | 4 |
+| **Decide** | 4 | What should we do? | 4 |
+
+<Card title="How the editions work" icon="layers" href="/argos/editions">
+  What each edition adds, and why a report sits where it does.
+</Card>
+
+## Where to start
+
+<CardGroup cols={2}>
+  <Card title="Reading a report" icon="book-open" href="/argos/reading-a-report">
+    What every report screen has in common: parameters, the run record, drill-down and exports.
+  </Card>
+  <Card title="The report catalogue" icon="library" href="/argos/reports/overview">
+    All sixty-six reports by domain, with the edition each one needs.
+  </Card>
+</CardGroup>
+
+<Note>
+  Figures in the ARGOS documentation come from a demonstration warehouse belonging to Meridian Co-operative Credit Union, which is not a real credit union. They are there to show shape and behaviour, never as anyone's actual position.
+</Note>

@@ -1,0 +1,90 @@
+---
+title: "Sign in and access your credit union"
+sidebarTitle: "Signing in"
+description: "Sign in to the Loan Origination System, navigate to your credit union workspace, switch between workspaces, and recover your account."
+icon: "key"
+---
+
+The Loan Origination System uses email and password authentication. Each credit union has its own workspace URL that ends in the credit union's slug, for example `https://loan.compuzign.com/your-slug`. Bookmark your credit union's URL so you always land in the right workspace. If you are not sure what your URL is, ask your **Administrator**.
+
+## Signing in
+
+<Steps>
+  <Step title="Navigate to your credit union's workspace URL">
+    Open your browser and go to the URL your administrator provided, for example `https://loan.compuzign.com/your-slug`. Going to the root domain without a credit union slug takes you to the sign-in page.
+  </Step>
+  <Step title="Enter your email address and password">
+    Type the email address and password associated with your account. The password is case-sensitive.
+  </Step>
+  <Step title="Complete multi-factor authentication (if enabled)">
+    If MFA is enabled on your account, you are prompted to enter the 6-digit code from your authenticator app before being admitted to the workspace. See [MFA](/omnia/los/access/mfa) for setup instructions.
+  </Step>
+  <Step title="You're in">
+    After a successful sign-in you land on your workspace dashboard. The active credit union's logo and name are shown in the left sidebar.
+  </Step>
+</Steps>
+
+<Note>
+  When you sign in from a device or network that does not match any of your other active sessions, the platform sends a new-sign-in alert email to your address with the time, the IP address, and the device and browser used. Your very first sign-in does not trigger this alert, since there is no earlier session to compare it against. If a later sign-in was you, no action is needed. If it was not, change your password and review your security settings at `/profile/security`.
+</Note>
+
+## Email verification for new accounts
+
+When your **Administrator** invites you, clicking the invitation link takes a brand-new user to sign-up to create their own account. If an account already exists for your email, the link takes you to sign-in instead, then straight into the workspace. After you create a new account, the platform emails a verification link to your address. You must verify your email before you can sign in for the first time.
+
+Check your inbox for the verification message and click the **Verify email** link. The link expires 24 hours after it is sent. Once verified, return to your credit union's sign-in page and proceed normally. If you do not receive the email within a few minutes, check your spam folder.
+
+If you try to sign in before verifying, the sign-in page shows "Please verify your email first." with a **Resend verification email** link that opens the **Check your email** page. There the **Resend verification email** button enforces a 30-second cooldown, reading "Resend in Ns" until the timer clears.
+
+<Note>
+  Joining by invitation does not skip verification. You still sign up and click the verification email before your first sign-in.
+</Note>
+
+## Forgot your password
+
+If you cannot remember your password, you can reset it from the sign-in page.
+
+<Steps>
+  <Step title="Click Forgot password">
+    On the sign-in page, click the **Forgot password?** link below the password field.
+  </Step>
+  <Step title="Enter your email address">
+    Type the email address associated with your account and click **Send reset link**.
+  </Step>
+  <Step title="Check your inbox">
+    The platform sends a password-reset email if that address exists in the system. For security, the page shows the same confirmation message whether or not the email was found. This prevents third parties from guessing which addresses have accounts.
+  </Step>
+  <Step title="Click the reset link and choose a new password">
+    Open the email, click **Reset password**, and enter a new password. The new password must be at least 12 characters and include a lowercase letter, an uppercase letter, a number, and a symbol. A live strength meter checks each rule as you type. Reset links are valid for **1 hour**. If yours has expired, repeat the process to request a new one.
+  </Step>
+</Steps>
+
+## Switching between credit unions
+
+If you are a member of more than one credit union workspace, you can switch workspaces without signing out. You see this only when you hold an active membership in more than one credit union.
+
+<Steps>
+  <Step title="Open the account menu">
+    Click your avatar in the top-right corner. The **Switch workspace** item appears only when you belong to more than one active membership.
+  </Step>
+  <Step title="Pick a workspace">
+    Select **Switch workspace** to open the workspace picker. Each workspace you belong to is a card showing the credit union's name, your role there, and its slug. Click the card for the workspace you want.
+  </Step>
+  <Step title="Confirm the switch">
+    The platform loads the selected workspace. Your role and permissions are specific to each credit union, so the available menus and queues may look different.
+  </Step>
+</Steps>
+
+<Note>
+  The workspace picker lists only the workspaces where your membership is active. If a workspace you expect to see is missing, contact the **Administrator** for that credit union.
+</Note>
+
+## When your access is paused
+
+Suspension is per workspace, not per account. If your membership in one workspace is paused, you can still sign in and use any other workspace where your membership is active.
+
+When you open a workspace your membership is paused in, sign-in still succeeds but you are redirected to an **Access paused** page that reads "Your access to this workspace is paused." Contact the **Administrator** for that credit union to restore it.
+
+<Warning>
+  Never share your credentials with a colleague. Each person must have their own account. Shared accounts make it impossible to attribute who approved, submitted, or modified a loan in the audit trail.
+</Warning>
