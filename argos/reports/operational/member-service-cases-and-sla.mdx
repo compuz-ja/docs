@@ -1,0 +1,50 @@
+---
+title: "Member Service Cases and SLA"
+sidebarTitle: "Member Service Cases and SLA"
+description: "Cases by type and status with resolution time against SLA, and the disputed value still outstanding."
+icon: "settings"
+---
+
+## What it answers
+
+Are cases being resolved inside SLA?
+
+| | |
+|---|---|
+| Report key | `ops-service-cases` |
+| Edition | Understand, tier 2 |
+| Owner | Branch Manager |
+| Capability | `reports.run` |
+| Delivery | On demand |
+| Modules | `DW09` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Opened from** | date | Yes | `PERIOD_MONTH_START` |
+| **Opened to** | date | Yes | `LAST_CLOSE` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/ops-service-cases.png" alt="The Member Service Cases and SLA report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `case_type` | text | Case type |
+| `cases_opened` | integer | Opened |
+| `cases_resolved` | integer | Resolved |
+| `cases_open` | integer | Still open |
+| `avg_resolution_hours` | number | Avg resolution (hrs) |
+| `sla_met_pct` | percent | SLA met |
+| `amount_disputed` | currency | Disputed |
+| `amount_credited` | currency | Credited |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

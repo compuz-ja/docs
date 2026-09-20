@@ -1,0 +1,47 @@
+---
+title: "Product Penetration and Cross-Sell"
+sidebarTitle: "Product Penetration and Cross-"
+description: "How many members hold each product family and how many plausibly should, which turns the gap into a campaign rather than an observation."
+icon: "users"
+---
+
+## What it answers
+
+How many members hold each product, and how many plausibly should?
+
+| | |
+|---|---|
+| Report key | `mem-product-penetration` |
+| Edition | Understand, tier 2 |
+| Owner | Executive |
+| Capability | `reports.member.run` |
+| Delivery | On demand |
+| Modules | `DW10` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Period** | month | Yes | `LAST_CLOSE_MONTH` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/mem-product-penetration.png" alt="The Product Penetration and Cross-Sell report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `product_family` | text | Product family |
+| `members_holding` | integer | Members holding |
+| `members_total` | integer | Members total |
+| `penetration_pct` | percent | Penetration |
+| `avg_balance` | currency | Average balance |
+| `cross_sell_opportunity` | integer | Cross-sell opportunity |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

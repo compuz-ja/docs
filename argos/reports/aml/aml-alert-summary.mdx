@@ -1,0 +1,56 @@
+---
+title: "AML Alert Summary"
+sidebarTitle: "AML Alert Summary"
+description: "Alerts raised, closed and still open by scenario and month, with the false-positive rate and how long dispositions are taking."
+icon: "shield-alert"
+---
+
+## What it answers
+
+Are the detection rules producing work that is worth doing?
+
+| | |
+|---|---|
+| Report key | `aml-alert-summary` |
+| Edition | Comply, tier 1 |
+| Owner | Compliance Officer |
+| Capability | `reports.aml.run` |
+| Frequency | Monthly |
+| Delivery | On demand |
+| Modules | `DW07` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From month** | month | Yes | `PERIOD_START_MONTH` |
+| **To month** | month | Yes | `LAST_CLOSE_MONTH` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/aml-alert-summary.png" alt="The AML Alert Summary report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `alert_type` | text | Alert type |
+| `alerts_raised` | integer | Raised |
+| `alerts_closed` | integer | Closed |
+| `alerts_open` | integer | Open |
+| `false_positives` | integer | False positives |
+| `false_positive_pct` | percent | FP rate |
+| `strs_filed` | integer | STRs filed |
+| `aggregate_amount` | currency | Value alerted |
+| `avg_days_to_close` | number | Avg days to close |
+
+<Note>
+  A false-positive rate near 100% means a scenario is mistuned, not that the institution is clean. Read it beside the alert register rather than on its own.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

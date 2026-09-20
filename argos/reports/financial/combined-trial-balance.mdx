@@ -27,14 +27,14 @@ It answers what happened. It does not explain why, estimate anything or recommen
 
 ## Why it is called Combined
 
-The institution runs two legacy books. The MCCU book is kept in Smart Universa. The former IECCU book, carried over from the merger, is kept in Highgate Alpha. The two systems use different account codes for the same things.
+The institution runs two legacy books. The Meridian book is kept in one core system. The former Halcyon book, carried over from the merger, is kept in another. The two systems use different account codes for the same things.
 
 ARGOS maps both onto a single unified chart of accounts as the journals load, so an account means the same thing whichever system it came from.
 
 ```mermaid
 flowchart LR
-    A["MCCU book<br/>Smart Universa<br/>43 accounts"] -->|mapped| U["Unified chart<br/>of accounts<br/>47 accounts"]
-    B["Former IECCU book<br/>Highgate Alpha<br/>42 accounts"] -->|mapped| U
+    A["Meridian book<br/>core system<br/>43 accounts"] -->|mapped| U["Unified chart<br/>of accounts<br/>47 accounts"]
+    B["Former Halcyon book<br/>core system<br/>42 accounts"] -->|mapped| U
     C["Elimination entries<br/>2 accounts"] -->|posted| U
     U -->|aggregated| R["Combined Trial Balance<br/>43 rows at Aug 2026"]
 ```
@@ -50,7 +50,7 @@ Combining is an aggregation, not a reconciliation. The **Book** parameter select
 | Parameter | Default | What it changes |
 |---|---|---|
 | **Period** | Last close | The month the balances are struck at. Balances are cumulative, so choosing July shows the position at the July close, not July's activity on its own. |
-| **Book** | Combined entity | Combined entity includes MCCU, former IECCU and the elimination entries. The two single-book options show one source as the legacy core reports it, which is what you want when reconciling against that system. |
+| **Book** | Combined entity | Combined entity includes the Meridian book, the former Halcyon book and the elimination entries. The two single-book options show one source as the legacy core reports it, which is what you want when reconciling against that system. |
 | **Hide nil balances** | Yes | Suppresses accounts with no balance and no movement. Turn it off to see the complete chart, which is how you prove an account genuinely has nothing in it. |
 
 <Frame caption="The line under the parameters records who owns the report, the modules it satisfies, the capability it required, the row count, the time taken, and the run identifier that keys its entry in the audit trail.">
@@ -170,8 +170,8 @@ Three controls reconcile the ledger, one per book. Each compares what the source
 
 | Control | Source | Warehouse | Variance | Status |
 |---|---|---|---|---|
-| `TB_BALANCED_MCCU` | 255,308,618.36 | 255,308,618.36 | 0.00 | reconciled |
-| `TB_BALANCED_IECCU` | 26,733,343.00 | 26,733,343.00 | 0.00 | reconciled |
+| Meridian book balanced | 255,308,618.36 | 255,308,618.36 | 0.00 | reconciled |
+| Former Halcyon book balanced | 26,733,343.00 | 26,733,343.00 | 0.00 | reconciled |
 | `TB_BALANCED_ELIMINATION` | 3,283,806.01 | 3,283,806.01 | 0.00 | reconciled |
 
 ### Data quality
@@ -198,8 +198,8 @@ Every run writes to the audit trail before it returns: who ran it, the parameter
 ## Questions people ask
 
 <AccordionGroup>
-  <Accordion title="Why doesn't this tie to what Smart Universa prints?">
-    Check the **Book** parameter first. The default is Combined entity, which includes the former IECCU book and the elimination entries, so it will not match a single core system. Set Book to the MCCU book to compare like with like.
+  <Accordion title="Why doesn't this tie to what the core system prints?">
+    Check the **Book** parameter first. The default is Combined entity, which includes the former Halcyon book and the elimination entries, so it will not match a single core system. Set Book to the Meridian book to compare like with like.
 
     If it still does not tie, the three reconciliation controls above compare exactly these two figures and record the variance.
   </Accordion>

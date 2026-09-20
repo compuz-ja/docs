@@ -1,0 +1,57 @@
+---
+title: "Sanctions and Watch-list Screening Hits"
+sidebarTitle: "Sanctions and Watch-list Scree"
+description: "Every screening match by list and disposition, separating real-time onboarding screening from the daily batch re-screen of the whole member base."
+icon: "shield-alert"
+---
+
+## What it answers
+
+What matched a sanctions or watch list, and what was decided?
+
+| | |
+|---|---|
+| Report key | `aml-screening-hits` |
+| Edition | Comply, tier 1 |
+| Owner | Compliance Officer |
+| Capability | `reports.aml.run` |
+| Frequency | Daily |
+| Delivery | On demand |
+| Modules | `DW07` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+| **Matches only** | boolean | No | `True` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/aml-screening-hits.png" alt="The Sanctions and Watch-list Screening Hits report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `list_name` | text | List |
+| `screening_mode` | text | Mode |
+| `screenings` | integer | Screenings |
+| `matches` | integer | Matches |
+| `hit_rate` | percent | Hit rate |
+| `true_matches` | integer | True matches |
+| `false_positives` | integer | False positives |
+| `pending` | integer | Pending review |
+| `avg_match_score` | number | Avg score |
+
+<Note>
+  Real-time onboarding hits and batch rescreening hits are separated because they carry different obligations. Do not total them.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

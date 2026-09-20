@@ -291,7 +291,109 @@
                 "group": "Financial close",
                 "icon": "landmark",
                 "pages": [
-                  "argos/reports/financial/combined-trial-balance"
+                  "argos/reports/financial/budget-versus-actual",
+                  "argos/reports/financial/combined-trial-balance",
+                  "argos/reports/financial/fee-income-and-waivers",
+                  "argos/reports/financial/general-ledger-account-detail",
+                  "argos/reports/financial/interest-income-and-expense",
+                  "argos/reports/financial/month-end-close-status"
+                ]
+              },
+              {
+                "group": "Regulatory returns",
+                "icon": "scale",
+                "pages": [
+                  "argos/reports/regulatory/boj-liquidity-return",
+                  "argos/reports/regulatory/capital-adequacy-and-institutional-capital",
+                  "argos/reports/regulatory/fatca-and-crs-reportable-accounts",
+                  "argos/reports/regulatory/fid-currency-transaction-report",
+                  "argos/reports/regulatory/str-support-pack",
+                  "argos/reports/regulatory/taj-withholding-tax-on-interest"
+                ]
+              },
+              {
+                "group": "Credit risk and IFRS 9",
+                "icon": "trending-down",
+                "pages": [
+                  "argos/reports/risk/delinquency-ageing-by-branch-and-product",
+                  "argos/reports/risk/delinquency-roll-rates",
+                  "argos/reports/risk/large-exposures-and-concentration",
+                  "argos/reports/risk/loan-vintage-analysis",
+                  "argos/reports/risk/member-risk-rating-distribution"
+                ]
+              },
+              {
+                "group": "AML and CFT",
+                "icon": "shield-alert",
+                "pages": [
+                  "argos/reports/aml/aml-alert-register",
+                  "argos/reports/aml/aml-alert-summary",
+                  "argos/reports/aml/cash-activity-profile",
+                  "argos/reports/aml/pep-and-high-risk-member-register",
+                  "argos/reports/aml/sanctions-and-watch-list-screening-hits",
+                  "argos/reports/aml/structuring-detection"
+                ]
+              },
+              {
+                "group": "Members",
+                "icon": "users",
+                "pages": [
+                  "argos/reports/member/attrition-risk",
+                  "argos/reports/member/campaign-list-generation",
+                  "argos/reports/member/member-360",
+                  "argos/reports/member/member-segmentation",
+                  "argos/reports/member/new-and-closed-members",
+                  "argos/reports/member/next-best-action-by-member",
+                  "argos/reports/member/product-penetration-and-cross-sell",
+                  "argos/reports/member/retention-and-early-arrears-actions"
+                ]
+              },
+              {
+                "group": "Channels",
+                "icon": "smartphone",
+                "pages": [
+                  "argos/reports/channel/atm-performance-and-availability",
+                  "argos/reports/channel/card-activity-and-authorisation",
+                  "argos/reports/channel/card-and-atm-disputes",
+                  "argos/reports/channel/channel-adoption",
+                  "argos/reports/channel/digital-banking-sessions",
+                  "argos/reports/channel/statement-cycle-data"
+                ]
+              },
+              {
+                "group": "Operations",
+                "icon": "settings",
+                "pages": [
+                  "argos/reports/operational/branch-cash-position",
+                  "argos/reports/operational/dormant-and-inactive-accounts",
+                  "argos/reports/operational/load-exception-register",
+                  "argos/reports/operational/loan-origination-pipeline",
+                  "argos/reports/operational/member-service-cases-and-sla",
+                  "argos/reports/operational/supervisor-override-register",
+                  "argos/reports/operational/teller-balancing-and-cash-variance",
+                  "argos/reports/operational/transaction-register"
+                ]
+              },
+              {
+                "group": "Management and board",
+                "icon": "presentation",
+                "pages": [
+                  "argos/reports/management/alco-liquidity-and-rate-pack",
+                  "argos/reports/management/branch-scorecard",
+                  "argos/reports/management/growth-analysis",
+                  "argos/reports/management/kpi-trend",
+                  "argos/reports/management/product-contribution"
+                ]
+              },
+              {
+                "group": "Governance and evidence",
+                "icon": "file-check",
+                "pages": [
+                  "argos/reports/governance/audit-trail",
+                  "argos/reports/governance/column-lineage",
+                  "argos/reports/governance/cu-feature-requirements-coverage",
+                  "argos/reports/governance/load-batch-control",
+                  "argos/reports/governance/metric-definition-register"
                 ]
               }
             ]

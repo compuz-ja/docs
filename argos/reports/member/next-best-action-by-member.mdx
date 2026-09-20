@@ -1,0 +1,64 @@
+---
+title: "Next Best Action by Member"
+sidebarTitle: "Next Best Action by Member"
+description: "The product each member does not hold that members like them do, valued at what that product is worth on this institution's own book — and, where the product carries no balance, at the relationship-value gap between the members who hold it and those who do not."
+icon: "users"
+---
+
+## What it answers
+
+What should we offer this member next?
+
+| | |
+|---|---|
+| Report key | `dec-next-best-action` |
+| Edition | Decide, tier 4 |
+| Owner | Executive |
+| Capability | `decision.view` |
+| Frequency | Monthly |
+| Delivery | On demand |
+| Modules | `DW10` |
+
+<Warning>
+  This report sits at **Decide**. It is a recommendation. Nothing here is a decision until a named officer records one.
+</Warning>
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Period** | month | Yes | `LAST_CLOSE_MONTH` |
+| **List size** | number | No | `25` |
+| **Branch** | select | No | `all` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/dec-next-best-action.png" alt="The Next Best Action by Member report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `recommendation_id` | text | Reference |
+| `subject_ref` | text | Member |
+| `offer` | text | Offer |
+| `valued_as` | text | Valued as |
+| `value_at_stake` | currency | Value at stake |
+| `action_cost` | currency | Cost |
+| `expected_value` | currency | Expected value |
+| `confidence` | percent | Confidence |
+
+<Note>
+  The suggestion rests on what comparable members hold. It is a prompt for a conversation, never an approval, and nothing here commits the institution to anything.
+</Note>
+
+<Warning>
+  This report recommends actions on the evidence stated beside each one. It is analysis, not advice, and no outcome is warranted by CompuZign. Every recommendation requires a decision by an authorised officer of the institution before any action is taken, and that decision is recorded with the evidence it rested on. Nothing here is acted on automatically.
+</Warning>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+
