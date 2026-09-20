@@ -301,20 +301,40 @@
     ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/compuzign-light.png",
+    "dark": "/logo/compuzign-dark.png"
   },
   "navbar": {
     "links": [
       {
-        "label": "LOS sign in",
-        "href": "https://loan.compuzign.com"
+        "label": "Documentation",
+        "href": "/"
+      },
+      {
+        "label": "Products",
+        "href": "/#platforms"
+      },
+      {
+        "label": "Guides",
+        "href": "/omnia/los/quickstart"
+      },
+      {
+        "label": "Architecture",
+        "href": "/atlas/reference-architecture"
+      },
+      {
+        "label": "Support",
+        "href": "/aptos/overview"
+      },
+      {
+        "label": "About",
+        "href": "https://compuzign.com/about-us"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "compuzign.com",
-      "href": "https://compuzign.com"
+      "label": "LOS Sign In",
+      "href": "https://loan.compuzign.com"
     }
   },
   "redirects": [
