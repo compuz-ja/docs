@@ -147,3 +147,47 @@ img.nav-logo {
   max-width: 220px;
   height: auto;
 }
+/* =====================================================================
+   Per-product accent
+   =====================================================================
+   docs.json gives each product a `color`, which Mintlify applies to the
+   product switcher and the primary accent. These rules carry the same
+   accent into anything the product colour does not reach, keyed on the
+   `data-current-path` attribute Mintlify sets on <html>.
+
+   --primary is an RGB triple, not a hex string: `rgb(var(--primary))`.
+
+   If Mintlify ever stops setting data-current-path, these rules simply
+   stop matching and every product falls back to the site accent. The
+   site degrades, it does not break.
+   ===================================================================== */
+
+html[data-current-path^="/atlas"] {
+  --primary: 71 85 105;
+  --primary-light: 148 163 184;
+  --primary-dark: 51 65 85;
+}
+
+html[data-current-path^="/kairos"] {
+  --primary: 14 116 144;
+  --primary-light: 34 211 238;
+  --primary-dark: 8 74 92;
+}
+
+html[data-current-path^="/aptos"] {
+  --primary: 21 128 61;
+  --primary-light: 74 222 128;
+  --primary-dark: 13 84 40;
+}
+
+html[data-current-path^="/omnia"] {
+  --primary: 245 158 11;
+  --primary-light: 251 191 36;
+  --primary-dark: 217 119 6;
+}
+
+html[data-current-path^="/argos"] {
+  --primary: 18 53 91;
+  --primary-light: 127 168 216;
+  --primary-dark: 11 31 56;
+}

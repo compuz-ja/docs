@@ -1,0 +1,27 @@
+---
+title: "Data centre footprint"
+sidebarTitle: "Data centres"
+description: "Three active CompuZign data centres and one planned. Fort Lauderdale and Miami form the synchronous metro pair; every other pair replicates asynchronously."
+icon: "map-pin"
+---
+
+CompuZign operates three active data centres, with a fourth planned.
+
+| Code | Site | Address | Status |
+|---|---|---|---|
+| **KIN** | Kingston, Jamaica | 2-6 Carlton Crescent, PO Box 21, Kingston 10 | Active |
+| **FLL** | Fort Lauderdale, Florida | 500 Green Rd, Deerfield Beach, FL 33064 | Active |
+| **MIA** | Miami, Florida | 100 N. Biscayne Blvd, Miami, FL 33131 | Active |
+| **DRDC** | Santo Domingo, Dominican Republic | | Planned for 2028 |
+
+## What replicates how
+
+**FLL and MIA are the metro cluster pair.** They replicate synchronously, which is what delivers a Recovery Point Objective of zero: a transaction is acknowledged only once both sites hold it durably.
+
+**Every other site pair replicates asynchronously.** That includes KIN to either Florida site. Asynchronous replication has a non-zero recovery point by definition, and any statement about zero data loss applies to the metro pair.
+
+Configuration is replicated to an AWS S3 bucket over a site-to-site VPN, off the private backbone, so a rebuild does not depend on the backbone being up.
+
+<Note>
+  In-country residency for Jamaican institutions means primary processing at KIN. Which data leaves the island, and under what arrangement, is set per institution and is a contractual matter rather than a platform default.
+</Note>
