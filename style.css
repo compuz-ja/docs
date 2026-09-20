@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap');
 :root {
   --default-border-color: var(--gray-200);
 }
@@ -144,7 +145,7 @@ body:has([data-product-guide-index]) #sidebar a.nav-anchor[href='/'] svg {
 }
 
 img.nav-logo {
-  max-width: 220px;
+  max-width: 178px;
   height: auto;
 }
 /* =====================================================================
@@ -190,4 +191,760 @@ html[data-current-path^="/argos"] {
   --primary: 18 53 91;
   --primary-light: 127 168 216;
   --primary-dark: 11 31 56;
+}
+
+/* =====================================================================
+   Home page — the CompuZign portfolio landing
+   =====================================================================
+   index.mdx runs in Mintlify's `custom` page mode, which keeps the
+   navbar and removes the sidebar, table of contents and footer. Every
+   rule below is scoped to .cz-home, so nothing here can reach a
+   documentation page.
+
+   Artwork in /images/home/ is background and figure only. All type is
+   live HTML, so the page reflows on a phone and the headline stays
+   sharp at any size. Replacing an image is a file swap, never a code
+   change.
+
+   The element reset below uses :where(), which contributes no
+   specificity. A plain `.cz-home ul` reset would outrank every single
+   class that follows it and silently eat their margins.
+   ===================================================================== */
+
+html[data-current-path='/'] #content-area,
+html[data-current-path='/'] #content-area > div {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  background: transparent !important;
+}
+
+.cz-home {
+  --cz-navy: #0b2545;
+  --cz-blue: #0055b3;
+  --cz-ink: #334155;
+  --cz-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  color: var(--cz-navy);
+  overflow-x: hidden;
+}
+
+.cz-home :where(*) {
+  box-sizing: border-box;
+}
+
+.cz-home :where(p, h1, h2, h3, ul) {
+  margin: 0;
+}
+
+.cz-home :where(ul) {
+  padding: 0;
+  list-style: none;
+}
+
+.cz-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #1b4f9c;
+}
+
+.cz-center {
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- hero */
+
+.cz-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 64px 0 34px;
+  background: #0b2545;
+}
+
+/* The scrim. The photograph is bright on the left and mid-blue on the
+   right, and the band needs dark type on one side and white type on the
+   other, so the overlay lifts the left and drops the right rather than
+   dimming the whole picture. */
+.cz-hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(76% 108% at 88% -12%, rgba(2, 20, 46, 0.86) 0%, rgba(2, 20, 46, 0) 64%),
+    linear-gradient(
+      100deg,
+      rgba(250, 252, 254, 0.96) 0%,
+      rgba(248, 251, 253, 0.94) 28%,
+      rgba(240, 247, 252, 0.76) 42%,
+      rgba(168, 198, 228, 0.24) 54%,
+      rgba(14, 46, 90, 0.46) 67%,
+      rgba(6, 28, 58, 0.78) 84%,
+      rgba(3, 18, 40, 0.89) 100%
+    );
+  pointer-events: none;
+}
+
+/* The temple sits between the copy and the right-hand panel, anchored
+   to the foot of the band. Its edges are masked so the artwork melts
+   into the sky instead of ending on a visible rectangle. */
+.cz-hero-art {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background: url('/images/home/hero-atlas.jpg') 32% 46% / cover no-repeat;
+  pointer-events: none;
+}
+
+/* A shadow at the foot of the band, so the closing line reads white. */
+.cz-hero::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  inset: auto 0 0 0;
+  height: 210px;
+  background: linear-gradient(to top, rgba(3, 20, 45, 0.88), rgba(3, 20, 45, 0));
+}
+
+.cz-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.62fr);
+  gap: 36px;
+  align-items: start;
+  max-width: 1240px;
+  min-height: 448px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.cz-hero-copy {
+  min-width: 0;
+  max-width: 560px;
+}
+
+.cz-hero-title {
+  margin: 16px 0 18px;
+  font-size: clamp(30px, 3.4vw, 48px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--cz-navy);
+}
+
+.cz-hero-title .cz-accent {
+  color: #004bae;
+}
+
+.cz-hero-lede {
+  max-width: 448px;
+  font-size: 15.5px;
+  line-height: 1.66;
+  color: var(--cz-ink);
+}
+
+.cz-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 14px;
+  margin: 30px 0 32px;
+}
+
+.cz-hero-stats li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px;
+  border-left: 1px solid rgba(11, 37, 69, 0.16);
+}
+
+.cz-hero-stats li:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.cz-hero-stats svg {
+  flex: none;
+  width: 25px;
+  height: 25px;
+  color: #1b4f9c;
+}
+
+.cz-hero-stats span,
+.cz-value-item span,
+.cz-play-label {
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+.cz-hero-stats strong,
+.cz-value-item strong,
+.cz-play-label strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--cz-navy);
+}
+
+.cz-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+}
+
+.cz-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.cz-btn-primary {
+  padding: 13px 26px;
+  border-radius: 6px;
+  background: var(--cz-blue);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #fff !important;
+  box-shadow: 0 6px 18px rgba(0, 85, 179, 0.28);
+}
+
+.cz-btn-primary:hover {
+  background: #00458f;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 85, 179, 0.34);
+}
+
+.cz-play {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid rgba(0, 85, 179, 0.55);
+  border-radius: 50%;
+  color: var(--cz-blue);
+}
+
+.cz-play svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cz-btn-ghost:hover .cz-play {
+  border-color: var(--cz-blue);
+  background: rgba(0, 85, 179, 0.08);
+}
+
+/* --------------------------------------------------- hero right panel */
+
+.cz-hero-panel {
+  min-width: 0;
+  padding-top: 6px;
+  text-align: right;
+}
+
+.cz-hero-motto {
+  font-family: var(--cz-serif);
+  font-size: clamp(21px, 2.3vw, 31px);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 20px rgba(1, 14, 32, 0.6);
+}
+
+.cz-rule {
+  display: block;
+  width: 58px;
+  height: 4px;
+  margin: 18px 0 0 auto;
+  border-radius: 2px;
+  background: #2d7ff0;
+}
+
+.cz-hero-pillars {
+  margin-top: 70px;
+}
+
+.cz-hero-pillars li {
+  margin-bottom: 15px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 12px rgba(1, 14, 32, 0.75);
+}
+
+.cz-hero-footline {
+  position: relative;
+  margin-top: 40px;
+  font-family: var(--cz-serif);
+  font-size: clamp(15px, 1.7vw, 22px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 14px rgba(1, 14, 32, 0.7);
+}
+
+/* ------------------------------------------------------------ pillars */
+
+.cz-pillars {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 54px 40px 8px;
+  text-align: center;
+  scroll-margin-top: 90px;
+}
+
+.cz-section-title {
+  margin: 10px 0 14px;
+  font-size: clamp(25px, 2.9vw, 35px);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--cz-navy);
+}
+
+.cz-section-lede {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: #5b6b7f;
+}
+
+.cz-section-note {
+  margin-top: 10px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--cz-navy);
+}
+
+.cz-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 34px;
+  text-align: left;
+}
+
+/* The whole card is the link. One anchor per card, aria-labelled so its
+   accessible name is "Explore KAIROS" rather than the card's entire
+   text, and the call to action inside it is a styled span rather than a
+   second anchor. A stretched ::after over a separate anchor was tried
+   first and does not reliably take the click. */
+.cz-card {
+  position: relative;
+  color: inherit !important;
+  text-decoration: none !important;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--cz-card-bg);
+  box-shadow: 0 1px 2px rgba(11, 37, 69, 0.06), 0 10px 30px rgba(11, 37, 69, 0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cz-card:hover,
+.cz-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 2px var(--cz-accent),
+    0 2px 4px rgba(11, 37, 69, 0.08),
+    0 20px 44px rgba(11, 37, 69, 0.16);
+}
+
+.cz-aptos  { --cz-accent: #1b451e; --cz-card-bg: #f6f9f7; --cz-art: #19361b; --cz-art-rgb:  20 48 22; }
+.cz-kairos { --cz-accent: #0051a9; --cz-card-bg: #f4f8fc; --cz-art: #01284b; --cz-art-rgb:   2 34 62; }
+.cz-omnia  { --cz-accent: #a36301; --cz-card-bg: #f8f2e7; --cz-art: #824f0b; --cz-art-rgb: 108 64  8; }
+.cz-argos  { --cz-accent: #493379; --cz-card-bg: #f4f3fa; --cz-art: #23254c; --cz-art-rgb:  33 34 70; }
+
+.cz-card-art {
+  position: relative;
+  overflow: hidden;
+  min-height: 206px;
+  padding: 18px;
+  background: var(--cz-art);
+}
+
+/* The artwork fills the block and a scrim in the product's own deep
+   tone darkens the left of it, so the type reads without the picture
+   being cropped down to a cut-out figure. */
+.cz-card-art img {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 18%;
+  transition: transform 0.45s ease, filter 0.25s ease;
+}
+
+/* Above the picture. A pseudo and an <img> are both z-index auto here,
+   and the img is the later child, so without this the scrim paints
+   underneath the artwork and does nothing at all. */
+.cz-card-art::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, 0.3) 100%),
+    linear-gradient(
+      100deg,
+      rgb(var(--cz-art-rgb) / 0.93) 0%,
+      rgb(var(--cz-art-rgb) / 0.86) 36%,
+      rgb(var(--cz-art-rgb) / 0.52) 58%,
+      rgb(var(--cz-art-rgb) / 0.14) 80%,
+      rgb(var(--cz-art-rgb) / 0) 94%
+    );
+  pointer-events: none;
+}
+
+.cz-card:hover .cz-card-art img,
+.cz-card:focus-visible .cz-card-art img {
+  transform: scale(1.07);
+  filter: saturate(1.08) brightness(1.06);
+}
+
+/* A wash in the card's own accent, so the highlight says which product
+   is under the cursor rather than just "something is". */
+.cz-card-art::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(115deg, var(--cz-accent) 0%, rgba(255, 255, 255, 0.34) 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.cz-card:hover .cz-card-art::after,
+.cz-card:focus-visible .cz-card-art::after {
+  opacity: 0.22;
+}
+
+.cz-card-head {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  min-height: 170px;
+  max-width: 60%;
+  color: #fff;
+}
+
+.cz-card-head h3 {
+  font-family: var(--cz-serif);
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 10px rgb(var(--cz-art-rgb) / 0.9);
+}
+
+.cz-epithet {
+  margin-top: 7px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 8px rgb(var(--cz-art-rgb) / 0.95);
+}
+
+.cz-epithet::after {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.cz-role {
+  width: 150%;
+  margin-top: auto;
+  padding-top: 18px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+.cz-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.cz-card-body > p {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #4a5b6e;
+}
+
+.cz-card-list {
+  margin: 16px 0 18px;
+}
+
+.cz-card-list li {
+  position: relative;
+  margin-bottom: 9px;
+  padding-left: 26px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--cz-navy);
+}
+
+.cz-card-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  background: var(--cz-accent);
+  box-shadow: inset 0 0 0 2.5px var(--cz-card-bg), inset 0 0 0 4px var(--cz-accent);
+}
+
+.cz-card-cta {
+  display: block;
+  margin-top: auto;
+  padding: 11px 16px;
+  border-radius: 6px;
+  background: var(--cz-accent);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: center;
+  color: #fff !important;
+  transition: filter 0.15s ease;
+}
+
+.cz-card:hover .cz-card-cta,
+.cz-card:focus-visible .cz-card-cta {
+  filter: brightness(1.2);
+}
+
+.cz-card-cta span {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.cz-card:hover .cz-card-cta span {
+  transform: translateX(4px);
+}
+
+.cz-card:focus-visible {
+  outline: 3px solid var(--cz-accent);
+  outline-offset: 3px;
+}
+
+.cz-tagline {
+  margin-top: 12px;
+  font-family: var(--cz-serif);
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 600;
+  text-align: center;
+  color: var(--cz-accent);
+}
+
+/* --------------------------------------------------------- value bar */
+
+.cz-value {
+  max-width: 1240px;
+  margin: 40px auto 0;
+  padding: 0 40px;
+}
+
+.cz-value-inner {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 22px 8px;
+  border: 1px solid #e6edf5;
+  border-radius: 10px;
+  background: #f7f9fc;
+}
+
+.cz-value-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 18px;
+  border-left: 1px solid #e1e9f2;
+}
+
+.cz-value-item:first-child {
+  border-left: none;
+}
+
+.cz-value-item svg {
+  flex: none;
+  width: 27px;
+  height: 27px;
+  color: #1b4f9c;
+}
+
+.cz-value-item strong {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------ footer */
+
+.cz-footer {
+  margin-top: 46px;
+  padding: 26px 40px;
+  background: #082a4b;
+}
+
+.cz-footer-inner {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px 30px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.cz-footer-brand img {
+  display: block;
+  width: 156px;
+  height: auto;
+}
+
+.cz-footer-copy {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.cz-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: 12.5px;
+}
+
+.cz-footer-links a {
+  text-decoration: none !important;
+  color: rgba(255, 255, 255, 0.86) !important;
+}
+
+.cz-footer-links a:hover {
+  color: #fff !important;
+  text-decoration: underline !important;
+}
+
+.cz-footer-links a + a::before {
+  content: '|';
+  margin-right: 10px;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.cz-footer-motto {
+  grid-column: 1 / -1;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-align: right;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.cz-footer-motto span {
+  margin: 0 8px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ------------------------------------------------- narrower viewports */
+
+@media (max-width: 1180px) {
+  .cz-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cz-value-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
+  .cz-value-item:nth-child(3) { border-left: none; }
+  .cz-footer-inner { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
+  .cz-footer-links { justify-content: center; }
+  .cz-footer-motto { text-align: center; }
+}
+
+@media (max-width: 980px) {
+  /* Stacked, the right-hand panel no longer sits over the dark half of
+     the band, so the band goes light and every line in it goes dark.
+     Only the closing line stays white, over the scrim at the foot. */
+  .cz-hero { padding: 48px 0 30px; }
+
+  /* Stacked, the right-hand panel no longer sits over the dark half of
+     the band, so the scrim goes light all the way down and every line in
+     it goes dark. Only the closing line stays white, over the shadow at
+     the foot. */
+  .cz-hero::before {
+    background: linear-gradient(
+      180deg,
+      rgba(250, 252, 254, 0.95) 0%,
+      rgba(246, 250, 253, 0.92) 46%,
+      rgba(233, 243, 250, 0.82) 74%,
+      rgba(206, 226, 240, 0.66) 90%,
+      rgba(120, 158, 200, 0.5) 100%
+    );
+  }
+
+  .cz-hero::after { height: 128px; }
+  .cz-hero-art { background-position: center 55%; opacity: 0.9; }
+  .cz-hero-inner { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 0; padding: 0 24px; }
+  .cz-hero-panel { padding-top: 34px; text-align: left; }
+  .cz-hero-motto { color: var(--cz-navy); text-shadow: none; }
+  .cz-rule { margin-left: 0; }
+  .cz-hero-pillars { margin-top: 24px; }
+  .cz-hero-pillars li { color: #3f4d5e; text-shadow: none; }
+  .cz-hero-footline { margin-top: 30px; }
+  .cz-pillars, .cz-value { padding-left: 24px; padding-right: 24px; }
+  .cz-footer { padding: 24px; }
+}
+
+@media (max-width: 640px) {
+  .cz-cards { grid-template-columns: minmax(0, 1fr); }
+  .cz-value-inner { grid-template-columns: minmax(0, 1fr); }
+  .cz-value-item { border-left: none; }
+  .cz-hero-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
+  .cz-hero-stats li { padding: 0; border-left: none; }
+  .cz-btn-primary { flex: 1 1 100%; justify-content: center; }
+  .cz-footer-links a + a::before { margin-right: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cz-card, .cz-btn, .cz-card-art img, .cz-card-cta span { transition: none; }
+  .cz-card:hover,
+  .cz-card:focus-visible,
+  .cz-btn-primary:hover,
+  .cz-card:hover .cz-card-art img,
+  .cz-card:focus-visible .cz-card-art img,
+  .cz-card:hover .cz-card-cta span { transform: none; }
+}
+
+/* This band is brand artwork and stays light in both themes. */
+.dark .cz-home {
+  color: var(--cz-navy);
 }
