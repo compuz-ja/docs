@@ -260,18 +260,31 @@ html[data-current-path='/'] #content-area > div {
   isolation: isolate;
   overflow: hidden;
   padding: 64px 0 34px;
+  background: #0b2545;
+}
+
+/* The scrim. The photograph is bright on the left and mid-blue on the
+   right, and the band needs dark type on one side and white type on the
+   other, so the overlay lifts the left and drops the right rather than
+   dimming the whole picture. */
+.cz-hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
   background:
-    radial-gradient(90% 120% at 84% -20%, rgba(1, 18, 42, 0.92) 0%, rgba(1, 18, 42, 0) 62%),
+    radial-gradient(76% 108% at 88% -12%, rgba(2, 20, 46, 0.86) 0%, rgba(2, 20, 46, 0) 64%),
     linear-gradient(
       100deg,
-      #fbfcfd 0%,
-      #f2f7fa 24%,
-      #d5e4ef 38%,
-      #8fb4d6 50%,
-      #3c66a0 64%,
-      #14355f 80%,
-      #041c38 100%
+      rgba(250, 252, 254, 0.96) 0%,
+      rgba(248, 251, 253, 0.94) 28%,
+      rgba(240, 247, 252, 0.76) 42%,
+      rgba(168, 198, 228, 0.24) 54%,
+      rgba(14, 46, 90, 0.46) 67%,
+      rgba(6, 28, 58, 0.78) 84%,
+      rgba(3, 18, 40, 0.89) 100%
     );
+  pointer-events: none;
 }
 
 /* The temple sits between the copy and the right-hand panel, anchored
@@ -279,21 +292,9 @@ html[data-current-path='/'] #content-area > div {
    into the sky instead of ending on a visible rectangle. */
 .cz-hero-art {
   position: absolute;
-  z-index: -1;
-  left: 52%;
-  bottom: -5%;
-  translate: -22% 0;
-  width: min(30vw, 400px);
-  aspect-ratio: 830 / 776;
-  background: url('/images/home/atlas-temple.png') center bottom / contain no-repeat;
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, #000 24%, #000 78%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 14%, #000 74%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to right, transparent 0%, #000 24%, #000 78%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 14%, #000 74%, transparent 100%);
-  mask-composite: intersect;
+  z-index: -2;
+  inset: 0;
+  background: url('/images/home/hero-atlas.jpg') 32% 46% / cover no-repeat;
   pointer-events: none;
 }
 
@@ -302,10 +303,10 @@ html[data-current-path='/'] #content-area > div {
   content: '';
   position: absolute;
   z-index: -1;
+  pointer-events: none;
   inset: auto 0 0 0;
   height: 210px;
-  background: linear-gradient(to top, rgba(3, 20, 45, 0.86), rgba(3, 20, 45, 0));
-  pointer-events: none;
+  background: linear-gradient(to top, rgba(3, 20, 45, 0.88), rgba(3, 20, 45, 0));
 }
 
 .cz-hero-inner {
@@ -314,7 +315,7 @@ html[data-current-path='/'] #content-area > div {
   gap: 36px;
   align-items: start;
   max-width: 1240px;
-  min-height: 420px;
+  min-height: 448px;
   margin: 0 auto;
   padding: 0 40px;
 }
@@ -537,7 +538,15 @@ html[data-current-path='/'] #content-area > div {
   text-align: left;
 }
 
+/* The whole card is the link. One anchor per card, aria-labelled so its
+   accessible name is "Explore KAIROS" rather than the card's entire
+   text, and the call to action inside it is a styled span rather than a
+   second anchor. A stretched ::after over a separate anchor was tried
+   first and does not reliably take the click. */
 .cz-card {
+  position: relative;
+  color: inherit !important;
+  text-decoration: none !important;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -545,44 +554,97 @@ html[data-current-path='/'] #content-area > div {
   border-radius: 12px;
   background: var(--cz-card-bg);
   box-shadow: 0 1px 2px rgba(11, 37, 69, 0.06), 0 10px 30px rgba(11, 37, 69, 0.07);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.cz-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 2px 4px rgba(11, 37, 69, 0.08), 0 18px 40px rgba(11, 37, 69, 0.13);
+.cz-card:hover,
+.cz-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 2px var(--cz-accent),
+    0 2px 4px rgba(11, 37, 69, 0.08),
+    0 20px 44px rgba(11, 37, 69, 0.16);
 }
 
-.cz-aptos  { --cz-accent: #1b451e; --cz-card-bg: #f6f9f7; --cz-art: linear-gradient(145deg, #19361b 0%, #2c4a27 55%, #3d5934 100%); }
-.cz-kairos { --cz-accent: #0051a9; --cz-card-bg: #f4f8fc; --cz-art: linear-gradient(145deg, #01284b 0%, #0f3a5e 55%, #1c4b71 100%); }
-.cz-omnia  { --cz-accent: #a36301; --cz-card-bg: #f8f2e7; --cz-art: linear-gradient(145deg, #824f0b 0%, #a26718 55%, #be7f1e 100%); }
-.cz-argos  { --cz-accent: #493379; --cz-card-bg: #f4f3fa; --cz-art: linear-gradient(145deg, #23254c 0%, #2b2a68 55%, #322a56 100%); }
+.cz-aptos  { --cz-accent: #1b451e; --cz-card-bg: #f6f9f7; --cz-art: #19361b; --cz-art-rgb:  20 48 22; }
+.cz-kairos { --cz-accent: #0051a9; --cz-card-bg: #f4f8fc; --cz-art: #01284b; --cz-art-rgb:   2 34 62; }
+.cz-omnia  { --cz-accent: #a36301; --cz-card-bg: #f8f2e7; --cz-art: #824f0b; --cz-art-rgb: 108 64  8; }
+.cz-argos  { --cz-accent: #493379; --cz-card-bg: #f4f3fa; --cz-art: #23254c; --cz-art-rgb:  33 34 70; }
 
 .cz-card-art {
   position: relative;
   overflow: hidden;
-  min-height: 190px;
+  min-height: 206px;
   padding: 18px;
   background: var(--cz-art);
 }
 
+/* The artwork fills the block and a scrim in the product's own deep
+   tone darkens the left of it, so the type reads without the picture
+   being cropped down to a cut-out figure. */
 .cz-card-art img {
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 52%;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+  object-position: 72% 18%;
+  transition: transform 0.45s ease, filter 0.25s ease;
+}
+
+/* Above the picture. A pseudo and an <img> are both z-index auto here,
+   and the img is the later child, so without this the scrim paints
+   underneath the artwork and does nothing at all. */
+.cz-card-art::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, 0.3) 100%),
+    linear-gradient(
+      100deg,
+      rgb(var(--cz-art-rgb) / 0.93) 0%,
+      rgb(var(--cz-art-rgb) / 0.86) 36%,
+      rgb(var(--cz-art-rgb) / 0.52) 58%,
+      rgb(var(--cz-art-rgb) / 0.14) 80%,
+      rgb(var(--cz-art-rgb) / 0) 94%
+    );
+  pointer-events: none;
+}
+
+.cz-card:hover .cz-card-art img,
+.cz-card:focus-visible .cz-card-art img {
+  transform: scale(1.07);
+  filter: saturate(1.08) brightness(1.06);
+}
+
+/* A wash in the card's own accent, so the highlight says which product
+   is under the cursor rather than just "something is". */
+.cz-card-art::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(115deg, var(--cz-accent) 0%, rgba(255, 255, 255, 0.34) 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.cz-card:hover .cz-card-art::after,
+.cz-card:focus-visible .cz-card-art::after {
+  opacity: 0.22;
 }
 
 .cz-card-head {
   position: relative;
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  min-height: 154px;
+  min-height: 170px;
+  max-width: 60%;
   color: #fff;
 }
 
@@ -593,6 +655,7 @@ html[data-current-path='/'] #content-area > div {
   letter-spacing: 0.04em;
   line-height: 1;
   color: #fff;
+  text-shadow: 0 1px 10px rgb(var(--cz-art-rgb) / 0.9);
 }
 
 .cz-epithet {
@@ -602,7 +665,8 @@ html[data-current-path='/'] #content-area > div {
   letter-spacing: 0.14em;
   line-height: 1.5;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 8px rgb(var(--cz-art-rgb) / 0.95);
 }
 
 .cz-epithet::after {
@@ -615,13 +679,14 @@ html[data-current-path='/'] #content-area > div {
 }
 
 .cz-role {
+  width: 150%;
   margin-top: auto;
   padding-top: 18px;
   font-size: 15px;
   font-weight: 700;
   line-height: 1.25;
   color: #fff;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
 }
 
 .cz-card-body {
@@ -671,13 +736,27 @@ html[data-current-path='/'] #content-area > div {
   font-size: 13.5px;
   font-weight: 600;
   text-align: center;
-  text-decoration: none !important;
   color: #fff !important;
   transition: filter 0.15s ease;
 }
 
-.cz-card-cta:hover {
-  filter: brightness(1.18);
+.cz-card:hover .cz-card-cta,
+.cz-card:focus-visible .cz-card-cta {
+  filter: brightness(1.2);
+}
+
+.cz-card-cta span {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.cz-card:hover .cz-card-cta span {
+  transform: translateX(4px);
+}
+
+.cz-card:focus-visible {
+  outline: 3px solid var(--cz-accent);
+  outline-offset: 3px;
 }
 
 .cz-tagline {
@@ -750,14 +829,8 @@ html[data-current-path='/'] #content-area > div {
 
 .cz-footer-brand img {
   display: block;
-  width: 148px;
+  width: 156px;
   height: auto;
-}
-
-.cz-footer-brand p {
-  margin-top: 3px;
-  font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.62);
 }
 
 .cz-footer-copy {
@@ -821,29 +894,26 @@ html[data-current-path='/'] #content-area > div {
   /* Stacked, the right-hand panel no longer sits over the dark half of
      the band, so the band goes light and every line in it goes dark.
      Only the closing line stays white, over the scrim at the foot. */
-  .cz-hero {
-    padding: 48px 0 30px;
+  .cz-hero { padding: 48px 0 30px; }
+
+  /* Stacked, the right-hand panel no longer sits over the dark half of
+     the band, so the scrim goes light all the way down and every line in
+     it goes dark. Only the closing line stays white, over the shadow at
+     the foot. */
+  .cz-hero::before {
     background: linear-gradient(
       180deg,
-      #fbfcfd 0%,
-      #f1f6fa 48%,
-      #dbe8f2 74%,
-      #a8c4dd 90%,
-      #4d7aab 100%
+      rgba(250, 252, 254, 0.95) 0%,
+      rgba(246, 250, 253, 0.92) 46%,
+      rgba(233, 243, 250, 0.82) 74%,
+      rgba(206, 226, 240, 0.66) 90%,
+      rgba(120, 158, 200, 0.5) 100%
     );
   }
 
   .cz-hero::after { height: 128px; }
+  .cz-hero-art { background-position: center 55%; opacity: 0.9; }
   .cz-hero-inner { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 0; padding: 0 24px; }
-  .cz-hero-art {
-    left: auto;
-    right: -12%;
-    bottom: auto;
-    top: 42%;
-    translate: none;
-    width: min(74vw, 420px);
-    opacity: 0.3;
-  }
   .cz-hero-panel { padding-top: 34px; text-align: left; }
   .cz-hero-motto { color: var(--cz-navy); text-shadow: none; }
   .cz-rule { margin-left: 0; }
@@ -865,8 +935,13 @@ html[data-current-path='/'] #content-area > div {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cz-card, .cz-btn { transition: none; }
-  .cz-card:hover, .cz-btn-primary:hover { transform: none; }
+  .cz-card, .cz-btn, .cz-card-art img, .cz-card-cta span { transition: none; }
+  .cz-card:hover,
+  .cz-card:focus-visible,
+  .cz-btn-primary:hover,
+  .cz-card:hover .cz-card-art img,
+  .cz-card:focus-visible .cz-card-art img,
+  .cz-card:hover .cz-card-cta span { transform: none; }
 }
 
 /* This band is brand artwork and stays light in both themes. */
