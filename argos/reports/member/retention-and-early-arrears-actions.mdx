@@ -1,0 +1,67 @@
+---
+title: "Retention and Early Arrears Actions"
+sidebarTitle: "Retention and Early Arrears Ac"
+description: "The members most at risk of leaving or slipping into arrears, the action the institution's own playbook calls for in each case, what it costs and what it is expected to preserve. Ranked by value recovered per dollar spent."
+icon: "users"
+---
+
+## What it answers
+
+Who is about to leave or slip into arrears, and what can be done about it?
+
+| | |
+|---|---|
+| Report key | `dec-retention-actions` |
+| Edition | Decide, tier 4 |
+| Owner | Executive |
+| Capability | `decision.view` |
+| Frequency | Monthly |
+| Delivery | On demand |
+| Modules | `DW10`, `DW08` |
+
+<Warning>
+  This report sits at **Decide**. It is a recommendation. Nothing here is a decision until a named officer records one.
+</Warning>
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Period** | month | Yes | `LAST_CLOSE_MONTH` |
+| **Worklist size** | number | No | `20` |
+| **Action type** | select | No | `all` |
+
+**Action type** offers **All**, **Retention**, **Early arrears**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/dec-retention-actions.png" alt="The Retention and Early Arrears Actions report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `recommendation_id` | text | Reference |
+| `subject_ref` | text | Member |
+| `recommended_action` | text | Recommended action |
+| `why` | text | Why |
+| `value_at_stake` | currency | Value at stake |
+| `action_cost` | currency | Cost |
+| `expected_value` | currency | Expected value |
+| `value_per_dollar` | number | Per dollar |
+| `confidence` | percent | Confidence |
+
+<Note>
+  Every row needs a named officer before it can leave the open state. The platform raises the recommendation; a person decides it.
+</Note>
+
+<Warning>
+  This report recommends actions on the evidence stated beside each one. It is analysis, not advice, and no outcome is warranted by CompuZign. Every recommendation requires a decision by an authorised officer of the institution before any action is taken, and that decision is recorded with the evidence it rested on. Nothing here is acted on automatically.
+</Warning>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

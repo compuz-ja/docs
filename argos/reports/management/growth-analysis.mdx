@@ -1,0 +1,53 @@
+---
+title: "Growth Analysis"
+sidebarTitle: "Growth Analysis"
+description: "Member and balance growth by branch and product family, month on month, in both value and percentage."
+icon: "presentation"
+---
+
+## What it answers
+
+What grew, where, and by how much?
+
+| | |
+|---|---|
+| Report key | `mgmt-growth` |
+| Edition | Understand, tier 2 |
+| Owner | Executive |
+| Capability | `reports.run` |
+| Delivery | On demand |
+| Modules | `DW08`, `DW10` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Period** | month | Yes | `LAST_CLOSE_MONTH` |
+| **Analyse by** | select | No | `family` |
+
+**Analyse by** offers **Product family**, **Branch**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/mgmt-growth.png" alt="The Growth Analysis report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `grouping` | text | Group |
+| `accounts_open` | integer | Accounts |
+| `accounts_opened` | integer | Opened |
+| `accounts_closed` | integer | Closed |
+| `members_holding` | integer | Members |
+| `prior_month_balance` | currency | Prior balance |
+| `closing_balance` | currency | Closing balance |
+| `balance_growth` | currency | Growth |
+| `growth_pct` | percent | Growth % |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

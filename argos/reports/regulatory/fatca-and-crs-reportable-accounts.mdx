@@ -1,0 +1,55 @@
+---
+title: "FATCA and CRS Reportable Accounts"
+sidebarTitle: "FATCA and CRS Reportable Accou"
+description: "Accounts carrying US indicia or CRS reportability, with the closing balance and interest paid that the schedules require."
+icon: "scale"
+---
+
+## What it answers
+
+Which accounts are reportable, and with what balances?
+
+| | |
+|---|---|
+| Report key | `reg-fatca-crs` |
+| Edition | Comply, tier 1 |
+| Owner | Compliance Officer |
+| Capability | `reports.regulatory.run` |
+| Frequency | Annual, with quarterly review |
+| Delivery | Batch |
+| Regulator | TAJ / IRS |
+| Modules | `DW04` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **As at** | date | Yes | `LAST_CLOSE` |
+| **Regime** | select | No | `ALL` |
+
+**Regime** offers **FATCA and CRS**, **FATCA only**, **CRS only**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/reg-fatca-crs.png" alt="The FATCA and CRS Reportable Accounts report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `regime` | text | Regime |
+| `member_number` | text | Member |
+| `member_name` | text | Name |
+| `account_number` | text | Account |
+| `product_name` | text | Product |
+| `currency_code` | text | Ccy |
+| `closing_balance` | currency | Closing balance |
+| `interest_paid_ytd` | currency | Interest paid |
+| `kyc_status` | text | KYC |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

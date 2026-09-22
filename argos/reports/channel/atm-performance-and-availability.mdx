@@ -1,0 +1,53 @@
+---
+title: "ATM Performance and Availability"
+sidebarTitle: "ATM Performance and Availabili"
+description: "Per-terminal volume, decline and timeout rates, surcharge earned, and the on-us against off-us split."
+icon: "smartphone"
+---
+
+## What it answers
+
+Which terminals are working, and which are costing more than they earn?
+
+| | |
+|---|---|
+| Report key | `chan-atm-performance` |
+| Edition | Understand, tier 2 |
+| Owner | Branch Manager |
+| Capability | `reports.run` |
+| Delivery | On demand |
+| Modules | `DW09` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/chan-atm-performance.png" alt="The ATM Performance and Availability report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `atm_name` | text | Terminal |
+| `atm_location` | text | Location |
+| `branch_name` | text | Branch |
+| `transactions` | integer | Transactions |
+| `withdrawals` | integer | Withdrawals |
+| `cash_dispensed` | currency | Cash dispensed |
+| `declined` | integer | Declined |
+| `timeouts` | integer | Timeouts |
+| `success_rate` | percent | Success rate |
+| `off_us_share` | percent | Off-us share |
+| `surcharge_earned` | currency | Surcharge earned |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

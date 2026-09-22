@@ -1,0 +1,52 @@
+---
+title: "Capital Adequacy and Institutional Capital"
+sidebarTitle: "Capital Adequacy and Instituti"
+description: "Institutional capital against total assets for each month of the period, with the components that move the ratio."
+icon: "scale"
+---
+
+## What it answers
+
+Is institutional capital adequate against total assets?
+
+| | |
+|---|---|
+| Report key | `reg-capital-adequacy` |
+| Edition | Comply, tier 1 |
+| Owner | Finance Officer |
+| Capability | `reports.regulatory.run` |
+| Frequency | Monthly |
+| Delivery | Batch |
+| Regulator | DCFS / BOJ |
+| Modules | `DW04`, `DW05`, `DW08` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From month** | month | Yes | `PERIOD_START_MONTH` |
+| **To month** | month | Yes | `LAST_CLOSE_MONTH` |
+| **Prescribed minimum %** | number | No | `8` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/reg-capital-adequacy.png" alt="The Capital Adequacy and Institutional Capital report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `month_end` | date | Month |
+| `total_assets` | currency | Total assets |
+| `institutional_capital` | currency | Institutional capital |
+| `capital_adequacy_pct` | percent | Capital adequacy |
+| `minimum_pct` | percent | Minimum |
+| `headroom` | currency | Headroom |
+| `status` | text | Status |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

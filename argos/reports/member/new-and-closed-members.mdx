@@ -1,0 +1,51 @@
+---
+title: "New and Closed Members"
+sidebarTitle: "New and Closed Members"
+description: "Joiners and leavers by branch and month, with what the joiners opened and what the leavers took with them."
+icon: "users"
+---
+
+## What it answers
+
+Who joined, who left, and what did they take with them?
+
+| | |
+|---|---|
+| Report key | `mem-new-members` |
+| Edition | Comply, tier 1 |
+| Owner | Branch Manager |
+| Capability | `reports.member.run` |
+| Frequency | Monthly |
+| Delivery | On demand |
+| Modules | `DW10` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/mem-new-members.png" alt="The New and Closed Members report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `month_label` | text | Month |
+| `branch_name` | text | Branch |
+| `joined` | integer | Joined |
+| `still_active` | integer | Still active |
+| `deposits_brought` | currency | Deposits held |
+| `took_a_loan` | integer | Took a loan |
+| `digital_enrolled` | integer | Enrolled digital |
+| `avg_products` | number | Avg products |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

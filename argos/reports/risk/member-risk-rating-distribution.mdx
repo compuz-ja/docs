@@ -1,0 +1,61 @@
+---
+title: "Member Risk Rating Distribution"
+sidebarTitle: "Member Risk Rating Distributio"
+description: "Members by risk rating against their holdings and their arrears, so the rating model can be checked against what actually happened."
+icon: "trending-down"
+---
+
+## What it answers
+
+Do the risk ratings actually predict arrears?
+
+| | |
+|---|---|
+| Report key | `risk-member-rating` |
+| Edition | Anticipate, tier 3 |
+| Owner | Risk Analyst |
+| Capability | `reports.risk.run` |
+| Delivery | On demand |
+| Modules | `DW06`, `DW10` |
+
+<Warning>
+  This report sits at **Anticipate**. It is a projection, not a record of what happened.
+</Warning>
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Branch** | select | No | `ALL` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/risk-member-rating.png" alt="The Member Risk Rating Distribution report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `risk_rating` | text | Risk rating |
+| `members` | integer | Members |
+| `pct_of_members` | percent | % of members |
+| `total_deposits` | currency | Deposits |
+| `total_borrowings` | currency | Borrowings |
+| `delinquent_members` | integer | Delinquent |
+| `delinquency_rate` | percent | Delinquency rate |
+| `pep_count` | integer | PEP |
+
+<Note>
+  If members rated low risk carry the same arrears as members rated high risk, the rating model is not working. That comparison is the report.
+</Note>
+
+<Warning>
+  This report contains estimates produced from the institution's own data. Estimates are not forecasts of certain outcomes and no result is warranted by CompuZign. Read them with the confidence and coverage stated in the output, and against the institution's own judgement, before relying on them.
+</Warning>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+
