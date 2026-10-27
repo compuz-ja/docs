@@ -1,101 +1,88 @@
 ---
 title: "Generate and download the loan agreement PDF"
 sidebarTitle: "Loan agreements"
-description: "The platform generates a loan agreement PDF after approval. A loan must have a generated agreement before it can be disbursed, and regenerating supersedes the prior version."
+description: "The loan agreement PDF is generated after approval. A loan must have one before it can be disbursed, and regenerating replaces the earlier version while keeping it on file."
 icon: "file-text"
 ---
 
-The loan agreement is the signed PDF contract between your credit union and the borrower. The platform generates it automatically once a loan is approved, stores it with a fixed retention period, and requires it on file before any funds can be released. Every agreement is tied to the approved loan and to the exact figures that were approved.
+The loan agreement is the PDF contract between your credit union and the borrower. It is generated automatically once a loan is approved, built from the exact approved figures, and must be on file before any funds can be released.
 
-## The four agreement templates
+## The four agreement types
 
-The platform picks the template that matches the loan type. Each one carries the legal clauses and collateral section appropriate to that kind of loan.
+The agreement matches the loan type, with the clauses and security section that kind of loan needs.
 
-| Loan type | Template | What it covers |
-|---|---|---|
-| Cash-Secured | `cash-secured` | The loan secured against the member's savings, including the hypothecation of the secured deposit. |
-| Unsecured | `unsecured` | A personal loan with no collateral section. |
-| Auto | `auto` | The chattel mortgage over the vehicle, the registered lien, and the insurance requirement. |
-| Mortgage | `mortgage` | The mortgage over the real property, the title custody terms, and the property insurance requirement. |
+| Loan type | What the agreement covers |
+|---|---|
+| **Cash-secured** | A loan secured against the member's savings, including the pledge of the secured deposit. |
+| **Unsecured** | A personal loan with no security section. |
+| **Auto** | The charge over the vehicle, the registered lien, and the insurance requirement. |
+| **Mortgage** | The mortgage over the property, custody of the title, and the property insurance requirement. |
 
-Each generated PDF records its template name and version, the approved principal, term, rate, and approval date, the member's name and address, and the full monthly payment breakdown. The template version is 4 today; it shows as **Version** on the agreement card and in the download filename (`loan-agreement-<id>-v4.pdf`). The figures come from the approved decision and its rate computation, so the agreement always reflects what was actually approved. The agreement is signed by the member, any guarantors, the Credit Officer (the agreement's signature line reads "Loan Officer"), and the Branch Manager, each with a date. The Adjudicator who recorded the decision is not a signatory.
+Each agreement prints the approved principal, term, rate, and approval date, the member's name and address, and the full monthly payment. The **Loan agreement** card shows the template and version it was built from, when it was generated, and its size.
 
 ## What the agreement contains
 
-The agreement follows the credit union's own legal review. A few things are worth knowing about what a member reads and signs.
+**The full monthly payment, itemised.** The agreement splits the monthly payment into principal and interest, the compulsory savings paid alongside the loan, and the creditor-life premium where it is part of the instalment, then shows the total. The total matches the affordability figure the Credit Officer saw at capture.
 
-**The full monthly payment, itemised.** Rather than a single number, the agreement breaks the monthly payment into its parts: principal and interest, the compulsory savings paid alongside the loan, and the creditor-life premium where it is part of the instalment. It then shows the total the member pays each month. The total matches the affordability figure the officer sees at capture.
+- **Compulsory savings** uses the product's own minimum when the product sets one, the same figure used in the affordability check. See [Loan products](/omnia/los/admin/loan-products).
+- **Creditor-life** is priced from your credit union's creditor-life rate card for the number of lives covered, when your rates include one, and from the standard age table otherwise. It is never charged on a cash-secured loan.
+- **Premium paid separately.** When the member pays the creditor-life premium **annually** or **in full**, it is not in the monthly instalment. The agreement prints it as its own line: **Creditor Life Insurance (annual premium, payable yearly)** or **Creditor Life Insurance (single premium, paid in full)**, with the amount.
 
-- **Compulsory savings** uses the product's own compulsory-savings minimum when the product sets one, the same floor used in the affordability check at submission. See [Loan products](/omnia/los/admin/loan-products).
-- **Creditor-life** is priced from your credit union's group creditor-life rate card for the number of lives covered, when your rate table carries one, and from the platform's age table otherwise. It is never charged on a cash-secured loan.
-- **How the premium is paid.** When the officer recorded that the member pays the creditor-life premium **annually** or **in full**, the premium is not in the monthly instalment. The agreement prints it as its own line instead: **Creditor Life Insurance (annual premium, payable yearly)** or **Creditor Life Insurance (single premium, paid in full)**, with the amount. Loans captured before this choice existed keep the premium spread across the monthly payment.
+**The security, stated plainly.** On a secured loan, the agreement names the type of security (Cash Secured, Motor Vehicle, or Real Property) and what is pledged before the legal clause that grants it.
 
-**The security, stated plainly.** On a secured loan, the agreement leads with the type of security, Cash Secured, Motor Vehicle, or Real Property, and the details of what is pledged, before the legal clause that grants it.
+**When the first payment is due.** A cash-secured agreement carries an Effective Date, and the first payment falls one month after it. The other types are not disbursed the day the agreement is drawn up, so they say the first payment is due thirty days after disbursement.
 
-**When the first payment is due.** A cash-secured loan carries an Effective Date and the first payment falls one month after it. The other loan types are not disbursed on the day the agreement is drawn up, so they state instead that the first payment is due thirty days after the loan is disbursed. The Effective Date line appears only on the cash-secured agreement.
+**Standard clauses.** A consent to report to and check with credit bureaus, and a change-in-circumstances clause asking the member to tell the credit union promptly of any material change during the loan.
 
-**The clauses your members expect.** The agreement includes a credit-bureau consent, under the Credit Reporting Act, 2010, and a change-in-circumstances clause asking the member to tell the credit union promptly of any material change during the term of the loan.
-
-**The signature page.** The required signatories are the member, any guarantor where applicable, the Credit Officer (the agreement's signature line reads "Loan Officer"), and the Branch Manager, each with a place to date their signature. Each page also carries the member's initials. The page closes with an acknowledgement by the member, and each guarantor where applicable, that they have read and understood the agreement.
+**The signature page.** The member, any guarantors, the Credit Officer (the line is printed as "Loan Officer"), and the Branch Manager sign, each with a date. The Adjudicator does not sign. Each page carries the member's initials, and the page closes with the member's and each guarantor's acknowledgement that they have read and understood the agreement.
 
 <Note>
-  The name the agreement uses for the credit union as the legal party, in the opening sentence and on the signature lines, is configurable per credit union and is set to the credit union's registered name. It can differ from the display brand shown on the letterhead.
+  The name the agreement uses for your credit union as the legal party is set to your registered name. It can differ from the display name on the letterhead.
 </Note>
 
 ## When the agreement is generated
 
-The agreement is generated as part of disbursement readiness. When a loan is approved, the platform queues a job that renders the PDF, uploads it to secure storage, and writes an agreement record against the loan. This happens in the background, so the agreement is ready by the time the loan reaches the Disbursement team.
+As soon as a loan is approved, the agreement is generated in the background and attached to the loan. It is ready by the time the loan reaches the Disbursement team.
 
 <Warning>
-  A loan cannot be disbursed without a generated agreement. The disbursement readiness check refuses to schedule or execute a disbursement while the agreement is missing, with the reason "The signed loan agreement has not been generated yet." The agreement is one of three readiness gates: the member's KYC must be VERIFIED, every security request must be resolved, and the agreement must be on file. This is a server-side guard, not just a hidden button, so it holds even against a stale page. Releasing the funds also needs the signed [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet) on file.
+  A loan cannot be disbursed without an agreement. Scheduling and release are refused with "The signed loan agreement has not been generated yet." The agreement is one of three items on the **Pre-execution checklist**, with a **Verified** identity check and no open security requests. The check runs when you click, so a stale page cannot get around it. Releasing funds also needs the signed [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet).
 </Warning>
 
 ## Regenerating an agreement
 
-If the agreement needs to be reissued, for example after a correction, you can regenerate it from the loan detail page. Regenerating queues a fresh PDF render and writes a new agreement record. The prior agreement is kept and the new one supersedes it, so the full history is preserved for audit.
-
-The newest agreement in the chain, the one nothing supersedes, is the canonical version. It is the one the download link serves. The readiness check requires at least one agreement on file for the loan, regardless of which version is canonical. Older versions stay on file and remain in the audit trail.
+Regenerate an agreement to reissue it, for example after a correction. The new agreement replaces the old one, which stays on file and in the audit trail. Downloads always serve the newest version.
 
 <Steps>
   <Step title="Open the loan">
-    Go to the loan on the adjudication or disbursement detail page. The agreement card shows whether an agreement has been generated.
+    Open the loan from the Adjudication or Disbursement queue. The **Loan agreement** card shows whether an agreement exists.
   </Step>
   <Step title="Regenerate">
-    Click the regenerate action. The platform finds the loan's latest approved decision, queues the render against it, and waits for the job to finish. A regeneration from an existing agreement supersedes that agreement; a first generation simply creates the first record.
+    Click **Regenerate**, or **Generate agreement** if none exists yet. The agreement is rebuilt from the loan's latest approval decision.
   </Step>
-  <Step title="Confirm the result">
-    When the job completes, the page refreshes and the new agreement becomes the canonical version. If the render fails, the page shows the reason and the technical detail is captured in the audit log. Two failures are worth knowing: an agreement generates only against an APPROVED decision, and an Auto or Mortgage agreement needs a collateral record on file. If the collateral record is missing, the reason reads "The agreement could not be generated because the loan has no collateral record on file. Open the loan and capture the collateral details, then retry."
+  <Step title="Check the result">
+    When it finishes, the page refreshes and the card shows the new agreement. If generation fails, the page shows the reason.
   </Step>
 </Steps>
 
-Who can regenerate depends on the surface. Any oversight role that holds **reports.view** regenerates through that access: Administrator, Credit Manager, and Branch Manager. The Disbursement team can also retry generation (**loans.disburse**) when the post-approval job failed silently and is blocking their pre-execution checklist.
+Two failures come up most:
+
+- **The loan is not approved.** An agreement is only built against an approval decision.
+- **No collateral record.** An auto or mortgage agreement needs the collateral captured. The message reads "The agreement could not be generated because the loan has no collateral record on file. Open the loan and capture the collateral details, then retry."
+
+Staff with the **View reports** permission (Administrator, Credit Manager, and Branch Manager) can regenerate. So can the Disbursement team, with **Disburse loans**, when a missing agreement is blocking their checklist.
 
 ## Downloading the agreement
 
-The agreement download is capability-gated. Five capabilities can download it, so everyone working the loan in its pipeline can read the agreement that backs the file:
+Everyone working the loan can read its agreement:
 
-| Capability | Who holds it |
+| Who | Through |
 |---|---|
-| **reports.view** | Oversight roles: Administrator, Credit Manager, and Branch Manager |
-| **loans.read.own** | The officer who created the loan |
-| **loans.adjudicate** | Adjudicator |
-| **securities.review** | Securities team |
-| **loans.disburse** | Disbursement team |
+| Administrator, Credit Manager, Branch Manager | **View reports** |
+| Credit Officer | Their access to the loans they capture |
+| Adjudicator | **Approve loans** |
+| Securities team | **Review securities** |
+| Disbursement team | **Disburse loans** |
 
-The download serves the canonical agreement for the loan. You can open it inline in a new tab to read it first, or request it as an attachment to save it directly. If no agreement has been generated yet, the download returns a clear "not generated yet" response rather than an empty file.
+On the **Loan agreement** card, click **View** to open it in a new tab, or the download button to save it. The file name includes the agreement's version. If no agreement exists yet, you are told it has not been generated rather than handed an empty file.
 
-The agreement-download links on the Adjudicator, Securities, and Disbursement detail pages all point at this same endpoint.
-
-<Note>
-  The scoping of **loans.read.own** to the loan's creator is a planned refinement; today any holder of the capability can download. Agreement PDFs are stored with a 7-year retention period, the Bank of Jamaica minimum for loan records, and cannot be altered or deleted within that window. Every download is logged.
-</Note>
-
-## Events recorded
-
-The agreement lifecycle is logged. The generated and failed events are also written to the immutable audit trail; the start of a render is a log line only.
-
-| Event | When it fires | Where it lands |
-|---|---|---|
-| `loan_agreement.generation.started` | A render job began for an approved loan. | Log only |
-| `loan_agreement.generated` | The PDF was rendered, stored, and recorded against the loan. | Audit trail and log |
-| `loan_agreement.generation.failed` | The render or storage step failed. The reason is captured for investigation. | Audit trail and log |
+Agreements are kept for seven years in storage that cannot be altered or deleted. Every generation, failure, and download is recorded.

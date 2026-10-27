@@ -7,30 +7,30 @@ icon: "banknote"
 
 The Loan Origination System runs your credit union's lending process in one audited workflow. A Credit Officer captures the application, an approver decides it in **Credit Approvals**, Securities clears the collateral, and Disbursement releases the funds. Each department picks up the application exactly when it is their turn.
 
-## How a loan moves through the platform
+## How a loan moves through the system
 
-Every application starts as **DRAFT** and ends in one of four terminal states: **FILED** (completed), **DECLINED**, **CANCELLED** or **DRAFT_ABANDONED**.
+Every application starts as **Draft** and ends in one of four final stages: **Filed** (completed), **Declined**, **Cancelled** or **Draft abandoned**.
 
-1. A Credit Officer captures the application in **DRAFT**. Sections save automatically. The officer can [change the loan type or product](/omnia/los/loans/changing-loan-type) while it is a draft.
-2. The officer submits. The platform checks the member's KYC, your workspace's required fields and the affordability inputs, and tells the officer exactly what is missing if anything is. The application becomes **SUBMITTED** and the risk band is assessed.
-3. An approver claims it into **ADJUDICATION** and decides. Who may approve depends on your [approval routes](/omnia/los/workflows/approval-routes): one approver within their limit, an In-House Committee quorum, or a recorded Credit Committee decision.
-4. Approved, it becomes **APPROVED**, then **SECURITIES** for collateral review. Unsecured loans have nothing to perfect and move on once the required documents are signed.
-5. **DISBURSEMENT** schedules and releases the funds, then the loan is **DISBURSED** and finally **FILED**.
+1. A Credit Officer captures the application as a **Draft**. Sections save automatically. While it is a draft, the officer can [change the loan type or product](/omnia/los/loans/changing-loan-type).
+2. The officer submits. The system checks the member's identity status, your credit union's required fields and the affordability inputs, and lists anything missing. The application becomes **Submitted** and its risk band is assessed.
+3. An approver claims it into **Credit approval** and decides. Who may approve depends on your [approval routes](/omnia/los/workflows/approval-routes): one approver within their limit, a committee quorum, or a recorded committee decision.
+4. Once **Approved**, it moves to **Securities** for collateral review. Unsecured loans have nothing to perfect and move on once the required documents are signed.
+5. **Disbursement** schedules and releases the funds. The loan becomes **Disbursed** and finally **Filed**.
 
-Several states send an application backward: Request more information (**INFO_REQUESTED**, then DRAFT), a return to DRAFT for a rebuild, a structural collateral problem (**SECURITIES_ISSUE**), and reverts from Securities and Disbursement. The full state machine is on [Workflow states](/omnia/los/loans/workflow-states).
+Some steps send an application backward: a request for more information (**Info requested**, then back to **Draft**), a return to **Draft** for a rebuild, a collateral problem (**Securities issue**), and returns from Securities and Disbursement. See [Workflow states](/omnia/los/loans/workflow-states).
 
-No application is ever deleted. Declined, cancelled and abandoned applications stay on file for the audit trail.
+No application is ever deleted. Declined, cancelled and abandoned applications stay on file.
 
 ## The four kinds of loan
 
-Your workspace defines its own loan types and products. Each one maps to one of four kinds, which decide the form sections and collateral rules.
+Your credit union defines its own loan types and products. Each maps to one of four kinds, which decide the form sections and collateral rules.
 
-| Kind (shown in the app as) | Collateral | Notes |
+| Kind | Collateral | Notes |
 |---|---|---|
-| **Unsecured** | None | Creditor life cover on by default. |
-| **Cash secured** | Pledged savings, deposits or funds held elsewhere | Up to 97% of the member's own pledged cash, 95% once any of it is held at another institution. No creditor life. |
-| **Motor vehicle** | The vehicle | Vehicle age can set the rate tier. |
-| **Real estate** | The property | Terms up to 480 months where the product allows. |
+| **Unsecured** | None | Creditor life cover is on by default. |
+| **Cash secured** | Pledged savings, deposits or funds held elsewhere | Lends up to a share of the pledged cash that your credit union sets. No creditor life. |
+| **Motor vehicle** | The vehicle | Vehicle age can set the rate. |
+| **Real estate** | The property | Long terms where the product allows. |
 
 See [Loan types](/omnia/los/loans/loan-types).
 
@@ -38,24 +38,24 @@ See [Loan types](/omnia/los/loans/loan-types).
 
 | Role | Responsibility |
 |---|---|
-| **Credit Officer** | Creates the draft, captures every section, sets fees and creditor life, submits, and responds to information requests. |
-| **Adjudicator** | Claims and decides applications in Credit Approvals, within the authority your approval schedule gives the role. |
-| **Credit Manager** | Oversees the pipeline, sets rate overrides, decides KYC reviews and approves disbursements. Approves loans where your workspace grants the role `loans.adjudicate`. |
+| **Credit Officer** | Creates the draft, captures every section, sets fees and creditor life, submits, and answers information requests. |
+| **Adjudicator** | Claims and decides applications in Credit Approvals, within the authority your credit union gives the role. |
+| **Credit Manager** | Oversees the pipeline, overrides rates, decides identity reviews and approves disbursements. Approves loans where your credit union grants the role **Approve loans**. |
 | **Branch Manager** | Sees and assigns their branch's loans. |
 | **Securities** | Reviews and perfects collateral for secured loans. |
 | **Disbursement** | Schedules and executes the release of approved funds. |
 
-Committee membership, approval limits and who records Credit Committee decisions are workspace configuration, so your credit union's own positions may also approve. See [Approval routes](/omnia/los/workflows/approval-routes).
+Approval limits, committee membership and who records committee decisions are set for your credit union, so senior approvers it designates may also approve. See [Approval routes](/omnia/los/workflows/approval-routes).
 
 ## Loan ID format
 
-Every application gets a Loan ID when the draft is created: the branch code, the loan type code and a 5-digit sequence number, joined by hyphens. **MAIN-AUTO-00042** is the 42nd motor vehicle loan opened at the branch coded MAIN.
+Every application gets a Loan ID when the draft is created: the branch code, the loan type code and a 5-digit sequence number, joined by hyphens. For example, `MAIN-AUTO-00042` is the 42nd motor vehicle loan opened at the branch coded `MAIN`.
 
 | Segment | Example | Meaning |
 |---|---|---|
 | Branch code | `MAIN` | The branch where the application was opened |
-| Loan type code | `AUTO` | The kind of loan (`AUTO`, `UNS`, `CASH`, `MORT`) |
-| Sequence number | `00042` | 5-digit running count per branch and loan type |
+| Loan type code | `AUTO` | The kind of loan, for example `AUTO`, `UNS`, `CASH` or `MORT` |
+| Sequence number | `00042` | A running count per branch and loan type |
 
 Changing a draft to a different kind of loan issues a new Loan ID from the new type's sequence.
 
@@ -75,7 +75,7 @@ Changing a draft to a different kind of loan issues a new Loan ID from the new t
     Move a draft to another product or kind of loan.
   </Card>
   <Card title="Staff and confidential loans" icon="lock" href="/omnia/los/loans/confidential-and-staff-loans">
-    Who sees a staff or Board loan, and how it is approved.
+    Who sees a staff loan, and how it is approved.
   </Card>
   <Card title="Credit approvals" icon="gavel" href="/omnia/los/workflows/adjudication">
     How approvers review and decide applications.
@@ -86,18 +86,18 @@ Changing a draft to a different kind of loan issues a new Loan ID from the new t
 
 <AccordionGroup>
   <Accordion title="Can a submitted application be edited?">
-    No. Sections lock at submission. The approver can request more information or return it to DRAFT.
+    No. Sections lock at submission. The approver can request more information or return it to **Draft**.
   </Accordion>
   <Accordion title="Can I change the loan type after creating the draft?">
-    Yes, while it is a DRAFT. Same kind keeps the Loan ID; a different kind creates a new draft with a new Loan ID.
+    Yes, while it is a **Draft**. The same kind keeps the Loan ID. A different kind creates a new draft with a new Loan ID.
   </Accordion>
   <Accordion title="Who approves a loan?">
-    Whoever your approval routes say: an approver within their own limit, an In-House Committee quorum, or the Credit Committee through its recorder. The approval route card on the loan shows which.
+    Whoever your approval routes say: an approver within their own limit, a committee quorum, or a committee decision entered by its recorder. The approval route card on the loan shows which.
   </Accordion>
   <Accordion title="Why is a staff member's loan missing from my list?">
-    Staff and Board loans are confidential. Only their designated handlers, the assignee and the borrower see them. See [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
+    Staff loans can be confidential. Only their designated handlers, the assignee and the borrower see them. See [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
   </Accordion>
   <Accordion title="Is anything ever deleted?">
-    No. Every application reaches a terminal state and stays on file.
+    No. Every application reaches a final stage and stays on file.
   </Accordion>
 </AccordionGroup>

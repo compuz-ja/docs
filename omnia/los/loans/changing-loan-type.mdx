@@ -5,36 +5,36 @@ description: "Move a draft application to a different product of the same kind i
 icon: "repeat"
 ---
 
-**Change loan type / product** moves a DRAFT application to a different product or a different kind of loan without abandoning it and re-keying everything. What happens depends on whether the new choice is the same kind of loan.
+**Change loan type / product** moves a draft application to a different product or kind of loan without abandoning it and re-keying everything. What happens depends on whether the new choice is the same kind of loan.
 
 | You pick | What happens | Loan number |
 |---|---|---|
 | Another product of the **same kind** (for example one Unsecured product to another) | The draft is changed in place. | Kept |
 | A product of a **different kind** (for example Unsecured to Motor vehicle) | A new draft is created and the capture is copied across. The old draft is abandoned. | New |
 
-The kind of loan is the archetype behind your workspace's loan types: Unsecured, Cash secured, Motor vehicle or Real estate. The loan number encodes it (`BRANCH-TYPE-NUMBER`), which is why a change of kind needs a new number from the right sequence.
+The kind of loan is Unsecured, Cash secured, Motor vehicle or Real estate. The loan number includes the loan type code, for example `MAIN-UNS-00001`, which is why a change of kind needs a new number.
 
 ## Who can do it
 
-- **Same kind**: `loans.edit`.
-- **Different kind**: `loans.edit` and `loans.create`. Without `loans.create`, the dialog lists only products of the same kind and says: "Moving to a different kind of loan creates a new application, which your role cannot do."
+- **Same kind**: **Edit loans**.
+- **Different kind**: **Edit loans** and **Create loans**. Without **Create loans**, the dialog lists only products of the same kind and says: "Moving to a different kind of loan creates a new application, which your role cannot do."
 
-The Credit Officer holds both. The application must be a DRAFT. A loan returned for more information can be changed once it is back in DRAFT.
+The Credit Officer holds both. The application must be a **Draft**. A loan returned for more information can be changed once it is back in **Draft**.
 
 ## Change the product or type
 
 <Steps>
   <Step title="Open the draft">
-    The **Change loan type / product** button is in the header of the application page.
+    **Change loan type / product** is in the header of the application page.
   </Step>
   <Step title="Pick the loan type and product">
-    Choose a **loan type**, then a **product** under it. The products list shows each product's name and code.
+    Choose a **loan type**, then a **product** under it. The list shows each product's name and code.
   </Step>
   <Step title="Read what will happen">
-    For the same kind, the dialog says the loan number is kept and lists what is cleared. For a different kind, it says a new draft with a new loan number will be created and the current one abandoned, then lists what is carried over and what is not.
+    For the same kind, the dialog says the loan number is kept and lists what is cleared. For a different kind, it says a new draft with a new loan number will be created and the current one abandoned, and lists what carries over and what does not.
   </Step>
   <Step title="Confirm">
-    Click **Change product** (same kind) or **Create new draft** (different kind). A different kind takes you to the new draft, and a message confirms "New draft NEW-ID created. OLD-ID was abandoned."
+    Click **Change product** (same kind) or **Create new draft** (different kind). A different kind takes you to the new draft with the message "New draft NEW-ID created. OLD-ID was abandoned."
   </Step>
 </Steps>
 
@@ -44,70 +44,68 @@ The Credit Officer holds both. The application must be a DRAFT. A loan returned 
 
 ## Same kind: changed in place
 
-The loan keeps its number, its history and everything captured. Anything priced against the old product is cleared:
+The loan keeps its number, history and capture. Anything priced against the old product is cleared:
 
-- the manual rate override
-- the fee-treatment choices
-- the escrow-months override
+- the rate override
+- the fee treatment choices
+- the escrow months override
 - the product-limit exception reason
-- optional document-requirement selections that belonged to the old loan type, when the product sits under a different loan type
+- optional document requirements that belonged to the old loan type, when the new product sits under a different loan type
 
-Estimates recalculate for the new product. If the amount or term is outside the new product's limits, you see a warning rather than a refusal, so you are not trapped on the old product. Fix the amount or term before submitting: saving the loan parameters and approval both enforce the limits.
-
-The change records `loan_application.product.changed`.
+Estimates recalculate for the new product. If the amount or term is outside the new product's limits, you get a warning rather than a refusal, so you are not trapped on the old product. Fix the amount or term before submitting: saving the loan parameters and approval both enforce the limits. The change is recorded in the audit trail.
 
 ## Different kind: a new draft
 
-The new draft goes through the normal create path and receives a new loan number. The following is copied across:
+The new draft gets a new loan number. Copied across:
 
 - the member, branch, requested amount, term and purpose
 - the transaction type and any balance being paid off
-- the statement of affairs: income lines, expense lines and their after-loan amounts
+- income and expense lines, with their after-loan amounts
 - net worth entries
 - employment records
-- active guarantors, with their employment details
+- active guarantors and their employment details
 - the credit rating, credit score, report source and Risk Registry check
 - the creditor life settings, when cover can apply to the new kind
-- the current owner assignment
+- the current assignee
 
-The following is not copied. The dialog lists it before you confirm:
+Not copied (the dialog lists these before you confirm):
 
 - collateral and security records
-- prepared or executed legal documents and draft agreements
-- security requests, security holds and security documents
-- guarantor supporting documents (they stay on the abandoned draft; re-upload them)
+- prepared or signed legal documents and draft agreements
+- security requests, holds and security documents
+- guarantor documents (they stay on the abandoned draft; upload them again)
 - guarantor acknowledgements
-- the rate override, fee-treatment overrides, custom fee lines and the escrow-months override
+- the rate override, fee treatment choices, custom fee lines and escrow months override
 - the product-limit exception reason
 - the Credit Officer recommendation and approval level
-- optional document-requirement selections
+- optional document requirements
 
-Creditor life follows the cash-secured rule. Moving to a cash-secured loan turns cover off. Moving from a cash-secured loan gives the new draft the default cover settings, because the old draft's "off" was forced, not chosen.
+Creditor life follows the cash-secured rule. Moving to a cash-secured loan turns cover off. Moving from one gives the new draft the default cover settings.
 
-The old draft moves to DRAFT_ABANDONED with the reason "Re-typed to NEW-ID". It is never deleted. Both records carry a cross-referencing audit event: `loan_application.retyped` on the old draft and `loan_application.created_from_retype` on the new one. Everything happens in one transaction, so you never end up with two live drafts or none.
+The old draft becomes **Draft abandoned** with the reason "Re-typed to NEW-ID". It is never deleted, and the audit trail links the two records. The change happens all at once, so you never end up with two live drafts or none.
 
 ## When a change of kind is refused
 
 - **A migrated loan** cannot be re-typed: "A migrated loan cannot be re-typed."
-- **An application from the digital channel** cannot change kind, because the member's online application is linked to it. You can still change the product within the same kind.
+- **An application from the online channel** cannot change kind, because the member's online application is linked to it. You can still change the product within the same kind.
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Do I lose the income and expenses I captured?">
-    No. The statement of affairs, net worth, employment and guarantors carry across in both cases.
+    No. Income, expenses, net worth, employment and guarantors carry across either way.
   </Accordion>
   <Accordion title="Why did my loan number change?">
-    You moved to a different kind of loan. The loan number includes the loan type code, so the new draft takes the next number in that type's sequence. The old number stays on the abandoned draft.
+    You moved to a different kind of loan. The number includes the loan type code, so the new draft takes the next number for that type. The old number stays on the abandoned draft.
   </Accordion>
   <Accordion title="Can I change the type after submitting?">
-    No. Only a DRAFT can be changed. If the application was returned for more information, change it once it is back in DRAFT.
+    No. Only a **Draft** can be changed. If the application was returned for more information, change it once it is back in **Draft**.
   </Accordion>
   <Accordion title="I changed to a car loan. Why is the collateral section empty?">
-    Collateral never carries to a new kind of loan, because the old security does not fit the new type. Capture the vehicle on the new draft.
+    Collateral never carries to a new kind of loan, because the old security does not fit. Capture the vehicle on the new draft.
   </Accordion>
   <Accordion title="The new product's maximum is lower than my amount. Is the change refused?">
-    No. You get a warning and the change goes through. Lower the amount, or record a product-limit exception if your workspace allows one, before you submit.
+    No. You get a warning and the change goes through. Lower the amount, or record a product-limit exception if your credit union allows one, before you submit.
   </Accordion>
   <Accordion title="Where do the guarantor documents go?">
     They stay on the abandoned draft. Upload them again on the new draft's guarantors.

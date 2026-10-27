@@ -1,93 +1,70 @@
 ---
 title: "Identity verification health"
 sidebarTitle: "Identity health"
-description: "Check which identity verification providers are wired for your deployment and run a fixture check to confirm they respond."
+description: "See which identity verification service each check uses and run a test to confirm the services respond."
 icon: "fingerprint"
 ---
 
-The identity verification health screen confirms that the providers behind member KYC are wired correctly and reachable.
+The identity verification health screen shows which service answers your member identity checks and lets you test that each one responds.
 
-Member KYC verifies a member's TRN and driver's licence against an outside identity service. This admin screen does not verify any member. It reports which provider is configured for each verification slot and lets you run a fixture check to confirm each one responds. Use it after a provider configuration change, after credentials rotate, or when the KYC page misbehaves and you need to isolate whether the partner is reachable.
+Member identity checks confirm a member's tax ID and driver's licence against an outside identity service, such as your national identity service. This screen checks no member. It tells you which service each check is connected to and lets you send a test check to each. Use it after your identity service settings change, or when member checks misbehave and you need to know whether the service is reachable.
 
-**Required role:** Administrator (`admin.tenant.manage` capability).
+**Required permission:** **Manage workspace**, held by the Administrator.
 
-To open the screen, choose **Administration → Settings → Identity Verifier**, or navigate to `/{tenantSlug}/admin/identity-health`. For example, `https://loan.compuzign.com/your-slug/admin/identity-health`.
+Open **Administration → Settings → Identity Verifier**. The page is titled **Identity verifier health**.
 
-## The provider abstraction
-
-The platform talks to identity verifiers through a provider abstraction, so the verification slots can point at different partners without a code change. This screen checks two slots.
-
-- **TRN.** Tax Registration Number verification.
-- **Driver's licence.** Driver's licence verification.
-
-The verifier also builds a third motor-vehicle slot (used for Auto loans), but this screen does not exercise it, so a green result here does not confirm the motor-vehicle slot.
-
-Each slot is wired independently from the deployment environment. The available providers include:
-
-- A **mock provider** that returns deterministic dev fixtures. This is the default and is used in development and CI.
-- **eGov Jamaica**, the integration for live TRN, driver's licence, and motor-vehicle checks.
-- Other live partners can be wired per slot: **Dojah** (TRN or driver's licence), a direct TRN provider (taj-direct), and a direct driver's licence provider (ita-direct).
-
-The full set of selectable per-slot providers is `mock`, `egov-ja`, `dojah`, `taj-direct` (TRN only), and `ita-direct` (driver's licence only). A separate **recording** wrapper can sit in front of any of these to capture traffic for replay, and an internal composite router combines the per-slot providers behind one interface.
-
-When a slot is configured for a live partner but its credentials are missing, that slot falls back to the mock provider rather than failing. The health screen surfaces this fallback so you can tell a real connection from a fallback at a glance.
-
-## What the health screen shows
-
-The screen has two parts.
+## What the screen shows
 
 ### Configured providers
 
-A row of chips shows the provider wired for each slot, read from the deployment environment.
+A chip for each check shows the service it uses:
 
-- A chip for the **TRN** slot with its provider label.
-- A chip for the **Driver's licence** slot with its provider label.
-- A **Recording wrapper active** chip when traffic recording is enabled.
+- The tax ID chip, labelled **TRN** (the tax ID in Jamaica).
+- **Driver's licence**, the licence check.
+- **Recording wrapper active**, when your support team is recording traffic to diagnose a problem.
 
-The chips are color-coded. A live partner reads as live. A slot that fell back to mock because credentials are missing is flagged so the fallback is obvious. A slot deliberately set to mock reads as mock.
+The chip color tells you the state:
 
-<Note>
-  Flipping a provider for a slot is a configuration-only change in the
-  deployment environment. No redeploy is needed for the change to take effect.
-</Note>
+- **Green**: connected to a live service.
+- **Amber**: set up for a live service, but its credentials are missing, so the check has fallen back to a test service. Member checks are not reaching the real service.
+- **Grey**: deliberately set to the test service, which gives fixed answers and checks nobody.
+
+The motor-vehicle check used on vehicle loans is not tested here, so a green screen says nothing about it.
+
+Your LOS support team connects and changes these services. The change takes effect without any downtime.
 
 ### Run a check
 
-A **Run health check** button pings each configured verifier with a fixture subject. It uses `DEV-HEALTH-001` for the TRN slot and `DEV-HEALTH-DL-001` for the driver's licence slot, so no real member PII is sent through the pipeline.
+Click **Run health check** to send a test identity, not a real member, to each check. For each one you see:
 
-On a default mock deployment, the outcome is driven by the fixture string rather than a live partner. Both fixtures end in an odd digit, which the mock returns as Verified, so a green result on a mock slot confirms the wiring works, not a real identity check. Because those fixtures are fixed to read Verified on mock, a non-Verified outcome on a mock slot means the wiring itself is broken, not that a member failed a check.
+- Whether it **responded** or **failed**.
+- The **service** that answered.
+- The **result**: Verified, Partial, Failed, or Manual review.
+- How long it took, in milliseconds.
 
-For each slot, the result row reports:
+A summary line shows when the check ran and whether all providers responded ("All providers responded" or "One or more failed").
 
-- Whether the slot **responded** or **failed**.
-- The **vendor** that answered (the partner label; for the mock this reads `mock`).
-- The **outcome status**: Verified, Partial, Failed, or Manual review.
-- The **latency** of the call in milliseconds.
-
-A summary line shows the time of the last run and whether all providers responded.
+On a test service the test identity always comes back **Verified**. Any other result there means the connection itself is broken, not that a member failed.
 
 <Warning>
-  For any slot wired to a live partner, each run is a real verification call
-  that counts against that partner's rate limit and cost budget. On a mock slot
-  the call is a deterministic fixture lookup with no partner or cost. Either
-  way, run it to diagnose wiring, not as a routine poll.
+  On a live service, each test is a real check that counts against that service's usage limits and fees. Run it to diagnose a problem, not on a schedule.
 </Warning>
 
-The screen does not write an audit row, because these pings are operational rather than member-PII events. Each run is recorded as a structured log line, `identity.health.checked`, tied to the admin who ran it.
+The test sends no member data and does not appear in the audit trail.
 
-## How it relates to member KYC
+## When member checks fail
 
-This screen checks the same providers that the member KYC flow uses. If members are failing KYC unexpectedly, run the health check here first. If a slot has fallen back to mock or a live partner fails to respond, that explains why member verifications are not behaving as expected.
+This screen tests the same services that member identity checks use. If members are failing checks unexpectedly, run the health check first. An amber chip, or a live service that does not respond, explains it. Send the result to your LOS support team.
 
-For how to submit a member for verification, read the result statuses, and handle manual review, see [KYC verification](/omnia/los/members/kyc-verification).
+To submit a member for checking and handle the results, see [KYC verification](/omnia/los/members/kyc-verification).
 
 ## Related pages
 
 <CardGroup cols={2}>
   <Card title="KYC verification" icon="scan-face" href="/omnia/los/members/kyc-verification">
-    Submit a member for identity verification and handle the result.
+    Submit a member for identity checking and handle the result.
   </Card>
   <Card title="Workspace configuration" icon="sliders-horizontal" href="/omnia/los/admin/workspace-configuration">
-    Workspace-wide operational settings, including audit retention.
+    Credit-union-wide settings, including audit retention.
   </Card>
 </CardGroup>

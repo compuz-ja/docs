@@ -1,75 +1,74 @@
 ---
-title: "Settlement lifecycle and reversals"
+title: "Settlement and reversals"
 sidebarTitle: "Settlement"
-description: "How a released disbursement moves through its settlement states on the payment rail, and how a claw-back reversal works."
+description: "Track a released disbursement as the payment moves through the banking system, and claw back a payment with a reversal."
 icon: "repeat"
 ---
 
-A released disbursement moves through settlement states as the payment travels on the rail, and every move writes an immutable lifecycle event. A reversal claws a payment back and always requires a reason.
+After funds are released, you record each payment's progress through the banking system on the disbursement page, and a reversal claws a payment back with a stated reason.
 
-## The settlement states
+## The settlement statuses
 
-The `DisbursementSettlementStatus` enum holds six values.
+The **Settlement** badge on the **Controls & settlement** card shows where the payment stands.
 
 | Status | Meaning |
 | --- | --- |
-| `SCHEDULED` | Created, not yet released. |
-| `SENT` | Released to the rail. The cheque is issued or the ACH/RTGS leg is sent. |
-| `CLEARED` | Settled at the destination. |
-| `RETURNED` | Bounced back, for example a bad or closed account. |
-| `FAILED` | The rail rejected the instruction. |
-| `REVERSED` | Clawed back after release. |
-
-A new instruction starts at `SCHEDULED`. Executing the disbursement moves it to `SENT`. From there it reaches `CLEARED`, or `RETURNED`, or `FAILED`. A `SENT` or `CLEARED` payment can be `REVERSED`.
+| **Scheduled** | Created, not yet released. |
+| **Sent to rail** | Released. The cheque is issued or the transfer is sent. |
+| **Cleared** | Settled at the receiving bank. |
+| **Returned** | Bounced back, for example to a closed or wrong account. |
+| **Failed** | The bank or payment system rejected it. |
+| **Reversed** | Clawed back after release. |
 
 ```mermaid
 stateDiagram-v2
-    [*] --> SCHEDULED
-    SCHEDULED --> SENT
-    SENT --> CLEARED
-    SENT --> RETURNED
-    SENT --> FAILED
-    CLEARED --> REVERSED
-    SENT --> REVERSED: reversal only, off-graph
+    state "Scheduled" as Scheduled
+    state "Sent to rail" as Sent
+    state "Cleared" as Cleared
+    state "Returned" as Returned
+    state "Failed" as Failed
+    state "Reversed" as Reversed
+    [*] --> Scheduled
+    Scheduled --> Sent
+    Sent --> Cleared
+    Sent --> Returned
+    Sent --> Failed
+    Sent --> Reversed
+    Cleared --> Reversed
 ```
 
-Each transition is validated. An attempt to move between states the graph does not allow is refused with an `INVALID_SETTLEMENT_TRANSITION` error.
+**Mark disbursed** moves a disbursement from **Scheduled** to **Sent to rail**. From there it ends at **Cleared**, **Returned**, or **Failed**. **Returned**, **Failed**, and **Reversed** are final.
 
-## Advancing the settlement
+## Update the settlement
 
-`advanceSettlement` moves the status forward, validates the move, stamps the matching timestamp where one exists, and writes an immutable `DisbursementLifecycleEvent`. It is used for `SENT`, `CLEARED`, `RETURNED`, and `FAILED`. `SENT`, `CLEARED`, and `RETURNED` each stamp their own timestamp column (`sentAt`, `clearedAt`, `returnedAt`); `FAILED` has no timestamp column, so a move to `FAILED` records the lifecycle event and status only.
+<Steps>
+  <Step title="Open the disbursement">
+    Open the loan from the Disbursement queue, on the **Completed** tab once it is disbursed.
+  </Step>
+  <Step title="Pick the new status">
+    On the **Controls & settlement** card, choose the next status under **Move to**. The list offers only the moves allowed from the current status.
+  </Step>
+  <Step title="Add a reason and update">
+    Add a reason if useful, for example the bank's return code on a returned payment, then click **Update**.
+  </Step>
+</Steps>
 
-Advancing settlement is gated by the `disbursements.settlement.update` capability, which the **Disbursement** role holds.
+Each move is listed under the badge with its date, time, and reason, and recorded in the audit trail. Updating settlement needs the **Update settlement** permission, which the **Disbursement** role holds.
 
-The audit events are exact:
+## Reverse a payment
 
-| Move | Event |
-| --- | --- |
-| To `SENT` | `disbursement.settlement.sent` |
-| To `CLEARED` | `disbursement.settlement.cleared` |
-| To `RETURNED` | `disbursement.settlement.returned` |
-| To `FAILED` | `disbursement.settlement.failed` |
+A reversal claws back a payment that is **Sent to rail** or **Cleared**.
 
-A move to `RETURNED` records its reason on the instruction's `returnReason` field and on the lifecycle event.
+On the **Controls & settlement** card, type the **Reversal reason** and click **Reverse**. The reason is required: a reversal without one is refused, because pulling back released funds is exactly what an auditor will ask about. The status becomes **Reversed** and the reason is kept on the disbursement and in the audit trail.
 
-## Reversing a disbursement
-
-`reverseDisbursement` claws back a released payment. It is valid only from `SENT` or `CLEARED`, and it **requires** a reason. The reversal stamps a `reversedAt` timestamp and writes the reason to the instruction's `reversalReason` field, not `returnReason`. The reason is also recorded on the lifecycle event and in the audit log.
-
-Reversal is gated by the `disbursements.reverse` capability, which the **Disbursement** role holds. The event is `disbursement.reversed`.
-
-<Note>
-A reversal with no reason is refused. The reason is mandatory because a claw-back of released funds is a high-stakes action that the audit trail must explain.
-</Note>
-
-A reversal does not go through the generic settlement transition graph. The graph models `CLEARED` to `REVERSED`, while `reverseDisbursement` runs its own from-status check that accepts both `SENT` and `CLEARED`.
+Reversing needs the **Reverse disbursements** permission, which the **Disbursement** role holds.
 
 ## Not yet available
 
-The following are planned but not yet built. They are part of a deferred Phase 5 and are not live today.
+These are planned and not built yet:
 
-- Partial and tranche disbursement (multiple draws against one loan).
-- Batch ACH and RTGS ISO 20022 file generation.
-- Return-file reconciliation.
+- Partial or staged disbursement, with several draws against one loan.
+- Batch payment files for ACH and RTGS.
+- Automatic matching of bank return files.
 - Receipt and payment-advice PDFs.
-- Multi-currency and FX.
+- Multi-currency disbursements.

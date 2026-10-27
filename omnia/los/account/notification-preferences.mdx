@@ -1,53 +1,44 @@
 ---
 title: "Notification preferences"
-description: "Control which email alerts you receive from the Notifications page in your profile. Preferences are per-user and apply across every workspace you belong to."
+description: "Choose which optional email alerts you receive. Preferences belong to you and apply in every workspace you work in."
 sidebarTitle: "Notification preferences"
 icon: "bell"
 ---
 
-The **Notifications** page in your profile lets you suppress specific email alerts you would otherwise receive. Preferences are per-user. They live on your account and apply across every workspace you belong to, not just one. The page is not workspace-scoped: it lives at `https://loan.compuzign.com/profile/notifications`, with no workspace slug in the path.
+The **Notifications** page in your profile lets you turn off optional email alerts. Your choices belong to your account and apply in every workspace you work in.
 
 ## Opening notification preferences
 
-Click your avatar in the top-right corner, then choose **Profile**, or open **Manage Account** then **Profile** at the bottom of the left menu. That opens the profile area, whose sidebar lists three pages: **Settings**, **Authentication**, and **Notifications**. Select **Notifications**.
+Click your avatar in the top-right corner and choose **Profile**, or open **Manage Account** then **Profile** at the bottom of the left menu. In the profile sidebar, select **Notifications**.
 
-## What you can control
+## What you can turn off
 
-The page currently has one preference.
+The page has one preference.
 
 | Preference | What it controls |
 |---|---|
-| **New invitations sent by other admins** | When another admin in a workspace you belong to sends a member invitation, you get an email heads-up so you can revoke it if it was a mistake. Turn this off to stop those alerts. |
+| **New invitations sent by other admins** | When another administrator invites someone to a workspace you belong to, you get an email so you can revoke it if it was a mistake. Turn this off to stop those emails. |
 
-This preference is **on by default**, so every eligible admin gets the alert until they turn it off here.
+It is **on by default**.
 
-The setting is a toggle. Changes save immediately. A short confirmation toast reads "Enabled invitation alerts" or "Disabled invitation alerts" when the new setting is stored. If a save fails, the toggle bounces back to its previous position and an error toast appears, so a bounced toggle means the change did not save.
+The toggle saves the moment you flip it. A short message confirms "Enabled invitation alerts" or "Disabled invitation alerts". If the save fails, the toggle snaps back and an error appears, so a toggle that snaps back means nothing changed.
 
-<Note>
-  This is the only notification preference in the current release. More preferences will appear here as the platform adds them. The page documents only what exists today.
-</Note>
+## Who gets the invitation alert
 
-## How preferences relate to your role
+A preference can only stop an email you would otherwise get. Whether you get it at all depends on your role.
 
-A preference can only suppress an email you are otherwise eligible to receive. Your eligibility comes from your role and your assignments, not from this page.
-
-<CardGroup cols={2}>
-  <Card title="Eligibility comes from your role" icon="user-check">
-    Capabilities decide whether you can receive a given alert at all. The invitation heads-up reaches only peers with an active membership who hold the `admin.tenant.invite.list` capability. The admin who sent the invitation never gets their own alert, and suspended or revoked members are skipped. Turning the toggle off suppresses the email without changing your capability.
-  </Card>
-  <Card title="Workflow emails follow ownership" icon="bell">
-    For loan lifecycle events, you are notified about loans you own or that land in your queue. Claiming or being assigned a file makes you the point of contact for its stage events.
-  </Card>
-</CardGroup>
+- The alert goes to people who can see the invitation list, which means people with **Manage users and invitations**.
+- The person who sent the invitation does not get their own alert.
+- Suspended and revoked users get nothing.
 
 ## What this page does not control
 
-Loan emails, bell alerts and the weekday morning summary have no switch here. They follow your role and the loans assigned to you:
+Loan emails, bell alerts, and the weekday morning summary have no switch here. They follow your role and the loans you own:
 
 - **Hand-off emails** go to whoever owns the loan's current step, or to the whole team when nobody does.
 - **Bell alerts** mirror your hand-off emails. Mark them read to clear the count.
 - **The weekday morning summary** only arrives on days when something is waiting for you.
 
-To receive fewer loan emails, claim or get assigned the loans you work. Once a loan has an owner, its stage emails stop going to the whole team.
+To get fewer loan emails, claim or get assigned the loans you work. Once a loan has an owner, its stage emails stop going to the whole team.
 
-For the full picture of which loan events send email and who receives each one, see [Email notifications for loan workflow events](/omnia/los/workflows/notifications). For the bell, the morning summary and Teams posts, see [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).
+For which loan events send email and who receives each, see [Email notifications for loan workflow events](/omnia/los/workflows/notifications). For the bell and the morning summary, see [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).

@@ -1,90 +1,88 @@
 ---
 title: "Sign in and access your credit union"
 sidebarTitle: "Signing in"
-description: "Sign in to the Loan Origination System, navigate to your credit union workspace, switch between workspaces, and recover your account."
+description: "Sign in to the Loan Origination System, open your credit union's workspace, switch between workspaces, and recover your account."
 icon: "key"
 ---
 
-The Loan Origination System uses email and password authentication. Each credit union has its own workspace URL that ends in the credit union's slug, for example `https://loan.compuzign.com/your-slug`. Bookmark your credit union's URL so you always land in the right workspace. If you are not sure what your URL is, ask your **Administrator**.
+You sign in to the Loan Origination System with your email address and password. Each credit union has its own workspace with its own web address. Bookmark it so you always land in the right place. If you do not know the address, ask your **Administrator**.
 
 ## Signing in
 
 <Steps>
-  <Step title="Navigate to your credit union's workspace URL">
-    Open your browser and go to the URL your administrator provided, for example `https://loan.compuzign.com/your-slug`. Going to the root domain without a credit union slug takes you to the sign-in page.
+  <Step title="Open your workspace address">
+    Go to the address your administrator gave you. If you open the site without a workspace in the address, you land on the sign-in page.
   </Step>
   <Step title="Enter your email address and password">
-    Type the email address and password associated with your account. The password is case-sensitive.
+    Type the email address and password for your account. The password is case-sensitive.
   </Step>
-  <Step title="Complete multi-factor authentication (if enabled)">
-    If MFA is enabled on your account, you are prompted to enter the 6-digit code from your authenticator app before being admitted to the workspace. See [MFA](/omnia/los/access/mfa) for setup instructions.
+  <Step title="Enter your verification code, if you use MFA">
+    If multi-factor authentication is on for your account, enter the 6-digit code from your authenticator app. See [MFA](/omnia/los/access/mfa).
   </Step>
-  <Step title="You're in">
-    After a successful sign-in you land on your workspace dashboard. The top of the left sidebar shows your credit union's logo and name, the product name **OMNIA HORIZON: LoS** (or your workspace's own product name), and the release version you are running. Quote that version when you report a problem.
+  <Step title="Start work">
+    You land on your workspace dashboard. The top of the left sidebar shows your credit union's logo and name, the product name, and the release version. Quote that version when you report a problem.
   </Step>
 </Steps>
 
 <Note>
-  When you sign in from a device or network that does not match any of your other active sessions, the platform sends a new-sign-in alert email to your address with the time, the IP address, and the device and browser used. Your very first sign-in does not trigger this alert, since there is no earlier session to compare it against. If a later sign-in was you, no action is needed. If it was not, change your password and review your security settings at `/profile/security`.
+  When you sign in from a device or network that does not match your other active sessions, you get a new-sign-in alert email with the time, the network address, and the device and browser. Your very first sign-in sends no alert. If the sign-in was you, do nothing. If it was not, change your password straight away under **Profile → Authentication**.
 </Note>
 
-## Email verification for new accounts
+## Verifying your email
 
-When your **Administrator** invites you, clicking the invitation link takes a brand-new user to sign-up to create their own account. If an account already exists for your email, the link takes you to sign-in instead, then straight into the workspace. After you create a new account, the platform emails a verification link to your address. You must verify your email before you can sign in for the first time.
+When your **Administrator** invites you, the invitation link takes you to sign-up if you are new, or to sign-in if you already have an account. A new account gets a verification email. You must click its **Verify email** link before your first sign-in.
 
-Check your inbox for the verification message and click the **Verify email** link. The link expires 24 hours after it is sent. Once verified, return to your credit union's sign-in page and proceed normally. If you do not receive the email within a few minutes, check your spam folder.
+The link expires 24 hours after it is sent. If it does not arrive within a few minutes, check your spam folder.
 
-If you try to sign in before verifying, the sign-in page shows "Please verify your email first." with a **Resend verification email** link that opens the **Check your email** page. There the **Resend verification email** button enforces a 30-second cooldown, reading "Resend in Ns" until the timer clears.
+If you try to sign in before verifying, the page says "Please verify your email first." and offers a **Resend verification email** link. The resend button waits 30 seconds between sends and shows "Resend in Ns" while it counts down.
 
 <Note>
-  Joining by invitation does not skip verification. You still sign up and click the verification email before your first sign-in.
+  Joining by invitation does not skip verification. You still sign up and verify your email before your first sign-in.
 </Note>
 
 ## Forgot your password
 
-If you cannot remember your password, you can reset it from the sign-in page.
-
 <Steps>
   <Step title="Click Forgot password">
-    On the sign-in page, click the **Forgot password?** link below the password field.
+    On the sign-in page, click **Forgot password?** below the password field.
   </Step>
   <Step title="Enter your email address">
-    Type the email address associated with your account and click **Send reset link**.
+    Type your account email and click **Send reset link**.
   </Step>
   <Step title="Check your inbox">
-    The platform sends a password-reset email if that address exists in the system. For security, the page shows the same confirmation message whether or not the email was found. This prevents third parties from guessing which addresses have accounts.
+    A reset email arrives if the address has an account. The page shows the same message either way, so nobody can use it to find out which addresses have accounts.
   </Step>
-  <Step title="Click the reset link and choose a new password">
-    Open the email, click **Reset password**, and enter a new password. The new password must be at least 12 characters and include a lowercase letter, an uppercase letter, a number, and a symbol. A live strength meter checks each rule as you type. Reset links are valid for **1 hour**. If yours has expired, repeat the process to request a new one.
+  <Step title="Choose a new password">
+    Click **Reset password** in the email and enter a new password. It must be at least 12 characters and include a lowercase letter, an uppercase letter, a number, and a symbol. A strength meter checks each rule as you type. The link is valid for **1 hour**. If it has expired, request a new one.
   </Step>
 </Steps>
 
 ## Switching between credit unions
 
-If you are a member of more than one credit union workspace, you can switch workspaces without signing out. You see this only when you hold an active membership in more than one credit union.
+If you work for more than one credit union on the platform, you can switch workspaces without signing out.
 
 <Steps>
   <Step title="Open the account menu">
-    Click your avatar in the top-right corner. The **Switch workspace** item appears only when you belong to more than one active membership.
+    Click your avatar in the top-right corner. **Switch workspace** appears only when you have active access to more than one workspace.
   </Step>
   <Step title="Pick a workspace">
-    Select **Switch workspace** to open the workspace picker. Each workspace you belong to is a card showing the credit union's name, your role there, and its slug. Click the card for the workspace you want.
+    Each workspace shows as a card with the credit union's name and your role there. Click the one you want.
   </Step>
-  <Step title="Confirm the switch">
-    The platform loads the selected workspace. Your role and permissions are specific to each credit union, so the available menus and queues may look different.
+  <Step title="Work in the new workspace">
+    Your role is set separately in each workspace, so your menus and queues may look different.
   </Step>
 </Steps>
 
 <Note>
-  The workspace picker lists only the workspaces where your membership is active. If a workspace you expect to see is missing, contact the **Administrator** for that credit union.
+  The picker lists only workspaces where your access is active. If one you expect is missing, contact that credit union's **Administrator**.
 </Note>
 
 ## When your access is paused
 
-Suspension is per workspace, not per account. If your membership in one workspace is paused, you can still sign in and use any other workspace where your membership is active.
+Access is paused per workspace, not per account. If one credit union suspends your access, you can still use any other workspace where your access is active.
 
-When you open a workspace your membership is paused in, sign-in still succeeds but you are redirected to an **Access paused** page that reads "Your access to this workspace is paused." Contact the **Administrator** for that credit union to restore it.
+When you open a workspace where your access is paused, you see an **Access paused** page that reads "Your access to this workspace is paused." Contact that credit union's **Administrator** to restore it.
 
 <Warning>
-  Never share your credentials with a colleague. Each person must have their own account. Shared accounts make it impossible to attribute who approved, submitted, or modified a loan in the audit trail.
+  Never share your sign-in with a colleague. Each person needs their own account. A shared account makes it impossible to tell from the audit trail who approved, submitted, or changed a loan.
 </Warning>

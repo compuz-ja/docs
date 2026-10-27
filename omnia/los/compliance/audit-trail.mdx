@@ -1,126 +1,95 @@
 ---
 title: "View and search the audit trail for your credit union"
 sidebarTitle: "Audit trail"
-description: "The platform keeps an immutable, hash-chained audit trail of every action in your credit union workspace. Search it by actor, resource, action, or time range."
+description: "Every action in your workspace is recorded in a permanent, tamper-evident audit trail. Search it by loan or member, staff member, action, or date."
 icon: "file-check"
 ---
 
-The Loan Origination System keeps a tamper-evident record of every action taken in your credit union workspace. The audit trail is a legal-grade record. It cannot be modified or deleted. It is the source of truth for regulatory inquiries, internal investigations, and dispute resolution.
+The audit trail is a permanent, tamper-evident record of every action taken in your workspace. Nobody can edit or delete an entry. It is the record you rely on for your regulator's questions, internal investigations, and disputes.
 
-## What the audit trail records
+## What is recorded
 
-Every meaningful event is captured automatically. Recording is always on. There is nothing to configure.
+Recording is always on. There is nothing to set up.
 
 <CardGroup cols={2}>
-  <Card title="Loan lifecycle events" icon="file-text">
-    Every loan state change is logged with full before and after context. That includes application submitted, adjudication decision recorded, securities resolved, and disbursement executed.
+  <Card title="Loans" icon="file-text">
+    Every step of every loan: submission, approval decisions and their reasons, security requests, document signing, and disbursement.
   </Card>
-  <Card title="Member and document activity" icon="user">
-    Every member record update, document upload, and identity verification attempt is recorded, including the actor who performed it and when.
+  <Card title="Members and documents" icon="user">
+    Every change to a member record, every document uploaded or removed, every identity check, and every time someone reveals a member's identity numbers.
   </Card>
-  <Card title="Access and authentication" icon="lock">
-    Every login, logout, failed login, and permission-denied event is captured, and the session ID is recorded whenever the action came from an authenticated session.
+  <Card title="Sign-in and access" icon="lock">
+    Sign-ins, sign-outs, failed sign-ins, and every action refused because the person lacked permission.
   </Card>
-  <Card title="Configuration changes" icon="settings">
-    Every change to rates, workflow configuration, user roles, and workspace settings is logged, including who made the change and its previous value.
+  <Card title="Settings" icon="settings">
+    Every change to rates, fees, products, roles, branding, and other settings, with who made it and the value before.
   </Card>
 </CardGroup>
 
-## Non-repudiation: who did what
+## Who did what
 
-Every audit entry captures a complete picture of the actor at the exact moment of the action. There is no ambiguity about who performed an action, under what authority, and from where.
+Each entry captures the person exactly as they were at that moment:
 
-Each entry records:
+- **Who**: the staff member, shown with their name and email when you open the entry.
+- **Their role at the time**, so a later role change does not rewrite history.
+- **Their permissions at the time.**
+- **Where from**: the network address and the browser or device.
+- **How they signed in**, and whether multi-factor authentication was used for that session.
+- **Reference numbers** that tie the entry to related activity, for your support team.
 
-- **Actor identity:** the user's ID. The viewer resolves that ID to the current name and email when you open an entry, so the immutable record always points at exactly one person.
-- **Role at the time:** the role the user held when they performed the action. This is a snapshot, so later role changes do not affect historical records.
-- **Capabilities at the time:** the exact permissions the user held at that moment
-- **IP address:** the network address the request came from
-- **User agent:** the browser or client used
-- **Authentication method:** how the user authenticated, recorded as `password` for staff actions or `system` for platform-initiated actions
-- **MFA status:** whether multi-factor authentication was satisfied for that session
-- **Session and request IDs:** for cross-referencing with other systems
+Actions the platform takes on its own, such as scheduled checks, are marked **System**.
 
-## Accessing the audit viewer
+## Who can open the audit trail
 
-<Note>
-  Viewing the audit trail requires the `reports.view` capability. The seeded **Administrator**, **Credit Manager**, and **Branch Manager** roles all carry it, so all three see the full workspace-wide audit trail. A role that holds only `loans.read.branch` (and not `reports.view`) gets a narrower view, scoped to the events for its assigned branch. Operational roles, including **Credit Officer**, **Adjudicator**, **Securities**, and **Disbursement**, hold neither capability and cannot open the audit trail in this release.
+Staff with **View reports** see the whole workspace's trail. In the built-in roles that is the **Administrator**, **Credit Manager**, and **Branch Manager**. A role your credit union sets up with **View branch loans** but not **View reports** sees only its own branch's entries. The Credit Officer, Adjudicator, Securities, and Disbursement roles cannot open it.
 
-  The **Audit Log** link in the sidebar shows to exactly the people the page admits: anyone holding `reports.view` or `loans.read.branch`. The Administrator, Credit Manager, and Branch Manager all see it.
-</Note>
+## Searching the audit trail
 
 <Steps>
   <Step title="Open the Audit Log">
-    In the sidebar, under **Administration**, click **Audit Log**. The page header reads **Audit trail**, and you will see the trail for your entire credit union workspace, with the most recent events at the top.
+    In the sidebar, under **Administration**, click **Audit Log**. The page is titled **Audit trail** and shows the newest entries first.
   </Step>
-  <Step title="Apply filters to narrow the results">
-    Use the filter bar to search by resource, actor, action type, or time range. The four search patterns are described below.
+  <Step title="Filter">
+    Use the filter bar: **Event**, **Resource**, **Actor**, **Resource ID**, and **Date range**. Tick **Show system & integrity** to include the platform's own activity.
   </Step>
-  <Step title="Click any row to expand it">
-    Click any audit entry row to see the actor name and email, role, IP address, sequence number, request and trace IDs, the decision rationale for adjudication events, and the full event payload JSON.
+  <Step title="Open an entry">
+    Click a row to see the person, their role and network address, the decision reason for approval decisions, and the full detail of what changed. **Copy JSON** copies that detail.
   </Step>
 </Steps>
 
-## Four ways to search the audit trail
-
-<Accordion title="By resource: find all events for a specific loan or member">
-  Select a **Resource type** from the dropdown, such as `LoanApplication` or `Member`, and enter the resource's ID in the **Resource ID** field. This returns every event that touched that specific record.
-
-  **Example:** To reconstruct the complete history of a loan application for a regulatory inquiry, select `LoanApplication` and enter the Loan ID. You will see every state change, decision, document upload, and access event for that loan in chronological order.
+<Accordion title="Everything that happened to one loan or member">
+  Pick the **Resource**, for example a loan application or a member, and paste its ID into **Resource ID**. You get every event that touched that record in order: each step, decision, document, and access. Add a **Date range** to cover the life of the application.
 </Accordion>
 
-<Accordion title="By actor: find all actions taken by a specific staff member">
-  Enter a staff member's name, email address, or user ID in the **Actor** field. The platform returns every action that person performed across the workspace during the selected time range.
-
-  **Example:** If a staff member's credentials may have been compromised, search by their user ID to review every action taken under their account.
+<Accordion title="Everything one staff member did">
+  Type the person's name or email in **Actor**. You get every action they took in the date range. Use this when you suspect someone else used their sign-in.
 </Accordion>
 
-<Accordion title="By action type: filter by a specific event">
-  Use the **Event type** dropdown to filter by a specific event name. The dropdown lists every event type the platform can emit, so you can search for an event even before it has occurred in your workspace.
-
-  Common event types include:
-  - `loan_application.submitted`
-  - `adjudication.decision.recorded`
-  - `disbursement.executed`
-  - `member.updated`
-  - `permission.denied`
-  - `audit.exported`
+<Accordion title="One kind of action">
+  Pick an **Event**, such as approval decisions, disbursements, or refused actions. The list shows every kind of event the platform records, including ones that have not happened in your workspace yet, so you can confirm a negative.
 </Accordion>
 
-<Accordion title="By time range: filter by date and time">
-  Set a **From** and **To** date and time to restrict results to a specific window. Combine it with other filters. For example, you can pull all `adjudication.decision.recorded` events in the past calendar year to produce a focused record for a regulatory inquiry.
+<Accordion title="A period of time">
+  Set the **Date range** and combine it with the other filters. For example, every approval decision in the last calendar year.
 </Accordion>
 
-The **Request ID** and **Trace ID** are shown read-only when you expand an entry row, so you can correlate an event with the application logs. They are not searchable filters in this release.
+## Quick export
 
-<Tip>
-  Use the time-range filter together with a specific Loan ID to reconstruct the complete history of a loan application. Select the `LoanApplication` resource type, enter the Loan ID, and set the date range to cover the application period. You will see every event from submission to disbursement in a single view.
-</Tip>
+To take what you are looking at into a spreadsheet, apply your filters and export from the toolbar as **CSV** (opens cleanly in Excel and Sheets) or **JSON** (with the full detail of each entry).
 
-## Quick CSV or JSON export
+The quick export is for day-to-day work, not for your regulator:
 
-The audit trail offers a fast, lightweight export of whatever you are currently looking at. Apply your filters, then export the visible rows to a spreadsheet-ready CSV file or a pretty-printed JSON file straight from the toolbar.
+- It holds at most **1,000 rows**. A larger view is cut off at 1,000, and the download says so.
+- It is **not signed**, so nobody can prove later that it was not edited.
+- It contains only entries you can already see.
 
-The quick export is built for day-to-day work, not for regulators:
+For a record your regulator or auditor can check for themselves, generate a [compliance export](/omnia/los/compliance/compliance-export). Every quick export is itself recorded in the audit trail.
 
-- It writes plain **CSV** (RFC 4180, with a UTF-8 byte-order mark so Excel opens it cleanly) or pretty-printed **JSON**.
-- It is capped at **1,000 rows**. If your filtered view is larger, the file holds the first 1,000 rows and the download flags that it was truncated.
-- It carries **no digital signature, no hash-chain proof, and no immutable cloud copy**. For a record that a regulator can verify offline, generate a [compliance export bundle](/omnia/los/compliance/compliance-export) instead.
+## Why the trail can be trusted
 
-The quick export honors the same scope as the trail itself, so you can only export rows you are already permitted to see. Every quick export is itself recorded as an `audit.exported` event whose payload carries `source: quick-export`, so the export is part of the trail it came from.
+- **Entries cannot be changed.** The database itself refuses any edit or deletion. No screen, administrator, or support action can alter an entry.
+- **Every entry is sealed to the one before it.** Changing, removing, or reordering any entry breaks the seal from that point on.
+- **The platform checks the seals every hour** and raises an alert on any break, saying exactly where it is.
+- **Signed checkpoints are kept outside the database.** The latest seal is signed regularly and copied each day to separate locked storage that cannot be altered or deleted until the retention period ends. Even someone with direct access to the database could not rewrite history without the checkpoints showing it.
 
-## Hash-chain integrity
-
-The audit log is **hash-chained**. Each entry stores a SHA-256 cryptographic hash that links it to the previous entry. This means:
-
-- If anyone modifies, deletes, or reorders any audit entry, even a single character, the chain breaks at that point and every subsequent entry becomes invalid.
-- The break is detectable automatically. A chain-integrity job runs every hour and alerts immediately if the chain is broken, naming the exact failure: a payload hash mismatch, a broken link to the previous entry, or a chain hash mismatch.
-- Every hour, the latest chain state is committed as a signed anchor. Once a day, at 4 AM UTC, those anchors are pushed to external immutable cloud storage with compliance-mode object lock and a 7-year retention lock. The push is RSA-SHA256 signed. Even an attacker with direct database access cannot rewrite history without breaking the external anchors.
-
-The audit log is not just protected by application-layer access controls. It is mathematically verifiable.
-
-<Note>
-  The audit log is append-only and cannot be modified or deleted. This is enforced at the **storage level** by a Postgres trigger that blocks UPDATE and DELETE. It is not merely an application-layer restriction. No platform interface or administrative action can alter or remove an existing audit entry.
-</Note>
-
-To provide a cryptographically-signed, verifiable record to regulators or auditors, use the [Compliance Export](/omnia/los/compliance/compliance-export) feature.
+To hand over a record that can be verified independently, use the [compliance export](/omnia/los/compliance/compliance-export).

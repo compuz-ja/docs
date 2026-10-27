@@ -1,112 +1,94 @@
 ---
 title: "Data security and privacy for credit unions"
 sidebarTitle: "Data security"
-description: "How the platform protects member data: workspace isolation, AES-256-GCM encryption, PII redaction, and role-based access controls."
+description: "How the platform protects member data: a private workspace per credit union, encryption, controlled document access, and permission-based access."
 icon: "shield-check"
 ---
 
-The Loan Origination System is built for the security requirements of regulated financial institutions. Member PII is encrypted at rest before it ever touches the database. All data is isolated per credit union. Every mutating action and every permission denial is recorded in an immutable, hash-chained audit log.
+The Loan Origination System protects member data the way a regulated lender needs. Sensitive identity numbers are encrypted before they are stored. Each credit union's data is kept apart from every other's. Every change, and every refused attempt, is recorded in the [audit trail](/omnia/los/compliance/audit-trail).
 
-## Workspace isolation
+## Your workspace is private
 
-Every credit union on the platform runs in a fully isolated **workspace**. A user in one credit union cannot access any data belonging to another, regardless of their role or permissions.
+Each credit union works in its own **workspace**. Nobody in another credit union can see your data, whatever their role.
 
-Isolation is enforced at multiple layers:
+The separation is enforced several times over: by the application, by the database itself, and by encryption, because each credit union's data is encrypted with its own key. It is always on and cannot be turned off. There is nothing for you to set.
 
-- **Application layer:** every query is scoped to your workspace. The application never constructs cross-workspace queries.
-- **Data layer:** Postgres row-level security scopes every query to your workspace's data. Cross-workspace access is structurally prevented.
-- **Encryption layer:** each credit union has its own encryption key. Even at the storage level, one workspace's encrypted data is keyed separately from all others.
+## Encryption
 
-Nothing is required on your part. Isolation is the default and cannot be turned off.
-
-## Encryption at rest
-
-Sensitive identity fields are encrypted with **AES-256-GCM** before they are stored in the database. Each credit union has its own per-workspace data encryption key, derived from a master key using HKDF at the moment data is read or written. Your members' data is encrypted with a key that belongs exclusively to your credit union.
-
-These member identity fields are always encrypted at rest:
+These identity details are always encrypted before they are stored, with a key that belongs only to your credit union:
 
 <CardGroup cols={2}>
-  <Card title="Tax Registration Number (TRN)" icon="contact" />
+  <Card title="Tax ID number" icon="contact" />
   <Card title="Driver's licence number" icon="car" />
   <Card title="Passport number" icon="book-user" />
   <Card title="Bank account number" icon="landmark" />
-  <Card title="Core banking account number" icon="wallet" />
+  <Card title="Core Banking System account number" icon="wallet" />
   <Card title="Government ID number" icon="id-card" />
   <Card title="Mother's maiden name" icon="user-round" />
   <Card title="Member notes" icon="notebook-pen" />
 </CardGroup>
 
-The core banking account number is held encrypted, with only its last four digits kept in the clear so screens can show a masked value without decrypting it. Revealing the full number is permission-gated and audited. The one document that prints it, the Loan Disbursement Sheet, shows only the last five digits and never stores the full number. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet#the-member-account-stays-masked).
+Screens show these masked. Only staff with **View member personal details** can reveal one, and every reveal is recorded in the audit trail. The Core Banking System account number shows only its last four digits; the Loan Disbursement Sheet, the one document that prints it, shows only the last five. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet#the-member-account-stays-masked).
 
-The same AES-256-GCM, per-workspace scheme also encrypts identity numbers on **guarantor** records (TRN and driver's licence), the **payee account number** on a disbursement, and each credit union's stored **integration credentials**, including Microsoft Teams channel webhook addresses.
+The same protection covers guarantors' identity numbers, the payee account number on each disbursement, and the connection details your credit union stores for outside services.
 
-These values are never stored in plain text. They cannot be exported in bulk through any reporting feature. Access requires authentication and appropriate role permissions, and every access is recorded in the audit log.
+None of these can be exported in bulk through any report.
 
-## Document storage
+## Documents
 
-Member documents are stored in secure cloud storage, not in the application database. That covers PDFs, identity images, and supporting materials. Access to a document requires:
+Member documents, such as ID scans, payslips, and PDFs, are kept in secure file storage, apart from the database. To open one, a staff member must:
 
-1. A valid authenticated session
-2. The `members.documents.view` capability, held by the staff who work loans (Credit Officer, Adjudicator, Securities, and Disbursement) and by the Administrator
-3. The document belonging to a member within your credit union's workspace
+1. Be signed in, with active access to your workspace.
+2. Hold **View member documents**.
+3. Be opening a document that belongs to your credit union.
 
-Document uploads and deletions are recorded in the audit trail with the full actor identity and timestamp. Every download requires the `members.documents.view` capability and an active workspace membership.
+Every upload and removal is recorded in the audit trail with who did it and when.
 
-## PII in operational logs
+## Operational logs and the audit trail
 
-The platform produces two distinct types of records, and they handle PII differently.
+The platform keeps two kinds of record, and they treat personal data differently.
 
-| Record type | PII treatment | Who can access |
+| Record | Personal data | Who sees it |
 |---|---|---|
-| **Operational logs** for monitoring and debugging | PII is automatically redacted. PII keys are replaced with `[REDACTED]` at write time. | Engineering and operations teams |
-| **Legal audit log**, the audit trail | Full PII is present. This is the complete, unredacted record. | Users with the `reports.view` capability: Administrator, Credit Manager, and Branch Manager |
+| **Operational logs**, for keeping the service running | Removed automatically before anything is written | Your LOS support team |
+| **Audit trail**, your legal record | Kept in full | Staff with **View reports**: in the built-in roles, the Administrator, Credit Manager, and Branch Manager |
 
-Operational logs replace PII keys with `[REDACTED]` at write time, so routine system monitoring never carries member PII. The legal audit log retains the full detail needed for regulatory inquiries. In-app access to it requires the `reports.view` capability (Administrator, Credit Manager, Branch Manager); regulators receive that detail through a signed compliance export bundle rather than direct access to the log.
+Your regulator gets the audit trail's detail through a signed [compliance export](/omnia/los/compliance/compliance-export), not through access to your system.
 
 ## Access controls
 
-<Accordion title="Authentication and multi-factor authentication">
-  Every user must authenticate with a valid email and password before accessing any data. There are no anonymous access paths.
+<Accordion title="Sign-in and multi-factor authentication">
+  Everyone signs in with an email and password. There is no anonymous access.
 
-  Multi-factor authentication (MFA) is available for all user accounts. Enable MFA for every user with administrative access, especially Credit Managers and Administrators. Each user enables it themselves under Profile then Authentication. See [Set up multi-factor authentication](/omnia/los/access/mfa).
-
-  Each audit entry records whether MFA was satisfied for the session, so you can verify that sensitive actions were performed by properly-authenticated users.
+  Every user can turn on multi-factor authentication under **Profile → Authentication**, and every administrator and manager should. Each audit trail entry records whether it was used, so you can check that sensitive actions came from properly signed-in staff. See [Set up multi-factor authentication](/omnia/los/access/mfa).
 </Accordion>
 
-<Accordion title="Role-based capability controls">
-  Access to data and actions is controlled by capabilities assigned to roles. No user can access data or perform actions beyond what their assigned role permits. Every permission-denied event is recorded in the audit trail, so an attempt outside a user's role is visible.
-
-  Common roles and their scope:
-  - **Administrator:** full workspace access, user management, configuration, compliance export
-  - **Credit Manager:** full loan pipeline visibility, audit viewer
-  - **Branch Manager:** read-only access scoped to their assigned branch
-  - **Adjudicator:** adjudication queue and decision recording
+<Accordion title="Roles and permissions">
+  What each person can see and do comes from their role. Nobody can go beyond it, and every refused attempt is recorded in the audit trail. See [Roles and permissions](/omnia/los/access/roles-and-permissions).
 </Accordion>
 
-<Accordion title="Session security and CSRF protection">
-  Session cookies are issued with `Secure` and `HttpOnly` flags. They cannot be read by JavaScript and are never transmitted over an unencrypted connection.
-
-  All data-mutating actions, such as form submissions, state changes, and exports, are protected against Cross-Site Request Forgery (CSRF). A forged request from another site cannot trigger actions on behalf of a logged-in user.
+<Accordion title="Sessions">
+  Sign-in sessions are protected against theft by other websites and scripts, and are only ever sent over an encrypted connection. A forged request from another site cannot act on behalf of a signed-in user.
 </Accordion>
 
-<Accordion title="Account suspension">
-  An Administrator can suspend any user account immediately. Suspension takes effect on the user's next request: the membership capability check fails and access to the workspace is blocked. You can respond to a potential credential compromise or a departing staff member without delay.
+<Accordion title="Suspending access">
+  An administrator can suspend any user at once. Their next click in the workspace is refused, so you can act immediately on a suspected compromise or a departure. See [Inviting team members](/omnia/los/access/inviting-team-members#suspending-a-team-members-access).
 </Accordion>
 
-## Audit completeness as a security control
+## Detecting misuse
 
-Every action is recorded in the hash-chained audit log, so unauthorized access or data modification is **detectable**. You can:
+Because everything is recorded and the audit trail cannot be altered, misuse can be found. You can:
 
-- Search the audit trail for all actions performed by a specific user during a time window
-- Identify every record that was accessed or changed during a suspected incident
-- Confirm that the audit chain itself is unbroken using the [Compliance Export](/omnia/los/compliance/compliance-export) bundle's chain-proof verification
+- List everything one staff member did in a given period.
+- Find every record viewed or changed during a suspected incident.
+- Prove the audit trail is intact by generating a [compliance export](/omnia/los/compliance/compliance-export) and verifying it.
 
-The hash-chain integrity means that even if someone deleted or altered audit entries after the fact, the break would be caught by the hourly integrity verification job. The discrepancy would also be visible to any examiner who verifies the chain proof in an exported bundle.
+If anyone altered or deleted an audit entry after the fact, the hourly integrity check would flag it, and so would any examiner checking an export.
 
 <Note>
-  The platform does not expose raw database access to any user through the application. All data access goes through the access-control layer, whether reading a loan record, viewing a document, or searching the audit trail. There is no SQL console, data export API, or bulk-download feature that bypasses role and capability checks.
+  There is no back door. No database console, bulk download, or data feed skips the role and permission checks. Every read of a loan, document, or audit entry goes through them.
 </Note>
 
 <Tip>
-  Enable MFA for all users with administrative access, especially Credit Managers and Administrators. Each user enables multi-factor authentication themselves under **Profile** then **Authentication**, as described in [Multi-factor authentication](/omnia/los/access/mfa). An administrator can only reset or disable a user's MFA, not enroll it for them. These roles can access the full audit trail and generate compliance export bundles, so protecting them against credential theft is a high-priority step.
+  Make sure every Administrator and Credit Manager has turned on multi-factor authentication. Those accounts can see the full audit trail and generate compliance exports. Each person turns it on for themselves; an administrator cannot do it for them, or reset it.
 </Tip>

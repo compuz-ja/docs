@@ -1,77 +1,76 @@
 ---
-title: "The four disbursement controls"
+title: "Disbursement controls"
 sidebarTitle: "Controls"
-description: "The four controls that wrap fund release: maker-checker dual control, AML and sanctions screening, per-officer limits, and optional auto-disbursement."
+description: "The four controls around releasing funds: a second approver for large disbursements, AML and sanctions screening, per-officer limits, and optional automatic release."
 icon: "shield-check"
 ---
 
-Four controls sit around the moment funds are released: maker-checker dual control, AML and sanctions screening, a per-officer limit, and optional auto-disbursement. Each is off by default, so a workspace that configures nothing keeps the simple release path.
+Four controls can sit around the moment funds are released: a second approver, AML and sanctions screening, a personal limit per officer, and automatic release of small disbursements. Each is off until your credit union turns it on, so a workspace that sets nothing keeps the simple schedule-then-release path.
 
-## Dual control (maker-checker)
+You see the controls on the **Controls & settlement** card of the disbursement page.
 
-A disbursement above the workspace threshold needs a second person to approve it before it can be released.
+## Second approver (maker-checker)
 
-The threshold is `TenantConfig.dualControlThresholdCents`. When the net to member is **at or above** the threshold, the instruction's `approvalStatus` is set to `PENDING` and a `disbursement.approval.requested` event fires. The comparison is `net >= threshold`. A `null` threshold means dual control is off, which is the default.
+A disbursement whose net to member is at or above your credit union's dual-control threshold needs a second person to approve it before it can be released.
 
-The approver must be a **different** user from the officer who scheduled the disbursement. The scheduler is recorded as `scheduledByUserId`, the maker. If the same user tries to approve, the platform refuses with a `SELF_APPROVAL` error. Maker is never checker.
+When you schedule one, the card's **Approval** badge shows **Pending** and reads "Awaiting a maker-checker approval before the funds can be released." Until someone approves it, **Mark disbursed** is refused.
 
-Approval is gated by the `disbursements.approve` capability. The **Credit Manager** role holds it. The **Disbursement** role does **not** hold it. That separation is deliberate: the Disbursement team makes the disbursement, and a different role, the Credit Manager, checks it.
+<Steps>
+  <Step title="Open the disbursement">
+    The approver opens the loan from the Disbursement queue.
+  </Step>
+  <Step title="Give a rationale">
+    On the **Controls & settlement** card, type the reason for the decision. It is required and goes on the audit trail.
+  </Step>
+  <Step title="Approve or reject">
+    Click **Approve release** or **Reject**. An approved disbursement can then be released. A rejected one cannot.
+  </Step>
+</Steps>
 
-The document behind the release has its own, separate check: the Loan Disbursement Sheet's **Checked by** signer cannot be the officer who prepared the sheet. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet#the-checker-rules).
+The approver needs the **Approve disbursements** permission, which only the **Credit Manager** role holds. The Disbursement team makes the disbursement and a Credit Manager checks it.
 
-Every approve or reject records a required rationale on an immutable `DisbursementApproval` row, alongside the amount snapshot and the deciding user. An empty rationale is refused.
+The approver must be a different person from the officer who scheduled it. If you scheduled it, the card tells you a second officer must approve, and the system refuses your approval even if you hold the permission. Maker is never checker.
 
-The audit events are exact: `disbursement.approval.requested`, `disbursement.approval.approved`, and `disbursement.approval.rejected`. A rejected disbursement cannot be released.
+Below the threshold, the badge reads **Not required** and no second approval is needed.
 
-<Note>
-The approval status enum is `NOT_REQUIRED`, `PENDING`, `APPROVED`, `REJECTED`. Every disbursement below the threshold reads `NOT_REQUIRED` and skips the second sign-off.
-</Note>
+The signed paperwork has its own, separate check: the **Checked by** signer on the Loan Disbursement Sheet cannot be the officer who prepared it. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet#the-checker-rules).
 
 ## AML and sanctions screening
 
-Screening checks every payee against sanctions and PEP lists before funds move, a Proceeds of Crime Act obligation.
+Screening checks every payee against sanctions and politically exposed person lists before money moves.
 
-Screening runs through a provider abstraction. The directory ships a deterministic mock as the default in development and test, a real HTTP `sanctions-list` stub for production, an optional recording wrapper, and a factory that picks one from configuration. Swapping the vendor is a configuration change, never a code change.
+Click **Screen payees** on the card while the disbursement is still scheduled. The **AML screening** badge shows the result for the disbursement as a whole:
 
-`screenInstructionPayees` runs the provider over every payee on the instruction, writes one immutable `PayeeScreening` row per payee, and rolls the per-payee verdicts up onto the instruction. Each row carries the provider, the verdict, a numeric score, and the list of matches. Re-screening appends new rows; the latest set drives the rollup.
-
-The rollup status is the `PayeeScreeningStatus` enum, four values:
-
-| Status | Meaning |
+| Badge | Meaning |
 | --- | --- |
-| `NOT_SCREENED` | No screen has run, or a payee is unscreened. |
-| `CLEAR` | No match. Release may proceed. |
-| `REVIEW` | A possible match. Needs a human decision. |
-| `BLOCKED` | A confirmed match. Release is refused. |
+| **Not screened** | No screen has run yet. |
+| **Clear** | No payee matched. Release can go ahead. |
+| **Review** | A payee possibly matched. A person must decide. |
+| **Blocked** | A payee matched. Release is refused. |
 
-The rollup is dominance-based: any `BLOCKED` payee makes the instruction `BLOCKED`, then any `REVIEW` makes it `REVIEW`, and only when every payee is `CLEAR` is the instruction `CLEAR`.
+The worst payee decides the result: one blocked payee blocks the whole disbursement. If you change payees or want a fresh check, click **Re-screen payees**. Every screen is kept.
 
-Screening is required only when `TenantConfig.amlScreeningRequired` is `true`. When required, execute is gated on a `CLEAR` rollup; anything else blocks release with a `SCREENING_REQUIRED` or `SCREENING_NOT_CLEAR` error. Screening is run by the `disbursements.screen` capability, which the **Disbursement** role holds. The events are `disbursement.screening.completed` and `disbursement.screening.blocked`.
+When your credit union requires screening, **Mark disbursed** is refused unless the badge reads **Clear**. When it does not, screening is available but optional. Screening needs the **Screen disbursements** permission, which the **Disbursement** role holds.
 
 ## Per-officer limits
 
-Each officer can carry a personal ceiling, `Membership.disbursementLimitCents`. When set, execute refuses a net above that officer's ceiling with an `OFFICER_LIMIT` error, and a higher-tier officer must release it. A `null` limit means no ceiling for that officer.
+Your credit union can give any officer a personal ceiling on a single disbursement. When you try to release a net above your ceiling, **Mark disbursed** is refused and an officer with a higher ceiling, or none, must release it.
 
-## Auto-disbursement
+An administrator sees each officer's ceiling on **Administration → Users & Roles**, in the hover card on the user's row, as **Disb. ceiling** or **No personal limit**. It is a ceiling on one release, not an approval limit.
 
-A workspace can opt in to release a scheduled disbursement automatically when it clears every gate. It is off by default.
+## Automatic release
 
-Auto-disbursement is governed by `TenantConfig.autoDisburseEnabled` and `TenantConfig.autoDisburseThresholdCents`. The decision is a pure gate, `shouldAutoDisburse`, and it fires only when **all** of these hold:
+Your credit union can choose to release small disbursements the moment they are scheduled. It is off by default.
 
-- The feature is enabled.
-- A threshold is configured and the net is at or below it.
-- No approval is outstanding (`approvalStatus` is `NOT_REQUIRED`).
-- Screening is satisfied. When the workspace requires screening, the rollup must be `CLEAR`.
+When it is on, clicking **Schedule disbursement** also releases the funds, with no separate **Mark disbursed** step, but only when all of these hold:
+
+- The net to member is at or below the automatic-release threshold.
+- No second approval is needed.
 - The officer is within their personal limit.
+- Your credit union does not require AML screening. Screening runs after scheduling, so a workspace that requires it always releases by hand.
 
-When all hold, the disbursement executes immediately and a `disbursement.auto_executed` event fires. Auto-disbursement only fires at or below `TenantConfig.autoDisburseThresholdCents`, which is the gate.
+Anything that fails a condition waits for **Mark disbursed** as usual. An automatic release is recorded in the audit trail like any other.
 
-<Note>
-Auto-disbursement is consulted at schedule time, before screening has run, so the schedule path passes the screening rollup as `NOT_SCREENED`. A workspace with `amlScreeningRequired` set to `true` therefore never auto-disburses: the screening gate cannot be satisfied yet. Auto-disbursement fires for workspaces that do not require screening.
-</Note>
+## Setting the controls
 
-## Configuring the controls
-
-The `admin.disbursement.config` capability, held by the **Credit Manager**, is reserved for changing these settings, but no in-app editor ships yet. Today your CompuZign team sets the thresholds and flags for your workspace, so the `tenant.disbursement_config.updated` event is registered but not yet emitted.
-
-Each officer's personal ceiling shows in the hover card on **Administration → Users & Roles** as **Disb. ceiling**, or **No personal limit**. It is a ceiling on a single disbursement, not an approval limit.
+The dual-control threshold, the screening requirement, officer ceilings, and automatic release are set for your credit union by your LOS support team. There is no screen to change them in the app yet. The **Configure disbursement controls** permission, held by the **Credit Manager**, is reserved for that screen when it arrives.

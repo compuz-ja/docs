@@ -1,53 +1,48 @@
 ---
 title: "Approval authority, routes and committees"
 sidebarTitle: "Approval routes"
-description: "How the Loan Origination System decides who may approve a loan: delegated authority per role and security class, individual and committee routes, Credit Committee decisions, waivers, product-limit exceptions and maker-checker rules."
+description: "How the Loan Origination System decides who may approve a loan: delegated authority by role and type of security, individual and committee routes, committee decisions, waivers, product-limit exceptions and maker-checker rules."
 icon: "scale"
 ---
 
-Every loan is approved under your workspace's approval policy, which decides who may approve it, alone or as a committee. The policy is two documents held as workspace configuration: an **approval schedule** (how much each role may approve on its own) and an **approval routing policy** (when a loan needs a committee instead). CompuZign loads both from your board-approved delegation of authority. The platform enforces them at the moment of approval, and checks them earlier at claim so nobody picks up a loan they cannot finish.
+Every loan is approved under your credit union's approval policy, which decides who may approve it, alone or as a committee. The policy has two parts: **approval authority** (how much each role may approve on its own) and **routing rules** (when a loan needs a committee instead). Both are set up from your board-approved delegation of authority. The LOS enforces them at the moment of approval, and checks them earlier at claim so nobody picks up a loan they cannot finish.
 
 <Note>
-  Without an approval schedule, any holder of `loans.adjudicate` approves any amount, as before. Without a routing policy, every loan is an individual approval. Both are optional and set per workspace.
+  Both parts are optional. Without approval authority set up, anyone with the **Approve loans** permission can approve any amount. Without routing rules, every loan is an individual approval.
 </Note>
 
-## Delegated authority: the approval schedule
+## Approval authority
 
-The schedule gives each role a limit for each **security class**. There are three classes:
+Approval authority gives each role a limit for each **type of security**. There are three:
 
-| Security class | Covers |
+| Type of security | Covers |
 |---|---|
 | Unsecured | Unsecured products |
 | Motor vehicle and real estate | Motor vehicle and real estate products |
 | Cash secured | Cash-secured products |
 
-Each of your loan products is mapped to one class. A role's entry is one of:
+Each of your loan products belongs to one type. For each type, a role either has a limit (an amount, or deliberately unlimited) or has **no individual approval**, meaning it may not approve alone.
 
-- **A limit per class.** An amount, or "unlimited" stated deliberately.
-- **No individual approval.** The role is in the schedule but may not approve alone.
+The LOS fails closed:
 
-The platform fails closed. A role the schedule does not mention cannot approve. A class the schedule leaves blank for a role means no authority for that class, never unlimited. A product mapped to a class that the schedule cannot resolve cannot be approved by anyone until the schedule is fixed. A product the schedule does not mention at all is outside the schedule and keeps plain `loans.adjudicate` approval.
+- A role that has no entry cannot approve.
+- A type left blank for a role means no authority for that type, never unlimited.
+- A product whose type cannot be resolved cannot be approved by anyone until the setup is fixed.
 
 <Note>
-  Fictional example schedule:
-
-  | Role | Unsecured | Motor vehicle and real estate | Cash secured |
-  |---|---|---|---|
-  | Adjudicator | JMD 1,000,000 | JMD 3,000,000 | No authority |
-  | Branch Manager | No authority | No authority | JMD 2,000,000 |
-  | Credit Manager | JMD 4,000,000 | JMD 12,000,000 | Unlimited |
+  Illustrative example only: an Adjudicator might approve unsecured loans up to $1,000,000 and secured loans up to $3,000,000, with larger loans left to the Credit Manager. Your credit union sets its own figures.
 </Note>
 
-Approval authority is not the per-officer disbursement ceiling shown on **Users & Roles**. That ceiling limits a single disbursement. Approval authority lives only in the schedule.
+Approval authority is not the personal disbursement ceiling shown on **Users & Roles**. That ceiling limits a single disbursement.
 
 ## Who can claim a loan for approval
 
-At SUBMITTED and ADJUDICATION, holding a loan means being its approver. On an individual-approval loan governed by the schedule, the platform therefore checks authority before you take it:
+While a loan is **Submitted** or in **Approval**, holding it means being its approver. On an individual-approval loan, the LOS checks authority before you take it:
 
-- **Claim** is refused when your role cannot approve this loan on its own. The message names who can: "Adjudicator cannot approve Personal Loan (unsecured) loans at this amount under the approval schedule. It can be approved by: Credit Manager. Assign it to one of them, or send it back."
-- **Assign to** lists only people whose role can approve this loan on its own.
+- **Claim** is refused when you cannot approve this loan on your own. The message names who can and suggests assigning it to one of them, or sending it back.
+- **Assign to** lists only people who can approve this loan on their own.
 
-Loans on a committee route skip this check. Their committee membership rules apply instead.
+Loans on a committee route skip this check. The committee's own rules apply instead.
 
 <Frame caption="The approval route card names the route, why the loan is on it, and what is still needed before it can be approved.">
   <img src="/images/omnia/los/approval/approval-route-individual.png" alt="Approval route card reading Individual approval, with the note that one approver decides within their own approval limit" />
@@ -59,32 +54,32 @@ The **Approval route** card on the Credit Approvals page and on the loan page sh
 
 ### Individual approval
 
-One approver decides, within their own limit. If the approver's role lacks authority, the approval is refused with "Approval denied: ROLE lacks authority for PRODUCT-CODE at the requested amount." followed by the roles that can approve it.
+One approver decides, within their own limit. If you lack authority, the approval is refused and the message names the roles that can approve it.
 
 ### In-House Committee
 
-Several approvers each record an approval. Each one is a **vote**. The loan is approved on the vote that completes the **quorum**. The routing policy sets:
+Several approvers each record an approval inside the LOS. Each one is a **vote**. The loan is approved on the vote that completes the **quorum**. Your credit union's routing rules set:
 
 - **Members**: the roles that may vote.
-- **Quorum**: how many distinct people must approve.
+- **Quorum**: how many different people must approve.
 - **Required roles**: roles that must be among the votes.
-- **Limits**: the committee's own limit per security class. Above it, the loan goes to the Credit Committee.
+- **Limits**: the committee's own limit for each type of security. Above it, the loan goes to the Credit Committee.
 
-The card shows "N of M committee approvals recorded" and which required role must still be one of them. When you approve as a member, the decision form says "Approving records your approval as a committee member. The loan is approved when the committee quorum is complete." A person votes once; a second approval from the same person is refused.
+The card shows "N of M committee approvals recorded" and which required role must still be one of them. When you approve as a member, the decision form says your approval is recorded as a committee vote. Each person votes once.
 
 <Note>
-  Fictional example: members Credit Manager, Adjudicator and Branch Manager; quorum 2; Credit Manager required. A Credit Manager plus any one other member approves the loan. Two Adjudicators do not.
+  Illustrative example only: a committee of Credit Manager, Adjudicator and Branch Manager with a quorum of two, the Credit Manager required. A Credit Manager plus any one other member approves the loan. Two Adjudicators do not.
 </Note>
 
 <Frame caption="An In-House Committee loan with one of two approvals recorded. The note says which role must still be one of them.">
   <img src="/images/omnia/los/approval/approval-route-in-house.png" alt="Approval route card on the loan page for the In-House Committee showing one recorded approval and the note that one more is needed" />
 </Frame>
 
-Votes belong to one pass through ADJUDICATION. A decline, a request for information, a return to draft or a revert voids the votes, so the next pass starts with a fresh quorum.
+Votes count for one pass through approval. A decline, a request for information, or a return to draft clears the votes, so the next pass starts with a fresh quorum.
 
 ### Credit Committee
 
-The Credit Committee meets outside the platform. One designated role **records** its decision. The routing policy names the recorder roles, and can name a substitute recorder when the borrower holds the recorder role, so nobody records the decision on their own loan.
+The Credit Committee meets outside the LOS, and one designated person **records** its decision. Your routing rules name who records it, and can name a substitute for when the borrower is the usual recorder, so nobody records the decision on their own loan.
 
 To record it, choose **Approve** and fill the **Credit Committee decision** fields:
 
@@ -92,23 +87,21 @@ To record it, choose **Approve** and fill the **Credit Committee decision** fiel
 - **Minute number (optional)**: up to 80 characters.
 - **Proof of approval (PDF or image, up to 10 MB)**: required. The signed minute or approval memo.
 
-The loan is approved when you submit. The card then reads "Approved at the meeting of DATE, minute N, recorded by the ROLE" with a link to the proof of approval.
+The loan is approved when you submit. The card then reads "Approved at the meeting of DATE, minute N, recorded by" the recorder's role, with a link to the proof of approval.
 
 ## How the route is chosen
 
-The first rule that applies wins. "Borrower" means the member the loan is for; staff roles and classifications are explained on [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
+The first rule that applies wins. "Borrower" means the member the loan is for; staff borrowers and member classifications are explained on [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
 
 ```mermaid
 flowchart TD
-    A[Loan reaches approval] --> B{Borrower's staff role<br/>sent to Credit Committee?}
+    A[Loan reaches approval] --> B{Borrower's staff role or classification<br/>sent to Credit Committee?}
     B -- Yes --> CC[Credit Committee]
-    B -- No --> C{Borrower's classification<br/>sent to Credit Committee?}
-    C -- Yes --> CC
-    C -- No --> D{Amount above the In-House<br/>Committee limit for the class?}
+    B -- No --> D{Amount above the In-House<br/>Committee limit?}
     D -- Yes --> CC
     D -- No --> E{Borrower's staff role or classification<br/>sent to In-House Committee?}
     E -- Yes --> IH[In-House Committee]
-    E -- No --> F{Amount above every<br/>individual limit for the class?}
+    E -- No --> F{Amount above every<br/>individual limit?}
     F -- Yes --> IH
     F -- No --> G{Amount above the product<br/>maximum, within the exception margin?}
     G -- No --> IND[Individual approval]
@@ -121,87 +114,84 @@ The card states the reason in plain words, for example "The amount is above ever
 
 ## Product-limit exceptions
 
-A product has a maximum amount. Normally the officer cannot save an amount above it. Your routing policy can allow a margin above the maximum as an **exception**: a percentage of the maximum and the one role that must approve it.
+A product has a maximum amount, and normally the officer cannot save an amount above it. Your credit union can allow a margin above the maximum as an **exception**, approved by one named role.
 
-- **At capture**, an amount inside the margin shows an amber **Exception: above the product maximum** panel stating the maximum, how far an exception can go, and who can approve it. The officer must write an **Exception reason**, at least 20 characters by default and up to 1,000. Without it the amount does not save. An amount beyond the margin is refused: "Above the maximum for CODE. The maximum is X; up to Y is possible only as an exception."
-- **On an individual route**, only the exception approver may approve, and only within their own limit. Anyone else sees "This amount is above the product maximum, so only the ROLE can approve it as an exception." When the exception approver's limit does not cover the amount, the loan goes to the In-House Committee.
+- **At capture**, an amount inside the margin shows an amber **Exception: above the product maximum** panel stating the maximum, how far an exception can go, and who can approve it. The officer must write an **Exception reason** (at least 20 characters) or the amount does not save. An amount beyond the margin is refused.
+- **On an individual route**, only the exception approver may approve, and only within their own limit. When their limit does not cover the amount, the loan goes to the In-House Committee.
 - **On the In-House Committee**, the exception approver becomes a required vote.
 - **On the Credit Committee**, nothing changes; the committee sits above the exception.
-- **Beyond the margin at approval**, the loan cannot be approved until the amount is reduced.
 
-The exception approver must be a member of the In-House Committee. The reason is recorded with `loan_application.product_limit_exception.recorded` and shown on the approval route card.
+The exception approver must be a member of the In-House Committee. The reason is kept in the audit trail and shown on the approval route card.
 
 <Note>
-  Fictional example: a product maximum of JMD 5,000,000 with a 5% exception margin. JMD 5,200,000 is an exception the named approver can sign off with a reason. JMD 5,300,000 is refused.
+  Illustrative example only: with a $5,000,000 product maximum and a 5% margin, $5,200,000 can be approved as an exception with a reason, and $5,300,000 is refused.
 </Note>
 
 ## Waivers
 
-A **waiver** is a recorded exception to policy on one loan: a missing payslip, a savings requirement, a staff car loan over its limit. Waivers are decided before the loan.
+A **waiver** is a recorded exception to policy on one loan, like a missing payslip or a savings requirement not met. Waivers are decided before the loan.
 
-**Request a waiver** sits on the approval route card while the loan is in DRAFT, SUBMITTED, ADJUDICATION or INFO_REQUESTED. Anyone holding `loans.create` or `loans.adjudicate` can request one. Give:
+**Request a waiver** sits on the approval route card while the loan is in **Draft**, **Submitted**, **Approval** or **Info requested**. Anyone who creates or approves loans can request one. Give:
 
 - **What is to be waived**: 3 to 200 characters.
 - **Justification**: at least 20 characters.
 - An optional supporting file (PDF, PNG or JPEG).
 
-The routing policy names the **waiver approver roles**. Every one of those roles must approve the waiver. A single rejection rejects it, and a rejection needs a comment of at least 10 characters. The person who requested a waiver cannot decide it, and only the requester can withdraw a pending one. Deciding a waiver also needs `loans.adjudicate`.
+Your routing rules name the roles that approve waivers. Every one of them must approve. A single rejection rejects the waiver, and a rejection needs a comment of at least 10 characters. The person who requested a waiver cannot decide it, and only the requester can withdraw a pending one.
 
-While any waiver is **pending**, the loan cannot be approved: "Approval blocked: a waiver on this application is still awaiting approval. Waivers are decided before the loan." The routing policy can also require an approved waiver for listed borrower classifications or staff roles. Those loans cannot be approved until a waiver is approved: "Approval blocked: this borrower's loans need an approved waiver before the loan can be approved."
-
-Waiver events: `loan_application.waiver.requested`, `loan_application.waiver.decided` and `loan_application.waiver.withdrawn`.
+While any waiver is **pending**, the loan cannot be approved. Your credit union can also require an approved waiver for certain borrower classifications or staff roles; those loans cannot be approved until one is in place.
 
 ## Maker-checker rules on approval
 
-Two separation-of-duty rules can be switched on for your workspace. Each is a workspace setting, off unless your credit union adopts it.
+Your credit union can switch on two separation-of-duty rules. Each is off until your credit union adopts it.
 
-| Rule | Setting | Refusal |
-|---|---|---|
-| The person who captured the application may not approve it | `approverMustNotBeCapturer` | "Approval denied: you captured this application, so another approver must decide it." |
-| The person who manually overrode the rate may not approve it | `approverMustNotBeRateOverrider` | "Approval denied: you changed the rate on this application, so another approver must decide it." |
+| Rule | What you see |
+|---|---|
+| The person who captured the application may not approve it | "Approval denied: you captured this application, so another approver must decide it." |
+| The person who manually overrode the rate may not approve it | "Approval denied: you changed the rate on this application, so another approver must decide it." |
 
-"Captured" means the user who created the application. The rate rule applies only while an override is in force; approving a loan whose rate someone else changed is fine. Both rules run before anything else at approval, and a refusal records `adjudication.authority.denied` with the reason.
+"Captured" means the person who created the application. The rate rule applies only while an override is in force; approving a loan whose rate someone else changed is fine.
 
-On committee routes the same people are excluded regardless of those settings: a capturer or rate overrider cannot cast an In-House Committee vote, and a capturer cannot record the Credit Committee's decision.
+On committee routes these people are always excluded: a capturer or rate overrider cannot cast an In-House Committee vote, and a capturer cannot record the Credit Committee's decision.
 
-Separately, disbursement keeps its own maker-checker rule: `disbursements.approve` belongs only to the Credit Manager. See [Disbursement controls](/omnia/los/disbursement/controls).
+Disbursement has its own maker-checker rule: only the Credit Manager approves disbursements. See [Disbursement controls](/omnia/los/disbursement/controls).
 
 ## What is checked at the moment of approval
 
-Whatever path an approval takes, the approve step re-checks, in order:
+Whatever path an approval takes, the approve step checks, in order:
 
-1. Maker-checker settings.
+1. The maker-checker rules your credit union has switched on.
 2. The amount against the product maximum and any exception margin, with an exception reason recorded.
-3. Pending or required waivers, and the staff motor-vehicle limit.
+3. Pending or required waivers, and any staff borrowing limit your credit union sets.
 4. The route's evidence: a complete In-House quorum, or a recorded Credit Committee decision with proof.
 5. On an individual route, that the approver is the exception approver, when the loan is an exception.
 6. The risk band against the product's ceiling, with the override rules described on [Credit approvals](/omnia/los/workflows/adjudication).
-7. On an individual route, the approver's own limit in the approval schedule.
+7. On an individual route, the approver's own limit.
 
-A refusal leaves the loan in ADJUDICATION and says why.
+A refusal leaves the loan in **Approval** and says why.
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why can I not claim this loan?">
-    Your role cannot approve it on its own under the approval schedule, for this security class and amount. The message names the roles that can. Ask a supervisor to assign it to one of them.
+    You cannot approve it on your own for this type of security and amount. The message names the roles that can. Ask a supervisor to assign it to one of them.
   </Accordion>
-  <Accordion title="I approved but the loan is still in ADJUDICATION. Why?">
+  <Accordion title="I approved but the loan is still in Approval. Why?">
     It is on the In-House Committee route and your approval was recorded as a vote. The loan is approved when the quorum, including any required role, is complete. The route card shows how many approvals are recorded and who is still needed.
   </Accordion>
   <Accordion title="Who records a Credit Committee decision?">
-    The recorder role your routing policy names, shown on the route card as "Recorded by". If the borrower holds that role, a substitute recorder records it.
+    The person your routing rules name, shown on the route card as "Recorded by". If the borrower is that person, the substitute records it.
   </Accordion>
   <Accordion title="Can the officer who captured the loan approve it?">
-    Not when your workspace has switched on the capturer rule, and never as an In-House Committee vote or as the Credit Committee recorder.
+    Not when your credit union has switched on the capturer rule, and never as an In-House Committee vote or as the Credit Committee recorder.
   </Accordion>
   <Accordion title="The amount is a little over the product maximum. Can it be approved?">
-    Only if your routing policy allows product-limit exceptions and the amount is inside the margin. The officer records a reason at capture, and the named exception approver must approve.
+    Only if your credit union allows product-limit exceptions and the amount is inside the margin. The officer records a reason at capture, and the named exception approver must approve.
   </Accordion>
   <Accordion title="Does a waiver approve the loan?">
     No. A waiver clears one policy exception. The loan still needs its normal approval on its route afterwards.
   </Accordion>
   <Accordion title="How do we change our limits?">
-    The schedule and routing policy are workspace configuration loaded by CompuZign from your approved delegation of authority. Send the revised schedule to CompuZign support; there is no in-app editor.
+    Approval authority and routing rules are set up from your approved delegation of authority, outside the app. Send the revised schedule to your LOS support team.
   </Accordion>
 </AccordionGroup>

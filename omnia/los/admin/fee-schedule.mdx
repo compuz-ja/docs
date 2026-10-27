@@ -1,61 +1,53 @@
 ---
 title: "Edit the fee schedule"
 sidebarTitle: "Fee schedule"
-description: "Change the standing fees applied to every loan: the rate, whether GCT applies, how the fee is treated, and whether it is active."
+description: "Set the standard fees charged on each loan type: the rate or amount, whether tax applies, how the fee is collected, and whether it is in use."
 icon: "receipt"
 ---
 
-The fee schedule holds the standing fees applied to every loan of each type in your credit union. The processing fee, the legal fee, valuation, stamp duty, and the rest.
+The fee schedule holds the standard fees your credit union charges on each loan type: processing, legal, valuation, stamp duty, and the rest.
 
-These are the defaults. A product can override them on its product sheet, a Credit Officer can change a fee's rate or amount for one loan while it is a draft, and a Disbursement officer can still waive or adjust a fee at funding. The catalogue you set here is where the standard numbers live.
+These are the starting figures. A product can set its own fees, a Credit Officer can change a fee on one loan while it is a draft, and a Disbursement officer can still adjust or waive a fee at funding. The schedule is where the standard numbers live.
 
-**Required role:** Administrator or Credit Manager (`fees.manage` capability). A Branch Manager cannot edit fees.
+**Required permission:** **Manage fees**, held by the Credit Manager and the Administrator.
 
-To access the fee schedule, navigate to **Administration → Fee Schedule**. The route is `/admin/fees`.
+Open **Administration → Fee Schedule**.
 
 <Frame caption="One row per fee and loan type. Edit a row in place and save it on its own.">
-  <img src="/images/omnia/los/admin/fee-schedule.png" alt="The Fee Schedule page listing fees such as the processing fee for each loan type, with rate, GCT, treatment and active fields" />
+  <img src="/images/omnia/los/admin/fee-schedule.png" alt="The Fee Schedule page listing fees such as the processing fee for each loan type, with rate, tax, treatment and active fields" />
 </Frame>
 
 ## What you can change
 
-Each fee is one row. You edit it in place and save that row on its own.
+Each fee is one row. Edit it in place and save that row.
 
 | Field | What it does |
 | --- | --- |
-| **Label** | The name officers see, for example "Processing fee". |
-| **Rate** | The percentage for a percent-based fee, for example `2` for 2%. |
-| **Amount** | The flat amount in J$ for a fixed fee, for example a J$5,000 registration fee. |
-| **Charge 15% GCT on this fee** | The GCT flag. Tick it and the platform adds 15% GCT to the fee. Leave it off for a GCT-exempt fee like an insurance premium. |
-| **Treatment** | How the fee affects the cash the member receives. One of **Deducted from proceeds**, **Paid separately**, or **Added to loan**. |
-| **Active** | Untick to retire a fee without deleting it. An inactive fee stops pre-filling the disbursement screen. |
+| **Label** | The name staff see, for example "Processing fee". |
+| **Rate** | The percentage for a percentage fee, for example `2` for 2%. |
+| **Amount** | The fixed amount for a flat fee, for example a registration fee. |
+| **Charge tax on this fee** | The checkbox names your sales tax and rate, for example "Charge 15% GCT on this fee". Tick it and the tax is added to the fee. Leave it off for a tax-exempt fee such as an insurance premium. |
+| **Treatment** | How the fee affects what the member receives: **Deducted from proceeds**, **Paid separately**, or **Added to loan**. |
+| **Active** | Untick to stop using a fee without deleting it. An inactive fee no longer appears on the disbursement screen. |
 
-Each row also shows the fee's code (like `PROCESSING`) and which loan types it applies to, so you can tell the unsecured processing fee from the mortgage one at a glance.
+Each row also shows the fee's code and the loan types it applies to, so you can tell the unsecured processing fee from the mortgage one.
 
 <Note>
-  The stamp duty fee has no editable rate. Its amount is worked out by the
-  Jamaica stamp and mortgage duty formula, so the row shows "Computed by the
-  Jamaica stamp-duty formula" instead of a rate field. You can still change its
-  label, GCT flag, treatment, and active state.
+  A fee worked out by a formula, such as stamp duty, has no rate to edit. Its row says how it is computed instead. You can still change its label, tax checkbox, treatment, and active state.
 </Note>
 
-## Changing the service fee
+## Changing the processing fee
 
-The processing fee is the one you are most likely to change. It ships at 2% on unsecured and auto loans and 1% on cash-secured and mortgage loans, and it is GCT-taxable. To change it, open **Fee Schedule**, find the processing row for the loan type, type the new percentage into **Rate**, and click **Save**.
+The processing fee is the one you are most likely to change. Find the processing row for the loan type, type the new percentage into **Rate**, and click **Save**.
 
-The new rate takes effect on the next loan funded against that schedule. Loans already disbursed keep the fee that was captured on them; the disbursement record is an immutable snapshot.
+The new figure applies to the next loan funded. Loans already disbursed keep the fee they were charged.
 
 ## What happens at funding
 
-The fee schedule is the source. The disbursement screen is where a single loan's fees are finalised. A fee's starting figure there is the amount the Credit Officer agreed at capture, else the product's own fee, else this schedule, and the Disbursement officer can still waive or adjust it for that one loan. See [Fees, deductions, and GCT](/omnia/los/disbursement/fees-and-gct) for how a fee reduces the gross loan down to the net the member receives, and how GCT is applied.
+The disbursement screen is where one loan's fees are settled. Each fee starts from the amount agreed at capture, or else the product's own fee, or else this schedule. The Disbursement officer can still adjust or waive it for that loan. See [Fees, deductions, and tax](/omnia/los/disbursement/fees-and-gct) for how fees take the loan amount down to what the member receives.
 
-## Every save is audited
-
-Each save records a `tenant.fee_schedule.updated` audit event with the before and after values, so every change to a standing fee is traceable to who made it and when.
+Every save is recorded in the audit trail with the old and new values.
 
 <Warning>
-  The fee schedule sets the standard for every future loan of that type. An
-  officer can change a fee on one loan, but changing the catalogue here changes
-  it for all loans afterward that have no product or per-loan figure of their
-  own. Confirm the rate before you save.
+  A change here applies to every future loan of that type that has no product or loan-level figure of its own. Check the figure before you save.
 </Warning>

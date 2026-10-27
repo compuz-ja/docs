@@ -5,7 +5,7 @@ description: "The bell lists the loan events that concern you, hand-off emails t
 icon: "bell-ring"
 ---
 
-The Loan Origination System tells you about work in four ways: the bell in the top bar, a hand-off email when a loan reaches you, a summary email on weekday mornings, and, if your credit union turns them on, posts in a Microsoft Teams channel. All four carry the loan ID. None of them carry a member's personal details beyond what the hand-off email needs.
+The Loan Origination System tells you about work in four ways: the bell in the top bar, a hand-off email when a loan reaches you, a summary email each weekday morning, and, if your credit union turns them on, posts in a Microsoft Teams channel. All four carry the loan ID. None of them carry a member's personal details beyond what the hand-off email needs.
 
 ## The notification bell
 
@@ -19,11 +19,11 @@ Click the bell to see your latest **20** alerts, newest first, each with how lon
 
 - **Click an alert** to open the loan. The alert is marked read as you go.
 - **Mark all read** clears the unread count in one click.
-- The list refreshes every 60 seconds, and again each time you open it.
+- The list updates on its own about once a minute, and again each time you open it.
 
 ### What creates an alert
 
-An alert is written every time the platform sends you a hand-off email about a loan, in the same moment and for the same reason. If you were emailed, you have an alert. If you were not emailed, you do not.
+An alert is written every time the LOS sends you a hand-off email about a loan, in the same moment and for the same reason. If you were emailed, you have an alert. If you were not emailed, you do not.
 
 The alert text is short and names the loan by its ID only:
 
@@ -48,13 +48,13 @@ The member's name is never in an alert, so the list is safe to open on a shared 
 
 ### Whose alerts you see
 
-Only your own. Every read and every "mark read" is pinned to the signed-in person. Nobody else can see or clear your alerts, and you cannot see theirs, in the same workspace or any other.
+Only your own. Nobody else can see or clear your alerts, and you cannot see theirs.
 
-Alerts belong to a workspace. If you work in more than one, each has its own bell. The profile pages, which sit outside any workspace, have no bell.
+Alerts belong to a workspace. If you work in more than one, each has its own bell. Your profile pages, which sit outside any workspace, have no bell.
 
 ## Hand-off emails
 
-When a loan reaches someone's step, the platform emails them. The rule is simple: **if the loan is assigned to someone, only that person is emailed; if it is not, everyone who works that stage is.**
+When a loan reaches someone's step, the LOS emails them. The rule is simple: **if the loan is assigned to someone, only that person is emailed; if it is not, everyone who works that stage is.**
 
 | Event | Who is emailed |
 |---|---|
@@ -72,15 +72,15 @@ When a loan reaches someone's step, the platform emails them. The rule is simple
 | Loan filed | The Credit Officer |
 | Loan cancelled | The owner and the Credit Officer, or the teams that handled the loan when it had no owner |
 
-Every hand-off email carries a **View loan & current stage** button that opens the loan. For the full routing rules, member emails and the filed-loan exception, see [Email notifications for loan workflow events](/omnia/los/workflows/notifications).
+Every hand-off email carries a **View loan & current stage** button that opens the loan. For the full routing rules and member emails, see [Email notifications for loan workflow events](/omnia/los/workflows/notifications).
 
 <Note>
-  A confidential loan is only emailed to staff whose role holds `loans.read.confidential` as well as the stage capability. Staff who cannot see the loan on screen are not told about it by email either.
+  A confidential loan is only emailed to staff who also hold the **View confidential loans** permission. Staff who cannot see the loan on screen are not told about it by email either.
 </Note>
 
 ## The weekday morning summary
 
-At **08:00 Jamaica time, Monday to Friday**, the platform emails each staff member a summary of what is waiting for them. It is built from the same rule as the [Waiting for you](/omnia/los/navigation/finding-your-work#waiting-for-you) list on your dashboard, so the email and the dashboard agree.
+**Each weekday morning**, the LOS emails each staff member a summary of what is waiting for them. It is built from the same rule as the [Waiting for you](/omnia/los/navigation/finding-your-work#waiting-for-you) list on your dashboard, so the email and the dashboard agree.
 
 <Frame caption="The headline gives the total and how many have waited more than two days. Each line opens the loan.">
   <img src="/images/omnia/los/nav/morning-digest-email.png" alt="Summary email headed You have 5 loans waiting; 3 over 2 days, with a list of loan IDs, queues, amounts and waiting times, and an Open my work button" />
@@ -93,17 +93,17 @@ The email contains:
 - the first **10** loans, then "And N more" for the rest,
 - an **Open my work** button that opens your dashboard.
 
-It carries loan IDs, stages, amounts and waiting times only. No member names. The email leaves the platform, so it says no more than it must.
+It carries loan IDs, stages, amounts and waiting times only. No member names.
 
 ### Who gets it
 
-Active staff whose role works a queue or captures loans: holders of `loans.adjudicate`, `securities.review`, `loans.disburse` or `loans.create`. Suspended and revoked users are skipped.
+Active staff who work a queue or capture loans. Suspended users are skipped.
 
-**Nobody is emailed about an empty day.** If nothing is waiting for you, no email arrives. You get at most one summary per weekday, even if the job runs twice.
+**Nobody is emailed about an empty day.** If nothing is waiting for you, no email arrives. You get at most one summary per weekday.
 
-### The Credit Manager's team summary
+### The team summary
 
-Holders of `disbursements.approve` also get a **Team summary** at the end of the email: the count in **Credit Approvals**, **Securities** and **Disbursement**, and the oldest loan in each with how long it has waited. With the built-in roles that is the Credit Manager alone, because `disbursements.approve` belongs only to that role. Administrators and Branch Managers, who also see every queue count, do not get the team summary.
+Staff with the **Approve disbursements** permission also get a **Team summary** at the end of the email: the count in **Credit Approvals**, **Securities** and **Disbursement**, and the oldest loan in each with how long it has waited. With the built-in roles that is the Credit Manager alone. Administrators and Branch Managers, who also see every queue count, do not get it.
 
 A Credit Manager with nothing personally waiting still gets the email when the team queues have work in them. The subject then reads "Team queue summary".
 
@@ -121,50 +121,50 @@ One card per arrival, for three queues:
 | **Securities** | A Credit Officer sends security documents for review, or a loan is sent back to Securities |
 | **Disbursement** | A loan is ready for disbursement |
 
-The card reads like "LOAN_ID · J$1,300,000 · arrived in Securities", lists the loan, stage and amount, and has an **Open loan** button. Nothing about the member is on it.
+The card reads like "LOAN_ID · $1,300,000 · arrived in Securities", lists the loan, stage and amount, and has an **Open loan** button. Nothing about the member is on it.
 
-**Confidential loans are never posted.** A channel reaches everyone in it, which is exactly what confidential routing exists to prevent.
+**Confidential loans are never posted.** A channel reaches everyone in it, which is exactly what confidential handling exists to prevent.
 
 ### Set up Teams posts
 
-You need the `admin.tenant.manage` capability, which the Administrator holds.
+You need the **Manage workspace** permission, which the Administrator holds.
 
-<Frame caption="One row per queue. A saved webhook shows masked, with an on and off switch beside it.">
-  <img src="/images/omnia/los/nav/teams-posts-admin.png" alt="Teams posts settings page with rows for Credit Approvals, Securities and Disbursement, each with a webhook URL field and a Save button" />
+<Frame caption="One row per queue. A saved link shows masked, with an on and off switch beside it.">
+  <img src="/images/omnia/los/nav/teams-posts-admin.png" alt="Teams posts settings page with rows for Credit Approvals, Securities and Disbursement, each with a webhook link field and a Save button" />
 </Frame>
 
 <Steps>
-  <Step title="Create the webhook in Teams">
-    In the Teams channel that should receive the posts, add an incoming webhook, or a Workflows flow that starts **when a webhook request is received**. Copy the URL it gives you.
+  <Step title="Create the incoming webhook in Teams">
+    In the Teams channel that should receive the posts, add an incoming webhook and copy the link it gives you.
   </Step>
   <Step title="Open Teams Posts">
     In the left menu, go to **Administration**, then **Settings**, then **Teams Posts**.
   </Step>
-  <Step title="Paste and save the URL">
-    Paste the URL into the row for the queue and click **Save**. The URL must be an `https` address on a Microsoft Teams or Workflows host. Saving keeps posts **off**.
+  <Step title="Paste and save the link">
+    Paste the channel's incoming-webhook link into the row for the queue and click **Save**. Saving keeps posts **off**.
   </Step>
   <Step title="Turn posts on">
-    Flip the switch beside the saved webhook. From now on, every non-confidential loan arriving in that queue is posted.
+    Flip the switch beside the saved link. From now on, every non-confidential loan arriving in that queue is posted.
   </Step>
 </Steps>
 
 Repeat for each queue you want. Each queue can post to a different channel.
 
-- To **change** the channel, paste a new URL and click **Save**.
-- To **pause** posts, flip the switch off. The URL stays saved.
-- To **stop** completely, click **Remove**. The URL is cleared and posts turn off.
+- To **change** the channel, paste a new link and click **Save**.
+- To **pause** posts, flip the switch off. The link stays saved.
+- To **stop** completely, click **Remove**. The link is cleared and posts turn off.
 
-The URL is stored encrypted and is never shown again in full: the page shows only the host and the last six characters. Every change is recorded in the audit trail with the queue, the host and whether posts are on, never the URL.
+The link is stored encrypted and is never shown again in full. Every change is recorded in the audit trail.
 
 <Warning>
-  Posts leave through the platform's integration service. Your IT team must allow that service to reach Microsoft's webhook hosts: `*.webhook.office.com`, and for Workflows, `*.logic.azure.com` or `*.api.powerplatform.com`. Until that is allowed, posts are not delivered even with the switch on.
+  Your IT team must allow the LOS to post to Microsoft Teams. Until that is allowed, posts are not delivered even with the switch on.
 </Warning>
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why did I get an email but no alert in the bell?">
-    You should get both. An alert is written for every staff hand-off email tied to your account. If the bell is empty, check you are in the right workspace: each workspace has its own bell.
+    You should get both. An alert is written for every hand-off email sent to you. If the bell is empty, check you are in the right workspace: each workspace has its own bell.
   </Accordion>
   <Accordion title="Why didn't my colleagues get the email for this loan?">
     The loan is assigned to you. Once a loan has an owner, stage emails go to the owner only, not the whole team.
@@ -173,15 +173,15 @@ The URL is stored encrypted and is never shown again in full: the page shows onl
     Every active staff member who works a queue or captures loans and has something waiting that morning. The Credit Manager also gets the team summary. Nobody gets an email on a day when nothing is waiting.
   </Accordion>
   <Accordion title="What time does the morning email arrive?">
-    08:00 Jamaica time, Monday to Friday. Delivery can take a few minutes after that.
+    Early each weekday morning, Monday to Friday, before the working day starts. Delivery can take a few minutes.
   </Accordion>
   <Accordion title="Can I turn off the morning email?">
-    Not in this release. The Notifications page in your profile has no switch for it. It only arrives on days when something is waiting for you.
+    No. The Notifications page in your profile has no switch for it. It only arrives on days when something is waiting for you.
   </Accordion>
   <Accordion title="Can I stop an alert from showing in the bell?">
     No. Alerts follow your hand-off emails. Mark them read to clear the count.
   </Accordion>
   <Accordion title="We turned on Teams posts but nothing appears. Why?">
-    Three things to check. The switch for that queue is on, not only the URL saved. The loan is not confidential. And your IT team allows the platform's integration service to reach Microsoft's webhook hosts.
+    Three things to check. The switch for that queue is on, not only the link saved. The loan is not confidential. And your IT team allows the LOS to post to Microsoft Teams.
   </Accordion>
 </AccordionGroup>
