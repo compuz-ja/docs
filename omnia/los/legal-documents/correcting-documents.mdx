@@ -1,0 +1,99 @@
+---
+title: "Correct a legal document with an error"
+sidebarTitle: "Correcting documents"
+description: "Re-prepare an unsigned document from the loan's current details, or have a supervisor void a signed one so it can be prepared and signed again. Nothing is ever deleted."
+icon: "file-pen"
+---
+
+How you correct a legal document depends on one thing: whether it has been signed yet.
+
+| The document is | Fix it with | Who |
+|---|---|---|
+| **Prepared, awaiting signature** | **Re-prepare** | Anyone who can prepare documents |
+| **Executed** (signed) | **Void**, then prepare and sign again | A supervisor who did not execute it |
+
+Neither path deletes anything. The old copy stays on file, marked as replaced or voided, so the audit trail always shows what existed and why it changed.
+
+<Frame caption="Re-prepare sits on an unsigned row. Void sits on a signed row, for supervisors only.">
+  <img src="/images/omnia/los/documents/re-prepare-void.png" alt="The Legal documents and contracts card showing a Re-prepare button on a prepared document and a Void button on an executed document" />
+</Frame>
+
+## Re-prepare an unsigned document
+
+Use **Re-prepare** when a prepared document has an error and nobody has signed it yet: the amount changed, a name was corrected, a guarantor's details were fixed.
+
+<Steps>
+  <Step title="Correct the loan first">
+    The new copy is built from the loan's current details, so fix the loan or member record before you re-prepare.
+  </Step>
+  <Step title="Click Re-prepare">
+    On the document's row, click **Re-prepare**. A confirmation explains that a fresh copy replaces the prepared one and that any printed copy of the old version must be discarded.
+  </Step>
+  <Step title="Confirm">
+    Click **Re-prepare document**. The new copy is generated and the old one is marked **superseded**. The row stays at **Prepared, awaiting signature**, now pointing at the new copy.
+  </Step>
+</Steps>
+
+On the **Declaration of Purpose**, the confirm button reads **Continue to itemize** and reopens the purposes editor, so you can change the lines before the new copy is generated. The amounts must still add up to the gross loan.
+
+Re-preparing needs `loans.legal_documents.prepare`, held by the Credit Officer, Securities, Disbursement, and Administrator roles, and an active template for the form. It records `loan.legal_document.superseded` with the reason `reprepared`.
+
+<Warning>
+  Re-prepare only works on an unsigned document. A signed copy is never overwritten. If someone signs the document while you are re-preparing it, the re-prepare is refused and the signed copy stands. To change a signed document, a supervisor voids it.
+</Warning>
+
+## Void a signed document
+
+Use **Void** when a document was signed with an error. A void marks the signed copy as no longer valid and reopens the slot so the document can be prepared and signed again.
+
+<Steps>
+  <Step title="Click Void">
+    On the executed document's row, click **Void**. The button only shows for supervisors who did not execute the document.
+  </Step>
+  <Step title="Give the reason">
+    Type what was wrong with the signed copy, at least 10 characters and at most 1,000. The reason is stored on the audit trail.
+  </Step>
+  <Step title="Confirm">
+    Click **Void signed document**. The row returns to **Required** with the note **signed copy voided, prepare again**.
+  </Step>
+  <Step title="Prepare and sign again">
+    Prepare the document afresh and collect the signature as usual.
+  </Step>
+</Steps>
+
+The voided signed copy and its original prepared PDF both stay in storage, unchanged. The void records `loan.legal_document.voided` with the reason.
+
+### Who can void
+
+- The voider needs `loans.legal_documents.void`. Among the built-in roles, the **Adjudicator**, **Credit Manager**, and **Administrator** hold it.
+- The voider cannot be the person who executed the document, or the officer named as checker on a Loan Disbursement Sheet. The refusal reads "You executed this document, so a different supervisor must void it (maker ≠ checker)."
+
+### When a document can no longer be voided
+
+A void never silently undoes a gate the loan has already passed.
+
+| Document | Can be voided while the loan is | Refused when |
+|---|---|---|
+| Securities gate documents: consents, guarantees, the NSIPP Security Agreement, the Mortgage Deed, the Insurance Assignment, and any optional form set to block at Securities | Anywhere from Draft up to and including Securities or Securities Issue | The loan is in Disbursement: "This document was needed to leave Securities. Step the loan back to Securities first, then void it." |
+| Every other document, including the Loan Disbursement Sheet and the Declaration of Purpose | Anywhere from Draft up to and including Disbursement | The loan has been disbursed or filed |
+
+Nothing on a closed loan (declined, abandoned, or cancelled) can be voided.
+
+To void a Securities gate document on a loan already in Disbursement, the Disbursement team clicks **Revert to Securities** on the Disbursement page first. That is only possible before the disbursement is executed. Once the replacement is signed, the loan moves back to Disbursement on its own.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="A Credit Officer found an error after the member signed. What now?">
+    Ask a supervisor (an Adjudicator, Credit Manager, or Administrator) to void the signed copy, giving the reason. Then prepare the document again and have it signed.
+  </Accordion>
+  <Accordion title="Does voiding a document move the loan back a stage?">
+    No. The loan stays where it is. The void is refused if it would undo a stage the loan has already passed.
+  </Accordion>
+  <Accordion title="Can a signed document be deleted?">
+    No. Signed and prepared documents are kept for seven years in storage that cannot be changed or deleted. A void marks the copy as not valid; it does not remove it.
+  </Accordion>
+  <Accordion title="Can I void an unsigned document?">
+    No. Re-prepare it instead. Only a signed (executed) document can be voided.
+  </Accordion>
+</AccordionGroup>

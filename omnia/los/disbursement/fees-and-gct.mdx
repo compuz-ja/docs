@@ -92,9 +92,23 @@ A workspace created through the demo seed gets ten Jamaica fee items spread acro
 | `VALUATION` | Valuation / appraisal | Mortgage | J$35,000 | `PAID_SEPARATELY` | `OTHER` | Yes |
 | `REGISTRATION` | Title registration | Mortgage | J$5,000 | `PAID_SEPARATELY` | `GOVERNMENT` | No |
 
+## Where the starting figures come from
+
+Each fee line on the disbursement screen starts from the most specific figure available, in this order:
+
+1. **The amount agreed at capture.** While a loan is a draft, the Credit Officer can replace a scheduled fee's rate or amount for that loan, for example a 3% processing fee instead of the 2% default, or a flat J$ amount. Use **Edit amount** on the fee card, choose **% of loan** or **Fixed J$**, and optionally give a reason. The line shows **Edited** with the schedule default beside it, and **Reset to schedule** puts it back. The officer also chooses each fee's treatment and can add fees of their own. Editing needs `loans.edit` and only works while the loan is a draft. See [Fees and insurance at capture](/omnia/los/loans/fees-and-insurance-at-capture).
+2. **The product's own fee.** A per-product amount or waiver set on the [product sheet](/omnia/los/admin/loan-products#setting-fees-per-product).
+3. **The fee schedule.** The workspace default from [Fee schedule](/omnia/los/admin/fee-schedule).
+
+The fee engine then recomputes GCT and the net to member from those inputs, exactly as before.
+
+### The creditor-life premium line
+
+When creditor-life cover applies and the member chose to pay the premium **annually** or **in full**, the disbursement screen adds a line for it: **Creditor life insurance (annual premium, first year)** or **Creditor life insurance (single premium, paid in full)**. It is a fixed amount owed to the insurer, carries no GCT, and is deducted from the proceeds by default. Its amount comes from the cover the officer set at capture and cannot be edited as a fee value there.
+
 ## What an officer can change
 
-A **Disbursement** officer can add, edit, and waive fee lines at schedule time. Every change is audited.
+A **Disbursement** officer can still add, edit, and waive fee lines at schedule time, on top of the starting figures. Every change is audited.
 
 - **Add** a custom line that is not in the schedule.
 - **Edit** a schedule line for this loan.
@@ -106,5 +120,6 @@ The audit events are exact:
 
 - `disbursement.fees.applied` records the full fee, GCT, and net breakdown for the instruction.
 - `disbursement.fee.waived` records each waived line and its reason.
+- `loan_application.fee_value.updated` records a fee amount edited at capture, with the schedule, old, and new values.
 
 Both fire inside `scheduleDisbursement`. Catalogue edits are audited too: the `tenant.fee_schedule.updated` event fires on every save from the [Fee schedule](/omnia/los/admin/fee-schedule) page.

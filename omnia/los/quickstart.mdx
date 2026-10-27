@@ -1,14 +1,14 @@
 ---
 title: "Originate your first loan"
 sidebarTitle: "Quickstart"
-description: "Sign in, verify a member, create a loan application, submit it for adjudication, and track it through the workflow."
+description: "Sign in, verify a member, create a loan application, submit it for approval, and track it through the workflow."
 icon: "rocket"
 ---
 
-Five steps take you from signing in to a submitted loan: sign in, verify a member, create the application, submit for adjudication, and track it. Each step is gated on the one before it: you cannot submit without a verified member.
+Five steps take you from signing in to a submitted loan: sign in, verify a member, create the application, submit for approval, and track it. Each step is gated on the one before it: you cannot submit without a verified member.
 
 <Tip>
-  Invite the rest of your team before you create your first loan, so each person can act in their own role. Go to **Administration** then **Invitations** and invite your Adjudicators, Securities team, and Disbursement team. A loan cannot advance past adjudication without someone to claim that queue.
+  Invite the rest of your team before you create your first loan, so each person can act in their own role. Go to **Administration** then **Add New Users** and invite your Adjudicators, Securities team, and Disbursement team. A loan cannot advance past approval without someone to claim it.
 </Tip>
 
 <Steps>
@@ -23,7 +23,13 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
 
     Enter your email and password. If you have set up two-factor authentication on your account, enter the one-time code from your authenticator app.
 
-    After signing in you open your workspace and land on the sidebar's Overview dashboard, reachable at `/your-slug/dashboard`. It shows action queues and recent activity, and the tiles you see depend on your capabilities. From the left navigation, a Credit Officer opens Loans and an Adjudicator opens the Adjudication queue.
+    After signing in you land on the **Overview** dashboard at `/your-slug/dashboard`. Three things on your first screen tell you where your work is:
+
+    - **The counts in the left menu.** Every queue you can open shows how many items are in it. A count turns amber once its oldest item has waited more than 24 hours.
+    - **Waiting for you**, at the top of the dashboard. It lists the loans that are your next action, oldest first. On your first day it reads **All clear**.
+    - **The bell** in the top bar. It lists the loan events that concern you, like a loan arriving in your queue.
+
+    A Credit Officer works from **Loans** in the menu. An Adjudicator works from **Credit Approvals**. See [Find the work waiting for you](/omnia/los/navigation/finding-your-work) for what each count means.
   </Step>
 
   <Step title="Verify your first member">
@@ -44,7 +50,7 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
   <Step title="Create a loan application">
     With a member in place, open a new application. You can start a draft while KYC is in progress or in manual review, but submission stays blocked until KYC is Verified.
 
-    1. In the left navigation, click **Loans**, then **New application**.
+    1. In the left navigation, click **Loans**, then **New Application**.
     2. In the **Search members by name or CIF** field, find and select the member you just verified.
     3. Choose the **loan type** that matches the request:
        - **Unsecured** is a personal loan with no collateral.
@@ -52,30 +58,32 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
        - **Motor vehicle** is a vehicle loan secured against the vehicle.
        - **Real estate** is a property loan secured against real estate.
     4. Pick the product, then click **Create draft application**.
-    5. On the draft, work through each section: applicant details, employment, statement of affairs (income and expenses), loan purpose, guarantors if any, and collateral if the type needs it.
+    5. On the draft, the **Application progress** bar shows six steps: Applicant, Loan, Income & expenses, Guarantors, Collateral and Documents. Click a step to jump to its section. The hint under the bar names the next section to complete.
 
-    The platform saves your progress as a draft as you go. Leave and come back any time before you submit.
+    The platform saves your progress as a draft as you go. Leave and come back any time before you submit. A draft you have not submitted waits under **Loans** then **All Loans**.
   </Step>
 
-  <Step title="Submit for adjudication">
+  <Step title="Submit for approval">
     Before you submit, check the figures the platform computed from your inputs:
 
     - **TDSR (Total Debt Service Ratio)** is the applicant's monthly debt obligations as a percentage of gross income.
     - **Risk band** is a rating from **R1** (lowest risk) to **R5** (highest risk), calculated from employment, income, loan type, and other factors.
     - **Indicative rate** is the rate that applies based on the loan product and risk band.
 
-    Confirm every required section shows a green tick. When the application is complete, click **Submit application**. Submission is blocked unless the member's KYC status is Verified.
+    Then check **What's stopping this loan** in the banner at the top of the loan. It lists every blank required field and says whether the member's identity verification is complete. When it reads **Nothing is blocking this stage.**, click **Submit application** in the bar at the bottom of the page. The button stays greyed out while anything is still listed.
 
-    Status changes from **Draft** to **Submitted**, and the loan enters the Adjudication queue. The form sections lock. Only an Adjudicator can request changes from here.
+    Status changes from **Draft** to **Submitted**, and the loan enters the **Credit Approvals** queue. A message confirms the submission and names the colleagues who were notified. The form sections lock. Only an Adjudicator can request changes from here.
   </Step>
 
   <Step title="Track the loan through the workflow">
-    After submission, the loan routes to the next department's queue at each step. Staff in that department pick it up and act: an Adjudicator claims it and records a decision, the Securities team clears collateral, and the Disbursement team executes the funds release. One step, Securities to Disbursement, advances automatically once collateral clears. Watch progress any time from your **Dashboard** or the **Loans** list.
+    After submission, the loan routes to the next department's queue at each step. Staff in that department pick it up and act: an Adjudicator claims it and records a decision, the Securities team clears collateral, and the Disbursement team executes the funds release. One step, Securities to Disbursement, advances automatically once collateral clears.
+
+    You do not need to chase it. Open the loan at any time and the **next-step banner** at the top says who has it now, what is stopping it, and who gets it next. The **Timeline** card shows each stage it has passed through and how long it spent there. See [A guided tour of the loan page](/omnia/los/navigation/the-loan-page).
 
     | Status | Department | What is happening |
     |---|---|---|
-    | **Submitted** | Adjudication queue | Waiting for an Adjudicator to claim it |
-    | **Adjudication** | Adjudication | Adjudicator is reviewing the application |
+    | **Submitted** | Credit Approvals | Waiting for an Adjudicator to claim it |
+    | **Approval** | Credit Approvals | Adjudicator is reviewing the application |
     | **Info requested** | Your queue | Adjudicator asked for more information |
     | **Approved** | Moving to Securities | Decision recorded |
     | **Securities** | Securities queue | Securities team confirming collateral |
@@ -83,12 +91,12 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
     | **Disbursed** | Being archived | Funds released |
     | **Filed** | On permanent record | Loan complete |
 
-    If the Adjudicator requests more information, status moves to **Info requested** in your queue with a note on what is needed. Update the application and resubmit. The loan returns to the Adjudication queue for the decision to continue.
+    If the Adjudicator requests more information, status moves to **Info requested** with a note on what is needed. The loan shows up in your **Returned to Me** count in the menu and on your Waiting for you list, and the bell tells you. Update the application and resubmit. The loan returns to Credit Approvals for the decision to continue.
 
-    Each status change sends an email to the team responsible for the next step, when recipients exist for that role.
+    Each hand-off emails the person who owns the next step, or the whole team when nobody owns it yet, and adds an alert to their bell. Every weekday at 08:00 Jamaica time, anyone with work waiting gets a summary email. See [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).
   </Step>
 </Steps>
 
 <Note>
-  Your role decides what you can see and do. A Credit Officer creates and submits applications but cannot open the Adjudication or Disbursement queues. An Adjudicator approves or declines but cannot edit a submitted application's form data. If you need a feature you cannot see, ask your Administrator to review your role.
+  Your role decides what you can see and do. A Credit Officer creates and submits applications but cannot open the Credit Approvals or Disbursement queues. An Adjudicator approves or declines but cannot edit a submitted application's form data. If you need a feature you cannot see, ask your Administrator to review your role.
 </Note>

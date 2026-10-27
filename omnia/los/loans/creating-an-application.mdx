@@ -1,159 +1,164 @@
 ---
-title: "How to create and submit a loan application"
+title: "Create and submit a loan application"
 sidebarTitle: "Creating an application"
-description: "Step-by-step guide to creating a loan application draft, filling in all required sections, and submitting it for adjudication."
+description: "Capture a loan application from member search to submission: loan parameters, income and expenses, collateral, guarantors, fees, creditor life, credit rating and the officer's recommendation."
 icon: "square-pen"
 ---
 
-Creating a loan application is a multi-section process. You fill in the sections on the application page, and each section has its own Save button. Submit and Abandon sit at the bottom of the page once the required sections are captured. Once submitted, the application is placed in the Adjudication queue.
+A loan application is captured on one page, section by section, and saved as you go. You start it from **New Application**, fill each section, and click **Submit application** when the page says **Ready to submit**. Submission sends it to the **Credit Approvals** queue.
 
 ## Before you start
 
-Make sure the following conditions are met before opening a new application.
+- **The member exists and is ACTIVE.** You cannot draft a loan for a suspended or deceased member. Search before creating a new member; see [Creating members](/omnia/los/members/creating-members).
+- **KYC allows drafting.** You can draft for any member except one whose KYC is UNVERIFIED or FAILED. To **submit**, KYC must be exactly VERIFIED.
+- **You hold the capabilities.** `loans.create`, `loans.edit` and `loans.submit`, which the Credit Officer and the Administrator hold.
 
-- **The member is ACTIVE.** You cannot draft a loan for a suspended, inactive, or deceased member. Reactivate the member first.
-- **The member's KYC status allows it.** You can draft an application for any member except one whose KYC is UNVERIFIED or FAILED, so a member who is still in progress or in manual review can be drafted. To submit, though, the member's KYC must be exactly VERIFIED. A drafted application for an in-progress or manual-review member is blocked at submission until verification completes.
-- **You have the Credit Officer role.** You need permission to create and submit loan applications. Contact your Administrator if you are unsure about your role.
-
-## Steps to create and submit an application
+## Start the draft
 
 <Steps>
-
-  <Step title="Go to Loans, then New application">
-    From the main navigation, select **Loans**, then click **New application** in the top-right corner of the loans list.
+  <Step title="Open New Application">
+    In the sidebar, open **Loans**, then **New Application**.
   </Step>
+  <Step title="Find the member">
+    Search by name or CIF. The selected member's branch and KYC carry through to the application. A **Member context** panel shows the CIF, date of birth, branch, contact details and their last loan.
 
-  <Step title="Search for and select the member">
-    Type the member's name or member account number into the member search field. Select the correct member from the results. The member's basic details pre-fill the Applicant Information section. Encrypted identifiers like the TRN are not part of this loan member search.
+    If the member's KYC is not VERIFIED and you hold `members.kyc.submit`, a **KYC verification** card appears right here, so you can capture identifier documents and run the check without leaving the page. If the member cannot be drafted for, an **Application blocked** panel says why.
   </Step>
-
-  <Step title="Select the loan type">
-    Choose the loan type. The dropdown lists the loan types your credit union has defined, and the visible names are configurable by your credit union. Each one maps to one of four fixed archetypes that drive the behaviour: **Unsecured**, **Cash secured**, **Motor vehicle** (AUTO), or **Real estate** (MORTGAGE). The loan type determines which form sections appear. See [Loan Types](/omnia/los/loans/loan-types) for a full breakdown.
-
-    <Note>
-      The loan type is locked once the application is submitted. If you select the wrong type, you must abandon the draft and start a new application.
-    </Note>
+  <Step title="Choose the loan type and product">
+    **Loan type** is your credit union's own list; the product list filters to match. Each loan type maps to one of four kinds: Unsecured, Cash secured, Motor vehicle or Real estate. See [Loan types](/omnia/los/loans/loan-types).
   </Step>
-
-  <Step title="Select the loan product">
-    Choose the loan product that applies to this application. Products are configured by your credit union and determine the eligible amount range, term limits, and applicable rate tables.
+  <Step title="Check a quick estimate (optional)">
+    Enter an amount and term (and a vehicle year for a motor vehicle loan) for an indicative payment from the current rate table.
   </Step>
-
-  <Step title="Fill in Applicant Information">
-    Confirm or complete the applicant's personal details: name, date of birth, contact information, and address. The member record is the source of truth, so you confirm rather than re-enter, and encrypted identifiers such as TRN, driver's licence, and passport are never re-typed in plaintext here.
+  <Step title="Click Create draft application">
+    The draft is created with its Loan ID, for example MAIN-UNS-00001, and opens on the application page.
   </Step>
-
-  <Step title="Fill in Employment">
-    Enter the applicant's employment details: employment type (employed, self-employed, or pensioner), employment status (permanent, contract, or temporary), employer name, position held, length of employment, and gross monthly income. Employment type and employment status are scored as separate risk factors, so capture both. The platform uses this information to calculate risk and residual income.
-  </Step>
-
-  <Step title="Fill in Statement of Affairs">
-    Capture the applicant's income and monthly expenses.
-
-    **Income sources.** At least one is required; submission is rejected without one. Each income line carries an applicability percentage, so income that counts only partially toward affordability (a bonus counted at 50%, for example) is weighted accordingly.
-
-    **Monthly expenses.** List every outgoing under a category. The category dropdown covers Statutory Deductions, Pension, Existing Loan Payment, Other Payment, Property-Related, Utility / Household, Personal / Family, Transportation, and Other Expense. **Quick add** chips drop the common ones in with one click: Utility / Household, Transportation, Personal / Family, Existing Loan Payment, and Property-Related. Utility bills go under Utility / Household.
-
-    As you type, the section shows a live **Total income**, **Total expenses**, **Net monthly** (which turns red if it goes negative), and a **TDSR** percentage with a colour-coded band chip. Click **Save statement of affairs**. The platform uses these figures for the Total Debt Service Ratio (TDSR) and residual income.
-  </Step>
-
-  <Step title="Fill in Loan Purpose">
-    Enter the loan amount requested and the requested term in months. The amount and term must fall within the product's configured limits, which the platform enforces. A mortgage product can run up to 480 months; most products cap lower. Describe the purpose in free text and tag it with a purpose category, which the adjudication queue uses for filtering. Pick the preferred repayment method (standing order, payroll deduction, or direct debit); standing order is the default.
-  </Step>
-
-  <Step title="Fill in the collateral section (if applicable)">
-    Depending on the loan type you selected, an additional section appears.
-
-    - **Cash-Secured:** Pledge one to five accounts as security. You can mix types, for example shares plus a fixed deposit. Each account has a type (Cash / Shares, Fixed / Time Deposit, or Savings Hypothecation), its account number, and the amount held. The card shows the combined total and the most you can borrow against it. The requested loan cannot exceed 95% of the combined pledged cash; the platform warns you and blocks submit if it does.
-    - **Auto:** Enter the vehicle's make, model, year, VIN, engine number, and estimated valuation, plus optional mileage. Insurance is confirmed during the Securities review, not captured here.
-    - **Mortgage:** Enter the property type, address, estimated valuation, valuation date, security type (First Mortgage, Second Mortgage, Strata Title, or Other), and any registered mortgagees. Title and insurance are Securities-review concerns, not application fields.
-
-    This section does not appear for Unsecured loans.
-  </Step>
-
-  <Step title="Add guarantors (optional)">
-    If the application requires or benefits from a guarantor, click **Add Guarantor** and fill in the guarantor's personal, employment, and income details, along with their relationship to the applicant, which is required. You can add more than one guarantor.
-
-    Each guarantor has its own **Documents** block. Use the **ID**, **Income**, and **Employment** buttons to upload that guarantor's identification, proof of income, and employment letter. You can view a file or remove it later. The documents follow the loan, so the Adjudicator, Securities, and Disbursement reviewers see them downstream. Each upload runs the same checks as any member document: a 10 MB size cap, magic-byte type check, and virus scan.
-
-    <Tip>
-      You can add or remove guarantors, and upload or remove their documents, at any time while you are editing the application.
-    </Tip>
-  </Step>
-
-  <Step title="Set creditor-life insurance">
-    The application carries creditor-life cover by default. The **Creditor-life insurance** section lets you tune it for this loan.
-
-    - **This loan carries creditor-life cover** is the on/off toggle, on by default. Untick it for a loan with no cover.
-    - **Premium basis** is **Level (full sum, whole term)** or **Declining balance (reduces as repaid)**. Level is the default.
-    - **Sum insured** defaults to the requested principal. Set a different figure when the cover differs from the loan amount.
-    - **Manual total premium (optional)** lets you enter the whole-term premium directly. Leave it blank to use the actuarial table.
-
-    The section shows the **Estimated premium** three ways that reconcile: per month, per year, and the total over the loan term. The monthly figure leads, because it is the one added to the total monthly payment and counted in the affordability (TDSR) check. The figures recompute when you save. Click **Save insurance**. Insurance is editable only while the application is a DRAFT.
-  </Step>
-
-  <Step title="Review the fees that will apply">
-    The **Fees that will apply** card lists the standard fees for this loan: each fee with its **Amount**, its **GCT**, and its **Treatment** (deducted from proceeds, paid separately, or added to the loan), then the **Total fees + GCT** and the **Net to member** after deductions. It is estimated on the requested amount and is read-only here. The Disbursement officer finalises fees at funding. See [Fees, deductions, and GCT](/omnia/los/disbursement/fees-and-gct).
-  </Step>
-
-  <Step title="Review the auto-calculated figures">
-    Before submitting, review the figures the platform calculates automatically on the application page.
-
-    - **Risk Band** (R1 to R5): the band mapped from the sum of seven categorical factors (employment type, employment status, length of employment, TDSR, LTV, loan type, and credit history).
-    - **TDSR**: share of gross income going to all debt repayments.
-    - **LTV**: loan amount as a proportion of collateral value (secured loans only).
-    - **Monthly payment**: estimated repayment amount.
-    - **Mandatory shares**: the member equity required to hold the loan, shown as its own tile. The greater of JMD $2,000 or 15% of the loan amount.
-    - **Residual income**: take-home income remaining after all obligations.
-    - **Total monthly payment**: the loan repayment plus compulsory savings plus the creditor life premium.
-
-    These are estimates displayed during capture. The authoritative figures are confirmed at Adjudication.
-  </Step>
-
-  <Step title="Click Submit">
-    When you are satisfied that all sections are complete and the figures look correct, click **Submit**. The application status moves from DRAFT to SUBMITTED, and it is automatically placed in the Adjudication queue.
-  </Step>
-
 </Steps>
 
-<Warning>
-  If the member's KYC status is not exactly VERIFIED, submission is blocked. The platform stops the submission server-side rather than just hiding a button, so it holds even against a stale page. Complete KYC verification before attempting to submit.
-</Warning>
+<Frame caption="Pick the member first. Their branch and KYC state carry into the application, and KYC can be completed inline.">
+  <img src="/images/omnia/los/capture/new-loan.png" alt="New application form with member search, member context, loan type and product selectors and a quick estimate" />
+</Frame>
 
-<Note>
-  Your loan is assigned a unique Loan ID (for example, MDVL-UNS-00001) when the draft is created, which is the moment you pick the member, loan type, and product. This ID appears in the application header and in all subsequent notifications.
-</Note>
+## Capture the sections
 
----
+Most sections save automatically a moment after you stop typing. The footer reads "Saved automatically. Your entries go to adjudication when you submit." with a **Saving…**, **Saved** or **Not saved yet** status. Collateral sections (vehicle, property, each cash account) have their own save button. Every section is editable only while the application is a DRAFT.
 
-## Saving a draft
+The step bar at the top of a draft tracks progress. Each section folds to a one-line summary when you are not working in it.
 
-You do not need to complete all sections in a single session. Each section has its own save action, with labels like **Save loan parameters**, **Save statement of affairs**, **Save net worth**, **Save cash details**, **Save vehicle details**, and **Save insurance**. Save the section you are working on to preserve its contents. The application stays in DRAFT status, and you can return to it from the Loans list at any time. Saving is explicit: your progress is preserved when you save a section, so save before navigating away.
+### Loan parameters
 
----
+**Purpose**, **Requested amount** and **Term (months)**, all required. The amount and term must sit inside the product's limits; a value outside them is refused with the limit, for example "Above the maximum for CODE. The maximum is JMD 5,000,000."
 
-## Abandoning a draft
+If your workspace allows [product-limit exceptions](/omnia/los/workflows/approval-routes#product-limit-exceptions), an amount slightly above the maximum opens an **Exception reason** field instead of a refusal.
 
-If you started an application but decide not to proceed, use the **Abandon Draft** option from the application's action menu. The UI confirms with an "Abandon this draft?" dialog before flipping the status. Abandoning runs through the workflow engine and is gated by the `loans.edit` capability. The status changes to **DRAFT_ABANDONED**, the record is preserved in the audit trail, and the application is removed from your active drafts.
+The section also shows:
 
-An abandoned draft cannot be reopened or resubmitted. If you need to proceed with the same member, create a new application.
+- the live **Estimated monthly**, **Effective rate** (with the risk band it assumes), **Rate source**, and a plain sentence explaining the rate. "Indicative only. Same engine adjudication uses at decision time."
+- **Share requirements**: **Mandatory shares**, the fixed membership requirement every member holds, and **Minimum shares**, the loan-linked equity as a percentage of the loan set per loan type, or **Not required**.
+- **Rate override**, for holders of `loans.override` (Credit Manager and Administrator). Set a rate and a reason of 3 to 280 characters; the section then reads **Rate override active** with who set it. Officers without the capability see a note to ask their Credit Manager.
 
----
+### Income & expenses
 
-## Auto-calculated fields
+Income lines with their applicable share, monthly expenses with an after-loan amount for any debt this loan pays off, this loan's monthly payment, and the totals: **Total income**, **Total expenses**, **Money left over** and **TDSR**. At least one income line is required. The full rules and a worked example are on [Affordability and TDSR](/omnia/los/loans/affordability-and-tdsr).
 
-The platform calculates these figures and shows them as you capture the application.
+### Net worth
 
-| Field | How it's calculated |
+Assets (real estate, motor vehicle, furniture and household, savings and investments, life insurance cash value, other) and liabilities (other loans, credit cards, lines of credit, contingent and other liabilities). The approver reads it alongside the TDSR.
+
+### Guarantors
+
+Optional for every loan type. **Add Guarantor** and capture their personal, contact, employment and income details and their relationship to the applicant. Each guarantor has a **Documents** block with **ID**, **Income** and **Employment** uploads (10 MB, magic-byte check, virus scan). The documents follow the loan to every later stage.
+
+### Collateral
+
+Shown for secured loans only.
+
+- **Cash secured**: pledge one to five accounts. Each is **Cash / Shares**, **Fixed / Time Deposit**, **Savings Hypothecation** or **Funds held at another institution**, with its account number and the amount held. The card sums them and shows the most you can borrow: 97% of the combined total, or 95% when any of it is held at another institution.
+- **Motor vehicle**: make, model, year, VIN or chassis number, engine number, colour, registration number, insurer and policy number, valuation amount, forced sale value, valuator name, valuation date and source. Click **Save vehicle details**.
+- **Real estate**: property type, address, parish, volume and folio or title deed number, registered mortgagees, insurer and peril insurance, valuation, forced sale value, valuator and valuation date. Click **Save property details**.
+
+### Creditor-life insurance and fees
+
+Creditor life is on by default except on cash-secured loans. Choose **Lives covered** and **Premium payment** (Annually or In full); the payment choice is required before submission. The **Fees & charges** card lists your schedule's fees for this loan, and you can edit an amount, choose how each fee is collected, and add others. Both are explained on [Fees and creditor life at capture](/omnia/los/loans/fees-and-insurance-at-capture).
+
+### Escrow shares
+
+Shown only when the product requires escrow shares: the months of this loan's payment the member holds in shares as security. You can override the months (0 to 6) for this loan, or enter the member's savings percentage where the product varies the months by savings tier.
+
+### Credit rating & risk registry
+
+The external credit rating from a credit report (Very low risk to Very high risk), an optional credit score and report source, and the **Risk Registry check** (Clear, Adverse listing found, or Not checked). The rating feeds the risk band's credit history factor at submission; not captured counts as Average risk.
+
+### Officer recommendation
+
+Your note to the approver and the **approval level** your branch policy recommends: Branch Manager, Credit Manager, Credit Committee or Board. Approvers see both. It is advice; the approval route decides who approves.
+
+## Submit
+
+When nothing is outstanding, the footer reads **Ready to submit**. Otherwise it reads **Almost there** and lists every item still outstanding, for example "2 items outstanding before this can be submitted: at least one income line, identity verification for Jane Demo (KYC in progress)." Identity verification is listed last because you complete it on the member's record, not on this page.
+
+Click **Submit application**. On success a message confirms the loan is now in the approval queue and names who was notified.
+
+### Why a submission is refused
+
+The platform checks everything again on the server, so a stale page cannot slip past. Each refusal names its cause and the fix.
+
+| Cause | Message |
 |---|---|
-| **Risk Band (R1 to R5)** | The band mapped from the sum of seven categorical factors: employment type, employment status, length of employment, TDSR, LTV, loan type, and credit history. R1 is the lowest risk; R5 is the highest. |
-| **TDSR** | Total monthly debt payments divided by total applicable income. Includes the proposed new loan repayment. |
-| **LTV** | Requested loan amount divided by collateral value. Applies to Cash-Secured, Auto, and Mortgage loans only. |
-| **Monthly payment** | Calculated using the applicable rate from the loan product's rate table and the requested term. |
-| **Residual income** | Gross monthly income minus all monthly obligations (existing debts plus new loan payment plus living expenses). |
-| **Mandatory shares** | The required member-equity share purchase: the greater of JMD $2,000 or 15% of the loan amount. |
-| **Compulsory savings** | A savings contribution added to the monthly payment: the greater of JMD $2,000 or 5% of the monthly loan amortization payment. |
-| **Creditor life premium** | An insurance premium. Drawn from a per-thousand-per-year table keyed by the applicant's age by default, or from the sum insured, basis, and manual override you set in the Insurance section. |
-| **Total monthly payment** | The loan repayment plus compulsory savings plus the creditor life premium. |
+| KYC not exactly VERIFIED | "Identity verification for FIRST LAST is waiting on manual review. It must be completed on the member's record before this application can be submitted." (or *not started*, *in progress*, *failed*) |
+| Member not ACTIVE | "This member is not active. Reactivate the member before submitting." |
+| Creditor life payment not chosen | "Choose how the creditor life premium will be paid (annually or in full) in the Creditor-life insurance section before submitting." |
+| No income line | "Statement of affairs is empty. Capture at least one income line before submitting." |
+| Required fields missing | "Complete these fields before submitting. Loan: Purpose. Guarantor Jane Demo: TRN, Phone. Motor vehicle: Valuator name." |
+| Collateral not captured | "Cash-secured loans require at least one captured cash security record." (likewise for a vehicle or property record) |
+| Cash-secured advance limit | "Cash-secured loans can't exceed 97% of the pledged cash. The most you can borrow against this collateral is AMOUNT. Lower the amount or pledge more cash." With funds held elsewhere it reads 95% and adds "(95% applies because part of the security is held at another institution)". |
 
-When you submit, the platform persists the risk band, the integer score, the policy flags, the engine version, and a snapshot of the inputs on the risk assessment record. The other figures above are estimates shown during capture, not separate stored fields on that record. The Adjudicator reviews them when making a decision.
+<Frame caption="Until every required field is filled, Submit stays disabled and the card names each missing field, grouped by the loan, each guarantor and each security record.">
+  <img src="/images/omnia/los/capture/submit-blocked.png" alt="Almost there card listing missing loan, guarantor and motor vehicle fields above a disabled Submit application button" />
+</Frame>
+
+### The required-fields policy
+
+Your workspace can require more than the platform's minimum. A **required-fields policy**, set up with CompuZign, names the fields that must be complete before submission:
+
+- **the loan**: purpose, amount, term, at least one income line, at least one expense line, credit rating level, credit score, report source, Risk Registry status, the officer recommendation;
+- **each guarantor**: name, relationship, date of birth, TRN, driver's licence, phone, email, address, credit union account number, employment, industry sector, salary frequency, existing commitments, other guarantees held;
+- **each vehicle**: make, model, year, VIN, engine number, colour, registration, insurer, policy number, forced sale value, valuator, valuation amount, date and source;
+- **each property**: address, parish, volume and folio or title deed number, registered mortgagees, insurer, policy number, peril insurance, forced sale value, valuator, valuation amount, date and source;
+- **each cash security**: pledged amount, source account number, source of funds, hypothecation note.
+
+Which of these your workspace requires is its own policy. A field can also be conditional, for example required only when another field is filled. With no policy, only the platform's own checks apply. The same policy governs [member records](/omnia/los/members/creating-members#required-fields).
+
+## After submission
+
+Every section locks. The risk band is assessed and appears in the **Risk rating** section. If the approver requests more information, the application comes back to DRAFT with their conditions, and you edit and resubmit.
+
+## Abandon a draft
+
+**Abandon draft** asks "Abandon this draft?" and moves the application to DRAFT_ABANDONED. It stays on file and cannot be revived. To change the product or kind of loan instead, use [Change loan type / product](/omnia/los/loans/changing-loan-type).
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Do I need to click Save?">
+    Not for most sections. They save automatically and show **Saved**. Vehicle, property and cash accounts have their own save buttons.
+  </Accordion>
+  <Accordion title="Why is Submit greyed out?">
+    Something is outstanding. The footer lists every item. If the only item is identity verification, finish KYC on the member's record and come back.
+  </Accordion>
+  <Accordion title="I verified the member's documents. Why does it still say identity verification?">
+    Checking the documents is not the same as completing verification. Record the verification on the member's KYC page so their status becomes VERIFIED.
+  </Accordion>
+  <Accordion title="I picked the wrong product. Do I have to start again?">
+    No. Use **Change loan type / product** on the draft.
+  </Accordion>
+  <Accordion title="Why was my amount refused?">
+    It is outside the product's limits. Lower it, or record an exception reason if your workspace allows product-limit exceptions and the amount is inside the margin.
+  </Accordion>
+  <Accordion title="Can I change the rate?">
+    Only with `loans.override`, which the Credit Manager and Administrator hold. Ask them to set an override on the draft.
+  </Accordion>
+  <Accordion title="Where do I put a bonus?">
+    On a **Performance-Based Pay** income line. It counts at 50% toward affordability.
+  </Accordion>
+</AccordionGroup>

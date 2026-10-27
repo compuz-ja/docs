@@ -121,3 +121,40 @@ When you delete a document, it is marked as removed and hidden from the standard
 To delete a document, open the Documents page, find the document you want to remove, and click the **trash icon** on that row. The icon is visible only to actors with the delete capability. You are prompted to confirm, and a reason is **required**, at least three characters.
 
 Deleted documents stay visible to anyone who holds the delete capability, so they can audit what was removed; a "show deleted" toggle on the page brings them back into view. They are hidden from everyone else.
+
+---
+
+## Documents kept on the loan instead
+
+Some files belong to one loan rather than to the member, so they are uploaded on the loan page and follow that loan through every stage. They do not appear in the member's library.
+
+| Document | Where it is uploaded | Who can upload | Who can view |
+|---|---|---|---|
+| Guarantor ID, income and employment documents | **Guarantors** section, each guarantor's **Documents** block | `loans.guarantors.documents.upload`: Credit Officer, Securities, Administrator | `loans.guarantors.documents.view`: Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Administrator |
+| Security documents (hypothecation, insurance assignment, other) | **Collateral** section | `loans.security.documents.upload`: Credit Officer, Securities, Administrator | `loans.security.documents.view`: the same reviewer roles |
+| Waiver supporting file | **Approval route** card, with the waiver request | Anyone who can request a waiver | Approvers on the loan |
+| Credit Committee proof of approval | **Record decision**, on the Credit Committee route | The Credit Committee recorder | Approvers on the loan |
+
+Guarantor and security documents run the same checks as member documents: 10 MB per file, a magic-byte content check and a virus scan. A waiver file or Credit Committee proof is a PDF, PNG or JPEG.
+
+When a draft is [changed to a different kind of loan](/omnia/los/loans/changing-loan-type), guarantor documents stay on the abandoned draft. Upload them again on the new one.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is the guarantor's ID not in the member's documents?">
+    Guarantor documents belong to the loan, not to the borrower. Open the loan and look in the Guarantors section.
+  </Accordion>
+  <Accordion title="Can I upload a Word document?">
+    Not from this page. The upload card accepts PDF, JPEG, PNG, HEIC and WebP.
+  </Accordion>
+  <Accordion title="Is a deleted document gone for good?">
+    No. It is hidden and kept for audit, and a holder of `members.documents.delete` can restore it until its file is purged at the end of its retention period.
+  </Accordion>
+  <Accordion title="Why was my upload rejected as an unsupported file type?">
+    The platform checks the file's content, not its name. A file whose content does not match an accepted format is rejected even if its extension looks right.
+  </Accordion>
+  <Accordion title="How many files can I upload at once?">
+    Up to 25 in one batch, each up to 10 MB.
+  </Accordion>
+</AccordionGroup>

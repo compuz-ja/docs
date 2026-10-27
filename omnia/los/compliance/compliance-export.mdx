@@ -11,7 +11,7 @@ The Loan Origination System generates a self-contained, cryptographically-signed
 
 Generating a compliance export bundle requires the `reports.view` capability. The seeded **Administrator**, **Credit Manager**, and **Branch Manager** roles all carry it, so any of the three can generate a bundle. The export action checks `reports.view`, then re-validates the filter input with a Zod schema before the bundle runs, so a request cannot smuggle a cross-workspace or malformed filter past the gate.
 
-There is a separate `audit.export` capability that the platform reserves for the **Administrator** role as a compliance privilege, but it only controls whether the **Audit log** link appears in the navigation. It does not gate the export itself. A Credit Manager or Branch Manager does not see the nav link and reaches the audit trail at `/admin/audit-viewer` directly, where `reports.view` enables both the view and the export.
+There is a separate `audit.export` capability that the platform reserves for the **Administrator** role as a compliance privilege. It does not gate the export, and it no longer decides who sees the **Audit Log** link: the link shows to everyone the audit trail page admits.
 
 <Note>
   Do not confuse the compliance export bundle with the [quick CSV or JSON export](/omnia/los/compliance/audit-trail#quick-csv-or-json-export) on the same page. The quick export is a fast, unsigned download of up to 1,000 rows for internal work. The compliance bundle described here is the signed, hash-chained, immutably-stored archive that a regulator can verify offline.
@@ -20,8 +20,8 @@ There is a separate `audit.export` capability that the platform reserves for the
 ## How to generate an export bundle
 
 <Steps>
-  <Step title="Open the Audit log">
-    In the navigation, under **Administration**, click **Audit log**. The page header reads **Audit trail**. If you do not see the nav link, you hold `reports.view` but not `audit.export`; open `/admin/audit-viewer` directly.
+  <Step title="Open the Audit Log">
+    In the sidebar, under **Administration**, click **Audit Log**. The page header reads **Audit trail**.
   </Step>
   <Step title="Filter to the records you need">
     Use the filter bar to narrow the audit records to the time range and scope you want to export. For a BoJ examination of loan decisions, you might filter by:

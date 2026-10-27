@@ -138,6 +138,18 @@
                 ]
               },
               {
+                "group": "Finding your way",
+                "icon": "compass",
+                "expanded": true,
+                "pages": [
+                  "omnia/los/navigation/finding-your-work",
+                  "omnia/los/navigation/the-loan-page",
+                  "omnia/los/navigation/alerts-and-email",
+                  "omnia/los/workflows/notifications",
+                  "omnia/los/navigation/getting-help"
+                ]
+              },
+              {
                 "group": "Account & access",
                 "icon": "shield-check",
                 "pages": [
@@ -166,8 +178,12 @@
                 "pages": [
                   "omnia/los/loans/overview",
                   "omnia/los/loans/creating-an-application",
+                  "omnia/los/loans/affordability-and-tdsr",
+                  "omnia/los/loans/fees-and-insurance-at-capture",
+                  "omnia/los/loans/changing-loan-type",
                   "omnia/los/loans/loan-assignment",
                   "omnia/los/loans/loan-types",
+                  "omnia/los/loans/confidential-and-staff-loans",
                   "omnia/los/loans/workflow-states",
                   "omnia/los/loans/loan-agreements"
                 ]
@@ -181,10 +197,11 @@
                 ]
               },
               {
-                "group": "Adjudication & securities",
+                "group": "Credit approvals & securities",
                 "icon": "gavel",
                 "pages": [
                   "omnia/los/workflows/adjudication",
+                  "omnia/los/workflows/approval-routes",
                   "omnia/los/workflows/securities"
                 ]
               },
@@ -206,14 +223,9 @@
                 "pages": [
                   "omnia/los/legal-documents/overview",
                   "omnia/los/legal-documents/signing",
+                  "omnia/los/legal-documents/disbursement-sheet",
+                  "omnia/los/legal-documents/correcting-documents",
                   "omnia/los/legal-documents/templates"
-                ]
-              },
-              {
-                "group": "Notifications",
-                "icon": "bell",
-                "pages": [
-                  "omnia/los/workflows/notifications"
                 ]
               },
               {

@@ -17,6 +17,8 @@ The approver must be a **different** user from the officer who scheduled the dis
 
 Approval is gated by the `disbursements.approve` capability. The **Credit Manager** role holds it. The **Disbursement** role does **not** hold it. That separation is deliberate: the Disbursement team makes the disbursement, and a different role, the Credit Manager, checks it.
 
+The document behind the release has its own, separate check: the Loan Disbursement Sheet's **Checked by** signer cannot be the officer who prepared the sheet. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet#the-checker-rules).
+
 Every approve or reject records a required rationale on an immutable `DisbursementApproval` row, alongside the amount snapshot and the deciding user. An empty rationale is refused.
 
 The audit events are exact: `disbursement.approval.requested`, `disbursement.approval.approved`, and `disbursement.approval.rejected`. A rejected disbursement cannot be released.
@@ -70,4 +72,6 @@ Auto-disbursement is consulted at schedule time, before screening has run, so th
 
 ## Configuring the controls
 
-The thresholds, flags, and per-officer limits are set by the `admin.disbursement.config` capability, which the **Credit Manager** role holds. The `tenant.disbursement_config.updated` event is registered for the config-change path. No in-app config editor ships yet, so today these values are set out of band and that event is not emitted.
+The `admin.disbursement.config` capability, held by the **Credit Manager**, is reserved for changing these settings, but no in-app editor ships yet. Today your CompuZign team sets the thresholds and flags for your workspace, so the `tenant.disbursement_config.updated` event is registered but not yet emitted.
+
+Each officer's personal ceiling shows in the hover card on **Administration → Users & Roles** as **Disb. ceiling**, or **No personal limit**. It is a ceiling on a single disbursement, not an approval limit.

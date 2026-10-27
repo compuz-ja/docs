@@ -11,7 +11,7 @@ A loan type pairs a name your team recognizes, such as "Civil Servant Auto," wit
 
 **Required role:** Administrator or Credit Manager (`loans.types.manage` capability). Viewing the list requires `loans.types.read`.
 
-To manage loan types, navigate to `/{tenantSlug}/admin/loan-types`. For example, `https://loan.compuzign.com/your-slug/admin/loan-types`.
+To manage loan types, open **Administration → Loan Types**, or navigate to `/{tenantSlug}/admin/loan-types`. Rest the pointer on a type's name to see its code, security basis, and product count in a hover card. For example, `https://loan.compuzign.com/your-slug/admin/loan-types`.
 
 <Note>
   This is the admin page for configuring loan types. For an explanation of what
@@ -91,6 +91,15 @@ To update an existing loan type:
 3. Update the code, name, sort order, or description, then click **Save changes**.
 
 Editing records a `loan_type.updated` audit event. The security basis is shown read-only and cannot be changed. If you also hold a products-catalog capability (`loans.products.read` or `loans.products.manage`), the edit page lists the loan products tagged to this type, each with its application count and rate source. If you hold `loans.products.manage`, you can create and archive products for this type right there, so the edit page doubles as where you manage that type's products.
+
+## Documents attached to a loan type
+
+The loan type's edit page has a **Required documents** panel for the legal documents its loans can carry.
+
+- **Always required** lists the documents the security basis always needs, read-only: the Personal Credit Consent and the Loan Disbursement Sheet on every loan, the NSIPP Security Agreement on Motor vehicle, and the Mortgage Deed and Insurance Assignment on Real estate. The Declaration of Purpose (net under J$1,000,000) and a Guarantee per guarantor are added automatically when they apply.
+- **Add document** makes another form available for this type. Pick the **Document** and the stage it **Blocks at**: Securities or Disbursement. The Guarantee & Indemnity cannot be added here, because it is always per guarantor.
+
+An added document is optional. On each loan it shows with a **Require for this loan** checkbox, and it blocks nothing until a case worker ticks it. Once ticked, it holds the loan at its stage until it is signed. Adding and removing documents needs `documents.templates.manage`, held by the Administrator and Credit Manager. See [Legal documents](/omnia/los/legal-documents/overview#optional-documents-per-loan-type).
 
 ## Archiving and restoring a loan type
 

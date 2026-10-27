@@ -7,6 +7,8 @@ icon: "bell"
 
 The platform sends email automatically at major loan lifecycle events. Notifications are scoped to the person responsible for the file. If a loan is assigned to a specific staff member, only that person is notified. If the loan has no owner yet, the event fans out to everyone who holds the stage capability for that stage (`loans.adjudicate`, `securities.review`, or `loans.disburse`).
 
+Every email sent to a staff member also lands as an alert in the bell in the top bar. The bell, the weekday morning summary email and Teams channel posts are covered in [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email). This page is the full routing reference for the event emails.
+
 ## How routing works
 
 <CardGroup cols={3}>
@@ -42,6 +44,16 @@ The platform sends email automatically at major loan lifecycle events. Notificat
 | Disbursement executed | Credit Officer, plus the member if member emails are enabled (the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, off by default) |
 | Loan filed | Credit Officer (see [Loan filed routing](#loan-filed-routing)) |
 | Loan cancelled | Assigned owner and Credit Officer when the file has an owner. Unassigned, the fan-out depends on where it was cancelled: an early-stage cancel (SUBMITTED) goes to the Adjudicators, a late-stage cancel (DISBURSEMENT) goes to the Credit Officer plus the Adjudicators plus the Securities team, so every team that touched the file knows it closed |
+
+## Confidential loans
+
+A confidential loan narrows every team fan-out. When a loan is marked confidential, a team email goes only to staff whose role holds the stage capability **and** `loans.read.confidential`. The assigned owner and the Credit Officer who captured the loan are named individuals and are still notified. Staff who cannot see the loan on screen are not told about it by email, and the loan is never posted to a Teams channel.
+
+The confidential flag is read from the loan as it was captured, not from the member's current record, so a notification follows the rules that applied when the loan was taken.
+
+## The link in every email
+
+Every staff email carries a **View loan & current stage** button that opens the loan in your workspace, where the [next-step banner](/omnia/los/navigation/the-loan-page#the-next-step-banner) shows who holds it and what is stopping it.
 
 ## Member notifications
 
@@ -89,5 +101,5 @@ The fan-out for **Loan filed** is not driven by whether the loan is assigned. It
 - **Scoped notifications off.** The legacy wider fan-out is restored: the Credit Officer, all Credit Manager (`reports.view`) holders, and the Branch Managers whose branch matches the loan's branch (via `loans.read.branch`). Branch Managers at other branches are never included.
 
 <Tip>
-If you are not getting notifications you expect, check two things. First, confirm with your Administrator that your role is configured with the right capabilities. Second, check whether the loan is assigned to someone else. If it is, that person is the only one receiving stage notifications for that file.
+If you are not getting notifications you expect, check three things. First, confirm with your Administrator that your role is configured with the right capabilities. Second, check whether the loan is assigned to someone else. If it is, that person is the only one receiving stage notifications for that file. Third, check whether the loan is confidential and your role does not hold `loans.read.confidential`. After any loan action, the confirmation message on screen names every colleague who was emailed, so you can see the routing for yourself.
 </Tip>

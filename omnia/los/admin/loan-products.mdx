@@ -5,13 +5,17 @@ description: "Create, edit, and archive the loan products your credit union offe
 icon: "file-text"
 ---
 
-A loan product is a lending offering your credit union makes available to members: its code, loan type, rate source, and amount and term limits.
+A loan product is a lending offering your credit union makes available to members: its code, loan type, rate source, amount and term limits, and the rest of its product sheet.
 
 Credit Officers see only active products when creating a new loan application, so keeping your product list accurate directly affects what your team can originate. As a **Credit Manager** or **Administrator** you can create new products, update their parameters, or archive discontinued ones.
 
 **Required role:** Credit Manager or Administrator (`loans.products.manage` capability). Viewing the product catalog and the new-application dropdown requires `loans.products.read` (read-only; the New, Edit, and Archive controls need `loans.products.manage`).
 
 To access the product catalog, navigate to **Administration → Products**.
+
+<Frame caption="Each row shows the product's code, loan type, rate source, amount and term range, and how many applications have used it.">
+  <img src="/images/omnia/los/admin/loan-products.png" alt="The Products page listing several demonstration loan products with their codes, loan types and rate sources" />
+</Frame>
 
 <Note>
   Create your loan types first. A product is built on top of a workspace-defined
@@ -41,7 +45,7 @@ Each loan product is defined by these fields:
 | **Rate source** | How the interest rate is calculated for this product: FLAT, RISK_BAND, COLLATERAL_TYPE, or VEHICLE_AGE. See [Rate Tables](/omnia/los/admin/rate-tables) for details |
 | **Default rate** | For FLAT products, the fixed annual interest rate as a percentage such as `12.00` (0 to 100 percent). Not used for RISK_BAND, COLLATERAL_TYPE, or VEHICLE_AGE products, where the rate is looked up from your rate table at approval time |
 | **Minimum amount** | The lowest loan amount a Credit Officer can request for this product. Non-negative |
-| **Maximum amount** | The highest loan amount a Credit Officer can request for this product. Non-negative |
+| **Maximum amount** | The highest loan amount a Credit Officer can request for this product. Non-negative. When your workspace allows product-limit exceptions, an amount a set margin above the maximum can be kept with a reason and goes to the named approver; beyond the margin it is refused. See [Approval routes](/omnia/los/workflows/approval-routes#product-limit-exceptions) |
 | **Minimum term** | The shortest repayment period, 1 to 480 months |
 | **Maximum term** | The longest repayment period, 1 to 480 months |
 | **Description** | Optional. An internal note kept on the product record; not currently surfaced on the New Loan dropdown |
@@ -56,16 +60,18 @@ Beyond the basics above, each product carries the rest of its product sheet. The
 | **Repayment method** | How the loan is repaid: Salary deduction, Over-the-counter payment, Automatic transfer, or Standing order. Tap all that apply. Recorded on the product sheet and shown to staff at capture |
 | **Repayment frequency** | How often a repayment falls due: Weekly, Fortnightly, or Monthly. Reference information; the schedule is still calculated as a monthly-blended payment |
 | **Minimum shares** | The share equity a member must hold for this product, as a percentage of the loan. When set, it overrides the loan type's minimum-shares rate for this product only, so two products under the same loan type can differ. Leave it blank to inherit the loan type's rate |
-| **Compulsory savings** | The product's stated compulsory-savings minimum, for example JMD 2,000. Recorded for reference |
-| **Approvals required** | How many approvers a loan on this product needs, for example 2 for approval by two adjudicators. Shown to Adjudication as policy guidance |
+| **Compulsory savings** | The product's compulsory-savings minimum per month, for example JMD 2,500. When set, it is the floor the platform applies: the monthly compulsory savings is the greater of this minimum and 5% of the monthly loan payment, in the affordability check at submission and on the signed loan agreement. Leave it blank to use the platform default of JMD 2,000 |
+| **Approvals required** | How many approvers a loan on this product needs, for example 2 for approval by two approvers. Shown to Credit Approvals as policy guidance; the binding approval rules come from your workspace's approval routing |
 | **Applicable fees** | The fees that apply to this product. See "Setting fees per product" below |
 | **Required supporting documents** | A checklist of the documents this product needs from the member, such as a job letter, recent payslips, or a valuation report. See "Required supporting documents" below |
 | **Product specifications** | Free-form rows (a label and its details) for anything else on the product sheet: loan purpose, target market, special terms, risk notes, and so on. Descriptive only |
 
 <Note>
-  The repayment, approvals, compulsory-savings, and specifications settings are
-  recorded as product-sheet information. They are shown to staff on the loan;
-  they do not change how a loan is priced or how the workflow gates.
+  The repayment, approvals-required, and specifications settings are recorded
+  as product-sheet information. They are shown to staff on the loan; they do
+  not change how a loan is priced or how the workflow gates. Compulsory
+  savings is different: it changes the monthly obligation, even though the
+  form's hint still calls it a reference value.
 </Note>
 
 ### Setting fees per product
@@ -78,7 +84,7 @@ By default a product uses the fees configured for its loan type on the [Fees](/o
 
 When a product has one or more fee rows, those rows are its fee set. When it has none, the product falls back to the fees configured for its loan type, exactly as before. New fees themselves are still created on the [Fees](/omnia/los/admin/fee-schedule) page, where each fee also carries its GL account and tax treatment; the product form only chooses which of those apply and at what amount.
 
-At disbursement, the Credit Officer sees these product fees pre-filled and can still edit or waive them per loan.
+On the loan, the Credit Officer sees these product fees at capture and can edit a fee's amount for that one loan while it is a draft. At disbursement, the Disbursement officer starts from the officer's figures and can still edit or waive them. See [Fees, deductions, and GCT](/omnia/los/disbursement/fees-and-gct#where-the-starting-figures-come-from).
 
 ### Required supporting documents
 
@@ -199,5 +205,5 @@ The product becomes active again and reappears in the new loan application dropd
 |---|---|---|
 | **FLAT** | Simple fixed-rate products | The rate you enter on the product is applied to every loan |
 | **RISK_BAND** | Unsecured and mortgage loans | Looked up from your rate table based on the borrower's R1 to R5 risk band. Mortgage products read a separate real-estate band table |
-| **COLLATERAL_TYPE** | Cash secured and collateral-rated loans | Looked up based on the collateral type (Vehicle, Shares, Cash hypothecation, Property) |
+| **COLLATERAL_TYPE** | Cash secured and collateral-rated loans | Looked up based on the collateral type (Vehicle, Shares, Cash hypothecation, Funds held externally, Property). A loan pledging several cash accounts is priced at its highest cash tier |
 | **VEHICLE_AGE** | Auto loans | Looked up based on the vehicle's age in years |
