@@ -1,0 +1,188 @@
+---
+title: "Find the work waiting for you"
+sidebarTitle: "Finding your work"
+description: "The menu shows a live count beside every queue you can open, and Waiting for you lists the loans that are your next action, oldest first."
+icon: "compass"
+---
+
+The Loan Origination System tells you what is waiting before you go looking for it. Every queue in the left menu carries a live count. The **Waiting for you** list on your dashboard names the exact loans that are your next action, oldest first. You do not need to open each queue to find out whether it has work in it.
+
+## The menu and its counts
+
+The left menu groups pages into **Workspace**, **Review Queue** and **Administration**. A number appears beside a queue whenever something is in it. Nothing is shown for an empty queue.
+
+<Frame caption="Counts sit to the right of each queue. Amber marks a queue whose oldest loan has waited more than 24 hours; here all three have.">
+  <img src="/images/omnia/los/nav/sidebar-queue-counts.png" alt="Left menu with amber counts of 7, 2 and 2 beside Credit Approvals, Securities and Disbursement" />
+</Frame>
+
+| Menu item | What the count is | Who sees it |
+|---|---|---|
+| **Credit Approvals** | Loans that are Submitted, in Approval, or with Info requested | Holders of `loans.adjudicate` or `reports.view` |
+| **Securities** | Open security requests, waiting on either the Credit Officer or the Securities team | Holders of `securities.review` or `reports.view` |
+| **Disbursement** | Loans waiting to be scheduled or paid out | Holders of `loans.disburse` or `reports.view` |
+| **KYC Review** | Identity checks that are pending review or in progress | Holders of `members.kyc.review` or `workflows.read` |
+| **Returned to Me** (under **Loans**) | Loans you captured that came back to you | Holders of `loans.create` |
+
+Each count is the same number the queue page shows on its default tab. The menu reads the queue through the page's own query, so the two never disagree.
+
+With the built-in roles, that works out as follows:
+
+- **Credit Officer** sees **Returned to Me** and **KYC Review**.
+- **Adjudicator** sees **Credit Approvals** and **KYC Review**.
+- **Securities** sees **Securities** and **KYC Review**.
+- **Disbursement** sees **Disbursement** and **KYC Review**.
+- **Credit Manager**, **Branch Manager** and **Administrator** see **Credit Approvals**, **Securities**, **Disbursement** and **KYC Review**. The Administrator also sees **Returned to Me**.
+
+If your Administrator has changed a role's capabilities, the counts follow the capabilities, not the role name.
+
+### Why a count turns amber
+
+A count turns **amber** when the oldest item in that queue has waited more than **24 hours**. The colour is about the oldest item, not the total. A queue with one loan that arrived yesterday morning is amber. A queue with twelve loans that all arrived this morning is not.
+
+Hover a count to see the detail, for example "4 waiting · oldest waiting 1d 3h".
+
+The clock each queue uses:
+
+| Queue | Waiting since |
+|---|---|
+| Credit Approvals | When the loan was submitted |
+| Securities | When the security request was raised |
+| Disbursement | When the loan was last updated |
+| KYC Review | When the review was opened |
+| Returned to Me | When the loan came back to you |
+
+### How fresh the counts are
+
+Counts refresh every **60 seconds** while the page is open in front of you, and again the moment you come back to the tab. A count is capped at **99+** so the menu never widens.
+
+Your capabilities are checked again on every refresh. If your Administrator changes your role, the counts you can see change within a minute.
+
+When you collapse the menu to icons only, a small dot on the queue icon replaces the number. It is amber under the same 24-hour rule.
+
+### Returned to Me
+
+**Returned to Me** is the Credit Officer's queue. It counts the loans you captured that are back with you:
+
+- the Adjudicator asked for more information (**Info requested**), or
+- the loan was sent back to **Draft** after it had been submitted.
+
+A draft you have never submitted does not count. Click **Returned to Me** to jump to the Waiting for you list on your dashboard, where each returned loan is listed.
+
+<Frame caption="Returned to Me sits under Loans and counts the loans that came back to you.">
+  <img src="/images/omnia/los/nav/sidebar-returned-to-me.png" alt="The Loans section of the left menu expanded, with a count beside Returned to Me" />
+</Frame>
+
+## Waiting for you
+
+**Waiting for you** is the first thing on your **Overview** dashboard, the page you land on after you sign in. It lists the loans that are your next action, oldest first, so the loan that has waited longest is always at the top.
+
+<Frame caption="Each row shows the loan ID, the member, the queue, whether it is yours or unassigned, the amount and how long it has waited.">
+  <img src="/images/omnia/los/nav/waiting-for-you.png" alt="Waiting for you panel listing five loans with loan IDs, member names, Credit Approvals as the queue, amounts in JMD and waiting times" />
+</Frame>
+
+Each row shows:
+
+- the **loan ID** and the **member's name**,
+- the **queue** it is in (Credit Approvals, Securities, Disbursement, or Returned to you),
+- **Yours** if the loan is assigned to you, or **Unassigned** if it is free to pick up,
+- the **amount** in JMD,
+- the **time in this queue**, in amber once it passes 24 hours.
+
+Click a row to open the loan at the right screen for your step. The header says how many are waiting: "3 waiting · oldest first", or "Oldest 10 of 14" when there are more than the ten the panel shows. When nothing is waiting it reads **All clear**.
+
+### What counts as waiting for you
+
+A loan is on your list when it is assigned to you, or when it is unassigned in a queue you work. The rules per queue:
+
+| Queue | On your list when |
+|---|---|
+| **Credit Approvals** | The loan is Submitted or in Approval, and it is assigned to you, or it is unassigned and your role can approve it on its own |
+| **Securities** | A Credit Officer has sent security documents for review, and the loan is assigned to you or unassigned |
+| **Disbursement** | The loan is waiting for the Disbursement team, and it is assigned to you or unassigned |
+| **Returned to you** | You captured the loan and it is in Info requested, or it was sent back to Draft after a submit |
+
+The panel appears for anyone who works a queue or captures loans: holders of `loans.adjudicate`, `securities.review`, `loans.disburse` or `loans.create`. Oversight roles like the Credit Manager and Branch Manager see the **Action queues** tiles further down the dashboard instead.
+
+### Approval limits narrow the list
+
+An unassigned loan in Credit Approvals only appears on your list if your role can approve it **on its own**, under your credit union's approval authority schedule. A loan above your role's limit is not your next action, so it stays off your list. The same rule decides who can claim the loan, so the list never offers you a loan you cannot take.
+
+A loan that is **assigned to you** always appears, whatever its amount.
+
+## My Work
+
+**My Work** is your personal dashboard. Open it from **Dashboards** then **My Work**. Every number on it is yours alone: the page reads only the signed-in person's work, never anyone else's.
+
+<Frame caption="My Work opens with the same Waiting for you list, then your own totals for the selected period.">
+  <img src="/images/omnia/los/nav/my-work.png" alt="My Work page with a Waiting for you list at the top and tiles for work on your plate, pipeline value, average cycle time and loans touched" />
+</Frame>
+
+The page shows:
+
+- **Waiting for you**, the same list as on the Overview dashboard.
+- **On your plate** (or **Needs your action** for a Credit Officer), with the age of the oldest item.
+- **Pipeline value**, the requested amount of the loans on your plate.
+- **Avg cycle time**, from claim to completion.
+- **Touched**, the loans you worked on in the period.
+- **Completed**, shaped to your role. A Credit Officer sees **Submitted** and **Funded**. An Adjudicator sees **Approved**, **Declined** and **Info requested**. Securities sees **Resolved**. Disbursement sees **Disbursed** with the net amount.
+- **Returned to you**, the loans that bounced back to you in the period.
+
+Pick **week**, **month** or **quarter** at the top right. The default is a week. Waiting for you and On your plate always show the present moment; the other tiles follow the period.
+
+## The Overview dashboard
+
+The **Overview** dashboard at `/your-slug/dashboard` is where you land after you sign in. From top to bottom:
+
+1. **Waiting for you**, if you work a queue or capture loans.
+2. **Trends over time** for the loans you can read.
+3. **Action queues**: one tile per queue you can open, with its count. For a Branch Manager these counts cover your branch only, and the header says so.
+4. **In-progress loans**: the loans in the active pipeline.
+5. **Loans** with quick filters, and **Recent activity**.
+
+Every dashboard you can open, and the ones your role does not reach, are listed under **Dashboards** then **All Dashboards**.
+
+## The top bar
+
+The bar across the top of every page holds search, help and your account.
+
+<Frame caption="From left to right: search, Docs, Changelog, Support, the notification bell, your role, and your avatar.">
+  <img src="/images/omnia/los/nav/top-bar.png" alt="Top bar with a Search field, Docs, Changelog and Support links, a bell icon with an unread count, a role label and an avatar" />
+</Frame>
+
+- **Search** opens the command palette. Press <kbd>⌘K</kbd> (or <kbd>Ctrl K</kbd>) from anywhere to jump to a page or a record.
+- **Docs** opens this documentation site in a new tab.
+- **Changelog** opens the release notes.
+- **Support** opens the support request form. See [Get help](/omnia/los/navigation/getting-help).
+- The **bell** lists your alerts. See [Alerts and email](/omnia/los/navigation/alerts-and-email).
+- Your **role** shows next to your avatar, so you always know which role you are acting in.
+
+## Which version you are on
+
+The version number sits at the top left of the menu, under your credit union's name. It reads **OMNIA HORIZON: LoS** followed by the release number, for example `1.0.83`. The number comes from the build you are running, so it changes the moment a new release reaches your workspace.
+
+Quote it when you report a problem. It tells the support team exactly which release you saw the problem in.
+
+Your Administrator can change the short product label after the colon from the Branding page. The OMNIA HORIZON name and the version number do not change.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is the count amber?">
+    The oldest item in that queue has waited more than 24 hours. Open the queue and sort out the oldest loan first. The count turns back to the normal colour once nothing in the queue is older than a day.
+  </Accordion>
+  <Accordion title="Why don't I see a loan in Waiting for you?">
+    One of four things. The loan is assigned to someone else. It is above what your role can approve on its own. It is waiting on someone else at this step, like a loan in Info requested or a security request the Credit Officer has not sent back yet. Or it is beyond the ten oldest the panel shows: the header then says "Oldest 10 of" the total, and the queue page lists the rest.
+  </Accordion>
+  <Accordion title="Why does the queue count show more loans than Waiting for you?">
+    The count is everything in the queue. Waiting for you is only what is yours to act on. Loans assigned to colleagues, loans above your approval limit, and loans waiting on the Credit Officer are in the count but not on your list.
+  </Accordion>
+  <Accordion title="Why don't I see Credit Approvals in my menu at all?">
+    Your role holds neither `loans.adjudicate` nor `reports.view`. The menu only shows queues you can open. Ask your Administrator if you need it.
+  </Accordion>
+  <Accordion title="Do I need to refresh the page to update the counts?">
+    No. Counts refresh every 60 seconds while the tab is open in front of you, and as soon as you return to the tab.
+  </Accordion>
+  <Accordion title="Why is there no Waiting for you panel on my dashboard?">
+    The panel is for people who work a queue or capture loans. If your role only oversees the pipeline, as the Credit Manager and Branch Manager do with the built-in roles, the Action queues tiles further down the dashboard show the counts instead. My Work still shows Waiting for you for everyone.
+  </Accordion>
+</AccordionGroup>

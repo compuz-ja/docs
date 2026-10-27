@@ -1,0 +1,147 @@
+---
+title: "Create and manage member profiles"
+sidebarTitle: "Creating members"
+description: "Create a member profile with its Core Banking identifiers, meet your workspace's required fields, edit details, and manage member status."
+icon: "user-plus"
+---
+
+A member profile is the customer record a loan application links to. No member record, no loan application. The profile starts from three identifiers your Core Banking System already holds, so the two systems agree on who the member is.
+
+<Tip>
+  Search before you create. Duplicate records cause confusion when linking loans and tracking KYC history.
+</Tip>
+
+## Who can create members
+
+You need the `members.create` capability, held by the Credit Officer and the Administrator. If you cannot see **New member**, ask your Administrator to check your role.
+
+## Create a member
+
+<Steps>
+  <Step title="Open the New member form">
+    Go to **Members** and click **New member**.
+  </Step>
+  <Step title="Fill the Core Banking identifiers">
+    The first card, **Core Banking identifiers**, holds the values established when the member is enrolled. Take all of them from your Core Banking System: for a new member, after you have opened them there; for an existing member, from their current record.
+
+    - **Branch** (required): the branch the member belongs to. Fixed once the member is created.
+    - **Member CIF number** (required): the Customer Information File number, the member's primary identifier in Core Banking. Copy it exactly. One CIF per person, unique within your workspace. If the member does not exist in Core Banking yet, create them there first.
+    - **Credit Union Member Account Number** (required): the member's account number in Core Banking. Digits only, up to 16. Stored encrypted and shown as the last four digits only. The full number prints on the Loan Disbursement Sheet.
+    - **Member since** (required): the date the member joined the credit union, as recorded in Core Banking. Not the date you are creating this record. For a newly enrolled member, that is today. It cannot be in the future, and the form never fills it in for you.
+  </Step>
+  <Step title="Enter personal details">
+    **First name** and **Last name** (required), middle name, **Date of birth** (required), gender, employment, email and phone.
+  </Step>
+  <Step title="Enter identity details">
+    The **Sensitive identifiers** card holds the TRN, driver's licence, passport and an external bank account. They are optional at creation unless your workspace requires them, and encrypted at rest with your credit union's key. The **Identity details** card holds salutation, marital status, dependents, education, government ID type, issuer and number, and mother's maiden name.
+  </Step>
+  <Step title="Enter address, residence and next of kin">
+    Mailing address, residential status, years at the address, previous address, and the next of kin's name, relationship, contact details, address and years known.
+  </Step>
+  <Step title="Click Create member">
+    The platform checks every required field, creates the member and opens the profile. KYC starts as **UNVERIFIED**.
+  </Step>
+</Steps>
+
+<Frame caption="The Core Banking identifiers come first. Take the CIF number, account number and member since date from your Core Banking System.">
+  <img src="/images/omnia/los/capture/new-member.png" alt="New member form showing the Core Banking identifiers card with branch, member CIF number, credit union member account number and member since" />
+</Frame>
+
+## Required fields
+
+The platform requires the branch, CIF, Core Banking account number, Member since, first name, last name and date of birth on every new member. Your workspace can require more through its **required-fields policy**, set up with CompuZign. The policy can name any field on the form: contact details, address lines, residence history, identity numbers, next of kin. A field can also be conditional:
+
+- a mailing address required only when it differs from the residential address;
+- an ID number required only for a chosen ID type;
+- a previous address required only when the member has lived at the current one for fewer than a set number of years;
+- a field required only when another field is filled in.
+
+The form marks required fields and checks them before saving. If any are blank, the save is refused with "Complete these fields before saving:" followed by the list. The same policy covers [loan submission](/omnia/los/loans/creating-an-application#the-required-fields-policy).
+
+### Records captured before the policy
+
+A member saved before a field became required is not blocked. Opening the profile shows an amber banner, "This member record is incomplete (N fields missing)", lists the fields, and says "Loans are not blocked, but these must be filled the next time the record is edited." **Complete the record** opens the edit form.
+
+Members saved before the Core Banking account number or Member since existed show the gap instead of a substitute: an amber prompt to add the account number in the profile header, and "Not yet taken from Core Banking" for Member since. Both can be added on **Edit**; on edit they are checked for format but not forced.
+
+## The member profile
+
+The profile header shows the member's name, CIF and the Core Banking account number masked to its last four digits. The quick facts strip shows **Member since**, branch, date of birth, gender and employment.
+
+<Frame caption="The Core Banking account number shows masked to its last four digits. Member since is the Core Banking joining date.">
+  <img src="/images/omnia/los/capture/member-profile.png" alt="Member profile header with the CIF, a masked account number ending in four digits, KYC verified badge and the member since date" />
+</Frame>
+
+### Revealing an encrypted value
+
+On **Edit**, encrypted fields show whether a value is on file and offer **Reveal**. Reveal works for the TRN, driver's licence, passport, external bank account, Core Banking account number and internal notes. It needs `members.edit`, and each reveal records `member.pii.revealed` naming who revealed which field, never the value. Loan reviewers holding `members.pii.view` can reveal the TRN, driver's licence and passport read-only from the loan pages. The government ID number and mother's maiden name are encrypted without a reveal control.
+
+### Peek without opening
+
+In the Members list, rest the pointer on a row or tab to it to see a preview panel with the member's key details. It opens after a short pause and closes on Escape.
+
+## Search for members
+
+The search bar matches names as you type. Filter by KYC status, member status or created date. **Export** downloads the filtered list as a CSV. Click a row to open the profile.
+
+## Edit a member
+
+<Steps>
+  <Step title="Open the profile and click Edit">
+    You need `members.edit`.
+  </Step>
+  <Step title="Change the fields">
+    Leave an encrypted field blank to keep its stored value. Type a new value to replace it.
+  </Step>
+  <Step title="Click Save changes">
+    Required fields are checked again. The change is applied immediately and audited.
+  </Step>
+</Steps>
+
+## Member status
+
+<AccordionGroup>
+  <Accordion title="ACTIVE, the default status">
+    New members are ACTIVE. Drafting a loan is blocked only while KYC is UNVERIFIED or FAILED; submitting needs KYC VERIFIED.
+  </Accordion>
+  <Accordion title="INACTIVE, suspended">
+    Suspending sets INACTIVE. The record and its history stay; the member cannot be linked to new loans until reactivated.
+  </Accordion>
+  <Accordion title="DECEASED">
+    The value exists but has no in-app control and is not set by bulk import. It arrives only through a direct data migration.
+  </Accordion>
+  <Accordion title="Suspending and reactivating">
+    Both need `members.suspend`, which the Administrator holds. A suspension needs a reason of at least three characters, stored on the record and in the `member.suspended` event. Reactivating clears it.
+  </Accordion>
+</AccordionGroup>
+
+## Soft deletion
+
+Deleting needs `members.delete`, which the Administrator holds. A deleted member disappears from the list and search but is kept in full for audit, and an Administrator can restore it. To take a member out of use without deleting, suspend them.
+
+## Classification and linked login
+
+The **Identity and access** card on the profile sets the member's **classification** (which can make their loans confidential) and links a staff member's own login. It needs `members.identity.manage`. See [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Where do I find the Credit Union Member Account Number?">
+    In your Core Banking System, on the member's record. Open the member there first if they are new.
+  </Accordion>
+  <Accordion title="Why will the form not let me save?">
+    A required field is blank. The error lists every one. Your workspace's required-fields policy may require more than the platform's minimum.
+  </Accordion>
+  <Accordion title="Can I set Member since to today for an existing member?">
+    No. Use the joining date from Core Banking. Member history and reporting depend on it.
+  </Accordion>
+  <Accordion title="Why does an older member show an incomplete banner?">
+    Their record was saved before a field became required. Loans are not blocked; fill the fields next time you edit.
+  </Accordion>
+  <Accordion title="Can I see the full Core Banking account number?">
+    Yes, with `members.edit`, by clicking **Reveal** on the edit form. Every reveal is audited.
+  </Accordion>
+  <Accordion title="Can I change a member's branch?">
+    No. The branch is fixed once the member is created.
+  </Accordion>
+</AccordionGroup>

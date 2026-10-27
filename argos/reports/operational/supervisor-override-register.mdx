@@ -1,0 +1,61 @@
+---
+title: "Supervisor Override Register"
+sidebarTitle: "Supervisor Override Register"
+description: "Every limit breach, fee waiver, hold release and backdated posting that needed a supervisor, with who approved it and by how much the limit was exceeded."
+icon: "settings"
+---
+
+## What it answers
+
+What needed a supervisor, and who gave it?
+
+| | |
+|---|---|
+| Report key | `ops-supervisor-overrides` |
+| Edition | Comply, tier 1 |
+| Owner | Branch Manager |
+| Capability | `reports.run` |
+| Frequency | Weekly review |
+| Delivery | On demand |
+| Modules | `DW09`, `DW16` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+| **Override type** | select | No | `ALL` |
+
+**Override type** offers **Every type**, **Limit breach**, **Fee waiver**, **Hold release**, **Backdated posting**, **Negative balance**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/ops-supervisor-overrides.png" alt="The Supervisor Override Register report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `override_date` | date | Date |
+| `branch_name` | text | Branch |
+| `staff_name` | text | Raised by |
+| `supervisor_name` | text | Approved by |
+| `member_name` | text | Member |
+| `override_type` | text | Type |
+| `threshold_value` | currency | Limit |
+| `actual_value` | currency | Actual |
+| `excess_value` | currency | Excess |
+| `reason_code` | text | Reason |
+| `alert_raised` | boolean | Alert raised |
+
+<Note>
+  Every override is a control being deliberately set aside. The register exists so that setting it aside is visible afterwards.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

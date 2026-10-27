@@ -1,0 +1,55 @@
+---
+title: "Loan Origination Pipeline"
+sidebarTitle: "Loan Origination Pipeline"
+description: "Applications by stage with approval rate, decline reasons and how long each step is taking, by branch and channel."
+icon: "settings"
+---
+
+## What it answers
+
+Where are applications stuck, and why are they declined?
+
+| | |
+|---|---|
+| Report key | `ops-loan-pipeline` |
+| Edition | Understand, tier 2 |
+| Owner | Branch Manager |
+| Capability | `reports.run` |
+| Delivery | On demand |
+| Modules | `DW09`, `DW10` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Submitted from** | date | Yes | `PERIOD_START` |
+| **Submitted to** | date | Yes | `LAST_CLOSE` |
+| **Group by** | select | No | `branch` |
+
+**Group by** offers **Branch**, **Product**, **Channel**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/ops-loan-pipeline.png" alt="The Loan Origination Pipeline report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `grouping` | text | Group |
+| `applications` | integer | Applications |
+| `requested_value` | currency | Requested |
+| `approved` | integer | Approved |
+| `declined` | integer | Declined |
+| `in_progress` | integer | In progress |
+| `approval_rate` | percent | Approval rate |
+| `disbursed_value` | currency | Disbursed |
+| `avg_days_to_decision` | number | Avg days to decision |
+| `avg_days_to_disburse` | number | Avg days to disburse |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

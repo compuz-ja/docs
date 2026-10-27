@@ -1,0 +1,145 @@
+---
+title: "Fees and creditor life at capture"
+sidebarTitle: "Fees and creditor life"
+description: "Set the fees that will apply to a loan while it is a draft, and configure creditor life cover: lives covered, how the premium is paid, and how it is priced from your rate card."
+icon: "receipt"
+---
+
+While an application is a DRAFT, the Credit Officer sets the fees that will apply to it and the creditor life cover it carries. The **Fees & charges** card and the **Creditor-life insurance** section both feed the disbursement screen, so the Disbursement officer starts from the officer's choices instead of re-keying them.
+
+Both are editable only in DRAFT. You need the `loans.edit` capability, which the Credit Officer and the Administrator hold. After submission they are read-only.
+
+## The Fees & charges card
+
+The card lists every fee on your workspace's [fee schedule](/omnia/los/admin/fee-schedule) that applies to this loan type, estimated on the requested amount. Each row shows the fee, how it is computed ("2% of the loan", "JMD 500.00 flat", "per J$1,000", "Stamp duty formula"), its **Amount**, its **GCT**, and its **Treatment**. GCT is charged at the workspace rate on taxable fees. The footer shows **Total fees + GCT** and **Net to member (after deductions)**.
+
+### Edit a fee's amount for this loan
+
+The schedule is the default. When the fee agreed with the member is different, change it on this loan only.
+
+<Steps>
+  <Step title="Click Edit amount on the fee">
+    The row opens an editor under it.
+  </Step>
+  <Step title="Choose % of loan or Fixed J$">
+    Enter a percentage of the loan (0% to 100%, to two decimal places) or a fixed amount (up to JMD 100,000,000.00).
+  </Step>
+  <Step title="Add a reason (optional)">
+    Up to 200 characters, for example "rate agreed with the member".
+  </Step>
+  <Step title="Click Save">
+    The row is marked **Edited** and shows the schedule default beside the new value. GCT, totals and net to member recalculate.
+  </Step>
+</Steps>
+
+**Change amount** edits it again. **Reset to schedule** removes the edit. The edit applies to this loan only; the schedule is untouched.
+
+Any fee on the schedule can be edited this way, including one the schedule computes per thousand or by the stamp duty formula. The edit replaces it with a percentage or a fixed amount. A fee that is not on your schedule for this loan type cannot be edited; add it as a custom line instead.
+
+<Frame caption="An edited fee carries an Edited marker and shows the schedule default beside the value used for this loan.">
+  <img src="/images/omnia/los/capture/fees-editable.png" alt="Fees and charges card with a processing fee marked Edited, showing 3 percent of the loan against a schedule default of 2 percent" />
+</Frame>
+
+### Choose how each fee is collected
+
+The **Treatment** select on each row sets how that fee is collected.
+
+| Treatment | Effect |
+|---|---|
+| **Deducted from the loan** | Taken from the loan proceeds, so the member receives less cash. |
+| **Charged to the member's account** | Collected from the member's account, so the loan proceeds are unchanged. |
+| **Added to the loan** | Added to the loan principal, so the member repays it over the term. |
+
+Only **Deducted from the loan** reduces the net to member.
+
+### Add fees that are not on the schedule
+
+Under **Fees & charges you're adding**, add any other charge, like a share deposit, a standing order or an insurance premium. Each line takes a name, an amount, how it is collected, where it goes (**CU income**, **Insurer**, **Attorney**, **Government**, **Tax authority**, **Other lender** or **Other**) and whether GCT applies. Lines save automatically.
+
+### Transaction type: top-ups and consolidations
+
+At the top of the card, **Transaction type** is **New loan**, **Top-up of an existing loan** or **Consolidation of existing debt**. For a top-up or a consolidation, enter the **Existing balance being paid off**. The processing fee is then charged on the new money, the requested amount minus that balance, not on the full amount.
+
+### What the Disbursement officer sees
+
+The disbursement screen starts from the edited amounts, the treatments and the custom lines. The Disbursement officer finalises fees at funding. See [Fees, deductions, and GCT](/omnia/los/disbursement/fees-and-gct).
+
+Every fee edit records a `loan_application.fee_value.updated` audit event with the schedule value, the old value and the new value.
+
+## Creditor life insurance
+
+Creditor life (group credit life) cover settles the outstanding balance if the borrower dies. It is on by default for Unsecured, Motor vehicle and Real estate loans. It never applies to a cash-secured loan: the pledged savings already settle the balance, so the section reads **Not applicable to cash-secured loans** and nothing is charged or counted.
+
+### The settings
+
+| Setting | Options | Notes |
+|---|---|---|
+| **This loan carries creditor-life cover** | On or off | On by default. Untick for a loan with no cover. |
+| **Lives covered** | Single (one life), Double (two lives), Triple (three lives) | Required when cover is on. Picks the rate from the rate card. |
+| **Premium payment** | **Annually (annual premium)** or **In full (single premium)** | Required before the application can be submitted when cover is on. |
+| **Sum insured** | An amount | Defaults to the requested amount. |
+| **Manual annual premium** or **Manual single premium** (optional) | An amount | Replaces the computed premium for the option chosen. Blank uses the rate card. |
+
+Until you choose **Premium payment**, an amber line says it is required, and submission is refused with "Choose how the creditor life premium will be paid (annually or in full) in the Creditor-life insurance section before submitting."
+
+<Frame caption="Cover on, single life, paid annually. The chosen option is highlighted and the note under it says what is charged and what counts in the TDSR.">
+  <img src="/images/omnia/los/capture/creditor-life.png" alt="Creditor-life insurance section with lives covered set to single, premium payment set to annually, and the premium box showing the monthly basic premium, annual premium and single premium" />
+</Frame>
+
+### How the premium is priced
+
+Your workspace's rate table carries a creditor life rate card: a rate per JMD 1,000 of sum insured per month for single, double and triple lives, and a flat policy fee. The section prices both options from it and shows them side by side.
+
+```latex
+\begin{aligned}
+\text{monthly basic} &= \frac{\text{sum insured}}{1000} \times \text{rate for the lives covered} \\
+\text{annual premium} &= \text{monthly basic} \times 12 + \text{policy fee} \\
+\text{single premium} &= \text{monthly basic} \times \text{term in months} + \text{policy fee}
+\end{aligned}
+```
+
+Each premium is carried exactly and rounded once, half-up, to the cent, so it matches a hand calculation from the same card. Age plays no part, and there is no declining cover on the rate card.
+
+| Payment | Collected | In the monthly payment | In the TDSR |
+|---|---|---|---|
+| **Annually** | The first year's annual premium, once, at disbursement | No | Annual premium ÷ 12, rounded half-up to the cent |
+| **In full** | The single premium, once, at disbursement | No | No |
+
+The note under the premium box says this in words. For **Annually** it reads that the first year's premium is collected at disbursement and that nothing is charged monthly; the monthly figure is used only in the TDSR affordability check.
+
+The one-off charge appears on the Fees & charges card as **Creditor life insurance (annual premium, first year)** or **Creditor life insurance (single premium, paid in full)**. It defaults to **Deducted from the loan**, remitted to the insurer, GCT-exempt. You can change its treatment. You cannot edit its amount there: it has no **Edit amount** control, because the amount comes from the premium. Change it with the manual premium in the Creditor-life insurance section.
+
+<Note>
+  Example with fictional rates: an example card of JMD 0.50 per JMD 1,000 per month (single life) and a JMD 1,000.00 policy fee, on JMD 1,500,000 over 60 months, gives a monthly basic of JMD 750.00, an annual premium of JMD 10,000.00, and a single premium of JMD 46,000.00. Paid annually, JMD 833.33 counts in the TDSR.
+</Note>
+
+### Without a rate card
+
+If your workspace has no creditor life rate card configured, the section says **Estimate only** and prices from a placeholder table keyed by the applicant's age. A **Premium basis** select (**Level (full sum, whole term)** or **Declining balance (reduces as repaid)**) appears in that case. Ask CompuZign to load your rate card before go-live.
+
+### Loans captured before the payment choice existed
+
+A loan saved before **Premium payment** existed and never given a choice spreads the whole-term premium across the monthly payment, as it always did. The note says "Not chosen yet" and shows the monthly figure. Choosing a payment mode moves it to the new behaviour.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I change the processing fee on one loan without changing the schedule?">
+    Yes. Click **Edit amount** on the fee, enter the percentage or fixed amount, and save. The schedule stays the default for every other loan.
+  </Accordion>
+  <Accordion title="Why can I not edit the creditor life fee line?">
+    Its amount is the premium, computed from the rate card. Set a different premium with the manual premium field in the Creditor-life insurance section, and the fee line follows.
+  </Accordion>
+  <Accordion title="Is creditor life charged every month?">
+    No. Paid annually, the first year is collected at disbursement. Paid in full, the whole premium is collected at disbursement. Neither is added to the monthly instalment.
+  </Accordion>
+  <Accordion title="Why is there no creditor life on a cash-secured loan?">
+    The member's pledged savings settle the balance on death, so cover would be redundant. The platform never applies or charges it on a cash-secured loan.
+  </Accordion>
+  <Accordion title="Can I change fees after the loan is submitted?">
+    Not at capture. Fees become read-only on submission. The Disbursement officer finalises them at funding.
+  </Accordion>
+  <Accordion title="What happens to my fee edits if I change the loan type?">
+    A change to a different kind of loan creates a new draft and does not carry fee treatments or custom fee lines. See [Change the loan type or product](/omnia/los/loans/changing-loan-type).
+  </Accordion>
+</AccordionGroup>

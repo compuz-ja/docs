@@ -1,0 +1,104 @@
+---
+title: "Sign legal documents electronically or on paper"
+sidebarTitle: "Signing"
+description: "Who signs what, and how. The borrower can e-sign their consent and declaration on screen, a second officer can e-sign the Disbursement Sheet as checker, and everything else is wet-signed and uploaded."
+icon: "square-pen"
+---
+
+A legal document is signed one of two ways: on paper and uploaded as a scan, or electronically on screen, and both land the document as **Executed** on the loan.
+
+Electronic signing is an option, never a requirement. You can always print, collect a wet signature, and upload the scan. See [Legal documents](/omnia/los/legal-documents/overview) for the prepare-then-execute lifecycle.
+
+## Who signs what
+
+Electronic signing covers exactly two signers: the **borrower**, on their own acknowledgement forms, and a **staff officer**, as checker on the Loan Disbursement Sheet. Guarantors and witnessed deeds are always signed on paper.
+
+| Document | Borrower e-sign | Officer e-sign | Paper |
+|---|---|---|---|
+| **Personal Credit Consent** (borrower's copy) | Yes | No | Yes |
+| **Personal Credit Consent** (a guarantor's copy) | No | No | Yes |
+| **Declaration of Purpose** | Yes | No | Yes |
+| **Guarantee & Indemnity** | No | No | Yes, with a witness |
+| **NSIPP Security Agreement** | No | No | Yes, with a Justice of the Peace |
+| **Mortgage Deed**, **Insurance Assignment** | No | No | Yes, with a Justice of the Peace |
+| **Loan Disbursement Sheet** | Never member-signed | Yes, as checker | Yes, naming the checker |
+| **Draft loan agreement** | Yes, to accept the proposed terms | No | Not applicable |
+
+Asking for an electronic signature on anything else is refused with "This document must be printed and wet-signed; it cannot be signed electronically." Asking for one on a guarantor's copy is refused with "Electronic signing is available for the borrower only in this version."
+
+## The borrower signs in the branch
+
+<Steps>
+  <Step title="Prepare the document">
+    On the loan's **Legal documents & contracts** card, click **Prepare** on the borrower's consent, or **Itemize & prepare** on the Declaration of Purpose. The row moves to **Prepared, awaiting signature**.
+  </Step>
+  <Step title="Click Sign electronically">
+    A signature panel opens on the row.
+  </Step>
+  <Step title="The member gives their signature">
+    The member can **draw** it on the pad, **type** their name and pick a signature style, or **upload** a photo of their signature. A preview shows exactly what will be placed on the document.
+  </Step>
+  <Step title="Confirm and finish">
+    The member ticks the box to confirm they have read the document, agree to be bound by it, and consent to signing electronically under the Electronic Transactions Act, 2006. Click **Sign electronically**.
+  </Step>
+</Steps>
+
+The document moves straight to **Executed**. The signature is placed on the member's own signature line, never a witness or Justice of the Peace line. If this was the last document the Securities gate was waiting on, the loan moves to Disbursement in the same step.
+
+## The borrower accepts the loan terms before approval
+
+Generate a **draft loan agreement** from the loan while it is still being worked. It carries a **DRAFT, PROPOSED TERMS, NOT YET APPROVED** watermark and is priced the same way approval will price it. The member reads it and e-signs to say they accept the terms on offer.
+
+Accepting the draft does not approve the loan or create the binding contract. After approval the platform generates the real [loan agreement](/omnia/los/loans/loan-agreements) from the approved figures. Regenerating the draft supersedes the earlier one, so the member always accepts the version they were shown.
+
+A product priced by its security needs that security captured before the draft can be generated. Without it you see "Add the security details (the cash account or deposit pledged) before generating the draft agreement", or, for a vehicle-age product, a prompt to check the vehicle's year of manufacture.
+
+### Signing the draft remotely
+
+When the member is not in the branch, click **Email signing link** on the draft loan agreement card. The member receives a single-use link, enters a one-time code sent to the same email address, reviews the draft, and signs on their own device.
+
+- The member must be **identity-verified** (KYC **Verified**).
+- The member needs an **email** on file. No phone number is required.
+- The link expires after **72 hours**. The code expires after **10 minutes** and allows five attempts.
+
+<Note>
+  Remote signing is available for the draft loan agreement only. Consent forms and the Declaration of Purpose are signed in the branch or on paper. The signing-link, code, and receipt emails are switched on for your workspace by your CompuZign team.
+</Note>
+
+## An officer signs the Disbursement Sheet as checker
+
+The Loan Disbursement Sheet is an internal sheet with three sign-off lines: **Prepared by**, **Disbursed by**, and **Checked by**. A second officer can sign the **Checked by** line on screen.
+
+The officer who prepared the sheet cannot. For them, **Sign electronically** is hidden and the row explains that a different officer must sign as checker. Any other officer who holds `loans.legal_documents.execute` sees the button, signs, and ticks an attestation that they reviewed the sheet and confirm it is correct. No one-time code is needed, because the officer is signed in.
+
+If the sheet is wet-signed instead, anyone with the execute right, including the preparer, can upload the scan, but must name the **Checked by** officer whose signature is on the page. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet#recording-the-signed-sheet).
+
+## Signing on paper
+
+Click **Upload signed**, enter the signing details the form requires, drop the scan, and click **Mark executed**.
+
+| Form | Required on upload |
+|---|---|
+| Personal Credit Consent, Guarantee & Indemnity | Witness name |
+| NSIPP Security Agreement, Mortgage Deed, Insurance Assignment | Justice of the Peace name |
+| Loan Disbursement Sheet | Checked by |
+
+The scan can be a PDF, PNG, JPEG, or WebP, up to 10 MB. Each scan is checked against its declared type and virus-scanned before it is stored.
+
+## What gets recorded
+
+- The signature is embedded in a new signed PDF. The prepared PDF is never altered. Both are kept for seven years in storage that cannot be changed or deleted.
+- A **signed receipt** records the exact consent or attestation statement and its version, who signed, how (in the branch or remotely), and when. It is cryptographically signed so any tampering is detectable.
+- The audit trail records `loan.legal_document.esigned`: that a signature happened and how, never the member's name or the signature image.
+- After a member signs, they receive a confirmation email in your workspace's branding when signing emails are on.
+
+## Who can do what
+
+| Action | Capability | Built-in roles |
+|---|---|---|
+| Record an electronic or wet signature | `loans.legal_documents.execute` | Credit Officer, Securities, Disbursement, Administrator |
+| Show the **Sign electronically** button for a member | `loans.esign.request` | Credit Officer, Securities, Disbursement, Administrator |
+| Send a remote signing link | `loans.esign.request` | Credit Officer, Securities, Disbursement, Administrator |
+| See whether a member has signed | `loans.esign.view` | Every pipeline role, including Adjudicator, Credit Manager, and Branch Manager |
+
+The User Administrator and Staff roles hold none of these. See [Roles and permissions](/omnia/los/access/roles-and-permissions).

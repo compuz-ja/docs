@@ -1,0 +1,45 @@
+---
+title: "The platform stack"
+sidebarTitle: "Platform stack"
+description: "The components KAIROS is built from, by layer, and what each one does."
+icon: "layers"
+---
+
+The components KAIROS is built from, by layer.
+
+## Infrastructure
+
+| Component | Role |
+|---|---|
+| Dell PowerEdge and HP compute | Enterprise x86 fleet hosting virtualized and containerized workloads |
+| Dell PowerStore and HP SAN arrays | All-flash primary storage for performance-sensitive banking workloads, with local immutable snapshots |
+| Cisco MDS 9220i | Storage area network and the inter-site disaster recovery fabric, using FCIP |
+| Dell 32Gb/s switches | High-throughput switching for the storage and data fabric |
+| VMware hypervisor | The virtualization layer beneath the cloud platform |
+
+Immutable snapshots are worth calling out. They protect data from ransomware and from a bad actor with credentials, and they make multiple copies of production data available for test and UAT without a separate copy process.
+
+## Cloud
+
+| Component | Role |
+|---|---|
+| Talos Linux | Immutable, minimal, API-driven operating system purpose-built for Kubernetes. No shell, no SSH |
+| Kubernetes under Rancher | Container orchestration and multi-cluster management |
+| Cilium in BGP peer mode | Container networking peered directly with the enterprise network fabric |
+| ArgoCD | GitOps delivery. Declarative, auditable, reversible change |
+| CNS and CSI integration | Cloud-native storage services connected to the enterprise arrays |
+| AWS S3 over site-to-site VPN | Configuration replication, backup and retention off the private backbone |
+
+<Note>
+  Talos ships no shell and no SSH daemon. Node-level work goes through `talosctl` against the machine API. That is a deliberate reduction in attack surface, and it changes how operational runbooks are written.
+</Note>
+
+## Data
+
+| Component | Role |
+|---|---|
+| CloudNativePG | Kubernetes-native PostgreSQL operator |
+| Three-instance cluster | Removes any single point of failure within a site |
+| Synchronous replication | Every committed transaction lands at both sites of the metro pair |
+| vSphere CSI snapshotter | Application-consistent snapshots for rapid recovery |
+| Dell PowerStore backend | All-flash persistent storage, with inline snapshot and on-demand capacity expansion |

@@ -1,0 +1,60 @@
+---
+title: "PEP and High-Risk Member Register"
+sidebarTitle: "PEP and High-Risk Member Regis"
+description: "Politically exposed and high-risk members with their holdings, KYC refresh status and alert history, which is what enhanced due diligence reviews need in one place."
+icon: "shield-alert"
+---
+
+## What it answers
+
+Who is politically exposed or high risk, and is their file current?
+
+| | |
+|---|---|
+| Report key | `aml-pep-register` |
+| Edition | Comply, tier 1 |
+| Owner | Compliance Officer |
+| Capability | `reports.aml.run` |
+| Frequency | Quarterly review |
+| Delivery | On demand |
+| Modules | `DW07`, `DW10` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Include** | select | No | `ALL` |
+| **KYC refresh overdue only** | boolean | No | `False` |
+
+**Include** offers **PEP and high risk**, **PEP only**, **High risk only**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/aml-pep-register.png" alt="The PEP and High-Risk Member Register report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `member_number` | text | Member |
+| `full_name` | text | Name |
+| `branch_name` | text | Branch |
+| `classification` | text | Classification |
+| `risk_rating` | text | Risk rating |
+| `kyc_status` | text | KYC |
+| `kyc_last_review` | date | Last review |
+| `total_deposits` | currency | Deposits |
+| `total_borrowings` | currency | Borrowings |
+| `transaction_value_6m` | currency | Activity 6m |
+| `aml_alerts_6m` | integer | Alerts 6m |
+
+<Note>
+  A stale KYC refresh date on this register is the finding an examiner opens with. The column is there to be actioned, not admired.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

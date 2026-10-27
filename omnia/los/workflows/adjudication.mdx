@@ -1,0 +1,167 @@
+---
+title: "Review and decide loans in Credit Approvals"
+sidebarTitle: "Credit approvals"
+description: "Work the Credit Approvals queue: claim an application, review the risk assessment, affordability, collateral and approval route, then approve, decline or request more information."
+icon: "gavel"
+---
+
+**Credit Approvals** is the queue where submitted loan applications are reviewed and decided. An approver claims a submitted application, reviews it, and records one of three decisions: approve, decline, or request more information. The queue was called Adjudication until September 2026; the workflow state behind it is still `ADJUDICATION` and the capability is still `loans.adjudicate`.
+
+## What you need
+
+You need the `loans.adjudicate` capability, which the Adjudicator role holds. Your workspace's [approval schedule](/omnia/los/workflows/approval-routes) may also limit what your role can approve on its own, by security class and amount.
+
+Holders of `reports.view` without `loans.adjudicate`, like the Credit Manager and Branch Manager by default, can open the queue as a read-only oversight view.
+
+## The queue
+
+Open **Credit Approvals** under **Review Queue** in the sidebar.
+
+- The **Active** tab shows applications in SUBMITTED, ADJUDICATION and INFO_REQUESTED. **Completed** shows decided files: APPROVED, DECLINED and CANCELLED.
+- **All**, **My queue** and **Unassigned** filter by owner, with counts.
+- Search, branch and loan-type filters narrow the list.
+
+Hover over or focus a row to see a quick preview: product, amount, term, stage, assigned officer and who captured it.
+
+<Frame caption="The Credit Approvals queue. Use the My queue and Unassigned tabs to find your work and unclaimed files.">
+  <img src="/images/omnia/los/approval/credit-approvals-queue.png" alt="Credit approvals queue listing four loans with loan number, member name, loan type, branch and submitted time" />
+</Frame>
+
+## Process an application
+
+<Steps>
+  <Step title="Open the application">
+    Click a row. The page header shows the loan number, the member and the CIF.
+  </Step>
+  <Step title="Claim it">
+    Click **Claim for adjudication**. The status moves from SUBMITTED to ADJUDICATION and the file is yours. If your workspace has an approval schedule, the claim is refused when your role cannot approve this loan on its own, and the message names the roles that can. See [Loan assignment](/omnia/los/loans/loan-assignment).
+  </Step>
+  <Step title="Review the file">
+    Read every card before you decide (described below).
+  </Step>
+  <Step title="Record your decision">
+    In the **Record decision** card, pick **Approve**, **Request more information** or **Decline**, write a rationale of at least 20 characters, and click **Record decision**.
+  </Step>
+</Steps>
+
+## What you review
+
+| Card | What it shows |
+|---|---|
+| **Application summary** | Loan ID, type, branch, member, CIF, phone, email, amount requested, term, submitted time. |
+| **Affordability snapshot** | Monthly gross income, monthly expenses, net monthly income, an expense ratio (monthly expenses ÷ gross), and counts of guarantors, employment records and documents. |
+| **Risk assessment** | Band (R1 to R5), score, engine version, policy flags, and the **How the score was reached** breakdown. Under it, **Credit report / Risk Registry** shows the captured credit rating and the Risk Registry result. |
+| **Collateral** | The security on file, with LTV and any security documents. Hidden for unsecured loans. |
+| **KYC status**, **identity**, **documents** | The member's verification state, masked identifiers you can reveal (audited), and the document library. |
+| **Credit officer recommendation** | The officer's note and the **Recommended approval level** (Branch Manager, Credit Manager, Credit Committee or Board). This is advice; the approval route decides who approves. |
+| **Decision history** | Every earlier decision with its date, who made it (with their role), the rationale and any conditions. |
+| **Approval route** | Who must approve this loan, why, votes so far, waivers. See [Approval routes](/omnia/los/workflows/approval-routes). |
+| **Signed documents still outstanding** | Documents that will stop the file after approval, shown while you decide. |
+
+The affordability snapshot's expense ratio is a quick read on gross income. The TDSR that counts is in the risk breakdown and on the loan's **Income & expenses** section; it uses counted income and includes this loan's payment. See [Affordability and TDSR](/omnia/los/loans/affordability-and-tdsr).
+
+<Frame caption="The risk assessment card. The breakdown shows each factor the band was built from; an adverse Risk Registry result shows in red underneath.">
+  <img src="/images/omnia/los/approval/risk-breakdown.png" alt="Risk assessment card with band R2, score, policy flags and a breakdown of TDSR, LTV, loan type, employment, credit history and loan size" />
+</Frame>
+
+## Decision outcomes
+
+Every decision needs a rationale of at least 20 characters, written to the audit record.
+
+<Frame caption="The decision panel. The approval route note above the options tells you whether your approval completes the decision or records a committee vote.">
+  <img src="/images/omnia/los/approval/decision-panel.png" alt="Record decision card with Approve, Request more information and Decline options, a rationale field and the Route Securities review to picker" />
+</Frame>
+
+### Approve
+
+"Move the loan forward through the workflow. The Securities team picks it up next."
+
+- Write the rationale.
+- Optionally pick someone in **Route Securities review to (optional)**. Leave it blank to drop the file in the Securities queue.
+- On the **In-House Committee** route, your approval is a vote; the loan is approved when the quorum completes.
+- On the **Credit Committee** route, enter the meeting date, an optional minute number and the proof of approval.
+- Click **Record decision**.
+
+If your role cannot approve on this route, the panel says so: "Your role cannot approve on this route. You can still request more information or decline."
+
+A successful approval generates the Loan Agreement PDF. Every approved loan then moves to SECURITIES. An unsecured loan has no security requests and moves on to DISBURSEMENT once the documents your workspace requires before disbursement are signed.
+
+### Request more information
+
+"Send the file back to the Credit Officer with a list of items to address. Reversible."
+
+- Write the rationale.
+- List at least one **condition**, one per line. The officer sees them.
+- Click **Record decision**.
+
+The application moves to INFO_REQUESTED, then back to DRAFT for the officer to edit and resubmit. Any In-House Committee votes on the file are voided.
+
+### Decline
+
+"Close this application. Terminal."
+
+- Write the rationale.
+- Click **Record decision** and confirm **Yes, decline** in the dialog.
+
+The loan moves to DECLINED and leaves all active queues. The Credit Officer is notified. The file cannot be reopened; a member who wants to try again needs a fresh application.
+
+## Refusals at approval
+
+The approval is refused, and the loan stays in ADJUDICATION, when any of these apply:
+
+- You captured the application, or you overrode its rate, and your workspace has switched on that rule.
+- Your role lacks authority for the product and amount: "Approval denied: ROLE lacks authority for PRODUCT-CODE at the requested amount." followed by who can approve it.
+- The amount is above the product maximum and no valid exception applies.
+- A waiver is pending, or a required waiver is missing.
+- The committee quorum is incomplete, or the Credit Committee decision is not recorded.
+- The risk band is above the product's ceiling and the override rules are not met (below).
+
+Each rule is explained on [Approval routes](/omnia/los/workflows/approval-routes).
+
+## Risk band override
+
+When the risk band is above the product's ceiling, an **Override required** panel appears on the Approve path: "Risk band BAND exceeds the policy ceiling for TYPE loans." Approving then needs all three:
+
+- the `loans.override` capability, which the Credit Manager and Administrator hold by default;
+- your workspace's `creditManagerOverrideEnabled` setting on `TenantWorkflowOverride`;
+- an override rationale of at least 20 characters.
+
+Without `loans.override` the panel adds: "Your role doesn't include the override capability. Contact your Credit Manager to approve, or decline this application." If any of the three is missing, the approval is refused, a failed-decision event is recorded, and the status does not change.
+
+## Rate override
+
+A manual rate override is set on the draft, not on this page. It needs `loans.override` and a reason of 3 to 280 characters, and works only while the loan is a DRAFT. The rate shows as **Rate override active** with who set it and why, and approval prices the loan at that rate. Where your workspace has switched on the rate-overrider rule, the person who set the override cannot approve the loan.
+
+## The INFO_REQUESTED cycle
+
+When the officer resubmits, the risk engine re-runs on the updated application, the file returns as SUBMITTED, and any approver can claim it again. The decision history shows what was asked and what was decided each time.
+
+## Credit Approvals dashboard
+
+**Dashboards**, then **Credit Approvals**, shows **Pending decision** (files in SUBMITTED, ADJUDICATION or INFO_REQUESTED), **Approved this week** and **Declined this week** (last 7 days), **Avg time to decision** (submission to decision, last 7 days) and a **Decisions per day** sparkline over 14 days. It needs `loans.adjudicate` or `reports.view`.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why can I not claim this loan?">
+    Your role cannot approve it on its own under your approval schedule. The message names who can. The loan may also already be owned by someone else.
+  </Accordion>
+  <Accordion title="I approved but the status did not change. Why?">
+    The loan is on the In-House Committee route. Your approval was recorded as a vote. It is approved when the quorum is complete.
+  </Accordion>
+  <Accordion title="Can I change the interest rate here?">
+    No. A rate override is set on the draft by a holder of `loans.override`. You can request more information and ask for it.
+  </Accordion>
+  <Accordion title="Can a declined loan be reopened?">
+    No. Declining is terminal. The member needs a new application.
+  </Accordion>
+  <Accordion title="Why is the Risk Registry adverse but the band is low?">
+    The Risk Registry result does not change the band. It is shown to you as a separate signal. Weigh it in your decision.
+  </Accordion>
+  <Accordion title="Does the recommended approval level decide who approves?">
+    No. It is the officer's advice. The approval schedule and routing policy decide.
+  </Accordion>
+  <Accordion title="Where did Adjudication go?">
+    It is the same queue, renamed **Credit Approvals** in September 2026. The address `/admin/adjudication` is unchanged.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,56 @@
+---
+title: "General Ledger Account Detail"
+sidebarTitle: "General Ledger Account Detail"
+description: "Every posting to one GL account in a period, with the originating transaction reference so a balance can be drilled back to the member movement that caused it."
+icon: "landmark"
+---
+
+## What it answers
+
+What actually posted to this account in this period?
+
+| | |
+|---|---|
+| Report key | `fin-gl-detail` |
+| Edition | Comply, tier 1 |
+| Owner | Finance Officer |
+| Capability | `reports.financial.run` |
+| Delivery | On demand |
+| Modules | `DW05`, `DW14` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **GL account** | select | Yes | — |
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/fin-gl-detail.png" alt="The General Ledger Account Detail report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `posting_date` | date | Date |
+| `branch_code` | text | Branch |
+| `book` | text | Book |
+| `narrative` | text | Narrative |
+| `source_module` | text | Source |
+| `transaction_reference` | text | Transaction |
+| `debit_amount` | currency | Debit |
+| `credit_amount` | currency | Credit |
+| `running_balance` | currency | Running balance |
+
+<Note>
+  This is the account-level audit trail behind the trial balance. Choose the account first: with no account it has nothing to show.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

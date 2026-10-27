@@ -1,0 +1,60 @@
+---
+title: "Statement Cycle Data"
+sidebarTitle: "Statement Cycle Data"
+description: "The statement extract for a period: opening and closing balance, movement counts and totals per account, in the shape the statement renderer and the channel API both consume."
+icon: "smartphone"
+---
+
+## What it answers
+
+What goes on a member's statement for this period?
+
+| | |
+|---|---|
+| Report key | `chan-statement-cycle` |
+| Edition | Comply, tier 1 |
+| Owner | Report Developer |
+| Capability | `reports.run` |
+| Frequency | Monthly, statement cycle |
+| Delivery | Batch |
+| Modules | `DW12`, `DW13` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Statement period** | month | Yes | `LAST_CLOSE_MONTH` |
+| **Product family** | select | No | `ALL` |
+
+**Product family** offers **Every product**, **Savings**, **Deposits**, **Shares**, **Loans**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/chan-statement-cycle.png" alt="The Statement Cycle Data report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `member_number` | text | Member |
+| `member_name` | text | Name |
+| `account_number` | text | Account |
+| `product_name` | text | Product |
+| `opening_balance` | currency | Opening |
+| `credits_count` | integer | Credits |
+| `credits_value` | currency | Credit value |
+| `debits_count` | integer | Debits |
+| `debits_value` | currency | Debit value |
+| `interest` | currency | Interest |
+| `closing_balance` | currency | Closing |
+
+<Note>
+  This is the extract behind the statement run, not the statement itself. It exists so a disputed statement can be reconstructed from the warehouse.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

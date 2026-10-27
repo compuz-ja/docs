@@ -1,0 +1,56 @@
+---
+title: "Load Exception Register"
+sidebarTitle: "Load Exception Register"
+description: "Open data exceptions from the load and reconciliation pipeline, aged, so nothing sits unresolved behind a published report."
+icon: "settings"
+---
+
+## What it answers
+
+What is unresolved behind the published reports?
+
+| | |
+|---|---|
+| Report key | `ops-exception-register` |
+| Edition | Comply, tier 1 |
+| Owner | Data Steward |
+| Capability | `governance.recon.view` |
+| Delivery | On demand |
+| Modules | `DW02`, `DW15`, `DW17` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Status** | select | No | `open` |
+
+**Status** offers **Every status**, **Open**, **Investigating**, **Resolved**, **Accepted**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/ops-exception-register.png" alt="The Load Exception Register report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `raised_at` | datetime | Raised |
+| `severity` | text | Severity |
+| `category` | text | Category |
+| `subject_area` | text | Subject area |
+| `business_date` | date | Business date |
+| `description` | text | Description |
+| `age_days` | integer | Age (days) |
+| `status` | text | Status |
+| `assigned_to` | text | Assigned to |
+
+<Note>
+  Ageing is the column that matters. An exception open for a day is a workload; the same exception open for a quarter is a control failure.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

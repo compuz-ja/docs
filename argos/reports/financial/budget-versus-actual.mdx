@@ -1,0 +1,48 @@
+---
+title: "Budget versus Actual"
+sidebarTitle: "Budget versus Actual"
+description: "Year-to-date performance against budget by income and expense line, worst variance first."
+icon: "landmark"
+---
+
+## What it answers
+
+Where is the institution against budget, and which lines are driving it?
+
+| | |
+|---|---|
+| Report key | `fin-budget-variance` |
+| Edition | Understand, tier 2 |
+| Owner | Finance Officer |
+| Capability | `reports.financial.run` |
+| Frequency | Monthly |
+| Delivery | On demand |
+| Modules | `DW05`, `DW08` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Period** | month | Yes | `LAST_CLOSE_MONTH` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/fin-budget-variance.png" alt="The Budget versus Actual report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `gl_name` | text | Account |
+| `account_class` | text | Class |
+| `actual_ytd` | currency | Actual YTD |
+| `budget_ytd` | currency | Budget YTD |
+| `variance` | currency | Variance |
+| `variance_pct` | percent | Variance % |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

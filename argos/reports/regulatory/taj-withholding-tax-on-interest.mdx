@@ -1,0 +1,51 @@
+---
+title: "TAJ Withholding Tax on Interest"
+sidebarTitle: "TAJ Withholding Tax on Interes"
+description: "Interest credited to members and the withholding tax deducted, by month, with the member-level schedule TAJ requires behind the summary."
+icon: "scale"
+---
+
+## What it answers
+
+What interest was credited, and what tax was withheld on it?
+
+| | |
+|---|---|
+| Report key | `reg-taj-wht` |
+| Edition | Comply, tier 1 |
+| Owner | Finance Officer |
+| Capability | `reports.regulatory.run` |
+| Frequency | Monthly |
+| Delivery | Batch |
+| Regulator | TAJ |
+| Modules | `DW04` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Reporting month** | month | Yes | `LAST_CLOSE_MONTH` |
+| **Minimum interest** | number | No | `0` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/reg-taj-wht.png" alt="The TAJ Withholding Tax on Interest report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `member_number` | text | Member |
+| `member_name` | text | Name |
+| `product_name` | text | Product |
+| `accounts` | integer | Accounts |
+| `interest_credited` | currency | Interest credited |
+| `withholding_tax` | currency | Withholding tax |
+| `net_interest` | currency | Net to member |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

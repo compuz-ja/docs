@@ -1,0 +1,44 @@
+---
+title: "What every report screen has in common"
+sidebarTitle: "Reading a report"
+description: "Parameters, the run record, drill-down and exports. The parts of an ARGOS report that work the same way on all sixty-six."
+icon: "book-open"
+---
+
+Every ARGOS report is laid out the same way. Learn it once.
+
+## The header
+
+<Frame caption="The line under the parameters is the run record. It names the owner, the modules the report satisfies, the capability it required, the row count, the time taken, and the identifier of this particular run.">
+  <img src="/images/argos/trial-balance-header.png" alt="A report header showing the title and summary, three parameter controls, a Run report button, and a metadata line with owner, modules, capability, row count, duration and run identifier, above a row of export buttons." />
+</Frame>
+
+**Parameters** sit above the result. A required parameter is marked. Defaults resolve against the warehouse rather than against today's date, so "last close" means the last close that actually loaded.
+
+**The run record** is written before the report returns. Who ran it, what parameters they chose, what triggered it, how many rows came back, how long it took and whether it succeeded. The run identifier in the header is that record's key, and it is what to quote when asking a question about a figure.
+
+**Definition** opens the governed definition behind the report: the query, the parameters as submitted, and the resolved reporting period.
+
+## Drill-down
+
+An account name or a category carrying a small chevron opens into its detail, below the figures, without leaving the report.
+
+<Frame caption="Two selectors are the question and the panel is the answer. Break down by chooses the dimension, Measuring chooses what is summed. Opening a component narrows again.">
+  <img src="/images/argos/trial-balance-drill.png" alt="A drill panel showing Composition, Trend and Movement tabs, a break down by selector set to Branch, a measuring selector set to Closing balance, a donut chart of four branches with values and percentages, and a table of components with amounts and share of gross." />
+</Frame>
+
+Up to three views of the same figure:
+
+- **Composition** is what the figure is made of at the close, broken down by a dimension the report did not use.
+- **Trend** is how each component moved over the last six closes.
+- **Movement** is opening, debits, credits and closing for each component, which is the trial balance question asked one level down. It appears only where the source can answer it.
+
+Rows with nothing underneath them do not respond. That is checked against the warehouse rather than guessed, so a row that cannot open never looks broken.
+
+## Exports
+
+CSV, XLSX, PDF and JSON. An export is a run like any other, so it is recorded against your name with the parameters you used. Any disclaimer the report carries travels into the export rather than living in a footer the screen draws.
+
+## Who can run what
+
+Every report names the capability it requires, and the header shows it. Capabilities are granted to roles and roles to people. Nothing in the platform branches on a role name.

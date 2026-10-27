@@ -1,0 +1,66 @@
+---
+title: "Attrition Risk"
+sidebarTitle: "Attrition Risk"
+description: "Members most likely to leave, scored on balance decline, activity decay, product depth and tenure, with the relationship value at stake."
+icon: "users"
+---
+
+## What it answers
+
+Which members are most likely to leave?
+
+| | |
+|---|---|
+| Report key | `mem-attrition-risk` |
+| Edition | Anticipate, tier 3 |
+| Owner | Executive |
+| Capability | `reports.member.run` |
+| Delivery | On demand |
+| Modules | `DW10` |
+
+<Warning>
+  This report sits at **Anticipate**. It is a projection, not a record of what happened.
+</Warning>
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Minimum risk score** | number | No | `60` |
+| **Minimum relationship value** | number | No | `0` |
+| **Branch** | select | No | `ALL` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/mem-attrition-risk.png" alt="The Attrition Risk report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `member_number` | text | Member |
+| `full_name` | text | Name |
+| `branch_name` | text | Branch |
+| `segment` | text | Segment |
+| `tenure_band` | text | Tenure |
+| `attrition_risk_score` | integer | Risk score |
+| `attrition_risk_band` | text | Band |
+| `relationship_value` | currency | Relationship value |
+| `products_held` | integer | Products |
+| `days_since_activity` | integer | Days inactive |
+| `next_best_product` | text | Next best product |
+
+<Note>
+  A score is a ranking, not a prediction about any one member. Work the list from the top; do not treat a score as a fact about a person.
+</Note>
+
+<Warning>
+  This report contains estimates produced from the institution's own data. Estimates are not forecasts of certain outcomes and no result is warranted by CompuZign. Read them with the confidence and coverage stated in the output, and against the institution's own judgement, before relying on them.
+</Warning>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

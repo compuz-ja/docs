@@ -1,0 +1,56 @@
+---
+title: "BOJ Liquidity Return"
+sidebarTitle: "BOJ Liquidity Return"
+description: "Liquid assets against withdrawable deposits on each business day of the period, with the prescribed minimum marked and every breach listed."
+icon: "scale"
+---
+
+## What it answers
+
+Did liquid assets cover withdrawable deposits on every business day?
+
+| | |
+|---|---|
+| Report key | `reg-boj-liquidity` |
+| Edition | Comply, tier 1 |
+| Owner | Finance Officer |
+| Capability | `reports.regulatory.run` |
+| Frequency | Monthly |
+| Delivery | Batch |
+| Regulator | BOJ |
+| Modules | `DW04`, `DW08` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+| **Prescribed minimum %** | number | Yes | `10` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/reg-boj-liquidity.png" alt="The BOJ Liquidity Return report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `business_date` | date | Date |
+| `liquid_assets` | currency | Liquid assets |
+| `withdrawable_deposits` | currency | Withdrawable deposits |
+| `liquidity_ratio_pct` | percent | Liquidity ratio |
+| `minimum_pct` | percent | Minimum |
+| `status` | text | Status |
+| `concentration_pct` | percent | Top-10 depositor concentration |
+
+<Note>
+  The test is daily, not monthly. A month that averages comfortably above the minimum can still contain a breach, and every breach is marked.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

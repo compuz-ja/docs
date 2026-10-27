@@ -1,0 +1,54 @@
+---
+title: "Card Activity and Authorisation"
+sidebarTitle: "Card Activity and Authorisatio"
+description: "AccessPlus debit activity by merchant category, with the approval rate, card-not-present share and international exposure."
+icon: "smartphone"
+---
+
+## What it answers
+
+What is being spent on cards, where, and how often is it declined?
+
+| | |
+|---|---|
+| Report key | `chan-card-activity` |
+| Edition | Understand, tier 2 |
+| Owner | Branch Manager |
+| Capability | `reports.run` |
+| Delivery | On demand |
+| Modules | `DW09` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+| **Group by** | select | No | `category` |
+
+**Group by** offers **Merchant category**, **Country**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/chan-card-activity.png" alt="The Card Activity and Authorisation report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `grouping` | text | Group |
+| `attempts` | integer | Attempts |
+| `approved` | integer | Approved |
+| `declined` | integer | Declined |
+| `approval_rate` | percent | Approval rate |
+| `approved_value` | currency | Approved value |
+| `avg_ticket` | currency | Average ticket |
+| `cnp_share` | percent | Card not present |
+| `disputed` | integer | Disputed |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

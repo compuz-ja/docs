@@ -1,0 +1,61 @@
+---
+title: "FID Currency Transaction Report"
+sidebarTitle: "FID Currency Transaction Repor"
+description: "Cash activity at or above the POCA threshold, counting single transactions and same-day aggregates separately, ready for FID submission."
+icon: "scale"
+---
+
+## What it answers
+
+What cash activity has to be reported?
+
+| | |
+|---|---|
+| Report key | `reg-fid-ctr` |
+| Edition | Comply, tier 1 |
+| Owner | Compliance Officer |
+| Capability | `reports.aml.run` |
+| Frequency | Within 15 days of the transaction |
+| Delivery | Batch |
+| Regulator | FID |
+| Modules | `DW04`, `DW07` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+| **Basis** | select | No | `ALL` |
+
+**Basis** offers **Single and aggregated**, **Single transaction only**, **Same-day aggregate only**.
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/reg-fid-ctr.png" alt="The FID Currency Transaction Report report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `business_date` | date | Date |
+| `member_number` | text | Member |
+| `member_name` | text | Name |
+| `branch_code` | text | Branch |
+| `currency_code` | text | Ccy |
+| `transaction_count` | integer | Cash txns |
+| `aggregate_amount` | currency | Aggregate cash |
+| `threshold_amount` | currency | Threshold |
+| `basis` | text | Basis |
+| `structuring_flag` | text | Structuring suspected |
+
+<Note>
+  Single transactions at or above the threshold and same-day aggregates are counted separately, because they are reported differently.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

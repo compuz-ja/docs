@@ -1,0 +1,105 @@
+---
+title: "Email notifications for loan workflow events"
+sidebarTitle: "Notifications"
+description: "The platform sends email at major loan lifecycle events. Learn which events trigger emails, who receives them, and how routing works."
+icon: "bell"
+---
+
+The platform sends email automatically at major loan lifecycle events. Notifications are scoped to the person responsible for the file. If a loan is assigned to a specific staff member, only that person is notified. If the loan has no owner yet, the event fans out to everyone who holds the stage capability for that stage (`loans.adjudicate`, `securities.review`, or `loans.disburse`).
+
+Every email sent to a staff member also lands as an alert in the bell in the top bar. The bell, the weekday morning summary email and Teams channel posts are covered in [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email). This page is the full routing reference for the event emails.
+
+## How routing works
+
+<CardGroup cols={3}>
+  <Card title="Assigned loan" icon="user-check">
+    Only the assigned staff member receives the notification. Once you claim a file or are assigned one, you are the single point of contact for every stage event on that loan.
+  </Card>
+  <Card title="Unassigned loan" icon="users">
+    The event fans out to everyone holding the stage capability: every Adjudicator, the whole Securities team, or the whole Disbursement team.
+  </Card>
+  <Card title="Claiming a loan" icon="hand">
+    Claiming a loan for yourself does **not** trigger an email. Claiming is a self-service action. Only an explicit assignment by a Credit Manager or Branch Manager sends an "assigned to you" notification.
+  </Card>
+</CardGroup>
+
+## Notification event table
+
+| Event | Recipients |
+|---|---|
+| Loan submitted, routes to Adjudication | Assigned Adjudicator, or all Adjudicators if unassigned |
+| Loan assigned to a staff member | The newly assigned staff member |
+| Recommendation routed for sign-off | The approver(s) for the chosen approval level: Branch Manager (managers scoped to the loan's branch), Credit Manager (`reports.view` holders), Credit Committee (Adjudicators), or Board (`reports.view` holders plus Adjudicators) |
+| Loan approved | Credit Officer who originated the application |
+| Loan declined | Credit Officer, plus the member if member emails are enabled (the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, off by default) |
+| Information requested | Credit Officer |
+| Loan returned to Draft (full rebuild) | Credit Officer |
+| Loan stepped back to a previous stage | Destination team, plus Credit Officer for awareness |
+| Security request created | Credit Officer |
+| Security request documents submitted by officer | The assigned Securities owner, or the Securities team if unassigned |
+| Security request resolved | Credit Officer |
+| Security request rejected | Credit Officer |
+| Ready for Disbursement | The assigned Disbursement owner, or the Disbursement team if unassigned, plus Credit Officer for awareness |
+| Disbursement scheduled | The assigned Disbursement owner, or the Disbursement team if unassigned |
+| Disbursement executed | Credit Officer, plus the member if member emails are enabled (the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, off by default) |
+| Loan filed | Credit Officer (see [Loan filed routing](#loan-filed-routing)) |
+| Loan cancelled | Assigned owner and Credit Officer when the file has an owner. Unassigned, the fan-out depends on where it was cancelled: an early-stage cancel (SUBMITTED) goes to the Adjudicators, a late-stage cancel (DISBURSEMENT) goes to the Credit Officer plus the Adjudicators plus the Securities team, so every team that touched the file knows it closed |
+
+## Confidential loans
+
+A confidential loan narrows every team fan-out. When a loan is marked confidential, a team email goes only to staff whose role holds the stage capability **and** `loans.read.confidential`. The assigned owner and the Credit Officer who captured the loan are named individuals and are still notified. Staff who cannot see the loan on screen are not told about it by email, and the loan is never posted to a Teams channel.
+
+The confidential flag is read from the loan as it was captured, not from the member's current record, so a notification follows the rules that applied when the loan was taken.
+
+## The link in every email
+
+Every staff email carries a **View loan & current stage** button that opens the loan in your workspace, where the [next-step banner](/omnia/los/navigation/the-loan-page#the-next-step-banner) shows who holds it and what is stopping it.
+
+## Member notifications
+
+Emails to borrowers are off by default. They are controlled at the deployment level by the `ILOAN_MEMBER_EMAILS_ENABLED` environment setting, not by a screen the Administrator manages. Until that setting equals `true`, member recipients are filtered out before any email is enqueued. When it is switched on, members receive emails for two events only:
+
+- **Loan declined.** The declined-decision email tells them the application was unsuccessful and includes the rationale.
+- **Disbursement executed.** A confirmation that funds have been released.
+
+Members never receive internal workflow notifications such as Information requested or Ready for Disbursement. Those are staff-facing events.
+
+<Note>
+Your credit union's name and branding appear in every email the platform sends, to staff and members alike. The from-name on the email comes from your credit union's configured sender name, and your primary brand color accents the loan link button. Branding is snapshotted at the moment the email is queued, not re-read at delivery, so the email always reflects the settings in force when the event fired.
+</Note>
+
+## Assignment notifications
+
+When someone uses the Assignment panel to route a loan to a specific person, that person receives an "a loan needs your attention" email immediately, as long as the loan is actionable. This is separate from the event-based notifications in the table above. Directing any loan to a specific person uses the `loans.assign` capability, which Credit Managers, Branch Managers, and Administrators hold. That is not the only path: a Credit Officer can route their own draft to an adjudicator with `loans.submit`, and a stage worker can reassign a loan within their own stage by holding that stage's owning capability, for example an Adjudicator with `loans.adjudicate` handing a file to another Adjudicator.
+
+One exception: assigning a loan that is still in **DRAFT** does **not** send the email. A draft pre-assignment is treated as routing intent only. The adjudicator gets the notice later, when the loan is submitted and routes to Adjudication.
+
+Assignment notifications fire for:
+
+- Direct assignment or reassignment to a specific person, by anyone permitted to assign that loan
+- Reassignment from one person to another
+
+They do **not** fire when you claim a loan yourself. Self-claiming is logged in the audit trail but does not generate an email.
+
+## Scoped versus broadcast
+
+Once a loan has an assignee, stage-team events go only to that person instead of the whole capability pool. The comparison below shows the difference between a fully unassigned pipeline and one where loans are actively assigned.
+
+| Event | Unassigned (worst case) | Assigned (scoped) |
+|---|---|---|
+| Loan routed to Adjudication | Every Adjudicator in the credit union | The one assigned Adjudicator |
+| Security request documents submitted | The whole Securities team | The one assigned owner |
+| Ready for Disbursement or scheduled | The whole Disbursement team | The one assigned owner |
+
+Assigning loans promptly, either through the Assignment panel or by claiming, keeps your team's inboxes manageable and makes it clear who is accountable for each file.
+
+## Loan filed routing
+
+The fan-out for **Loan filed** is not driven by whether the loan is assigned. It is governed by the global `ILOAN_SCOPED_NOTIFICATIONS` setting:
+
+- **Default (scoped notifications on).** Only the Credit Officer is notified. Senior staff track filed volume from their dashboards rather than from inbox blasts.
+- **Scoped notifications off.** The legacy wider fan-out is restored: the Credit Officer, all Credit Manager (`reports.view`) holders, and the Branch Managers whose branch matches the loan's branch (via `loans.read.branch`). Branch Managers at other branches are never included.
+
+<Tip>
+If you are not getting notifications you expect, check three things. First, confirm with your Administrator that your role is configured with the right capabilities. Second, check whether the loan is assigned to someone else. If it is, that person is the only one receiving stage notifications for that file. Third, check whether the loan is confidential and your role does not hold `loans.read.confidential`. After any loan action, the confirmation message on screen names every colleague who was emailed, so you can see the routing for yourself.
+</Tip>

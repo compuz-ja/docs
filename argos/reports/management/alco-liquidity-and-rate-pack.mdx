@@ -1,0 +1,60 @@
+---
+title: "ALCO Liquidity and Rate Pack"
+sidebarTitle: "ALCO Liquidity and Rate Pack"
+description: "Daily liquidity through the period with depositor concentration, plus the interest spread the committee is asked to price against."
+icon: "presentation"
+---
+
+## What it answers
+
+What does ALCO need to see about liquidity and rate risk?
+
+| | |
+|---|---|
+| Report key | `mgmt-alco` |
+| Edition | Anticipate, tier 3 |
+| Owner | Executive |
+| Capability | `reports.run` |
+| Frequency | Monthly, alco calendar |
+| Delivery | Batch |
+| Modules | `DW08` |
+
+<Warning>
+  This report sits at **Anticipate**. It is a projection, not a record of what happened.
+</Warning>
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/mgmt-alco.png" alt="The ALCO Liquidity and Rate Pack report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `business_date` | date | Date |
+| `cash_on_hand` | currency | Cash |
+| `bank_balances` | currency | Bank balances |
+| `investments` | currency | Investments |
+| `liquid_assets` | currency | Liquid assets |
+| `member_deposits` | currency | Member deposits |
+| `liquidity_ratio_pct` | percent | Liquidity ratio |
+| `net_cash_flow` | currency | Net cash flow |
+| `concentration_pct` | percent | Top-10 concentration |
+
+<Warning>
+  This report contains estimates produced from the institution's own data. Estimates are not forecasts of certain outcomes and no result is warranted by CompuZign. Read them with the confidence and coverage stated in the output, and against the institution's own judgement, before relying on them.
+</Warning>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

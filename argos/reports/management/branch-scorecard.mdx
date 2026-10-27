@@ -1,0 +1,54 @@
+---
+title: "Branch Scorecard"
+sidebarTitle: "Branch Scorecard"
+description: "Every branch on one page: growth, credit quality, income, operations and service, ranked on a composite score."
+icon: "presentation"
+---
+
+## What it answers
+
+How is each branch performing across every dimension at once?
+
+| | |
+|---|---|
+| Report key | `mgmt-branch-scorecard` |
+| Edition | Understand, tier 2 |
+| Owner | Executive |
+| Capability | `reports.run` |
+| Frequency | Monthly |
+| Delivery | On demand |
+| Modules | `DW08`, `DW09` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **Period** | month | Yes | `LAST_CLOSE_MONTH` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/mgmt-branch-scorecard.png" alt="The Branch Scorecard report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `rank_in_period` | integer | Rank |
+| `branch_name` | text | Branch |
+| `members_total` | integer | Members |
+| `net_member_growth` | integer | Net growth |
+| `deposits_balance` | currency | Deposits |
+| `loans_balance` | currency | Loans |
+| `loans_disbursed_value` | currency | Disbursed |
+| `delinquency_pct` | percent | Delinquency |
+| `fee_income` | currency | Fee income |
+| `teller_days_unbalanced` | integer | Unbalanced days |
+| `sla_met_pct` | percent | Service SLA |
+| `composite_score` | number | Score |
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+

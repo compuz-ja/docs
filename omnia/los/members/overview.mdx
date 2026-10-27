@@ -1,0 +1,121 @@
+---
+title: "Member management overview"
+sidebarTitle: "Overview"
+description: "The member directory stores borrower profiles, tracks KYC status, and links members to their loan applications throughout origination."
+icon: "users"
+---
+
+The Members section is the directory of everyone who borrows from your credit union. Every loan application belongs to a member record, and a member's KYC status must be VERIFIED before any loan can be submitted for them. You can search, create, update, and manage members from the Members list, then jump to a member's linked loans and uploaded documents from their profile page.
+
+## What a member record contains
+
+Each member profile stores the following information.
+
+| Field | Notes |
+|---|---|
+| Salutation, first name, middle name, last name | Used for search and display across the platform |
+| Date of birth | Required. The verification flow keys off the TRN, not this field |
+| Gender | Chosen from Male, Female, or Other. Optional |
+| Email address | Primary contact. Optional |
+| Phone number | Primary contact number. Optional |
+| Address | Street, city, parish, and postal code, plus residential status, years at address, previous address, and years at the previous address. A separate mailing address can be recorded; it defaults to the same as the residential address |
+| Marital status, dependents, education | Captured for the applicant profile the risk engine reads |
+| TRN | Tax Registration Number, encrypted at rest |
+| Driver's licence number | Encrypted at rest |
+| Passport number | Encrypted at rest |
+| Bank account number | Encrypted at rest |
+| Government ID type, number, and issuer | The generic identity document fields. The number is encrypted at rest |
+| Mother's maiden name | Encrypted at rest |
+| Internal notes | Free text, encrypted at rest |
+| Next of kin | Name, relationship, contact details, and address for the nearest relative |
+| Employment status | Used in loan risk assessment |
+| Branch | The credit union branch this member belongs to. Fixed once the member is created |
+| Member CIF number | The member's primary identifier in your Core Banking System, unique per workspace |
+| Credit Union Member Account Number | The member's account number in your Core Banking System. Up to 16 digits, encrypted at rest, shown as the last four digits |
+| Member since | The date the member joined the credit union, from Core Banking. Not the date the record was created here |
+| Classification | Optional. Your workspace's staff and Board categories. A confidential classification makes the member's new loans confidential |
+
+Branch, Member CIF number, Credit Union Member Account Number, Member since, first name, last name, and date of birth are required at create. Your workspace's **required-fields policy** can require more, and the form refuses to save until they are filled; see [Creating members](/omnia/los/members/creating-members#required-fields). A record saved before a field became required shows an amber **This member record is incomplete** banner but does not block loans.
+
+The TRN, driver's licence, passport, bank account, Core Banking account number, government ID number, mother's maiden name, and notes are encrypted at rest with your credit union's own key. Six have a **Reveal** control on the edit form: the TRN, driver's licence, passport, bank account, Core Banking account number, and notes. Reveal requires the `members.edit` capability, and each reveal is recorded as a `member.pii.revealed` event. Loan reviewers holding `members.pii.view` can reveal the TRN, driver's licence and passport read-only. The government ID number and mother's maiden name have no reveal control; they show as "On file (encrypted)".
+
+Members can also have additional contacts beyond their primary email, phone, and address. The three contact types are alternate phone (`PHONE_ALT`), alternate email (`EMAIL_ALT`), and alternate address (`ADDRESS_ALT`). One contact of each type can be marked as primary, enforced by a single-primary-per-type constraint. You manage contacts from the member's profile: add a contact, remove one, or promote an existing contact to primary, which demotes the current primary of that type. Managing contacts requires the **members.edit** capability, and adding or removing one records a `member.contact.added` or `member.contact.removed` audit event.
+
+## Member status tracks
+
+Every member record carries two independent status fields that serve different purposes.
+
+### MemberStatus, the account lifecycle
+
+This tracks whether the member's account is open and eligible for new loans.
+
+| Status | Meaning |
+|---|---|
+| **ACTIVE** | Default status. The member is in good standing and can apply for loans. |
+| **INACTIVE** | The member is suspended. They cannot apply for new loans, but the record can be reactivated to ACTIVE at any time. |
+| **DECEASED** | Indicates the member is deceased. The value exists on the record but the platform has no in-app control to set it, and bulk CSV import does not set it either; it appears only through a direct data migration. DECEASED remains a selectable option in the Members list status filter. |
+
+Suspend and reactivate are the two operations that drive this status: suspending a member sets it to **INACTIVE**, and reactivating sets it back to **ACTIVE**. Separately, a member can be soft-deleted, which hides the record from the Members list and search without losing it. The platform stores a deletion reason and timestamp on the record, and a soft-deleted member can be restored, which clears both and returns the record to the list.
+
+### KycStatus, identity verification
+
+This tracks whether the member's identity has been verified through the Know Your Customer process.
+
+| Status | Meaning |
+|---|---|
+| **UNVERIFIED** | No verification check has been run yet. |
+| **IN_PROGRESS** | A verification request has been submitted and is awaiting a result. |
+| **VERIFIED** | Identity confirmed. The member is eligible for loan applications. |
+| **FAILED** | Verification was rejected. Review and correct the member's details, then resubmit. |
+| **MANUAL_REVIEW** | The automated check could not reach a conclusion. A reviewer must approve or reject manually. |
+
+<Note>
+  A member's KYC status must be **VERIFIED** before a loan application can be submitted for that member. A member can be ACTIVE with an UNVERIFIED KYC status. You can create and edit the profile at any time, but you cannot submit a loan until KYC is complete.
+</Note>
+
+## Members and loan applications
+
+One member can have multiple loan applications over time. Each member's profile page shows a summary of their loan history: the total number of applications and the three most recent, with links to the full details of each. Every loan application page shows the member it belongs to, so you can navigate between the two in either direction.
+
+## Finding the Members section
+
+Open **Members** in the sidebar, under **Workspace**, or go to `/your-slug/members`. Search, open a profile, or create a new member. Rest the pointer on a row to peek at the member's key details without opening the profile.
+
+---
+
+## What you can do
+
+<CardGroup cols={2}>
+  <Card title="Creating Members" icon="user-plus" href="/omnia/los/members/creating-members">
+    Create new member profiles, search for existing members, edit details, and manage member status.
+  </Card>
+  <Card title="KYC Verification" icon="shield-check" href="/omnia/los/members/kyc-verification">
+    Submit a member for identity verification, understand each KYC status, and handle manual review cases.
+  </Card>
+  <Card title="Documents" icon="file-text" href="/omnia/los/members/documents">
+    Upload identity and supporting documents to a member's profile, and manage the document library.
+  </Card>
+  <Card title="Staff and confidential loans" icon="lock" href="/omnia/los/loans/confidential-and-staff-loans">
+    Classify staff and Board members so their loans stay confidential.
+  </Card>
+</CardGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can a member be ACTIVE but not able to borrow?">
+    Yes. ACTIVE with KYC UNVERIFIED or FAILED cannot even be drafted for. ACTIVE with KYC in progress or in manual review can be drafted for but not submitted.
+  </Accordion>
+  <Accordion title="Where do the CIF and account number come from?">
+    Your Core Banking System. Both, and the Member since date, are copied from the member's record there.
+  </Accordion>
+  <Accordion title="Who can see a member's TRN?">
+    Holders of `members.edit` on the edit form, and loan reviewers holding `members.pii.view` on the loan pages. Every reveal is audited.
+  </Accordion>
+  <Accordion title="Why does a member show an incomplete banner?">
+    The record was saved before your workspace required one of its fields. Loans are not blocked; complete it on the next edit.
+  </Accordion>
+  <Accordion title="Is a member ever deleted?">
+    No. Deletion hides the record from the list and search; an Administrator can restore it.
+  </Accordion>
+</AccordionGroup>

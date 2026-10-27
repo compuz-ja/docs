@@ -1,0 +1,60 @@
+---
+title: "Structuring Detection"
+sidebarTitle: "Structuring Detection"
+description: "Members whose cash activity clusters just below the reporting threshold across a rolling window. Each row is a pattern, not a single transaction."
+icon: "shield-alert"
+---
+
+## What it answers
+
+Is anyone breaking cash activity into pieces that individually stay under the threshold?
+
+| | |
+|---|---|
+| Report key | `aml-structuring` |
+| Edition | Comply, tier 1 |
+| Owner | Compliance Officer |
+| Capability | `reports.aml.run` |
+| Frequency | Daily |
+| Delivery | Batch |
+| Modules | `DW07` |
+
+## Parameters
+
+| Parameter | Type | Required | Default |
+|---|---|---|---|
+| **From** | date | Yes | `PERIOD_MONTH_START` |
+| **To** | date | Yes | `LAST_CLOSE` |
+| **Reporting threshold** | number | Yes | `1000000` |
+| **Within % of threshold** | number | No | `20` |
+| **Minimum occurrences** | number | No | `3` |
+
+## Running it
+
+<Frame caption="The line under the parameters records the owner, the modules the report satisfies, the capability it required, the row count and the time taken, and the run identifier that keys its entry in the audit trail.">
+  <img src="/images/argos/reports/aml-structuring.png" alt="The Structuring Detection report, run for the August 2026 close." />
+</Frame>
+
+## Reading a row
+
+| Column | Type | Meaning |
+|---|---|---|
+| `member_number` | text | Member |
+| `member_name` | text | Name |
+| `branch_name` | text | Branch |
+| `near_threshold_count` | integer | Near-threshold txns |
+| `total_cash` | currency | Total cash |
+| `largest_single` | currency | Largest single |
+| `threshold` | currency | Threshold |
+| `distinct_days` | integer | Distinct days |
+| `distinct_branches` | integer | Branches used |
+| `risk_rating` | text | Member risk |
+
+<Note>
+  Structuring is a pattern across days and branches, so this report needs a window wide enough to contain one. A narrow date range will find nothing and prove nothing.
+</Note>
+
+## Exports and evidence
+
+Every run writes a row to the audit trail with the run identifier shown above, the parameters used, the row count and who ran it. The **CSV**, **XLSX**, **PDF** and **JSON** buttons export exactly the rows on screen, so an export and its audit entry always agree. **Definition** opens the report definition this page describes.
+
