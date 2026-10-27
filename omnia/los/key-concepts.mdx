@@ -1,11 +1,11 @@
 ---
 title: "Key concepts and terminology"
 sidebarTitle: "Key concepts"
-description: "Workspaces, roles, loan applications, loan types, risk bands, KYC status, the audit trail, and compliance exports, defined once."
+description: "Workspaces, roles, loan applications, queues, the next step, alerts, loan types, risk bands, KYC status, the audit trail, and compliance exports, defined once."
 icon: "list"
 ---
 
-These are the concepts every screen in the platform is built on: workspaces, roles, loan applications, loan types, risk bands, KYC status, the audit trail, and compliance exports.
+These are the concepts every screen in the platform is built on: workspaces, roles, loan applications, queues, the next step, alerts, loan types, risk bands, KYC status, the audit trail, and compliance exports.
 
 ---
 
@@ -60,6 +60,36 @@ Two statuses mark temporary holds rather than forward progress:
 
 - **Info requested** means the Adjudicator asked the Credit Officer for more information before the review can continue.
 - **Securities issue** means a gap in the collateral documentation was found. The Securities team has to resolve it before the loan reaches disbursement.
+
+---
+
+## Queue
+
+A **queue** is the list of loans waiting for one team: **Credit Approvals**, **Securities**, **Disbursement**, and **KYC Review** for identity checks. A Credit Officer's own queue is **Returned to Me**, the loans that came back to them.
+
+A loan in a queue is either **unassigned**, free for anyone in the team to claim, or **owned** by one person. The left menu shows a live count beside every queue you can open. The count turns amber once the oldest item has waited more than 24 hours.
+
+**Waiting for you** narrows the queues to your own next actions: loans assigned to you, unassigned loans in a queue you work that your role can act on, and loans returned to you. See [Find the work waiting for you](/omnia/los/navigation/finding-your-work).
+
+---
+
+## Next step
+
+The **next step** is where a loan goes after its current stage, and who takes it there. Every loan page opens with a banner that names three things:
+
+- **Now with**: the team and the people who can act on the loan right now.
+- **What's stopping this loan**: every condition still standing between the loan and its next stage.
+- **Next**: the stage after this one, and the people who will work it.
+
+The banner reads the same rules the platform enforces when someone tries to move the loan, so the banner and a refusal never disagree. See [A guided tour of the loan page](/omnia/los/navigation/the-loan-page).
+
+---
+
+## Alerts
+
+An **alert** is a short entry in the bell in the top bar, written each time the platform emails you about a loan. It names the loan by its ID only. Alerts are yours alone: nobody else can read or clear them.
+
+Alongside the bell, a **hand-off email** goes to whoever owns a loan's next step, a **morning summary** email arrives on weekdays when something is waiting for you, and your credit union can turn on **Teams posts** for each queue. See [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).
 
 ---
 

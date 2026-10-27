@@ -5,17 +5,17 @@ description: "Invite Credit Officers, Adjudicators, and other staff to your work
 icon: "user-plus"
 ---
 
-As an **Administrator** or **HR** user, you can invite staff to join your credit union workspace. Each invitation specifies the staff member's role, so their access is live the first time they sign in. Invitations are sent by email and accepted through a secure one-time link.
+As an **Administrator** or **User Administrator**, you can invite staff to join your credit union workspace. Each invitation specifies the staff member's role, so their access is live the first time they sign in. Invitations are sent by email and accepted through a secure one-time link.
 
 <Note>
-  The **Administrator** and **HR** roles can send invitations and manage team member access. If you need to invite someone and do not see the **Administration** group in the sidebar, contact your Administrator or HR team.
+  The **Administrator** and **User Administrator** roles can send invitations and manage team member access. If you need to invite someone and do not see the **Administration** group in the sidebar, contact your Administrator.
 </Note>
 
 ## Sending an invitation
 
 <Steps>
   <Step title="Go to Administration → Invitations">
-    In the left sidebar, open the **Administration** group and select **Invitations**.
+    In the left sidebar, open the **Administration** group and select **Add New Users**.
   </Step>
   <Step title="Enter one or more email addresses">
     In the **Send invitations** card, type the work email addresses of the people you are inviting. You can add several at once, separated by commas, semicolons, spaces, or new lines. Every address in the card receives the same role. Make sure the addresses are correct, because each invitation link is tied to the email it was sent to.
@@ -39,7 +39,7 @@ As an **Administrator** or **HR** user, you can invite staff to join your credit
 </Note>
 
 <Warning>
-  Invitation links are single-use and expire after 72 hours. If a link expires before it is used, find the invitation in **Administration → Invitations** and use **Resend** to issue a fresh link.
+  Invitation links are single-use and expire after 72 hours. If a link expires before it is used, find the invitation in **Administration → Add New Users** and use **Resend** to issue a fresh link.
 </Warning>
 
 ### What the invitee sees
@@ -52,10 +52,10 @@ When you need to onboard many people at once, import a CSV instead of typing add
 
 <Steps>
   <Step title="Open the import dialog">
-    On the **Invitations** page, click **Import** in the top-right corner.
+    On the **Add New Users** page, click **Import** in the top-right corner.
   </Step>
   <Step title="Upload your CSV">
-    Provide a CSV with a header row. Two columns are required: **email** (header `email`, `email address`, or `e-mail`) and **role** (header `role` or `role name`). You can also include optional **first name**, **last name**, and **branch** columns (the branch header can be `branch` or `branch code`). The file is capped at 500 rows and 1 MB, whichever comes first, so a file with long rows can hit the size limit below 500 rows. Every upload is checked: the contents must read as CSV text, the file passes a virus scan, and rows with formula-like values are sanitized.
+    Provide a CSV with a header row. Two columns are required: **email** (header `email`, `email address`, or `e-mail`) and **role** (header `role` or `role name`). The role is matched by its name, ignoring case; for the Administrator, both **Application Administrator** and **Administrator** work. You can also include optional **first name**, **last name**, and **branch** columns (the branch header can be `branch` or `branch code`). The file is capped at 500 rows and 1 MB, whichever comes first, so a file with long rows can hit the size limit below 500 rows. Every upload is checked: the contents must read as CSV text, the file passes a virus scan, and rows with formula-like values are sanitized.
   </Step>
   <Step title="Review the preview">
     The platform parses the file and shows a preview that classifies every row as ready, invalid, duplicate, already a member, or already invited. Nothing is sent at this stage.
@@ -71,14 +71,14 @@ When you need to onboard many people at once, import a CSV instead of typing add
 
 ## Managing pending invitations
 
-You can track the status of all outstanding invitations from **Administration → Invitations**.
+You can track the status of all outstanding invitations from **Administration → Add New Users**.
 
 <CardGroup cols={2}>
   <Card title="Pending" icon="clock">
     The invitation has been sent but not yet accepted. Resend a pending invitation to send a fresh link.
   </Card>
   <Card title="Accepted" icon="circle-check">
-    The invitee has created their account and joined the workspace. You can find their membership record in **Administration → Team & roles**.
+    The invitee has created their account and joined the workspace. You can find their membership record in **Administration → Users & Roles**.
   </Card>
   <Card title="Expired" icon="calendar-x">
     The 72-hour window passed before the invitation was accepted. Click **Resend** to generate a new link with a fresh expiry.
@@ -97,8 +97,8 @@ To act on an invitation, open the **⋯** menu at the end of its row. Pending an
 If a staff member's responsibilities change, you can update their role at any time. Each member holds exactly one role, so changing it replaces the previous role.
 
 <Steps>
-  <Step title="Go to Administration → Team & roles">
-    In the left sidebar, open the **Administration** group and select **Team & roles**.
+  <Step title="Go to Administration → Users & Roles">
+    In the left sidebar, open the **Administration** group and select **Users & Roles**.
   </Step>
   <Step title="Find the team member">
     Search by name or email address to locate the member.
@@ -113,8 +113,8 @@ If a staff member's responsibilities change, you can update their role at any ti
 When a staff member leaves the credit union or is placed on leave, you can suspend their access without deleting their account. Suspension preserves all of their history. Loan records, audit logs, and previous actions remain intact.
 
 <Steps>
-  <Step title="Go to Administration → Team & roles">
-    Navigate to **Administration → Team & roles** and search for the team member.
+  <Step title="Go to Administration → Users & Roles">
+    Navigate to **Administration → Users & Roles** and search for the team member.
   </Step>
   <Step title="Open the actions menu and click Suspend">
     Open the **⋯** menu at the end of the member's row and click **Suspend**.
@@ -130,12 +130,33 @@ To reinstate a suspended member, open the same **⋯** menu and click **Reactiva
   Suspension takes effect immediately. The member cannot sign in to this workspace until an administrator reactivates them. Their account and all historical data are preserved throughout.
 </Warning>
 
+## Revoking a team member's access
+
+Revoke access when someone has left for good. Suspension can be undone by any administrator; revocation cannot. A revoked person can only come back through a fresh invitation.
+
+<Steps>
+  <Step title="Open the actions menu">
+    On **Administration → Users & Roles**, open the **⋯** menu at the end of the person's row and click **Revoke access**. It sits below a divider, in red.
+  </Step>
+  <Step title="Give a reason and type their name">
+    Enter a reason of at least 20 characters, then type the person's name (or email, when they have no name) exactly as shown to confirm.
+  </Step>
+  <Step title="Confirm">
+    Click **Revoke access**. They lose access on their next request and cannot sign back in to this workspace.
+  </Step>
+</Steps>
+
+Their loans, decisions, documents, and audit history are untouched and keep pointing at them. Access to any other workspace they belong to is unaffected. The audit trail records who revoked them and why.
+
+Two revocations are refused: your own ("You cannot revoke your own access. Ask another administrator to do it."), and the last active account that can revoke access, so the workspace is never left with nobody able to administer it.
+
 ## The capabilities behind these actions
 
-These admin actions are each gated by a specific capability, held by the **Administrator** and **HR** roles:
+These admin actions are each gated by a specific capability, held by the **Administrator** and **User Administrator** roles:
 
 - `admin.tenant.invite.create` sends and resends invitations and runs the CSV import.
 - `admin.tenant.invite.revoke` revokes invitations.
 - `admin.tenant.invite.list` views the invitations list.
 - `admin.tenant.member.role.set` changes a member's role.
 - `admin.tenant.member.deactivate` suspends and reactivates members.
+- `admin.tenant.member.revoke` permanently revokes a member's access. It is granted separately from suspend because it cannot be undone.

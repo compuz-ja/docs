@@ -30,12 +30,15 @@ These member identity fields are always encrypted at rest:
   <Card title="Driver's licence number" icon="car" />
   <Card title="Passport number" icon="book-user" />
   <Card title="Bank account number" icon="landmark" />
+  <Card title="Core banking account number" icon="wallet" />
   <Card title="Government ID number" icon="id-card" />
   <Card title="Mother's maiden name" icon="user-round" />
   <Card title="Member notes" icon="notebook-pen" />
 </CardGroup>
 
-The same AES-256-GCM, per-workspace scheme also encrypts identity numbers on **guarantor** records (TRN and driver's licence), the **payee account number** on a disbursement, and each credit union's stored **integration credentials**.
+The core banking account number is held encrypted, with only its last four digits kept in the clear so screens can show a masked value without decrypting it. Revealing the full number is permission-gated and audited. The one document that prints it, the Loan Disbursement Sheet, shows only the last five digits and never stores the full number. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet#the-member-account-stays-masked).
+
+The same AES-256-GCM, per-workspace scheme also encrypts identity numbers on **guarantor** records (TRN and driver's licence), the **payee account number** on a disbursement, and each credit union's stored **integration credentials**, including Microsoft Teams channel webhook addresses.
 
 These values are never stored in plain text. They cannot be exported in bulk through any reporting feature. Access requires authentication and appropriate role permissions, and every access is recorded in the audit log.
 

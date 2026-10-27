@@ -166,22 +166,23 @@ Drill-downs on this panel open the member record rather than a loan.
 
 ## The Dashboards hub
 
-Analytics is one of several dashboards. The **Dashboards** hub at `/{tenantSlug}/dashboards` lists every dashboard in the platform as a directory, marking each one open or locked for your role with a hint on which role unlocks it. From the hub you can reach:
+Analytics is one of several dashboards. The **Dashboards** hub at `/{tenantSlug}/dashboards` lists the dashboards as a directory, marking each one open or locked for your role with a hint on which role unlocks it. **My Work** is not in the hub; it sits in the sidebar. The dashboards are:
 
 | Dashboard | What it shows | Gated by |
 |---|---|---|
-| **My work** | Your own plate, completions, recent activity, and cycle time for the selected period | Any seat |
+| **My Work** (sidebar) | Your own plate, completions, recent activity, and cycle time for the selected period | Any seat |
 | **Overview** | Action queues, recent activity, and a trends snapshot, branch-scoped for Branch Managers | Any seat |
 | **Loan production** | The six analytics panels described above | `reports.view` |
 | **Credit Manager** | Full pipeline by state, range throughput, and the unassigned backlog | `reports.view` |
-| **Adjudication** | Pending decisions, weekly approvals and declines, time to decision | `loans.adjudicate` or `reports.view` |
+| **Adjudication** (the Credit Approvals dashboard) | Pending decisions, weekly approvals and declines, time to decision | `loans.adjudicate` or `reports.view` |
 | **Securities** | Loans awaiting collateral verification, outstanding requests, resolution velocity | `securities.review` or `reports.view` |
 | **Disbursement** | Approved loans ready to fund, weekly totals, approval-to-fund turnaround | `loans.disburse` or `reports.view` |
-| **Audit log** | Searchable, chain-verified view of every audited event | `audit.export` |
+| **Reports** | The named periodic credit reports | `reports.view` |
+| **Audit log** | Searchable, chain-verified view of every audited event. The hub card shows for `audit.export`; the sidebar **Audit Log** link shows for `reports.view` or `loans.read.branch` | `audit.export` |
 
 ### The My work dashboard
 
-At `/{tenantSlug}/my-work`, **My work** is each officer's personal home. It answers one question: what is mine right now, and what have I done lately. Every figure is pinned to your own sign-in, so one officer never sees another's numbers, and it needs no special permission beyond a seat.
+At `/{tenantSlug}/my-work`, **My Work** is each officer's personal home. It answers one question: what is mine right now, and what have I done lately. Every figure is pinned to your own sign-in, so one officer never sees another's numbers, and it needs no special permission beyond a seat.
 
 A week, month, or quarter selector (default week) sets the period. Four signals sit across the top for every role: how many loans are waiting on you right now and how long the oldest has waited (the tile reads **Needs your action** for a Credit Officer and **On your plate** for the queue roles), the **pipeline value** of what you are holding, your **average cycle time** from claim to completion, and how many loans you **touched** in the period. Below them, a **Completed** block shapes itself to your role. A Credit Officer sees applications submitted, an Adjudicator sees approvals and declines, Securities sees resolutions, and Disbursement sees loans disbursed, each with a count and the net value where it applies, alongside a **Returned to you** counter for anything that bounced back. A recent-activity list shows your latest actions, the plate, touched, and completed tiles link into the matching loans, and an **Export CSV** button downloads your plate and completions.
 
@@ -191,13 +192,13 @@ At `/{tenantSlug}/admin/dashboard`, the Credit Manager dashboard gives a workspa
 
 ### Per-queue dashboards
 
-The **Adjudication**, **Securities**, and **Disbursement** dashboards are each the home page for the team that works that queue. They live at `/{tenantSlug}/admin/adjudication/dashboard`, `/{tenantSlug}/admin/securities/dashboard`, and `/{tenantSlug}/admin/disbursement/dashboard`. Each opens with KPI tiles and a per-day throughput sparkline, and each has its own team CSV export button.
+The **Credit Approvals**, **Securities**, and **Disbursement** dashboards are each the home page for the team that works that queue. In the sidebar they sit under **Dashboards** with those names; the Credit Approvals dashboard is still titled Adjudication in the hub. They live at `/{tenantSlug}/admin/adjudication/dashboard`, `/{tenantSlug}/admin/securities/dashboard`, and `/{tenantSlug}/admin/disbursement/dashboard`. Each opens with KPI tiles and a per-day throughput sparkline, and each has its own team CSV export button.
 
-- **Adjudication**: Pending decision, Approved this week, Declined this week, Avg time to decision, and a decisions-per-day sparkline.
+- **Credit Approvals**: Pending decision, Approved this week, Declined this week, Avg time to decision, and a decisions-per-day sparkline.
 - **Securities**: Pending reviews, Outstanding requests, Resolved this week, Reviews completed, Auto-skipped (unsecured loans routed past securities), and a requests-resolved-per-day sparkline.
-- **Disbursement**: Awaiting disbursement, Disbursed this week, Total disbursed, Avg approval to fund, and a disbursements-per-day sparkline.
+- **Disbursement**: Awaiting disbursement, Disbursed this week, Total disbursed, Avg approval to fund, and a disbursements-per-day sparkline. **Awaiting disbursement** is the same count as the Disbursement queue's **Pending** tab, so a loan still in Securities is not counted.
 
-Each of these headers also carries an **Audit trail** button that opens the audit viewer pre-filtered to that team's key event: Adjudication to `adjudication.decision.recorded`, Securities to `securities.request.resolved`, Disbursement to `disbursement.executed`. The Credit Manager dashboard's Audit trail button opens the viewer unfiltered.
+Each of these headers also carries an **Audit trail** button that opens the audit viewer pre-filtered to that team's key event: Credit Approvals to `adjudication.decision.recorded`, Securities to `securities.request.resolved`, Disbursement to `disbursement.executed`. The Credit Manager dashboard's Audit trail button opens the viewer unfiltered.
 
 ## Drilling into the numbers
 

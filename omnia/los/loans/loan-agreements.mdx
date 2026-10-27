@@ -18,13 +18,17 @@ The platform picks the template that matches the loan type. Each one carries the
 | Auto | `auto` | The chattel mortgage over the vehicle, the registered lien, and the insurance requirement. |
 | Mortgage | `mortgage` | The mortgage over the real property, the title custody terms, and the property insurance requirement. |
 
-Each generated PDF records its template name and version, the approved principal, term, rate, and approval date, the member's name and address, and the full monthly payment breakdown. The template version is 4 today; it shows as **Version** on the agreement card and in the download filename (`loan-agreement-<id>-v4.pdf`). The figures come from the approved decision and its rate computation, so the agreement always reflects what was actually approved. The agreement is signed by the member, any guarantors, the Loan Officer, and the Branch Manager, each with a date. The Adjudicator who recorded the decision is not a signatory.
+Each generated PDF records its template name and version, the approved principal, term, rate, and approval date, the member's name and address, and the full monthly payment breakdown. The template version is 4 today; it shows as **Version** on the agreement card and in the download filename (`loan-agreement-<id>-v4.pdf`). The figures come from the approved decision and its rate computation, so the agreement always reflects what was actually approved. The agreement is signed by the member, any guarantors, the Credit Officer (the agreement's signature line reads "Loan Officer"), and the Branch Manager, each with a date. The Adjudicator who recorded the decision is not a signatory.
 
 ## What the agreement contains
 
 The agreement follows the credit union's own legal review. A few things are worth knowing about what a member reads and signs.
 
-**The full monthly payment, itemised.** Rather than a single number, the agreement breaks the monthly payment into its parts: principal and interest, the compulsory savings paid alongside the loan, and the creditor-life premium where it applies. It then shows the total the member pays each month. Creditor-life is not charged on a cash-secured loan, so its line is zero there. The total matches the affordability figure the officer sees at capture.
+**The full monthly payment, itemised.** Rather than a single number, the agreement breaks the monthly payment into its parts: principal and interest, the compulsory savings paid alongside the loan, and the creditor-life premium where it is part of the instalment. It then shows the total the member pays each month. The total matches the affordability figure the officer sees at capture.
+
+- **Compulsory savings** uses the product's own compulsory-savings minimum when the product sets one, the same floor used in the affordability check at submission. See [Loan products](/omnia/los/admin/loan-products).
+- **Creditor-life** is priced from your credit union's group creditor-life rate card for the number of lives covered, when your rate table carries one, and from the platform's age table otherwise. It is never charged on a cash-secured loan.
+- **How the premium is paid.** When the officer recorded that the member pays the creditor-life premium **annually** or **in full**, the premium is not in the monthly instalment. The agreement prints it as its own line instead: **Creditor Life Insurance (annual premium, payable yearly)** or **Creditor Life Insurance (single premium, paid in full)**, with the amount. Loans captured before this choice existed keep the premium spread across the monthly payment.
 
 **The security, stated plainly.** On a secured loan, the agreement leads with the type of security, Cash Secured, Motor Vehicle, or Real Property, and the details of what is pledged, before the legal clause that grants it.
 
@@ -32,7 +36,7 @@ The agreement follows the credit union's own legal review. A few things are wort
 
 **The clauses your members expect.** The agreement includes a credit-bureau consent, under the Credit Reporting Act, 2010, and a change-in-circumstances clause asking the member to tell the credit union promptly of any material change during the term of the loan.
 
-**The signature page.** The required signatories are the member, any guarantor where applicable, the Loan Officer, and the Branch Manager, each with a place to date their signature. Each page also carries the member's initials. The page closes with an acknowledgement by the member, and each guarantor where applicable, that they have read and understood the agreement.
+**The signature page.** The required signatories are the member, any guarantor where applicable, the Credit Officer (the agreement's signature line reads "Loan Officer"), and the Branch Manager, each with a place to date their signature. Each page also carries the member's initials. The page closes with an acknowledgement by the member, and each guarantor where applicable, that they have read and understood the agreement.
 
 <Note>
   The name the agreement uses for the credit union as the legal party, in the opening sentence and on the signature lines, is configurable per credit union and is set to the credit union's registered name. It can differ from the display brand shown on the letterhead.
@@ -43,7 +47,7 @@ The agreement follows the credit union's own legal review. A few things are wort
 The agreement is generated as part of disbursement readiness. When a loan is approved, the platform queues a job that renders the PDF, uploads it to secure storage, and writes an agreement record against the loan. This happens in the background, so the agreement is ready by the time the loan reaches the Disbursement team.
 
 <Warning>
-  A loan cannot be disbursed without a generated agreement. The disbursement readiness check refuses to schedule or execute a disbursement while the agreement is missing, with the reason "The signed loan agreement has not been generated yet." The agreement is one of three readiness gates: the member's KYC must be VERIFIED, every security request must be resolved, and the agreement must be on file. This is a server-side guard, not just a hidden button, so it holds even against a stale page.
+  A loan cannot be disbursed without a generated agreement. The disbursement readiness check refuses to schedule or execute a disbursement while the agreement is missing, with the reason "The signed loan agreement has not been generated yet." The agreement is one of three readiness gates: the member's KYC must be VERIFIED, every security request must be resolved, and the agreement must be on file. This is a server-side guard, not just a hidden button, so it holds even against a stale page. Releasing the funds also needs the signed [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet) on file.
 </Warning>
 
 ## Regenerating an agreement

@@ -8,6 +8,154 @@ icon: "clock"
 This is the running history of what changed in the Loan Origination System, organised by date with the newest release at the top. Each entry is what your credit union would notice in day-to-day work, not the internal plumbing. Open an entry to see the detail.
 
 <AccordionGroup>
+  <Accordion title="26 October 2026 · Correct a legal document: re-prepare before signing, void after">
+    A clear answer to "what happens when a document has an error?". How you fix it now depends on whether it has been signed.
+
+    - **Re-prepare an unsigned document.** A document at **Prepared, awaiting signature** has a **Re-prepare** button. It builds a fresh copy from the loan's current details and marks the old one superseded. On the Declaration of Purpose it reopens the purposes editor first. A signed copy is never re-prepared over.
+    - **Void a signed document.** An executed document has a **Void** button for supervisors: the Adjudicator, the Credit Manager, and the Administrator. A reason of at least 10 characters is required and recorded. The person who executed the document, or signed as checker on a disbursement sheet, cannot void it. The slot then reads **signed copy voided, prepare again**.
+    - **A void never undoes a stage already passed.** A document needed to leave Securities can be voided up to and including Securities; once the loan is in Disbursement, step it back to Securities first. Every other document can be voided until the loan is disbursed. Nothing on a closed loan can be voided.
+    - Nothing is deleted. Voided and superseded copies stay on file for the audit trail.
+
+    See [Correcting documents](/omnia/los/legal-documents/correcting-documents).
+  </Accordion>
+  <Accordion title="26 October 2026 · A branded Loan Disbursement Sheet with a masked member account">
+    The Loan Disbursement Sheet now looks like your credit union's own document and no longer carries the member's full account number.
+
+    - **Your branding.** The sheet prints your workspace logo (PNG or JPEG) with your credit union's legal name above the title.
+    - **Masked accounts.** The member's core banking account prints as its last five digits only, for example `****48213`, and the holding account is masked the same way. The full number is not stored with the document at all.
+    - **A footer on every page** reads `SHORT_NAME HORIZON: Loan Origination System`. Set the short name, up to 20 characters, under **Administration → Settings → Branding**. It falls back to your workspace name.
+    - **A prepared-by stamp** under the footer says who prepared the sheet and when, in Jamaica time: `Prepared in HORIZON by NAME on DATE at TIME`.
+    - **Cleaner sign-off.** Prepared by, Disbursed by, and Checked by each have a signature line and their own Date line. Paragraphs after the posting table now use the full page width.
+
+    See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet).
+  </Accordion>
+  <Accordion title="26 October 2026 · See what is waiting for you, and what is stopping each loan">
+    Two changes that answer "who has this loan, what is holding it, and who gets it next" without opening every queue.
+
+    **Knowing when work arrives**
+
+    - Every queue in the sidebar, Credit Approvals, Securities, Disbursement, KYC Review, and **Returned to Me**, now shows a live count. A count turns amber when the oldest loan in it has waited more than 24 hours. Counts refresh every minute.
+    - A **Waiting for you** list on your dashboard and on **My Work** names the loans that are your next action, oldest first, with how long each has waited.
+    - A **notification bell** in the top bar lists your latest 20 notifications, with mark read and mark all read.
+    - A **morning email** on weekdays lists up to 10 loans waiting for you. Credit Managers also get a team summary.
+    - An Administrator can switch on **Teams posts** per queue under **Administration → Settings → Teams Posts**, so a short card (loan ID, stage, amount, never member details) lands in a Microsoft Teams channel when a loan arrives. Off until you add a channel.
+
+    **Guidance on the loan page**
+
+    - A **next-step banner** says which stage the loan is in, who can act on it now, and who gets it next.
+    - **What's stopping this loan** lists every unmet rule, from KYC and required fields to unsigned documents, using the same checks the platform enforces.
+    - After an action, the confirmation names who was notified.
+    - A **timeline** shows when the loan entered each stage, who moved it, and how long it spent there.
+    - A sticky **action bar** offers the one next action you can take, and sections not relevant to your role fold away, remembering your choice.
+
+    See [Finding your work](/omnia/los/navigation/finding-your-work), [Alerts and email](/omnia/los/navigation/alerts-and-email), and [The loan page](/omnia/los/navigation/the-loan-page).
+  </Accordion>
+  <Accordion title="26 October 2026 · Income counted by its applicable share in the TDSR">
+    Income now counts toward affordability the way your Statement of Affairs counts it.
+
+    - **Basic salary** counts at 100%, **Allowances** at 75%, and **Performance-based pay** at 50%. Other income lines count in full.
+    - Each income line on the capture screen shows the share that counts, for example **75% counts**, and the total income, money left over, and both TDSR figures use the counted income, with the gross shown beneath when it differs.
+    - The TDSR on the capture screen is the same figure recorded at submission, to the cent.
+
+    See [Affordability and TDSR](/omnia/los/loans/affordability-and-tdsr).
+  </Accordion>
+  <Accordion title="22 to 23 October 2026 · Fees per loan, changing loan type, creditor-life payment, and the Securities hand-off">
+    A round of fixes and additions from user acceptance testing.
+
+    **Capture**
+
+    - **Edit a fee's amount for one loan.** On a draft, the Credit Officer can replace a scheduled fee's rate or amount, for example a 3% processing fee instead of 2%, or a flat J$ amount, with an optional reason. The line shows **Edited** beside the schedule default, and **Reset to schedule** undoes it. The disbursement screen starts from the edited figure. See [Fees and insurance at capture](/omnia/los/loans/fees-and-insurance-at-capture).
+    - **Change loan type or product on a draft.** Within the same kind of loan the draft changes in place and keeps its loan number. Changing to a different kind creates a new draft with a new loan number, carries the type-independent details across, and abandons the old draft. See [Changing loan type](/omnia/los/loans/changing-loan-type).
+    - **Choose how the creditor-life premium is paid.** Set the number of lives covered and whether the member pays **annually** or **in full**. Annually: the first year's premium is collected at disbursement, and one twelfth of it counts in the TDSR. In full: the whole premium is collected at disbursement and does not count in the TDSR. Neither is added to the monthly instalment. The premium is priced from your credit union's group creditor-life rate card when your rate table carries one, and the loan agreement prints it as its own line.
+    - **One TDSR.** The capture screen and submission now compute the TDSR the same way, at the rate the screen shows, so the two never disagree.
+    - The annual premium's monthly equivalent now rounds to the nearest cent, and the screen states that it is used only in the TDSR and is not charged monthly.
+
+    **Securities and disbursement**
+
+    - **Loans no longer stall in Securities.** Signing the last document Securities is waiting on, by upload or e-signature, now moves the loan to Disbursement straight away. Before, a loan approved before its consent was signed could stay in Securities with every requirement met.
+    - **The preparer can record a wet-signed Disbursement Sheet.** The upload now asks who signed as **Checked by**. The list leaves out the preparer, and the platform checks the named officer is a current staff member who can check a sheet.
+    - The Disbursement dashboard's **Awaiting disbursement** tile now matches the queue's **Pending** count.
+  </Accordion>
+  <Accordion title="16 October 2026 · OMNIA HORIZON, and fixes from user acceptance testing">
+    **A new name on screen**
+
+    - The app header and browser tabs now read **OMNIA HORIZON: LoS**, with HORIZON in yellow. An Administrator can replace **LoS** with your own product name, up to 40 characters, under **Administration → Settings → Branding**. In documentation the product is still the Loan Origination System.
+
+    **Fixes**
+
+    - **One rule for which rate table prices a product.** The estimate at capture, the draft agreement, and approval now pick the same table: the product's assigned table, else your workspace's current one. Officers no longer see a rate that approval then refuses.
+    - A cash-secured draft loan agreement now generates. If the security is not captured yet, the message says to add it.
+    - The progress panel on a draft now applies your required-fields policy, so it agrees with what submission checks.
+    - Approval authority is checked when a loan is claimed or assigned for approval, not only at the decision.
+    - An email address the mail service rejects no longer holds up other emails.
+    - A next-model-year vehicle, such as a 2027 model bought in 2026, is priced as new.
+  </Accordion>
+  <Accordion title="13 to 14 October 2026 · Approval authority, committees, waivers, and required fields">
+    Approval now follows your credit union's delegated authority policy, configured for your workspace by your CompuZign team.
+
+    - **Approval schedule.** Each approving position has its own limit by security class. An approver above their limit cannot approve.
+    - **Three approval routes.** A loan is approved by one approver within their limit, by an **In-House Committee** whose members each record a vote until the quorum is met, or as a **Credit Committee** decision recorded with the meeting date, an optional minute number, and the proof of approval.
+    - **Maker-checker on approval.** When switched on, the person who captured a loan, or who changed its rate, cannot approve it.
+    - **Waivers.** Request a waiver for an item with a justification and an optional file. Every approver role in the policy decides it, any rejection rejects it, and the requester never decides their own. A pending waiver holds the approval.
+    - **Product-limit exceptions.** An amount a set margin above a product's maximum can be kept with a reason and goes to the named approver. Beyond the margin it is refused.
+    - **Staff motor-vehicle limits.** A car loan above the cap for the borrower's staff classification needs an approved waiver first.
+    - **Required fields.** Your workspace's policy names the member, loan, guarantor, and security fields that must be filled. A member cannot be saved, and a loan cannot be submitted, with one blank. Existing incomplete members are flagged, not blocked. The collateral panels now keep colour, forced sale value, valuator, Volume and Folio, and peril insurance.
+    - Fixed: the **New Member** page no longer fails to open.
+
+    See [Approval routes](/omnia/los/workflows/approval-routes) and [Confidential and staff loans](/omnia/los/loans/confidential-and-staff-loans).
+  </Accordion>
+  <Accordion title="11 October 2026 · Send email from your Microsoft 365 mailbox">
+    Notification and signing emails can now go out from your credit union's own Microsoft 365 mailbox through Microsoft Graph, with no mailbox password stored. This works where Microsoft 365 blocks SMTP sign-in. Your own SMTP mail server has been an option since July. Your CompuZign team sets which one your workspace uses. See [Workspace configuration](/omnia/los/admin/workspace-configuration#email-delivery).
+  </Accordion>
+  <Accordion title="9 to 10 October 2026 · Fixes from the first week of user acceptance testing">
+    - **Approved loans now reach Securities.** An approved loan could fall back to Approved when the onward route to Disbursement was refused. The hand-off to Securities now always completes, and the loan waits in Securities for its documents.
+    - **Refusals say why.** When the platform will not move a loan, it now names the reason and what to do: which member's identity verification is outstanding and in what state, how many security requests are open, or which document for which party is unsigned.
+    - **Submit tells you about identity verification.** The draft no longer says **Ready to submit** while the member's verification is still in progress or waiting on manual review. It lists verification as the outstanding item.
+    - **The approval screen lists outstanding documents** and who can sign them, before the decision.
+    - **Cash-secured advance limits follow your credit policy:** 97% against the member's own savings or a co-maker's, 95% once any of the security is held at another institution. A mixed pledge takes the stricter figure.
+    - A cash pledge records the date its balance was confirmed, not a valuation date.
+    - Pressing approve twice now says the decision was already recorded, rather than suggesting it failed.
+    - Loan agreements open in the browser again, and attachment links in support emails work for 72 hours.
+  </Accordion>
+  <Accordion title="7 October 2026 · Confidential staff and Board loans">
+    A loan to a member of staff or a Board member can now be kept confidential.
+
+    - Each member can carry a **classification** from your workspace's list. A confidential classification makes that member's loans confidential from the moment they are captured.
+    - A confidential loan appears only to the roles your policy names, the borrower, and the person it is assigned to. Everyone else does not see it in the loans list, the Credit Approvals and Disbursement queues, reports, or notification emails.
+    - Linking a member to their staff login, and setting the classification, needs its own permission, `members.identity.manage`, separate from editing a member.
+
+    See [Confidential and staff loans](/omnia/los/loans/confidential-and-staff-loans).
+  </Accordion>
+  <Accordion title="3 October 2026 · Clearer hover, focus, and quick previews">
+    - Rows you can click now show a rose rail and tint when you point at them or tab to them. Rows you cannot act on stay still.
+    - The form section you are working in is banded so you can see where you are, and an invalid field stays red while focused.
+    - Rest the pointer on a loan in the loans list or the Credit Approvals queue to see its product, amount, term, stage, and officer. On **Users & Roles**, a person's role, branch, and personal disbursement ceiling.
+    - Preview panels no longer get cut off near the top or bottom of a list. They open after a short pause and close with Escape.
+  </Accordion>
+  <Accordion title="28 September to 2 October 2026 · Core banking details, cash-secured pricing tiers, and binding compulsory savings">
+    **Members**
+
+    - **Credit Union Member Account Number.** The member's core banking account number is captured beside the CIF, digits only, up to 16, encrypted. It is required on every new member and a required column in the bulk member import. Branch, CIF, and account number now sit together in their own section of the member form.
+    - **Member since** is the date the member joined, taken from core banking, not the date the record was created. It is required on new members and in the bulk import.
+
+    **Pricing**
+
+    - **Cash-secured loans price by who holds the funds.** The rate table gains a third cash tier, **Funds held externally**, beside Shares and Cash hypothecation. A loan pledging several cash accounts is priced at its highest tier, whatever order they were entered in. See [Rate tables](/omnia/los/admin/rate-tables#pricing-a-loan-with-several-cash-accounts).
+    - **The product's compulsory-savings minimum now binds.** It is the floor used in the affordability check and printed on the loan agreement, where before a fixed J$2,000 applied whatever the product said. See [Loan products](/omnia/los/admin/loan-products).
+    - **Group creditor-life pricing.** Creditor-life cover can be priced from your insurer's rate card by the number of lives covered, loaded into your rate table by your CompuZign team.
+  </Accordion>
+  <Accordion title="26 to 27 September 2026 · Credit Approvals, User Administrator, and revoking access">
+    - **Adjudication is now Credit Approvals** in the sidebar and on its dashboard, and the stage reads **Approval** on the workflow map. The Adjudicator role and its permissions are unchanged.
+    - **HR is now User Administrator**, the role that invites staff and assigns roles. Its permissions are unchanged. The Administrator role is labelled **Application Administrator** on screen. In the sidebar, **Team & Roles** is now **Users & Roles** and **Invitations** is now **Add New Users**.
+    - **Revoke access.** An administrator can now permanently remove a staff member's access to the workspace, with a reason of at least 20 characters and their name typed to confirm. Unlike suspension it cannot be undone; they come back only through a fresh invitation. You cannot revoke yourself, or the last account able to revoke. See [Inviting team members](/omnia/los/access/inviting-team-members#revoking-a-team-members-access).
+    - **The release version** now shows at the top of the sidebar, so you can quote it when reporting a problem.
+    - The **KYC Review** and **Audit Log** links now show to exactly the roles whose pages admit them. Credit Managers and Branch Managers see **Audit Log** in the sidebar.
+  </Accordion>
+  <Accordion title="28 August 2026 · A refreshed look">
+    - Menu and page names now use title case, for example **Review Queue**, **Loan Rates**, **Fee Schedule**, **Document Templates**, **Saved Payees**, and **Audit Log**.
+    - The sidebar has coloured icons and a clearer highlight for where you are.
+    - Rest the pointer on a member in the member directory, or on a loan type, to see a short preview.
+  </Accordion>
   <Accordion title="20 July 2026 · The loan agreement, revised to your legal team's review">
     The generated loan agreement now follows the credit union's legal review, across all four templates (cash-secured, unsecured, auto, and mortgage). Nothing changes in how it is generated, downloaded, or gated before disbursement. What changed is what the member reads and signs.
 
@@ -25,7 +173,7 @@ This is the running history of what changed in the Loan Origination System, orga
 
     **The signature page**
 
-    - The required signatories are the member, any guarantor where applicable, the Loan Officer, and the Branch Manager, each with a date. The Adjudicator is no longer a signatory. Each page carries the member's initials only, and the page closes with an acknowledgement by the member, and each guarantor, that they have read and understood the agreement.
+    - The required signatories are the member, any guarantor where applicable, the Credit Officer (the agreement's signature line reads "Loan Officer"), and the Branch Manager, each with a date. The Adjudicator is no longer a signatory. Each page carries the member's initials only, and the page closes with an acknowledgement by the member, and each guarantor, that they have read and understood the agreement.
 
     **The clauses your members expect**
 

@@ -1,0 +1,126 @@
+---
+title: "The Loan Disbursement Sheet"
+sidebarTitle: "Disbursement sheet"
+description: "The internal sheet that records how a loan's money is posted, carries your credit union's branding and a masked member account, and is signed off by a preparer, a disburser, and a separate checker before funds are released."
+icon: "receipt-text"
+---
+
+The Loan Disbursement Sheet is the internal posting record for a loan's money, and the loan cannot be marked disbursed until a signed copy is on file.
+
+Every loan needs one. It is never signed by the member. It carries three officer sign-off lines, **Prepared by**, **Disbursed by**, and **Checked by**, and the platform will not accept a checker who is the officer who prepared it.
+
+<Frame caption="Your logo and legal name head the sheet. The member account shows only its last five digits, and the footer and prepared-by stamp sit at the foot of every page.">
+  <img src="/images/omnia/los/documents/disbursement-sheet.png" alt="First page of a Loan Disbursement Sheet for a demonstration loan, with a logo, the credit union's legal name, borrower and account fields, a General Ledger posting table, and three signature lines" />
+</Frame>
+
+## What the sheet shows
+
+**The heading.** Your workspace logo prints at the top, with your credit union's legal name above the title. The logo prints when it is a PNG or JPEG. A WebP logo, or no logo, leaves a text heading instead. When no legal name is set, the workspace name is used. See [Workspace setup](/omnia/los/admin/workspace-setup#updating-branding).
+
+**The loan details.**
+
+| Field | What it holds |
+|---|---|
+| **Borrower** | The member's full name. |
+| **Member account** | The member's core banking account number, masked to its last five digits, for example `****48213`. |
+| **Loan reference** | The loan ID. |
+| **Holding account** | The holding account, masked the same way: the member's masked account followed by your holding-account suffix, for example `****48213.24-1`. |
+| **Loan suffix** | The suffix for the loan type. |
+| **Posting reference** | The disbursement's posting reference. |
+| **Gross amount** | The gross loan amount. |
+| **Date** | The date the sheet was prepared. |
+
+**The General Ledger posting.** A double-entry table debits the loan account with the gross amount and credits the holding account with the net to member, one row per General Ledger account your fees post to, and **GCT payable** when GCT applies. The Debit and Credit columns are totalled and always balance. Each fee's General Ledger account is set on the [Fee schedule](/omnia/los/admin/fee-schedule).
+
+**The sign-off.** Three signature lines, **Prepared by**, **Disbursed by**, and **Checked by**, each with its own separate **Date** line.
+
+**The footer.** Every page carries the footer `SHORT_NAME HORIZON: Loan Origination System`, where `SHORT_NAME` is your workspace's document short name, for example `Meridian HORIZON: Loan Origination System`. HORIZON prints in bold yellow with a thin dark outline so it stays legible on a mono printer.
+
+**The prepared-by stamp.** Directly under the footer, every page states who prepared the sheet and when, in Jamaica time: `Prepared in HORIZON by NAME on DATE at TIME`, for example `Prepared in HORIZON by Andrea Clarke on 26 Oct 2026 at 2:15 PM`. The name and the moment are frozen when the sheet is prepared, so a reprint never changes them.
+
+## The member account stays masked
+
+The full core banking account number never reaches the sheet. The platform decrypts it while preparing, keeps only the last five digits, and discards the rest. The full number is not in the PDF, not in the record of what was printed, and not in the audit trail.
+
+A member with no core banking account number on file prints `** NOT ON FILE - OBTAIN FROM CORE BANKING **` in both account fields, so a missing number is impossible to miss. Add the number to the member's record and re-prepare the sheet.
+
+No other form can print the member's core banking account. The Loan Disbursement Sheet is the only document kind whose template is allowed to reference it.
+
+## Preparing the sheet
+
+Prepare the sheet once the disbursement is scheduled. Its figures and General Ledger rows come from the scheduled disbursement. A sheet prepared before scheduling shows the requested amount as both gross and net.
+
+<Steps>
+  <Step title="Open the loan">
+    The sheet is on the loan's **Legal documents & contracts** card.
+  </Step>
+  <Step title="Click Prepare">
+    The row moves to **Prepared, awaiting signature**. Preparing needs `loans.legal_documents.prepare`, which the Credit Officer, Securities, Disbursement, and Administrator roles hold.
+  </Step>
+  <Step title="Print it for signature">
+    Use **Print** or **Download** and collect the three signatures.
+  </Step>
+</Steps>
+
+If the figures change before the sheet is signed, click **Re-prepare**. See [Correcting documents](/omnia/los/legal-documents/correcting-documents).
+
+## Recording the signed sheet
+
+There are two ways to record the checker's signature.
+
+**On screen.** A second officer who did not prepare the sheet clicks **Sign electronically** and signs the **Checked by** line. See [Signing](/omnia/los/legal-documents/signing#an-officer-signs-the-disbursement-sheet-as-checker).
+
+**On paper.** Any officer with `loans.legal_documents.execute` can upload the wet-signed scan, including the officer who prepared it.
+
+<Steps>
+  <Step title="Click Upload signed">
+    On the sheet's row, click **Upload signed**.
+  </Step>
+  <Step title="Choose Checked by">
+    Pick the officer whose signature is on the **Checked by** line. The list holds current officers whose role can check a sheet, and leaves out the person who prepared it. If you can check it yourself, you are selected for you.
+  </Step>
+  <Step title="Drop the scan and mark it executed">
+    Drop the scan and click **Mark executed**.
+  </Step>
+</Steps>
+
+<Frame caption="The Checked by picker is required on a disbursement sheet upload, and the preparer is not in the list.">
+  <img src="/images/omnia/los/documents/record-signed-scan.png" alt="The upload signed copy panel for a Loan Disbursement Sheet, with a required Checked by selector and a file drop area" />
+</Frame>
+
+### The checker rules
+
+The platform checks the named checker again on the server, whatever the page sent.
+
+- The checker must be named. An upload without one is refused.
+- The checker cannot be the officer who prepared the sheet. The refusal reads "The checker must be different from the person who prepared or disbursed (maker ≠ checker)."
+- The checker must be a current, active staff member whose role holds `loans.legal_documents.execute`, `loans.adjudicate`, or `disbursements.approve`. In the built-in roles that is the Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, and Administrator. Anyone else is refused with "The officer named as checker cannot check this sheet."
+
+The audit trail records who signed as checker and whether that was the same person who recorded the scan.
+
+This is segregation of duties on the document itself. It sits alongside the separate maker-checker on the money movement in [Disbursement controls](/omnia/los/disbursement/controls).
+
+## The sheet holds the release
+
+**Mark disbursed** is refused while the Loan Disbursement Sheet is unsigned. The check runs on the server, so it holds against a stale page. A signed sheet can still be voided by a supervisor before the loan is disbursed; after that it is permanent.
+
+## Previewing the template
+
+An Administrator or Credit Manager can preview the sheet template from **Document Templates**. The preview uses sample data and a made-up account number, never a real member, and shows the branding and a sample prepared-by stamp.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Why does the member account show only five digits?">
+    The sheet is printed and handled on paper. Five digits are enough for the clerk to key the posting against the right account without the full number travelling with the sheet.
+  </Accordion>
+  <Accordion title="I prepared the sheet. Can I upload the signed copy?">
+    Yes. Name the officer who signed it as checker. You cannot name yourself, and you cannot sign it electronically as checker.
+  </Accordion>
+  <Accordion title="Why is my logo missing from the sheet?">
+    The sheet prints PNG and JPEG logos. Upload your logo in one of those formats under Branding, then re-prepare any unsigned sheet.
+  </Accordion>
+  <Accordion title="Can I change the footer name?">
+    Yes. Set the **Short name** under **Settings → Branding**, up to 20 characters. Sheets already prepared keep the name they were printed with.
+  </Accordion>
+</AccordionGroup>

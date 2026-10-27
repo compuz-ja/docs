@@ -12,7 +12,7 @@ KYC (Know Your Customer) identity verification is the regulatory check that conf
 </Note>
 
 <Warning>
-  A loan application cannot be submitted if the member's KYC status is not **VERIFIED**. Complete this step before you begin loan origination for any member.
+  A loan application cannot be submitted if the member's KYC status is not exactly **VERIFIED**. A member who is IN_PROGRESS or in MANUAL_REVIEW can have a draft, but submission is refused with a message naming the member and their state, for example "Identity verification for Jane Demo is waiting on manual review." Checking the documents is not the same as verifying: the status on the member's record must read VERIFIED.
 </Warning>
 
 ## KYC status lifecycle
@@ -42,7 +42,7 @@ You need the **members.kyc.submit** capability to submit verification requests. 
     Search for the member on the Members list and click their name to open their profile.
   </Step>
   <Step title="Open the KYC page">
-    Click the **KYC** button in the profile header. This opens a dedicated page headed "KYC for {name}" showing the member's current KYC status and the full verification history.
+    Click the **KYC** button in the profile header. This opens a dedicated page headed "KYC for" and the member's name, showing the member's current KYC status and the full verification history.
   </Step>
   <Step title="Confirm the identifier you are verifying">
     The KYC page shows two identity panels side by side: one for the member's **TRN** and one for their **Driver's licence**. Each panel shows whether a number is on file and lists any identity documents already uploaded for that identifier.
@@ -68,6 +68,12 @@ You need the **members.kyc.submit** capability to submit verification requests. 
     - **MANUAL_REVIEW**: the check was escalated. See the section below on manual review.
   </Step>
 </Steps>
+
+---
+
+## Verify from the New Application page
+
+You do not have to leave loan capture to verify. On **New Application**, when the member you pick is not VERIFIED and you hold `members.kyc.submit`, a **KYC verification** card appears under the member. It captures identifier documents and runs the verification check without leaving the page. When the status turns VERIFIED, carry on creating the draft.
 
 ---
 
@@ -105,7 +111,7 @@ If a member's KYC status is **FAILED**, the identity details submitted did not m
 
 ## Manual review
 
-When a member's KYC status is **MANUAL_REVIEW**, the automated check could not reach a conclusion, for example because the records returned an ambiguous match. The platform automatically creates a task in the **KYC review** queue, found in the sidebar under **Review queue** then **KYC review**.
+When a member's KYC status is **MANUAL_REVIEW**, the automated check could not reach a conclusion, for example because the records returned an ambiguous match. The platform automatically creates a task in the **KYC Review** queue, found in the sidebar under **Review Queue**. Roles holding `workflows.read` can open the queue to follow it; deciding needs `members.kyc.review`.
 
 A staff member with the **members.kyc.review** capability, which the Credit Manager and Administrator hold, works the queued task. They first **claim** the task onto themselves, which moves it from the open queue into their hands, then submit one of three decisions based on the documents and information on file:
 
@@ -114,3 +120,25 @@ A staff member with the **members.kyc.review** capability, which the Credit Mana
 - **Escalate to senior reviewer**: this closes the review as Escalated and records the chosen senior reviewer (Credit Manager or Administrator) plus a reason code in the audit log. The member's KYC status does not change; they stay in **MANUAL_REVIEW**, but the review task itself is now closed.
 
 While a member is in MANUAL_REVIEW status, their profile remains fully visible and editable. You can keep uploading documents to support the reviewer's decision. New loan applications cannot be submitted until the review is resolved.
+
+---
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="I checked the member's ID. Why can I still not submit the loan?">
+    Checking the documents is not verification. Record an in-person verification or run the check on the member's KYC page so the status becomes VERIFIED.
+  </Accordion>
+  <Accordion title="Can a passport be verified automatically?">
+    No. There is no automated passport registry. Record a manual, in-person verification with the passport number on file and the passport scan attached.
+  </Accordion>
+  <Accordion title="Can I draft a loan while KYC is in manual review?">
+    Yes. Drafting is blocked only for UNVERIFIED and FAILED. Submission waits for VERIFIED.
+  </Accordion>
+  <Accordion title="Who resolves a manual review?">
+    A holder of `members.kyc.review`: the Credit Manager or the Administrator by default.
+  </Accordion>
+  <Accordion title="Can a verification be deleted?">
+    No. Every attempt stays in the member's KYC history.
+  </Accordion>
+</AccordionGroup>

@@ -127,7 +127,7 @@ One row per guarantor on a loan. Required: `external_ref`, `first_name`, `last_n
 
 One row per piece of security. Required: `external_ref`, `collateral_type`, `valued_amount` (as money), `valuation_date`, and `valuation_source` (who or what valued it). Optional: `details`, free text like a VIN, a title number, or a property description.
 
-`collateral_type` is one of `VEHICLE`, `CASH_SHARES`, `CASH_HYPOTHECATION`, `PROPERTY`, or `OTHER`. Use `OTHER` for real security that does not fit the four standard kinds; it records the collateral without changing any calculation.
+`collateral_type` is one of `VEHICLE`, `CASH_SHARES`, `CASH_HYPOTHECATION`, `CASH_EXTERNAL` (funds held at another institution), `PROPERTY`, or `OTHER`. Use `OTHER` for real security that does not fit the four standard kinds; it records the collateral without changing any calculation.
 
 ## Sheet: `payees`
 

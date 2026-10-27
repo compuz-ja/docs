@@ -5,7 +5,7 @@ description: "The member directory stores borrower profiles, tracks KYC status, 
 icon: "users"
 ---
 
-The Members section is the central directory for everyone who borrows from your credit union. Every loan application belongs to a member record, and a member's KYC status must be VERIFIED before any loan can be submitted for them. You can search, create, update, and manage members from the Members list, then jump to a member's linked loans and uploaded documents from their profile page.
+The Members section is the directory of everyone who borrows from your credit union. Every loan application belongs to a member record, and a member's KYC status must be VERIFIED before any loan can be submitted for them. You can search, create, update, and manage members from the Members list, then jump to a member's linked loans and uploaded documents from their profile page.
 
 ## What a member record contains
 
@@ -30,9 +30,14 @@ Each member profile stores the following information.
 | Next of kin | Name, relationship, contact details, and address for the nearest relative |
 | Employment status | Used in loan risk assessment |
 | Branch | The credit union branch this member belongs to. Fixed once the member is created |
-| Member account number (CIF) | The member's primary identifier within the credit union, unique per workspace |
+| Member CIF number | The member's primary identifier in your Core Banking System, unique per workspace |
+| Credit Union Member Account Number | The member's account number in your Core Banking System. Up to 16 digits, encrypted at rest, shown as the last four digits |
+| Member since | The date the member joined the credit union, from Core Banking. Not the date the record was created here |
+| Classification | Optional. Your workspace's staff and Board categories. A confidential classification makes the member's new loans confidential |
 
-Branch, Member account number (CIF), first name, last name, and date of birth are required at create. Email and phone are optional. The TRN, driver's licence, passport, bank account, government ID number, mother's maiden name, and notes columns are all encrypted at rest with your credit union's own key. Five of these have a reveal control on the member profile: the TRN, driver's licence, passport, bank account number, and notes. Reading any of those decrypted values is a separate action: the reader clicks the reveal control, which requires the **members.edit** capability, and each reveal is recorded in the audit log as a `member.pii.revealed` event. The government ID number and mother's maiden name are also stored encrypted but have no reveal control; on the profile they show as "On file (encrypted)".
+Branch, Member CIF number, Credit Union Member Account Number, Member since, first name, last name, and date of birth are required at create. Your workspace's **required-fields policy** can require more, and the form refuses to save until they are filled; see [Creating members](/omnia/los/members/creating-members#required-fields). A record saved before a field became required shows an amber **This member record is incomplete** banner but does not block loans.
+
+The TRN, driver's licence, passport, bank account, Core Banking account number, government ID number, mother's maiden name, and notes are encrypted at rest with your credit union's own key. Six have a **Reveal** control on the edit form: the TRN, driver's licence, passport, bank account, Core Banking account number, and notes. Reveal requires the `members.edit` capability, and each reveal is recorded as a `member.pii.revealed` event. Loan reviewers holding `members.pii.view` can reveal the TRN, driver's licence and passport read-only. The government ID number and mother's maiden name have no reveal control; they show as "On file (encrypted)".
 
 Members can also have additional contacts beyond their primary email, phone, and address. The three contact types are alternate phone (`PHONE_ALT`), alternate email (`EMAIL_ALT`), and alternate address (`ADDRESS_ALT`). One contact of each type can be marked as primary, enforced by a single-primary-per-type constraint. You manage contacts from the member's profile: add a contact, remove one, or promote an existing contact to primary, which demotes the current primary of that type. Managing contacts requires the **members.edit** capability, and adding or removing one records a `member.contact.added` or `member.contact.removed` audit event.
 
@@ -74,7 +79,7 @@ One member can have multiple loan applications over time. Each member's profile 
 
 ## Finding the Members section
 
-Navigate to **`/your-slug/members`** to open the Members list. You can also reach it from the main navigation sidebar. From there you can search for existing members, open a member's profile, or create a new member.
+Open **Members** in the sidebar, under **Workspace**, or go to `/your-slug/members`. Search, open a profile, or create a new member. Rest the pointer on a row to peek at the member's key details without opening the profile.
 
 ---
 
@@ -90,7 +95,27 @@ Navigate to **`/your-slug/members`** to open the Members list. You can also reac
   <Card title="Documents" icon="file-text" href="/omnia/los/members/documents">
     Upload identity and supporting documents to a member's profile, and manage the document library.
   </Card>
-  <Card title="Loan Applications" icon="file-check" href="/omnia/los/loans/overview">
-    Understand how member records connect to the loan origination workflow.
+  <Card title="Staff and confidential loans" icon="lock" href="/omnia/los/loans/confidential-and-staff-loans">
+    Classify staff and Board members so their loans stay confidential.
   </Card>
 </CardGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can a member be ACTIVE but not able to borrow?">
+    Yes. ACTIVE with KYC UNVERIFIED or FAILED cannot even be drafted for. ACTIVE with KYC in progress or in manual review can be drafted for but not submitted.
+  </Accordion>
+  <Accordion title="Where do the CIF and account number come from?">
+    Your Core Banking System. Both, and the Member since date, are copied from the member's record there.
+  </Accordion>
+  <Accordion title="Who can see a member's TRN?">
+    Holders of `members.edit` on the edit form, and loan reviewers holding `members.pii.view` on the loan pages. Every reveal is audited.
+  </Accordion>
+  <Accordion title="Why does a member show an incomplete banner?">
+    The record was saved before your workspace required one of its fields. Loans are not blocked; complete it on the next edit.
+  </Accordion>
+  <Accordion title="Is a member ever deleted?">
+    No. Deletion hides the record from the list and search; an Administrator can restore it.
+  </Accordion>
+</AccordionGroup>
