@@ -78,7 +78,7 @@ window.LOS_HELP_CONFIG = {
 };
 ```
 
-The config is read at question time, so file order does not matter. Never put a key or token in this object: everything in it is public. The endpoint holds the model key server-side, the way the Nova assistant on the MCCU site keeps `GEMINI_API_KEY` in its server environment.
+The config is read at question time, so file order does not matter. Never put a key or token in this object: everything in it is public. The endpoint holds the model key server-side, the way any server-side assistant keeps its model API key in its server environment.
 
 With AI mode on, each question still runs the local search first. The top passages go to the endpoint, its answer appears in a panel labelled **AI summary of the sources below**, and the local answer card with its cited source, related links and follow-ups still renders underneath. If the endpoint errors, times out, or returns no `answer`, the reader sees the local answer alone, with no error message.
 
@@ -127,7 +127,7 @@ What the server must do:
 4. **Protect the key and the bill.** Keep the model key in the server environment, rate-limit per IP, cap `question` at 300 characters (the input already does) and the total context size.
 5. **Respond within the timeout** (15 s by default).
 
-A minimal server in the shape of Nova's `/api/ai/chat` handler:
+A minimal server for the endpoint:
 
 ```js
 app.post('/ask', async (req, res) => {

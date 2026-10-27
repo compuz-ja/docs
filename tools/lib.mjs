@@ -15,7 +15,7 @@ export function totp(secret, t = Date.now()) {
 
 export const BASE = 'http://127.0.0.1:8099';
 export const USERS = {
-  admin:      ['htingling@compuzign.com',     '<admin-totp-secret>'],
+  admin:      [process.env.ARGOS_CAPTURE_ADMIN_EMAIL ?? 'admin@meridiancu.demo', '<admin-totp-secret>'],
   gm:         ['gm@meridiancu.demo',          '<gm-totp-secret>'],
   finance:    ['finance@meridiancu.demo',     '<finance-totp-secret>'],
   compliance: ['compliance@meridiancu.demo',  '<compliance-totp-secret>'],
