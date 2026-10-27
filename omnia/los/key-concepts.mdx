@@ -5,28 +5,21 @@ description: "Workspaces, roles, loan applications, queues, the next step, alert
 icon: "list"
 ---
 
-These are the concepts every screen in the platform is built on: workspaces, roles, loan applications, queues, the next step, alerts, loan types, risk bands, KYC status, the audit trail, and compliance exports.
+These are the concepts every screen in the LOS is built on: workspaces, roles, loan applications, queues, the next step, alerts, loan types, risk bands, KYC status, the audit trail, and compliance exports.
 
 ---
 
 ## Workspace
 
-A **workspace** is your credit union's isolated environment. Every record your team creates, like member records, loan applications, audit entries, rate tables, and user accounts, belongs to your workspace and is invisible to every other credit union on the platform.
+A **workspace** is your credit union's private environment. Every record your team creates, like member records, loan applications, audit entries, rate tables, and user accounts, belongs to your workspace and is invisible to every other credit union.
 
-Your workspace is identified by a short **slug** that appears in every URL:
-
-```text
-https://loan.compuzign.com/your-slug/loans
-https://loan.compuzign.com/your-slug/members
-```
-
-The slug is set when your workspace is created and cannot change afterwards. If your credit union's display name changes, only the name shown in the interface updates. The slug in your URLs stays the same.
+Your workspace is identified by a short name that appears at the start of every address in the app, for example `/your-credit-union/loans` and `/your-credit-union/members`. It is set when your workspace is created and cannot change afterwards. If your credit union's display name changes, only the name shown in the interface updates.
 
 ---
 
-## Roles and capabilities
+## Roles and permissions
 
-The platform uses **role-based access control**. Every staff member holds a role, and each role carries a set of capabilities, the actions that role can take. You cannot open a screen, submit a form, or trigger a workflow transition without the required capability.
+Every staff member holds a **role**, and each role carries a set of **permissions**, the actions that role can take. You cannot open a screen, submit a form, or move a loan without the matching permission.
 
 The built-in roles for the Credit Department:
 
@@ -35,7 +28,7 @@ The built-in roles for the Credit Department:
 | **Credit Officer** | Create and manage member records, capture and submit loan applications |
 | **Adjudicator** | Review submitted applications, record approve, decline, or information-request decisions |
 | **Securities** | Confirm collateral, resolve or reject securities requests |
-| **Disbursement** | Apply fees, schedule payees, and execute approved disbursements |
+| **Disbursement** | Apply fees, schedule payees, and release approved disbursements |
 | **Credit Manager** | Oversee the full pipeline, approve high-value disbursements, read reports across branches |
 | **Branch Manager** | View and monitor loans for their assigned branch |
 | **Administrator** | Manage users, roles, invitations, and workspace configuration |
@@ -46,14 +39,14 @@ Your Administrator assigns your role when they invite you. If your responsibilit
 
 ## Loan application
 
-The **loan application** is the central record. It captures everything about a member's loan request: their personal and employment details, income and expenses, collateral, guarantors, and the decisions made at each stage of review.
+The **loan application** is the central record. It captures everything about a member's loan request: personal and employment details, income and expenses, collateral, guarantors, and the decisions made at each stage of review.
 
-Every application moves through a defined sequence of statuses: DRAFT, SUBMITTED, ADJUDICATION, APPROVED, then SECURITIES, DISBURSEMENT, DISBURSED, and FILED.
+Every application moves forward through the same statuses: **Draft**, **Submitted**, **Approval**, **Approved**, **Securities**, **Disbursement**, **Disbursed**, and **Filed**.
 
-A loan can also move backward for corrections. An Adjudicator can send a file back to DRAFT, the Securities team can return it to ADJUDICATION, and a credit union that requires a post-disbursement re-check can route a DISBURSED loan back to SECURITIES. A loan can also be cancelled while it is SUBMITTED or in DISBURSEMENT, which takes it to a terminal CANCELLED status.
+A loan can also move backward for corrections. An Adjudicator can send a file back to **Draft**, the Securities team can return it to **Approval**, and a credit union that requires a post-disbursement re-check can route a **Disbursed** loan back to **Securities**. A loan can be cancelled while it is **Submitted** or in **Disbursement**, which ends it at **Cancelled**.
 
 <Note>
-  Loan applications are **never deleted**. Once created, a loan record exists for good. If a loan cannot proceed, it reaches a terminal status like **Declined**, **Cancelled**, or **Draft abandoned**, but the record stays, fully visible in the audit trail.
+  Loan applications are **never deleted**. If a loan cannot proceed, it ends at **Declined**, **Cancelled**, or **Draft abandoned**, but the record stays, fully visible in the audit trail.
 </Note>
 
 Two statuses mark temporary holds rather than forward progress:
@@ -67,9 +60,9 @@ Two statuses mark temporary holds rather than forward progress:
 
 A **queue** is the list of loans waiting for one team: **Credit Approvals**, **Securities**, **Disbursement**, and **KYC Review** for identity checks. A Credit Officer's own queue is **Returned to Me**, the loans that came back to them.
 
-A loan in a queue is either **unassigned**, free for anyone in the team to claim, or **owned** by one person. The left menu shows a live count beside every queue you can open. The count turns amber once the oldest item has waited more than 24 hours.
+A loan in a queue is either **unassigned**, free for anyone in the team to claim, or **owned** by one person. The left menu shows a live count beside every queue you can open. The count turns amber once the oldest item has waited more than a day.
 
-**Waiting for you** narrows the queues to your own next actions: loans assigned to you, unassigned loans in a queue you work that your role can act on, and loans returned to you. See [Find the work waiting for you](/omnia/los/navigation/finding-your-work).
+**Waiting for you** narrows the queues to your own next actions: loans assigned to you, unassigned loans in a queue you work, and loans returned to you. See [Find the work waiting for you](/omnia/los/navigation/finding-your-work).
 
 ---
 
@@ -81,21 +74,21 @@ The **next step** is where a loan goes after its current stage, and who takes it
 - **What's stopping this loan**: every condition still standing between the loan and its next stage.
 - **Next**: the stage after this one, and the people who will work it.
 
-The banner reads the same rules the platform enforces when someone tries to move the loan, so the banner and a refusal never disagree. See [A guided tour of the loan page](/omnia/los/navigation/the-loan-page).
+The banner checks the same rules the LOS applies when someone tries to move the loan, so the banner and a refusal never disagree. See [A guided tour of the loan page](/omnia/los/navigation/the-loan-page).
 
 ---
 
 ## Alerts
 
-An **alert** is a short entry in the bell in the top bar, written each time the platform emails you about a loan. It names the loan by its ID only. Alerts are yours alone: nobody else can read or clear them.
+An **alert** is a short entry in the bell in the top bar, written each time the LOS emails you about a loan. It names the loan by its ID only. Alerts are yours alone: nobody else can read or clear them.
 
-Alongside the bell, a **hand-off email** goes to whoever owns a loan's next step, a **morning summary** email arrives on weekdays when something is waiting for you, and your credit union can turn on **Teams posts** for each queue. See [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).
+Alongside the bell, a **hand-off email** goes to whoever owns a loan's next step, a **morning summary** email arrives each weekday morning when something is waiting for you, and your credit union can turn on **Teams posts** for each queue. See [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).
 
 ---
 
 ## Loan types
 
-The platform supports four loan types. The type you pick at the start decides which form sections appear and which collateral fields are required.
+The LOS supports four loan types. The type you pick at the start decides which form sections appear and which collateral fields are required.
 
 - **Unsecured** is a personal loan with no collateral. The assessment rests on the member's employment, income, and risk profile.
 - **Cash secured** is backed by the member's own savings, shares, or deposit. The cash is hypothecated, or ring-fenced, as security.
@@ -106,7 +99,7 @@ The platform supports four loan types. The type you pick at the start decides wh
 
 ## Risk band
 
-When you submit an application, the platform calculates a **risk band** from factors like employment type and length, income, total debt obligations, loan type, and credit history. The result is a single rating from **R1** to **R5**:
+The LOS calculates a **risk band** for every application from factors like employment type and length, income, total debt obligations, loan type, and credit history. Each factor is scored, the scores are added up, and the total maps to a single rating from **R1** to **R5**:
 
 | Band | Meaning |
 |---|---|
@@ -116,15 +109,13 @@ When you submit an application, the platform calculates a **risk band** from fac
 | **R4** | Elevated risk |
 | **R5** | Highest risk |
 
-For products priced by risk band, a higher band raises the rate, based on your credit union's rate tables. Some products price on other factors instead, such as collateral type or vehicle age. The Adjudicator sees both the band and the underlying score when reviewing an application. The score is a sum of seven categorical factors, each scored 1 to 5, for a range of 7 to 35, with most applications between 7 and 21.
+For products priced by risk band, a higher band raises the rate according to your credit union's rate tables. Some products price on other factors instead, such as collateral type or vehicle age. The Adjudicator sees both the band and the underlying score when reviewing an application.
 
 ---
 
 ## KYC status
 
 **KYC (Know Your Customer)** status reflects identity verification for a member. A member needs a **Verified** KYC status before their loan application can be submitted, so your credit union meets its member-identification obligations.
-
-KYC status moves through five states:
 
 | Status | Meaning |
 |---|---|
@@ -134,19 +125,17 @@ KYC status moves through five states:
 | **Failed** | Verification could not be completed with the documents provided |
 | **Manual review** | The check raised a flag, a reviewer must assess the documents by hand |
 
-If a member's KYC fails, upload more documents and retry. Each retry creates a new verification record, so the history of every attempt is preserved.
+If a member's KYC fails, upload more documents and retry. Every attempt is kept on file.
 
 ---
 
 ## Audit trail
 
-The platform records **every action** in a permanent, tamper-evident audit log: logins, every form save and submission, every status change, every decision, every document upload, and every configuration change.
+The LOS records **every action** in a permanent, tamper-evident audit trail: sign-ins, every form save and submission, every status change, every decision, every document upload, and every configuration change.
 
-The audit log is:
-
-- **Immutable.** No entry can be edited or deleted, not even by an administrator.
-- **Hash-chained.** Each entry is cryptographically linked to the one before it, so tampering with history is detectable at once.
-- **Complete.** Every entry captures who acted, the role they held at that moment, the capabilities they used, the time, and the IP address and device.
+- **Permanent.** No entry can be edited or deleted, not even by an Administrator.
+- **Tamper-evident.** Each entry is linked to the one before it, so any change to history is detectable at once.
+- **Complete.** Every entry captures who acted, the role they held at that moment, the time, and the device they used.
 
 This is how your credit union reconstructs the exact sequence of events for any loan, member, or user action, whether for an internal review, a member dispute, or a regulatory exam.
 
@@ -154,26 +143,22 @@ This is how your credit union reconstructs the exact sequence of events for any 
 
 ## Compliance export
 
-A **compliance export** is a downloadable package you generate from the audit viewer to hand to regulators or external auditors. The bundle contains:
+A **compliance export** is a downloadable package you generate from the audit viewer to hand to your regulator or external auditors. It contains your audit records, proof that they have not been tampered with, and a digital signature that shows the export is authentic.
 
-- Your audit records in a structured format
-- A **hash-chain proof** that the records have not been tampered with
-- A **cryptographic signature** that verifies the export is authentic
-
-The bundle is self-contained and independently verifiable. A regulator does not need access to the platform to confirm the integrity of the records you give them.
+The bundle is self-contained. A regulator does not need access to the LOS to confirm the integrity of the records you give them.
 
 ---
 
 ## Frequently asked questions
 
-<Accordion title="Can I change my credit union's workspace slug?">
-  No. Your slug is set when your credit union is onboarded and cannot change afterwards. It is embedded in every URL your staff uses and tied to the integrity of your audit chain. If your credit union rebrands, your Administrator can update the display name in the interface, but the URL slug stays the same.
+<Accordion title="Can I change my credit union's workspace short name?">
+  No. It is set when your credit union is onboarded and is part of every address your staff uses. If your credit union rebrands, your Administrator can update the display name in the interface, but the short name in the address stays the same.
 </Accordion>
 
 <Accordion title="What happens if a member fails KYC verification?">
-  Their status is set to **Failed** and they cannot be linked to a new loan submission in that state. Upload different or additional identity documents and resubmit. If the system flags the submission for closer review rather than failing it outright, the status moves to **Manual review**, and a staff member with the KYC review capability assesses the documents in the review queue. They can approve the verification, reject it, or escalate the case for further handling.
+  Their status is set to **Failed** and their loan cannot be submitted in that state. Upload different or additional identity documents and resubmit. If the check flags the submission for closer review rather than failing it outright, the status moves to **Manual review**, and staff with the **Review identity checks** permission assess the documents in the review queue. They can approve the verification, reject it, or escalate the case.
 </Accordion>
 
-<Accordion title="Is my credit union's data shared with other credit unions on the platform?">
-  No. Every credit union runs in a fully isolated workspace. Your member records, loan applications, staff accounts, rate tables, and audit logs are invisible to every other credit union. Isolation is enforced at every layer of the system, so there is no path for data to cross workspace boundaries.
+<Accordion title="Is my credit union's data shared with other credit unions?">
+  No. Every credit union works in its own private workspace. Your member records, loan applications, staff accounts, rate tables, and audit trail are invisible to every other credit union.
 </Accordion>

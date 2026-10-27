@@ -1,165 +1,105 @@
 ---
 title: "Workspace setup"
 sidebarTitle: "Workspace setup"
-description: "Configure your workspace branding, manage branches, and understand what is fixed at onboarding and what you can change later."
+description: "Set your workspace branding, understand your branches, and know what is fixed when your workspace is created."
 icon: "building"
 ---
 
-The workspace setup area is where an Administrator controls your workspace branding, branches, and the settings fixed at onboarding.
+Workspace setup is where an Administrator sets your credit union's branding and checks the things fixed when the workspace was created: its web address and its branches.
 
-Each credit union on the platform has its own private, isolated workspace. Your workspace is identified by a unique slug that appears in every URL your team uses. As an **Administrator** you can configure branding and view your branches. A few settings are fixed at onboarding and cannot be changed afterward.
+Each credit union has its own private workspace. Nobody outside your credit union can see into it.
 
-**Required role:** Administrator (`admin.tenant.manage` capability)
+**Required permission:** **Manage workspace**, held by the Administrator.
 
-## Your workspace slug
+## Your workspace address
 
-Your workspace slug is the short, URL-safe identifier assigned to your credit union at onboarding. It appears in every URL your team uses, for example:
-
-```
-/my-credit-union/loans
-/my-credit-union/admin/products
-```
-
-The slug appears in every URL your team uses, and it is baked into your onboarding records. Loan IDs do not use the slug: they embed the **branch code** instead, for example `EST-AUTO-00001`. Audit records are keyed to your workspace, not to the slug text. Because it is fixed into so many permanent links, **the slug cannot be changed after onboarding**.
-
-<Warning>
-  Your workspace slug cannot be changed after onboarding. Every URL references this
-  value, and it is baked into your onboarding records. If you believe your slug
-  needs to change, contact support before going live. It is far simpler to
-  correct before any loans are created.
-</Warning>
+Your workspace has a short name that appears in every web address your team uses, for example `/my-credit-union/loans`. It is set when your workspace is created and **cannot be changed afterwards**, because every bookmark, email link, and document link points at it. If it needs to change, raise it with your LOS support team before you go live.
 
 ## Updating branding
 
-Navigate to **Administration → Settings → Branding** (route `/admin/tenant/branding`) to update your credit union's visual identity and communication settings. Changes take effect immediately. New emails, newly generated loan agreement PDFs, and newly prepared legal documents use the updated values.
+Open **Administration → Settings → Branding** to set your credit union's look and the names on emails and documents. Changes apply at once to new emails, new loan agreements, and newly prepared documents.
 
 <Frame caption="The text settings sit together: primary color, product name, short name, and email from-name. Each says where it appears.">
   <img src="/images/omnia/los/admin/branding.png" alt="The Branding page with a logo, a primary color, a product name, a short name and an email from-name filled in for a demonstration workspace" />
 </Frame>
 
 <Note>
-  Branding changes are not retroactive. Loan agreements and legal documents
-  that were already generated keep their original branding. Only documents
-  generated after you save the change reflect the new settings. Re-prepare an
-  unsigned document to pick up the change.
+  Branding is not retroactive. Documents already generated keep the branding they were made with. Re-prepare an unsigned document to pick up the change.
 </Note>
-
-Every branding change writes an audit event: `tenant.branding.updated` for the settings fields, with the before and after values, and `tenant.branding.logo.uploaded` / `.logo.removed`, `tenant.branding.letterhead.uploaded` / `.letterhead.removed`, and `tenant.branding.icon.uploaded` / `.icon.removed` for each asset.
-
-The Branding page exposes these fields:
 
 <CardGroup cols={2}>
   <Card title="Primary color" icon="palette">
-    A hex color code such as `#003366`, used across the workspace UI, on
-    outbound emails, on loan agreement PDFs, and on sign-in pages. Stored as
-    `primaryColor`. Defaults to `#6366F1`.
+    A hex color such as `#003366`, used across the workspace, on emails, on loan agreements, and on the sign-in pages. Starts as `#6366F1`.
   </Card>
   <Card title="Product name" icon="type">
-    The name shown after the platform name in the app header and in browser
-    tab titles: **OMNIA HORIZON: PRODUCT_NAME**. Up to 40 characters. Leave it
-    blank to show the default, **LoS**. Stored as `productLabel`.
+    The name shown after the platform name in the app header and browser tabs. Up to 40 characters. Leave it blank to show **LoS**.
   </Card>
   <Card title="Short name" icon="text-cursor-input">
-    The name printed in the footer of generated documents such as the Loan
-    Disbursement Sheet: **SHORT_NAME HORIZON: Loan Origination System**. Up to
-    20 characters, letters, digits, spaces, and basic punctuation only. Leave
-    it blank to use the workspace name. Stored as `shortName`.
+    The name printed in the footer of generated documents such as the Loan Disbursement Sheet. Up to 20 characters: letters, digits, spaces, and basic punctuation. Leave it blank to use your workspace name.
   </Card>
   <Card title="Email from-name" icon="mail">
-    The display name members and staff see in the **From** field of
-    notification emails, for example `My Credit Union`. Stored as
-    `emailFromName`, 1 to 80 characters. The sending address itself is managed
-    by the platform.
+    The name members and staff see in the **From** field of emails, for example `My Credit Union`. 1 to 80 characters. Until you set it, emails come from "Loans Team".
   </Card>
   <Card title="Agreement letterhead text" icon="file-text">
-    A short text header printed at the top of every PDF loan agreement
-    generated in your workspace. Stored as `agreementLetterhead`. Up to 2,000
-    characters.
+    A short text header printed at the top of every loan agreement. Up to 2,000 characters.
   </Card>
 </CardGroup>
 
-<Note>
-  Your workspace name appears in the platform UI and as the prefix on outbound
-  email subject lines, but it is the immutable workspace name set at onboarding,
-  not a Branding field. There is no editable credit-union-name input on this
-  page.
-</Note>
+Every branding change is recorded in the audit trail with the old and new values.
 
-<Note>
-  Your credit union's **legal name**, its registered name, is also not on this
-  page. Your CompuZign team sets it. It names the credit union as the legal
-  party in the loan agreement and heads the Loan Disbursement Sheet. When it is
-  not set, the workspace name is used.
-</Note>
+Two names are not on this page. Your **workspace name**, shown in the app and at the start of email subject lines, is set when the workspace is created. Your credit union's **legal name**, which names the credit union as the lender in the loan agreement and heads the Loan Disbursement Sheet, is set by your LOS support team; until it is set, the workspace name is used.
 
-<Note>
-  On a brand-new workspace the branding record is created the first time you save
-  a setting or upload an asset, so before that the primary color shows the
-  `#6366F1` default while the email from-name and letterhead text start blank.
-  Until you set one, outbound emails use the default from-name "Loans Team".
-</Note>
+### Logo
 
-### Uploading your logo
+Upload your logo as PNG, JPEG, or WebP, up to 2 MB. The crop keeps your image's shape, so a square mark or a wide banner both work. The logo appears in the workspace header, on sign-in pages, on loan agreements, at the top of the Loan Disbursement Sheet, and in emails. The disbursement sheet prints PNG and JPEG logos only; with a WebP logo it prints a text heading instead. Uploading a new logo replaces the old one.
 
-On the Branding page you can also upload your credit union's logo. Accepted formats are PNG, JPEG, and WebP (maximum 2 MB). The crop locks to whatever shape you upload, so a square mark or a horizontal banner both work. Your logo appears in the workspace header, on auth pages, in PDF loan agreements, at the top of the Loan Disbursement Sheet, and in outbound email notifications. The Loan Disbursement Sheet prints PNG and JPEG logos only; with a WebP logo it shows a text heading instead. To replace an existing logo, upload a new file. The old one is removed automatically.
+### Letterhead image
 
-### Agreement letterhead image
-
-Separate from the letterhead **text** field above, you can upload a letterhead **image** that prints as a banner across the top of your loan agreement PDFs. Accepted formats are PNG, JPEG, and WebP (maximum 2 MB). When no image is set, the PDF falls back to the text-only letterhead. Use the Remove button to clear it.
+You can also upload a letterhead **image**, PNG, JPEG, or WebP up to 2 MB, printed as a banner across the top of loan agreements. Without one, agreements use the letterhead text. Click **Remove** to clear it.
 
 ### Browser tab icon
 
-You can upload a favicon shown in browser tabs and bookmarks, accepting PNG, JPEG, WebP, or SVG (maximum 512 KB). Upload a square image: the cropper locks to your upload's shape, so a square source renders sharpest. SVG uploads skip cropping entirely. Transparent backgrounds work best. When unset, the platform default favicon is used.
+Upload the small icon shown in browser tabs and bookmarks: PNG, JPEG, WebP, or SVG, up to 512 KB. Use a square image with a transparent background. SVG files skip cropping. Without one, the platform's default icon is used.
 
 <Note>
-  Every branding upload is checked server-side before it is stored: the file is
-  verified against its declared type by its magic bytes and run through a virus
-  scan, and a mismatched or infected file is rejected. SVG icons skip the
-  magic-byte check (they are text, not a raster format) but still go through the
-  virus scan.
+  Every upload is checked before it is stored: the file must really be the type it claims to be, and it is scanned for viruses. A file that fails either check is rejected.
 </Note>
 
 ## Branches
 
-Branches represent the physical locations of your credit union. Each branch is set up at onboarding with a short **branch code**, for example `EST` for an Eastview branch. That code is embedded in every loan ID created at that branch:
+Each branch has a short **branch code**, set when the branch is added, for example `EST` for an Eastview branch. The code starts every loan ID created at that branch:
 
 ```
-EST-AUTO-00001    (Auto loan, Eastview branch, first loan)
-MAIN-UNS-00047    (Unsecured loan, Main branch)
+EST-AUTO-00001    (motor vehicle loan, Eastview branch, first loan)
+MAIN-UNS-00047    (unsecured loan, Main branch)
 ```
 
 <Warning>
-  Branch codes are permanent. They are embedded in every loan ID created at that
-  branch and surface in branch-scoped role and account names, and they cannot be
-  changed after onboarding.
+  Branch codes are permanent. They are part of every loan ID created at the branch and cannot be changed later.
 </Warning>
 
-If your credit union opens a new branch after going live, contact support to have it added. You cannot add branches yourself through the admin UI in the current version.
+You cannot add a branch in the app. When your credit union opens a new branch, ask your LOS support team to add it.
 
-## Initial administrator account
+## Your first administrator
 
-The first Administrator account is created during onboarding using the email address provided in the setup configuration. Once you are signed in with that account, you can invite additional administrators and staff from **Administration → Add New Users**.
+Your first Administrator account is created with your workspace, using the email address your credit union supplied. Sign in with it, then invite your other administrators and staff from **Administration → Add New Users**.
 
-<Accordion title="What roles can I invite?">
-  The roles available in your workspace are configured at onboarding. The
-  seven built-in credit department roles are:
+<Accordion title="Which roles can I invite?">
+  Every workspace has seven built-in roles:
 
-  | Role | What they can do |
+  | Role | What they do |
   |---|---|
-  | **Administrator** | Full access to all admin settings, including branding, products, rates, and invitations. Shown on screen as **Application Administrator** |
-  | **Credit Manager** | Manage loan products and rate tables, view all-branch analytics, oversee the full pipeline |
-  | **Branch Manager** | View analytics scoped to their branch, manage and assign loans in their branch |
-  | **Credit Officer** | Capture and manage loan applications |
-  | **Adjudicator** | Review submitted applications and record approve, decline, or info-requested decisions |
-  | **Securities** | Verify collateral and resolve outstanding security requests |
-  | **Disbursement** | Schedule and execute funding on approved loans |
+  | **Administrator** | Branding, settings, products, rates, fees, and invitations. Shown on screen as **Application Administrator** |
+  | **Credit Manager** | Products, rates, and fees; all-branch analytics; oversight of the whole pipeline |
+  | **Branch Manager** | Branch analytics; assigns and oversees loans in their branch |
+  | **Credit Officer** | Captures and manages loan applications |
+  | **Adjudicator** | Approves, declines, or asks for more information |
+  | **Securities** | Verifies collateral and resolves security requests |
+  | **Disbursement** | Releases funds on approved loans |
 
-  Two further roles sit outside lending: **User Administrator**, for staff
-  account administration, and **Staff**, a front-desk member lookup. See
-  [Roles and permissions](/omnia/los/access/roles-and-permissions). Contact
-  support if you need to adjust the roles available in your workspace.
+  Your credit union may also have roles of its own. See [Roles and permissions](/omnia/los/access/roles-and-permissions).
 </Accordion>
 
-## Deeper operational configuration
+## Other workspace settings
 
-Branding and branches are the visual and structural setup. Your workspace also has operational settings such as the **GCT rate**, the **dual-control threshold** for large disbursements, the **AML screening** toggle, and the **audit retention** period. Those live on the separate [Workspace configuration](/omnia/los/admin/workspace-configuration) page so they stay distinct from branding.
+Branding and branches are the visible setup. The settings that govern lending, such as the tax rate on fees, disbursement controls, approval rules, and required fields, are on [Workspace configuration](/omnia/los/admin/workspace-configuration).

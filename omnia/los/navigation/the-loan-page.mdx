@@ -5,7 +5,7 @@ description: "The loan page tells you who holds the loan now, what is stopping i
 icon: "panel-top"
 ---
 
-Every loan page answers three questions before you scroll: who has this loan now, what is stopping it, and who gets it next. The answers come from the same rules the platform enforces when someone tries to move the loan, so the page and the refusal always agree.
+Every loan page answers three questions before you scroll: who has this loan now, what is stopping it, and who gets it next. The answers come from the same rules the LOS applies when someone tries to move the loan, so the page and a refusal always agree.
 
 This tour covers the full loan file at **Loans** then a loan, and the stage screens your team works from: the Credit Approvals, Securities and Disbursement detail pages. All of them carry the next-step banner, the timeline and the action bar.
 
@@ -19,7 +19,7 @@ The banner sits at the top of the loan. It reads as one sentence in three parts:
 
 ### Now with
 
-**Now with** names the team that holds the loan and the stage it is in, then lists the people who can act on it right now. The teams are:
+**Now with** names the team that holds the loan and the stage it is in, then lists the people who can act on it right now:
 
 | Stage | Team shown |
 |---|---|
@@ -29,39 +29,32 @@ The banner sits at the top of the loan. It reads as one sentence in three parts:
 | Securities issue | Approving authority |
 | Disbursement, Disbursed | Disbursement |
 
-When your name is in the list it is highlighted with **(you)**, and the line ends with **your move**.
-
-The banner shows up to four names, then "and N others". Hover the names to see each person's role.
+When your name is in the list it is highlighted with **(you)**, and the line ends with **your move**. The banner shows up to four names, then "and N others". Hover the names to see each person's role.
 
 ### How the people are chosen
 
-The list is not a guess. A person is listed when all of these hold:
+A person is listed when their account is active and their role is allowed to move the loan out of this stage. The loan's owner comes first: on a Draft or Info requested loan, the Credit Officer who captured it; at a later stage, the person the loan is assigned to.
 
-- their membership in the workspace is active, not suspended and not revoked,
-- their role holds the capability that moves the loan out of this stage, together with `workflows.transition` and `loans.transition`.
-
-The loan's owner comes first. On a Draft or Info requested loan, that is the Credit Officer who captured it. At a worker stage, it is the person the loan is assigned to.
-
-At the approval stages the list narrows further, by the loan's approval route:
+At the approval stages the list narrows further, by the loan's [approval route](/omnia/los/workflows/approval-routes):
 
 - **One approver.** Only approvers whose limit covers this amount and security are listed. The banner says so underneath.
 - **In-House Committee.** The committee members who have not voted yet are listed, with a note like "In-House Committee decides: 1 of 2 approvals recorded".
-- **Credit Committee.** The roles that record the Committee's decision are listed.
-- **Above the product maximum.** Only the role allowed to approve exceptions is listed, with a note naming it.
+- **Credit Committee.** The staff who record the committee's decision are listed.
+- **Above the product maximum.** Only the person allowed to approve exceptions is listed, with a note naming their role.
 
-If nobody qualifies, the banner says so in amber: "no one can act on it". That is a role setup problem, not a loan problem. Ask your Administrator to check the role.
+If nobody qualifies, the banner says so in amber: "no one can act on it". That is a role setup problem, not a loan problem. Ask your Administrator to check the roles.
 
 ### Approvers are counted for non-approvers
 
-If your role holds neither `loans.adjudicate` nor `reports.view`, approvers are counted rather than named: the banner reads, for example, **3 eligible approvers**. A Credit Officer sees that the loan is with the approving authority without seeing which approver holds or decided it. Approvers and oversight roles see the names.
+If your role neither approves loans nor views reports, approvers are counted rather than named: the banner reads, for example, **3 eligible approvers**. A Credit Officer sees that the loan is with the approving authority without seeing which approver holds or decided it.
 
 ### Next
 
-**Next** names the stage the loan goes to after this one, the team that works it, and the people in that team. Approved is skipped because the platform routes an approved loan straight on to Securities.
+**Next** names the stage the loan goes to after this one, the team that works it, and the people in that team. **Approved** is skipped because an approved loan goes straight on to Securities.
 
 When the next step happens without anyone clicking, the banner adds **automatically** and says when. An unsecured loan heading into Securities carries a note that unsecured loans usually pass straight through Securities to Disbursement.
 
-A loan in a closing state, like Filed or Declined, shows one line instead, for example "This loan is closed (Filed). There is no next step."
+A closed loan, like one that is **Filed** or **Declined**, shows one line instead, for example "This loan is closed (Filed). There is no next step."
 
 ## What's stopping this loan
 
@@ -71,34 +64,32 @@ Under **Now with**, the banner lists every condition that still stands between t
   <img src="/images/omnia/los/loan-page/whats-stopping.png" alt="What's stopping this loan checklist with two amber items about a security request and a signed document" />
 </Frame>
 
-The checks depend on the stage:
-
 | Stage | Check | What it says |
 |---|---|---|
 | Draft, Info requested | Required fields | Your credit union's required fields that are still blank, grouped by where they live: the loan, each guarantor by name, or the collateral |
 | Draft | Identity verification | The member's name and where the check stands, for example "has not been started" or "is waiting on review". Clear it on the member's record. |
-| Submitted, Approval | Approval route | What the approval still needs, for example the In-House Committee quorum, the Credit Committee decision and its proof, an exception reason for an amount above the product maximum, or an approved waiver |
+| Submitted, Approval | Approval route | What the approval still needs, for example a committee quorum, a committee decision and its proof, an exception reason for an amount above the product maximum, or an approved waiver |
 | Securities | Security requests | How many security requests are still open. Every request must be completed or cancelled first. |
 | Securities | Signed documents | Each signed document the stage needs that is not on file yet |
 | Disbursement | Payout | "The payout has not been scheduled." |
 | Disbursement | Readiness | Identity verification not complete, a security request still outstanding, or the signed loan agreement not generated yet |
 | Disbursement | Signed documents | Each signed document the stage needs that is not on file yet |
 
-These are the exact conditions the platform checks when someone tries to move the loan. If the list is empty and the move is still refused, the refusal message names the reason. Report it through **Support**.
+If the list is empty and the move is still refused, the refusal message names the reason. Report it through **Support**.
 
 On the Draft, Securities and Disbursement stages, the banner also links to **How signing works**, for loans with documents to sign.
 
 ## Who was notified
 
-After you move a loan on, a short message confirms what happened and which colleagues now have it, for example "Tricia Campbell and Devon Clarke have been notified." It appears at the bottom of the screen for about nine seconds.
+After you move a loan on, a short message confirms what happened and which colleagues now have it, for example "Jordan Reid and Casey Moore have been notified." It stays at the bottom of the screen for about nine seconds.
 
 <Frame caption="The second line names the staff who were just emailed. Here the last document was signed and the loan went to Disbursement.">
   <img src="/images/omnia/los/loan-page/notified-toast.png" alt="Confirmation that the last document was signed and the loan was sent to Disbursement, with a second line naming the three staff members who were notified" />
 </Frame>
 
-The message appears after you submit, claim, record an approval decision, send a loan to Securities, send documents to Securities, schedule or mark a disbursement, file, cancel, send a loan back a stage or to Draft, and after the last signed document moves a loan to Disbursement.
+The message appears after you submit, claim, record an approval decision, send a loan or its documents to Securities, schedule or mark a disbursement, file, cancel, or send a loan back, and after the last signed document moves a loan to Disbursement.
 
-It lists staff names only. Members are never listed and email addresses are never shown. When the platform found nobody to email, it says **No staff were emailed.** That usually means no one in your workspace holds the capability for the next step. Tell your Administrator.
+It lists staff names only. Members are never listed and email addresses are never shown. When nobody was emailed, it says **No staff were emailed.** That usually means nobody in your workspace is set up to work the next step. Tell your Administrator.
 
 ## The timeline
 
@@ -114,9 +105,9 @@ Each row reads:
 - the time it spent in the stage, like `3d`, or `5h so far` for the stage it is in now,
 - a last line: **Moved on by** the person who moved it out, **Moved on by the platform** for an automatic step, **With** a person **now** for the current stage, or **Waiting to be picked up** when nobody has claimed it.
 
-A loan that has finished shows a final **Closed** row for Filed, Declined, Cancelled or Abandoned.
+A finished loan shows a final **Closed** row for Filed, Declined, Cancelled or Abandoned.
 
-For viewers without `loans.adjudicate` or `reports.view`, the people at the approval stages read **the approving authority**, matching the banner. Loans brought in through loan migration show their history from the original dates.
+For viewers who neither approve loans nor view reports, the people at the approval stages read **the approving authority**, matching the banner. Loans brought in through loan import show their history from the original dates.
 
 ## The action bar
 
@@ -144,7 +135,7 @@ The bar only offers what your role can do, and on the approval stages only if yo
 
 On the Credit Approvals, Securities and Disbursement screens, **More** also holds **Open full loan file**.
 
-The bar never adds a new way to move a loan. Every button runs the action that already exists on the page, and the platform checks every rule again when you press it.
+Every button runs the same action that exists elsewhere on the page, and every rule is checked again when you press it.
 
 ## The capture step bar
 
@@ -158,29 +149,27 @@ On a Draft, an **Application progress** bar runs across the top of the form in s
 - **Guarantors** and **Collateral** are marked optional on loans that do not need them.
 - **Documents** is always optional. Missing supporting documents do not block submission; Securities asks for any still missing after approval.
 
-Under the bar, a hint says what to do next: "Next: complete the income & expenses section." Once every required step is done it reads "Every required section is complete. You can submit the application." If your credit union's required-fields policy still has gaps, the hint lists them.
+Under the bar, a hint says what to do next: "Next: complete the income & expenses section." Once every required step is done it reads "Every required section is complete. You can submit the application." If your credit union's required fields still have gaps, the hint lists them.
 
 Click any step to jump to that section. When you scroll past the bar, a slim copy pins under the top bar so your progress stays in view.
 
 ## Folded sections
 
-On the full loan file, once a loan leaves capture, the sections that are not your job start folded, so you land on the part you work. A folded section is one line with its name, a short summary like "2 guarantors", and **Show**. Click it to open. Click **Hide** above an open section to fold it again.
+On the full loan file, once a loan leaves capture, the sections that are not your job start folded, so you land on the part you work. A folded section is one line with its name, a short summary like "2 guarantors", and **Show**. Click **Hide** above an open section to fold it again.
 
 <Frame caption="A folded section shrinks to its title, with a short summary where one applies. Show opens it.">
   <img src="/images/omnia/los/loan-page/folded-section.png" alt="Income and expenses and Net worth folded to single lines, Net worth showing No entries, each with a Show link" />
 </Frame>
 
-Which sections start folded depends on the capabilities you hold:
-
 | Your focus | Starts folded |
 |---|---|
-| **Securities** (`securities.review`, no `loans.adjudicate`) | Income & expenses, Net worth, Credit rating, Risk rating, Officer recommendation, Creditor-life insurance, Escrow shares |
-| **Disbursement** (`loans.disburse` only) | Income & expenses, Net worth, Credit rating, Risk rating, Officer recommendation, Guarantors |
+| **Securities** (reviews securities but does not approve loans) | Income & expenses, Net worth, Credit rating, Risk rating, Officer recommendation, Creditor-life insurance, Escrow shares |
+| **Disbursement** (disburses loans only) | Income & expenses, Net worth, Credit rating, Risk rating, Officer recommendation, Guarantors |
 | **Credit Officers, approvers and oversight** | Nothing. Every section is open. |
 
 On a Draft or Info requested loan, nothing is folded for anyone: the Credit Officer is filling it in.
 
-Your own choice wins. Open or fold a section once and the loan page remembers it for you, in this browser, on every loan. In a private window, or where your browser blocks site storage, the choice lasts for that page view only.
+Your own choice wins. Open or fold a section once and the loan page remembers it for you, in this browser, on every loan. In a private window, the choice lasts for that page view only.
 
 ## How this works
 
@@ -188,34 +177,32 @@ Every banner carries a **How this works** link at the top right. It opens the **
 
 ## Peek at a loan from a list
 
-You do not have to open a loan to see its basics. Hover a loan in the **Loans** list or the **Credit Approvals** queue, or move to it with the keyboard, and a small panel opens beside the row with the product, amount, term, stage and who it is assigned to. In Credit Approvals it also shows who captured the loan.
+Hover a loan in the **Loans** list or the **Credit Approvals** queue, or move to it with the keyboard, and a small panel opens beside the row with the product, amount, term, stage and who it is assigned to. In Credit Approvals it also shows who captured the loan.
 
-The same peek works on **Users & Roles**, where it shows a user's role, branch, personal disbursement ceiling and status.
-
-The peek shows only what the list already loaded for you. It runs no new lookup, so it never shows more than the list you are allowed to see.
+The same peek works on **Users & Roles**, where it shows a user's role, branch, personal disbursement ceiling and status. The peek never shows more than the list you are allowed to see.
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why does the banner say no one can act on this loan?">
-    No active user in your workspace holds the capability for this stage, or at an approval stage, none of them has authority for this amount. The loan is not stuck because of the loan. Ask your Administrator to check the roles.
+    No active user in your workspace has a role that works this stage, or at an approval stage, none of them has authority for this amount. The loan itself is fine. Ask your Administrator to check the roles.
   </Accordion>
   <Accordion title="Why is Submit application greyed out?">
     Something is still listed under What's stopping this loan: a blank required field or identity verification that is not complete. Clear each item and the button turns on.
   </Accordion>
   <Accordion title="Why does it say 3 eligible approvers instead of names?">
-    Your role holds neither `loans.adjudicate` nor `reports.view`. Approver names are shown only to approvers and oversight roles.
+    Your role neither approves loans nor views reports. Approver names are shown only to approvers and oversight roles.
   </Accordion>
   <Accordion title="Why is there no action bar on this loan?">
     There is nothing your role can do on this loan at its current stage. The banner tells you who can.
   </Accordion>
   <Accordion title="The confirmation said No staff were emailed. Is something wrong?">
-    The loan moved, but nobody in your workspace holds the capability for the next step, so nobody was emailed. Ask your Administrator to check the roles before the loan sits unnoticed.
+    The loan moved, but nobody in your workspace is set up to work the next step, so nobody was emailed. Ask your Administrator to check the roles before the loan sits unnoticed.
   </Accordion>
   <Accordion title="I unfolded Income & expenses and now it is open on every loan. Can I reset it?">
     Yes. Click **Hide income & expenses** above the section. The page remembers that choice instead.
   </Accordion>
-  <Accordion title="Does the timeline show loans I migrated from paper?">
-    Yes. A migrated loan's timeline is built from the dates recorded when it was imported, so each stage shows in its true year.
+  <Accordion title="Does the timeline show loans we imported from paper?">
+    Yes. An imported loan's timeline is built from the dates recorded when it was imported, so each stage shows in its true year.
   </Accordion>
 </AccordionGroup>

@@ -5,129 +5,107 @@ description: "Give a loan an owner so it leaves the team queue. Staff claim unas
 icon: "user-check"
 ---
 
-Every loan in an active stage can have an owner. The owner is the one person responsible for the loan's current step, and notifications about the loan go to that person instead of the whole team. A loan gets an owner in one of two ways: a staff member claims an unassigned loan for themselves, or a supervisor assigns it to a specific person.
+Every loan in an active stage can have an owner: the one person responsible for its current step. While a loan is unassigned it sits in a shared team queue and notifications go to everyone who can work that stage. Once someone owns it, notifications go to the owner alone. A loan gets an owner when a staff member claims it, or when a supervisor assigns it.
 
-## Why ownership matters
-
-While a loan sits unassigned, it lives in a shared team queue and notifications fan out to everyone who can work that stage. The moment someone owns it, the platform narrows those notifications to the owner alone. Ownership is how work gets directed and how a loan stops being "anyone's job" and becomes "this person's job."
-
-## The two ways a loan gets an owner
+## Claim or assign
 
 <AccordionGroup>
   <Accordion title="Claim: take an unassigned loan for yourself">
-    A staff member who works a stage can pull an unassigned loan in that stage onto themselves. This is self-service. You need the **loans.claim** capability, and you must be eligible for the loan's current stage. Claiming records `loan_application.claimed` and sets you as the owner.
-
-    Claiming is race-safe. If two people try to claim the same loan at the same moment, only one wins. The other is told the loan is already owned.
+    Staff who work a stage pull an unassigned loan in that stage onto themselves. You need the **Claim loans** permission and must be able to work the loan's current stage. If two people claim the same loan at the same moment, only one wins. The other is told it is already owned.
   </Accordion>
   <Accordion title="Assign: direct a loan to a specific person">
-    A supervisor can assign or reassign a loan to any eligible person, overwriting any existing owner. The **loans.assign** capability is the supervisor right that allows this on any loan. The platform validates that the chosen person can actually work the loan's current stage, so you cannot route a loan to someone who has no way to act on it. Assigning records `loan_application.assigned` and notifies the new owner by email.
+    A supervisor with **Assign loans** can assign or reassign any loan to an eligible person, replacing any existing owner. You can only pick someone who can actually work the loan's current stage. The new owner is notified by email.
 
-    Two scoped assign rights exist alongside **loans.assign**. A Credit Officer who holds **loans.submit** can route their own DRAFT to a specific approver (a pre-assignment that carries forward into Credit Approvals). And a stage worker who holds the loan's current owning capability can reassign within their own stage, for example one Adjudicator handing a file to another Adjudicator.
+    Two narrower assign rights also exist. A Credit Officer with **Submit loans** can route their own draft to a specific approver, and that owner carries into Credit Approvals. And a stage worker can hand a loan to a colleague in the same stage, for example one Adjudicator to another.
   </Accordion>
 </AccordionGroup>
 
-## Who holds each capability
+## Who can do what
 
-| Capability | Roles that hold it | What it allows |
+| Permission | Roles | What it allows |
 |---|---|---|
-| **loans.claim** | Adjudicator, Securities, Disbursement, Administrator | Claim an unassigned loan in your stage onto yourself. |
-| **loans.assign** | Credit Manager, Branch Manager, Administrator | Assign or reassign any loan to a specific eligible person, and release a loan back to the queue. |
+| **Claim loans** | Adjudicator, Securities, Disbursement, Administrator | Claim an unassigned loan in your stage. |
+| **Assign loans** | Credit Manager, Branch Manager, Administrator | Assign or reassign any loan to an eligible person, and release a loan back to the queue. |
 
-The stage workers (Adjudicator, Securities, Disbursement) claim their own work. The supervisors (Credit Manager and Branch Manager) direct work to others. The Administrator holds both **loans.claim** and **loans.assign** through workspace management.
+Stage workers claim their own work. Supervisors direct work to others.
 
 ## Which stages can have an owner
 
-A loan can carry an owner only while it sits in a stage that someone actively works. The eligible owner for each stage is determined by the capability that owns the work there.
+| Loan stage | Owner role |
+|---|---|
+| **Submitted**, **Credit approval**, **Info requested** | Adjudicator (or another approver) |
+| **Securities** | Securities |
+| **Disbursement** | Disbursement |
 
-| Loan status | Owner role | Owning capability |
-|---|---|---|
-| `SUBMITTED` | Adjudicator | `loans.adjudicate` |
-| `ADJUDICATION` | Adjudicator | `loans.adjudicate` |
-| `INFO_REQUESTED` | Adjudicator | `loans.adjudicate` |
-| `SECURITIES` | Securities | `securities.review` |
-| `DISBURSEMENT` | Disbursement | `loans.disburse` |
-
-Transient and terminal states (`APPROVED`, `DISBURSED`, `FILED`, `DECLINED`, `CANCELLED`, `DRAFT_ABANDONED`) have no owner. A `DRAFT` is treated as a pre-assignment: a Credit Officer can route a draft to the approver who will review it once it is submitted, and that owner carries forward into Credit Approvals.
+**Approved**, **Disbursed** and the final stages have no new owner. A **Draft** can carry a pre-assignment: the Credit Officer routes it to the approver who will review it once it is submitted.
 
 ## Approval authority at claim and assignment
 
-At `SUBMITTED` and `ADJUDICATION`, owning a loan means approving it. When your workspace has an [approval schedule](/omnia/los/workflows/approval-routes) and the loan is on the individual-approval route, the platform checks authority before ownership changes hands:
+At **Submitted** and **Credit approval**, owning a loan means approving it. When your credit union uses an [approval schedule](/omnia/los/workflows/approval-routes) and the loan is on the single-approver route, authority is checked before ownership changes:
 
-- **Claim** is refused when your role cannot approve this loan on its own. The message says what the loan is and who can approve it, for example: "Adjudicator cannot approve Personal Loan (unsecured) loans at this amount under the approval schedule. It can be approved by: Credit Manager. Assign it to one of them, or send it back."
+- **Claim** is refused when your role cannot approve this loan on its own. The message names the loan and who can approve it, for example: "Adjudicator cannot approve Personal Loan (unsecured) loans at this amount under the approval schedule. It can be approved by: Credit Manager. Assign it to one of them, or send it back."
 - The **Assign to** picker lists only people whose role can approve this loan on its own.
 
-The check uses the same schedule and evaluator as the approval itself, so a claim never succeeds for someone who would be refused at the last click. Loans on the In-House Committee or Credit Committee route skip it; committee membership decides who acts on those. Workspaces without an approval schedule keep the plain rule: anyone holding `loans.adjudicate` can claim.
+The check matches the approval itself, so a claim never succeeds for someone who would be refused at the last click. Loans on a committee route skip it: committee membership decides who acts. Without an approval schedule, anyone with **Approve loans** can claim.
 
-Confidential loans add one more rule: you can assign only a loan you can already see. See [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
+Confidential loans add one rule: you can assign only a loan you can already see. See [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
 
 ## The Assigned to card
 
-The **Assigned to** card appears on the loan detail page in the Credit Approvals, Securities, and Disbursement queues, and on the Credit Officer's own loan page at `/loans/LOAN-ID`. That officer view is where the DRAFT pre-assignment happens, routing a file to the approver who will review it once it is submitted. What you see on the card depends on your capabilities and the loan's state.
+The **Assigned to** card is on the loan page in the Credit Approvals, Securities and Disbursement queues, and on the Credit Officer's own loan page, where the draft pre-assignment happens.
 
-- When a loan is unassigned and you can work the stage, you see a **Claim** button.
-- When you hold **loans.assign** and at least one eligible person exists for the stage, you see a picker listing every eligible person. On the worker-stage queues it reads **Assign to** or **Reassign to**; on the Credit Officer's DRAFT view it reads **Route to an approver** or **Change approver**, with the hint "Not routed yet. Pick the approver who'll review this once it's submitted, or leave it for the credit approvals team to claim." When no eligible staff exist and the loan is still unassigned, the card shows "No eligible staff to assign for this stage" instead. That message appears only while the loan is unassigned.
-- When a loan is owned, a **Release** button appears for the current owner or for anyone holding **loans.assign**.
+- An unassigned loan you can work shows **Claim**.
+- With **Assign loans**, you get a picker of every eligible person. In the stage queues it reads **Assign to** or **Reassign to**. On a draft it reads **Route to an approver** or **Change approver**, with the hint "Not routed yet. Pick the approver who'll review this once it's submitted, or leave it for the credit approvals team to claim." If nobody eligible exists, the card reads **No eligible staff to assign for this stage**.
+- An owned loan shows **Release** to its owner and to anyone with **Assign loans**.
 
-The card shows an **Owned** badge whenever a loan has an owner, whoever that is, and adds a **(you)** label next to the owner's name when that owner is you.
+An owned loan shows an **Owned** badge, with **(you)** next to the name when the owner is you.
 
-## Filtering the queue by ownership
+## Filter the queue by ownership
 
-Each of the three queues (Credit Approvals, Securities, Disbursement) has the same three assignment tabs, driven by the `assign` URL parameter.
+The Credit Approvals, Securities and Disbursement queues each have three tabs:
 
 | Tab | Shows |
 |---|---|
-| **All** | Every loan in the queue, owned or not. This is the default. |
-| **My queue** | Only loans you own. |
-| **Unassigned** | Only loans with no owner yet, waiting to be claimed or assigned. |
+| **All** | Every loan in the queue. The default. |
+| **My queue** | Loans you own. |
+| **Unassigned** | Loans waiting to be claimed or assigned. |
 
-Use **Unassigned** to find work that needs picking up, and **My queue** to focus on what you already own.
-
-## Releasing and automatic handoff
-
-A loan leaves an owner in three ways.
+## How a loan loses its owner
 
 <Steps>
-  <Step title="Manual release">
-    The current owner, or anyone holding **loans.assign**, clicks **Release** on the Assigned to card. The loan goes back to its team queue and records `loan_application.unassigned`. Anyone eligible can then claim it. Releasing a loan that already has no owner records nothing.
+  <Step title="Release">
+    The owner, or anyone with **Assign loans**, clicks **Release**. The loan goes back to its team queue for anyone eligible to claim.
   </Step>
   <Step title="Stage handoff">
-    The platform clears the owner automatically at exactly two boundaries: APPROVED to SECURITIES, and SECURITIES to DISBURSEMENT. The receiving team then sees the new work and someone there claims it. This also records `loan_application.unassigned`. The adjudicator's ownership carries forward from SUBMITTED through ADJUDICATION and APPROVED, and only clears at the move into SECURITIES.
+    The owner clears automatically at two points: when the loan moves from **Approved** to **Securities**, and from **Securities** to **Disbursement**. The receiving team then claims it. The approver stays the owner from **Submitted** through **Approved**.
   </Step>
   <Step title="Reassignment">
-    A supervisor assigns the loan to a different person. The previous owner is recorded on the audit trail alongside the new owner.
+    A supervisor assigns the loan to someone else.
   </Step>
 </Steps>
 
-## Events recorded
-
-Every ownership change is written to the audit trail.
-
-| Event | When it fires |
-|---|---|
-| `loan_application.claimed` | A staff member claimed an unassigned loan onto themselves. |
-| `loan_application.assigned` | A supervisor assigned or reassigned a loan to a specific person. |
-| `loan_application.unassigned` | A loan was released to its team queue, manually or by a stage handoff. |
+Every claim, assignment and release is recorded in the audit trail with who did it and when.
 
 <Note>
-  Assignment never changes the loan's status or moves it through the workflow. It only changes who owns the current step. Moving a loan forward is a separate action gated by its own capabilities.
+  Assignment never moves a loan through the workflow. It only changes who owns the current step.
 </Note>
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why was my claim refused when the loan is unassigned?">
-    Your role cannot approve this loan on its own under your approval schedule, for its security class and amount. The message names the roles that can. Ask a supervisor to assign it to one of them.
+    Your role cannot approve this loan on its own under your approval schedule, for its security type and amount. The message names the roles that can. Ask a supervisor to assign it to one of them.
   </Accordion>
   <Accordion title="Why is a colleague missing from the Assign to list?">
-    Either their role cannot work the loan's current stage, their account is suspended or revoked, or, at an approval stage, their role cannot approve this loan on its own.
+    Their role cannot work the loan's current stage, their account is suspended or revoked, or, at an approval stage, their role cannot approve this loan on its own.
   </Accordion>
   <Accordion title="Does assigning a loan move it forward?">
     No. Assignment only changes who owns the current step.
   </Accordion>
   <Accordion title="What happens to the owner when a loan is approved?">
-    The approver stays the owner through `APPROVED`. Ownership clears when the loan moves into `SECURITIES`, and again at the move into `DISBURSEMENT`.
+    The approver stays the owner through **Approved**. Ownership clears when the loan moves into **Securities**, and again at **Disbursement**.
   </Accordion>
   <Accordion title="Can I route my draft to a specific approver?">
-    Yes, if you hold `loans.submit`. Use **Route to an approver** on the Assigned to card of your draft.
+    Yes, if you have **Submit loans**. Use **Route to an approver** on the Assigned to card of your draft.
   </Accordion>
 </AccordionGroup>

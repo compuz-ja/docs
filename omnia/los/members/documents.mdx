@@ -1,141 +1,96 @@
 ---
 title: "Upload and manage member documents"
 sidebarTitle: "Documents"
-description: "Upload identity and supporting documents to a member's profile, including accepted file types, size limits, and document categories."
+description: "Upload identity and supporting documents to a member's profile, including accepted file types, size limits, and document types."
 icon: "file-text"
 ---
 
-The platform lets you attach documents directly to a member's profile: identity documents, proof of address, income verification, collateral paperwork, and anything else needed to support origination. Every file is virus-scanned before it is stored. Uploads, deletions, and restores are recorded in the audit log. The Documents page also surfaces outstanding Securities document requests across the member's loans, so you can see exactly what is still needed.
+The Documents page holds every file attached to a member: identity documents, proof of address, income evidence, collateral paperwork and anything else that supports a loan. Every file is virus-scanned before it is stored, and uploads, deletions and restores are recorded in the audit trail. The page also lists outstanding Securities document requests across the member's loans, so you can see exactly what is still needed.
 
 <Tip>
-  Upload the member's identity documents before starting KYC verification. Having the TRN card or driver's licence already on file gives reviewers everything they need without extra back-and-forth.
+  Upload the member's identity documents before starting KYC verification. With the tax ID card (TRN card in Jamaica) or driver's licence already on file, the reviewer has everything they need.
 </Tip>
 
-## Accepted file types and size limits
+## Accepted files
 
-| Detail | Requirement |
+| Detail | Limit |
 |---|---|
-| **Accepted formats** | PDF, JPEG, PNG, HEIC, and WebP |
-| **Maximum file size** | 10 MB per file |
-| **Batch size** | Up to 25 files per upload, uploaded two at a time |
-| **File type validation** | The platform checks each file's actual content (magic bytes), not just its name or extension |
-
-<Note>
-  The upload card on this page accepts the five formats above. The platform also accepts Word (.doc and .docx) and Excel (.xlsx) on the server side, but those types are not selectable from this upload form.
-</Note>
+| **Formats** | PDF, JPEG, PNG, HEIC and WebP |
+| **File size** | 10 MB per file |
+| **Batch** | Up to 25 files per upload |
+| **Content check** | Each file's actual content is checked, not just its name |
 
 <Warning>
-  If an upload fails with an **"Unsupported file type"** error, confirm that the file is one of the accepted formats. The platform checks the actual file content, not just the file extension. Files disguised with a misleading name, for example an executable renamed to `.pdf`, are rejected during validation and the security scan.
+  **Unsupported file type** means the file's content is not one of the accepted formats, whatever its name says. A file disguised with a misleading name, for example a program renamed to `.pdf`, is rejected.
 </Warning>
 
----
+## Document types
 
-## Document categories
+Pick the right **Document type** when uploading so documents are easy to find and the loan workflow can match them to requests.
 
-The platform organises documents into nine categories. Select the correct category when uploading so documents are easy to find and so the loan origination workflow can locate them automatically when needed.
+| Document type | Examples |
+|---|---|
+| **Primary ID** | Tax ID card, national ID, passport, driver's licence. The tax ID card and driver's licence show on their own panels on the KYC page; any other ID shows in its **Other identification** card. |
+| **Secondary ID** | Voter's ID, work ID, school ID, expired passport |
+| **Proof of address** | Utility bill, tenancy agreement, government letter |
+| **Proof of income** | Payslip, tax return, employer letter, audited financials |
+| **Employment letter** | Letter of employment, contract of employment |
+| **Bank statement** | Statements, cash collateral confirmation, hold confirmation letter |
+| **Collateral valuation** | Vehicle or property valuation |
+| **Insurance certificate** | Insurance binder, comprehensive insurance rider |
+| **Other** | Title search, survey diagram, bill of sale, signed assignment letter, anything else |
 
-<AccordionGroup>
-  <Accordion title="ID_PRIMARY, government-issued identity">
-    Primary identity documents issued by a government authority. Examples include the TRN card, national ID, passport, and driver's licence.
+## Upload documents
 
-    Upload the TRN card or driver's licence before running KYC verification. These two subtypes appear on their own panels on the member's KYC page. A passport, national ID, voter's ID, or any other identity document surfaces in the **Other identification** card on the same page, so every piece of identity evidence is in front of the reviewer.
-  </Accordion>
-  <Accordion title="ID_SECONDARY, secondary identity">
-    Supporting identity documents used alongside a primary ID. Examples include a voter's ID, work ID, school ID, or an expired passport.
-  </Accordion>
-  <Accordion title="PROOF_OF_ADDRESS, address verification">
-    Documents that confirm the member's current residential address. Examples include a utility bill, lease agreement, mailing-address bank statement, government letter, or insurance statement.
-  </Accordion>
-  <Accordion title="PROOF_OF_INCOME, income verification">
-    Documents that demonstrate income and ability to repay. Examples include a pay stub, tax return, employer letter, or audited financials.
-  </Accordion>
-  <Accordion title="EMPLOYMENT_LETTER, employment confirmation">
-    Documents confirming the member's employment. Examples include an employer letter or a contract of employment.
-  </Accordion>
-  <Accordion title="BANK_STATEMENT, account statements">
-    Member bank statements. Examples include current-account, savings-account, and credit-account statements.
-  </Accordion>
-  <Accordion title="COLLATERAL_VALUATION, collateral valuation">
-    Valuations for assets offered as security for a loan. Examples include a vehicle valuation, property valuation, or general asset valuation.
-  </Accordion>
-  <Accordion title="INSURANCE_CERTIFICATE, insurance coverage">
-    Insurance certificates tied to the member or the collateral. Examples include vehicle insurance, property insurance, and life insurance.
-  </Accordion>
-  <Accordion title="OTHER, general supporting documents">
-    Any document that does not fit the categories above. Use this for supplementary materials requested during application or adjudication.
-  </Accordion>
-</AccordionGroup>
-
----
-
-## Uploading a document
-
-You need the **members.documents.upload** capability to add files to a member's profile. Viewing those files requires the **members.documents.view** capability, held by the Credit Officer, Adjudicator, Securities, Disbursement, and Administrator roles.
+You need the **Upload member documents** permission.
 
 <Steps>
-  <Step title="Open the member's profile">
-    Search for the member on the Members list and click their name to open their profile.
+  <Step title="Open the member's Documents page">
+    Open the member's profile and click **Documents** in the header. With upload permission, an **Upload documents** card sits on the page next to any outstanding Securities document requests. Staff who can only view see the library but not the pending requests.
   </Step>
-  <Step title="Open the Documents page">
-    Click the **Documents** button in the profile header. You see the member's current document library. If you hold the upload capability, an **Upload documents** card is shown inline on the page, along with any outstanding Securities document requests linked to their loan applications; there is no separate button that opens a form. A view-only actor sees the document library but not the pending Securities requests.
-  </Step>
-  <Step title="Select the document category and subtype">
-    Choose the **document category** from the list, for example ID_PRIMARY or PROOF_OF_INCOME, then select the specific **subtype** that best describes the document, for example "drivers-license" or "pay-stub". The correct subtype ensures the document appears in the right place during KYC review and loan processing. Every file in one batch shares the same category and label.
+  <Step title="Choose the document type and label">
+    Pick a **Document type** and enter a **Label** (required, up to 120 characters). Suggested labels appear as chips under the field: pick one where it fits, because Securities requests look for those names. **Subtype** is optional free text, for example `utility-bill`. Every file in the batch shares the type, label and subtype.
   </Step>
   <Step title="Choose the files">
-    Drag files onto the card or use **Choose files to upload** to pick them. You can add several at once, up to 25 files in a batch. Each file must be one of the accepted formats and no larger than 10 MB.
-
-    A multi-page document, like both sides of a licence or every page of a passport, uploads as a set: add all the pages to the one batch and they share the single batch label. The KYC identity panels handle multi-page differently, adding an automatic "(page 1)", "(page 2)" suffix to each file when you upload, but on this page every file in the batch keeps the same shared label.
+    Drag files onto the card or click **Choose files to upload**. A multi-page document, like both sides of a licence or every page of a passport, goes in one batch under one label. (The identity panels on the KYC page add "(page 1)", "(page 2)" to each file instead.)
   </Step>
   <Step title="Click Upload">
-    Click **Upload** (the button reads **Upload N files** for a batch). The platform scans each file for viruses, verifies its content type, then stores it securely. Documents appear in the member's library as each one finishes.
+    The button reads **Upload N files** for a batch. Each file is checked and scanned, then appears in the library as it finishes.
   </Step>
 </Steps>
 
 <Warning>
-  An upload can be rejected for several reasons beyond an unsupported file type: a magic-byte mismatch, a detected virus, or an invalid category-and-subtype pairing. Three abuse guardrails also apply. You can run at most **60 successful uploads per hour**, a member can hold at most **100 active documents**, and each workspace has a **5 GB storage quota**. Hitting one of these shows an error such as "Upload rate limit reached", "this member has reached the maximum number of active documents", or "your workspace has reached its document storage quota".
+  An upload is also refused when a virus is found, or when you hit a limit: 60 successful uploads per hour per person, 100 active documents per member, and your workspace's total storage quota. The error says which, for example **Upload rate limit reached**.
 </Warning>
 
----
+## View documents
 
-## Viewing documents
+The library lists each document's name, type, upload date, uploader and scan status. Each row has a **preview** icon, which opens the file in a new browser tab, and a **download** icon. Viewing needs **View member documents**, which the Credit Officer, Adjudicator, Securities, Disbursement and Administrator hold.
 
-Every document in the member's library is listed on the Documents page, showing the document name, category, upload date, uploader, and current scan status. Each row has two controls: a **preview** icon that opens the file in a new browser tab (the browser renders PDFs and images natively there) and a **download** icon that saves it to your computer. Viewing documents requires the **members.documents.view** capability, held by the Credit Officer, Adjudicator, Securities, Disbursement, and Administrator roles.
+| Scan status | Meaning |
+|---|---|
+| **Pending scan** | Stored and waiting for its scan result |
+| **Clean** | Passed the virus scan |
+| **Infected** | The scan flagged the file |
+| **Expired** | Past its retention period |
+| **Archived** | Moved to archive storage |
 
-The scan status badge on each row shows where the file is in its lifecycle:
+## Delete and restore documents
 
-- **Pending scan**: the file is stored and awaiting its scan result.
-- **Clean**: the virus scan passed. With the current scanner a clean upload lands here right away.
-- **Infected**: the scan flagged the file.
-- **Expired**: the document has passed its retention window.
-- **Archived**: the document has been moved to archival storage.
-
----
-
-## Deleting documents
-
-Deleting a document requires the **members.documents.delete** capability.
-
-When you delete a document, it is marked as removed and hidden from the standard document list. It is not permanently erased. The file and its metadata are retained in full for regulatory audit purposes. Anyone with the **members.documents.delete** capability can restore a deleted document, as long as its file has not yet been purged. Once the file is purged after its retention period, the document cannot be restored.
-
-To delete a document, open the Documents page, find the document you want to remove, and click the **trash icon** on that row. The icon is visible only to actors with the delete capability. You are prompted to confirm, and a reason is **required**, at least three characters.
-
-Deleted documents stay visible to anyone who holds the delete capability, so they can audit what was removed; a "show deleted" toggle on the page brings them back into view. They are hidden from everyone else.
-
----
+Deleting needs **Delete member documents**. Click the **trash icon** on the row, confirm, and give a reason of at least three characters. The document is hidden from the list but kept in full. Staff with the same permission can turn on **show deleted** to see removed documents and restore one, until its file is purged at the end of its retention period.
 
 ## Documents kept on the loan instead
 
-Some files belong to one loan rather than to the member, so they are uploaded on the loan page and follow that loan through every stage. They do not appear in the member's library.
+Some files belong to one loan, not the member. They are uploaded on the loan page, follow that loan through every stage, and do not appear in the member's library.
 
 | Document | Where it is uploaded | Who can upload | Who can view |
 |---|---|---|---|
-| Guarantor ID, income and employment documents | **Guarantors** section, each guarantor's **Documents** block | `loans.guarantors.documents.upload`: Credit Officer, Securities, Administrator | `loans.guarantors.documents.view`: Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Administrator |
-| Security documents (hypothecation, insurance assignment, other) | **Collateral** section | `loans.security.documents.upload`: Credit Officer, Securities, Administrator | `loans.security.documents.view`: the same reviewer roles |
+| Guarantor ID, income and employment documents | **Guarantors** section, each guarantor's **Documents** block | Staff with **Manage guarantor documents**: Credit Officer, Securities, Administrator | Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Administrator |
+| Security documents (hypothecation, insurance assignment, other) | **Collateral** section | Staff with **Upload security documents**: Credit Officer, Securities, Administrator | Staff with **View security documents**: the same reviewer roles |
 | Waiver supporting file | **Approval route** card, with the waiver request | Anyone who can request a waiver | Approvers on the loan |
-| Credit Committee proof of approval | **Record decision**, on the Credit Committee route | The Credit Committee recorder | Approvers on the loan |
+| Committee proof of approval | **Record decision**, on the committee route | The committee recorder | Approvers on the loan |
 
-Guarantor and security documents run the same checks as member documents: 10 MB per file, a magic-byte content check and a virus scan. A waiver file or Credit Committee proof is a PDF, PNG or JPEG.
+Guarantor and security documents have the same 10 MB limit, content check and virus scan. A waiver file or committee proof is a PDF, PNG or JPEG.
 
 When a draft is [changed to a different kind of loan](/omnia/los/loans/changing-loan-type), guarantor documents stay on the abandoned draft. Upload them again on the new one.
 
@@ -143,16 +98,16 @@ When a draft is [changed to a different kind of loan](/omnia/los/loans/changing-
 
 <AccordionGroup>
   <Accordion title="Why is the guarantor's ID not in the member's documents?">
-    Guarantor documents belong to the loan, not to the borrower. Open the loan and look in the Guarantors section.
+    Guarantor documents belong to the loan, not the borrower. Open the loan and look in the Guarantors section.
   </Accordion>
   <Accordion title="Can I upload a Word document?">
-    Not from this page. The upload card accepts PDF, JPEG, PNG, HEIC and WebP.
+    No. The upload card accepts PDF, JPEG, PNG, HEIC and WebP. Save or scan the file as a PDF first.
   </Accordion>
   <Accordion title="Is a deleted document gone for good?">
-    No. It is hidden and kept for audit, and a holder of `members.documents.delete` can restore it until its file is purged at the end of its retention period.
+    No. It is hidden and kept, and staff with **Delete member documents** can restore it until its file is purged at the end of its retention period.
   </Accordion>
   <Accordion title="Why was my upload rejected as an unsupported file type?">
-    The platform checks the file's content, not its name. A file whose content does not match an accepted format is rejected even if its extension looks right.
+    The content is checked, not the name. A file whose content does not match an accepted format is rejected even if its extension looks right.
   </Accordion>
   <Accordion title="How many files can I upload at once?">
     Up to 25 in one batch, each up to 10 MB.

@@ -1,209 +1,103 @@
 ---
 title: "The four loan types"
 sidebarTitle: "Loan types"
-description: "The platform supports four loan types for credit unions: Unsecured, Cash-Secured, Auto, and Mortgage. Learn the requirements and form sections for each type."
+description: "The Loan Origination System supports four kinds of loan: Unsecured, Cash secured, Motor vehicle and Real estate. Learn the collateral, pricing and review rules for each."
 icon: "tags"
 ---
 
-The platform supports four loan types, each with specific form sections, collateral requirements, and rate calculation rules. The loan type chosen at the start of the application determines which sections the Credit Officer must complete, how the platform calculates the risk assessment, and which review steps the loan goes through after approval.
+Every loan is one of four kinds: **Unsecured**, **Cash secured**, **Motor vehicle** or **Real estate**. The kind decides which collateral section the Credit Officer completes, how the loan is priced, and whether Securities has collateral to perfect after approval.
 
-The risk engine scores seven categorical factors, each on a categorical scale up to 5: employment type, employment status, length of employment, TDSR, LTV, loan type, and credit history. Most factors range 1 to 3; credit history ranges 1 to 5 and comes from the credit rating the officer captures (Average risk, 3, when none is captured); and LTV scores 0 for unsecured loans, which carry no collateral. It sums them into a single integer and maps that sum to a risk band: a sum of 9 or below is R1, 12 or below is R2, 15 or below is R3, 18 or below is R4, and anything higher is R5. R1 is the lowest risk and R5 is the highest. Loan type is one of those seven factors: Cash-Secured scores 1, Auto and Mortgage score 2, and Unsecured scores 3. The band is assessed at submission and again on every resubmission.
+Your credit union names its own loan types and products under **Administration > Loan types**, managed by staff with the **Manage loan types** permission. Each named type maps to one of the four kinds, which set the behaviour described here.
 
-Guarantors are optional for every loan type.
-
-<Note>
-  The application page does not capture the applicant's own employment yet, so the three employment factors are scored at submission on fixed values: Employed (1), Permanent (1) and 12 months (3).
-</Note>
-
-<Note>
-  Your credit union can also define its own named loan types in the admin loan-type catalog (under **Administration > Loan types** at `/admin/loan-types`). Viewing the catalog is gated by `loans.types.read`; creating and managing types is gated by `loans.types.manage`. Each named type maps to one of the four archetypes below and carries its own product configuration. The four archetypes here describe the underlying behaviour.
-</Note>
-
----
+Every kind shares the same core sections (loan parameters, income and expenses, net worth, credit rating, recommendation; see [Creating an application](/omnia/los/loans/creating-an-application)). Guarantors are optional for every kind. The loan type is one of the factors in the risk band, alongside employment, TDSR, loan-to-value and credit history: secured loans generally score as lower risk than unsecured ones, but the band depends on all the factors together.
 
 ## Unsecured
 
-An Unsecured loan is a personal or consumer loan with no collateral backing. Eligibility is assessed on the applicant's income, employment stability, credit history, and the strength of any guarantors.
+A personal or consumer loan with no collateral. Eligibility rests on income, affordability, credit history and the strength of any guarantors.
 
-**Form sections required:**
-- Applicant Information
-- Employment
-- Statement of Affairs
-- Loan Purpose
-- Guarantors *(optional)*
+- **Collateral section:** none.
+- **After approval:** passes through Securities with no security requests, then moves to Disbursement once the legal documents your credit union requires are signed.
+- **Creditor life:** on by default.
+- **Typical uses:** personal expenses, home improvement, education, medical costs, debt consolidation.
 
-**Risk assessment factors:**
-- Employment type and employment status
-- Length of employment
-- TDSR (Total Debt Service Ratio)
-- Loan type (Unsecured scores 3, the highest of the loan-type factor)
-- Credit history
+## Cash secured
 
-**No additional collateral section is required.**
+Backed by cash the member pledges: shares, deposits or savings at the credit union, or funds held at another institution.
 
-**Post-approval review:** an approved Unsecured loan passes through Securities with no security requests, because there is no collateral to perfect. It moves on to Disbursement once the legal documents your workspace requires are signed.
-
-**Creditor life:** on by default.
-
-**Use cases:** personal expenses, home improvements, education costs, medical expenses, debt consolidation.
-
----
-
-## Cash-Secured (shown in the app as Cash secured)
-
-A Cash-Secured loan (the app displays this archetype as **Cash secured**, no hyphen) is backed by cash the applicant pledges: shares, deposits or savings at the credit union, or funds held at another institution. The collateral is liquid and already under your credit union's control, so this loan type contributes the lowest loan-type factor score.
-
-**Form sections required:**
-- Applicant Information
-- Employment
-- Statement of Affairs
-- Loan Purpose
-- **Cash Collateral** *(up to five pledged accounts, each one Cash / Shares, Fixed / Time Deposit, Savings Hypothecation, or Funds held at another institution, with its account number and amount held)*
-- Guarantors *(optional)*
-
-You can pledge more than one account against a single loan, for example shares plus a fixed deposit. Add each account on its own row, pick its type, and enter the amount held. The card sums every account and shows the most you can borrow against the combined total.
-
-**Collateral rules:**
-- The maximum loan is **97%** of the **combined** pledged cash when it is all the member's own savings or deposits at the credit union. Once **any** pledged account is **Funds held at another institution**, the maximum is **95%** of the combined total. The limit applies to the total, not to any single account.
-- The limit is enforced, not just advised. If the requested amount runs over it, the card shows a red warning, and submission is refused: "Cash-secured loans can't exceed 97% of the pledged cash. The most you can borrow against this collateral is AMOUNT. Lower the amount or pledge more cash." The 95% version adds "(95% applies because part of the security is held at another institution)".
-- By policy, the pledged funds are held (not accessible to the member) for the life of the loan. Each pledged account is captured with its own account number, amount, an optional source of funds, and an optional hypothecation note.
-- LTV is calculated as loan amount divided by collateral value, and feeds the LTV risk factor.
-
-**Risk assessment factors:**
-- Employment type and employment status
-- Length of employment
-- TDSR
-- LTV against the pledged cash security
-- Loan type (Cash-Secured scores 1, the lowest of the loan-type factor)
-- Credit history
-
-A Cash-Secured loan contributes the lowest possible loan-type factor score of 1, but the final risk band is the sum of all seven factors. A cash-secured loan with weak employment or credit history can still land in R3 or worse. The loan type lowers one factor; it does not guarantee a band.
-
-**Rate tiering:** your rate table can price cash security in three tiers by who holds the funds: shares, other credit union savings or deposits, and funds held at another institution. When a loan pledges a mix, the weakest tier present prices the whole loan, in this order: funds held at another institution, then savings or deposits (Fixed / Time Deposit and Savings Hypothecation), then shares. The order you capture the accounts in makes no difference.
+- **Collateral section:** **Cash Collateral**, up to five pledged accounts. Each is **Cash / Shares**, **Fixed / Time Deposit**, **Savings Hypothecation** or **Funds held at another institution**, with its account number, amount held, and an optional source of funds and hypothecation note. The card totals every account and shows the most the member can borrow.
+- **Advance limit:** the loan can be at most a share of the **combined** pledged cash that your credit union sets, lower when any account is held at another institution. The limit applies to the total, not to each account, and it is enforced: over it, the card shows a red warning and submission is refused with the maximum and the fix ("Lower the amount or pledge more cash").
+- **Pricing:** your rates can differ by who holds the cash: shares, other credit union savings or deposits, and funds held at another institution. When a loan pledges a mix, the weakest security prices the whole loan, in this order: funds elsewhere, then savings or deposits, then shares. Capture order makes no difference.
+- **After approval:** goes through Securities so the pledged accounts are placed on hold before disbursement. The funds stay held for the life of the loan.
+- **Creditor life:** never applies. The pledged savings settle the balance on death.
+- **Typical uses:** a lower rate for members with cash they are not using.
 
 <Note>
-  Fictional example: a rate table with shares at 8.00%, credit union deposits at 9.00% and external funds at 10.00%. A loan secured by shares plus a fixed deposit prices at 9.00%.
+  Illustrative example only: if shares price at 8%, credit union deposits at 9% and external funds at 10%, a loan secured by shares plus a fixed deposit prices at 9%.
 </Note>
 
-**Creditor life:** never applies. The pledged savings settle the balance on death.
+## Motor vehicle
 
-**Post-approval review:** like Motor vehicle and Real estate loans, an approved Cash-Secured loan routes through the Securities stage so the pledged accounts are perfected before disbursement.
+The financed vehicle is the collateral.
 
-**Use cases:** members who want a lower interest rate by pledging cash they are not currently using.
+- **Collateral section:** **Vehicle Details**: make, model, year, VIN or chassis number, engine number, colour, registration, insurer and policy number, valuation, forced sale value, valuator, valuation date and source.
+- **Loan-to-value:** the loan amount divided by the vehicle valuation.
+- **Pricing:** vehicle age (this year minus the vehicle year) can select the rate, so older vehicles may price differently. A next-model-year vehicle prices as new. A year further ahead is refused as a typing error.
+- **Staff borrowers:** your credit union can cap a staff member's vehicle loan by their classification. Above the cap, approval needs a waiver. See [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
+- **After approval:** Securities requests confirmation of title and insurance. The list of documents is set per request.
+- **Typical uses:** new and used vehicle purchases.
 
----
+## Real estate
 
-## Auto (shown in the app as Motor vehicle)
+Secured against property.
 
-An Auto loan (the app displays this archetype as **Motor vehicle**; AUTO is the internal enum value) uses the financed vehicle as collateral, captured in the Vehicle Details section alongside the standard employment and income criteria.
-
-**Form sections required:**
-- Applicant Information
-- Employment
-- Statement of Affairs
-- Loan Purpose
-- **Vehicle Details** *(make, model, year, VIN or chassis number, engine number, colour, registration number, insurer and policy number, valuation amount, forced sale value, valuator, valuation date and source)*
-- Guarantors *(optional)*
-
-**Collateral rules:**
-- LTV is calculated against the vehicle valuation: loan amount divided by vehicle valuation.
-- Vehicle age is a rate determinant, not a risk factor. The rate engine picks the rate tier where the vehicle's age (the current year minus the vehicle year) falls within the tier's maximum age, so older vehicles can attract a different rate. A next-model-year vehicle, like a 2027 model bought new in late 2026, is priced as new (age 0). A year further ahead is refused as a data-entry error.
-- A staff borrower's motor-vehicle loan can be capped by their classification. Above the cap, approval needs an approved waiver. See [Staff and confidential loans](/omnia/los/loans/confidential-and-staff-loans).
-- The Securities team requests confirmation of vehicle title and insurance during the Securities review. These are not captured on the application form, and the requested-document list is set per request rather than fixed by the system.
-
-**Risk assessment factors:**
-- Employment type and employment status
-- Length of employment
-- TDSR
-- LTV against vehicle valuation
-- Loan type (Auto scores 2)
-- Credit history
-
-**Use cases:** vehicle purchase loans, including new and used vehicles.
-
----
-
-## Mortgage (shown in the app as Real estate)
-
-A Mortgage loan (the app displays this archetype as **Real estate**; MORTGAGE is the internal enum value) is secured against real property. It carries the most extensive documentation and review requirements, including property valuation, security type, and registered mortgagees.
-
-**Form sections required:**
-- Applicant Information
-- Employment
-- Statement of Affairs
-- Loan Purpose
-- **Property Details** *(property type, address, parish, volume and folio or title deed number, registered mortgagees, insurer, policy number and peril insurance, valuation amount, forced sale value, valuator, valuation date and source)*
-- Guarantors *(optional)*
-
-The property type is one of Residential House, Residential Townhouse, Residential Apartment, Commercial Building, Land, or Other. The security type is one of First Mortgage, Second Mortgage, Strata Title, or Other.
-
-**Collateral rules:**
-- LTV is calculated against the property valuation: loan amount divided by property valuation.
-- The Securities team reviews valuation reports, title, and mortgage registration paperwork before disbursement. As with Auto loans, the requested-document list is set per request rather than fixed by the system.
+- **Collateral section:** **Property Details**: property type, address, parish or region, title reference (volume and folio or deed number), registered mortgagees, insurer, policy number and peril insurance, valuation, forced sale value, valuator, valuation date and source.
+- **Property type:** Residential House, Residential Townhouse, Residential Apartment, Commercial Building, Land or Other. **Security type:** First Mortgage, Second Mortgage, Strata Title or Other.
+- **Loan-to-value:** the loan amount divided by the property valuation.
+- **Term:** up to 480 months, within the product's own limits.
+- **After approval:** Securities reviews valuation reports, title and mortgage registration before disbursement.
+- **Typical uses:** home purchase, equity release, land purchase, construction.
 
 <Note>
-  **Amount and term limits come from the product, not the loan type.** A mortgage
-  can run up to 480 months. The mortgage product shipped with a fresh workspace
-  caps at 360 months (30 years), but a product you create yourself takes whatever
-  maximum term you enter, and leaving the maximum blank means no product-level cap
-  beyond the platform's 480-month ceiling. There is no built-in J$500,000 amount
-  cap or 30-month term cap. Both bounds are set per product on the [Loan products](/omnia/los/admin/loan-products)
-  page by an Administrator or Credit Manager, and the platform enforces the
-  product's minimum and maximum amount and term when the officer enters the loan
-  parameters.
+  Amount and term limits come from the product, not the kind of loan. An Administrator or Credit Manager sets each product's minimum and maximum on [Loan products](/omnia/los/admin/loan-products), and the application refuses values outside them.
 </Note>
 
-**Risk assessment factors:**
-- Employment type and employment status
-- Length of employment
-- TDSR
-- LTV against property valuation
-- Loan type (Mortgage scores 2)
-- Credit history
+## Shares, compulsory savings and creditor life
 
-**Use cases:** home purchase, home equity release, land purchase, construction loans.
+These apply across loan types:
 
----
+- **Mandatory shares** is the membership share amount every member holds, set by an Administrator. **Minimum shares** is the loan-linked share amount your credit union sets per loan type, or not required. Both show under **Share requirements** on the application.
+- **Compulsory savings** is added to the monthly payment, never less than the minimum set on the product.
+- **Creditor life** is priced from your rate card and paid **Annually** or **In full** at disbursement. It never applies to cash-secured loans. See [Fees and creditor life at capture](/omnia/los/loans/fees-and-insurance-at-capture).
 
-## Member equity and payment add-ons
+The monthly payment used for affordability is the instalment plus compulsory savings plus the monthly creditor life amount. See [Affordability and TDSR](/omnia/los/loans/affordability-and-tdsr).
 
-Three figures the rate engine computes feed into what a member pays and qualifies for, regardless of loan type:
+## Choosing the right kind
 
-- **Mandatory shares** is the fixed membership share amount every member holds, set by an Administrator under **Mandatory Shares**. **Minimum shares** is the loan-linked equity, a percentage of the loan set per loan type, or not required. Both show under **Share requirements** on the application.
-- **Compulsory savings** is added to the monthly payment: the greater of 5% of the monthly instalment or the product's compulsory-savings minimum (JMD 2,000.00 when the product sets none).
-- **Creditor life** is priced from your rate card by the lives covered and paid **Annually** or **In full** at disbursement. Paid annually, the annual premium ÷ 12 counts in the TDSR. It never applies to cash-secured loans. See [Fees and creditor life at capture](/omnia/los/loans/fees-and-insurance-at-capture).
-
-This loan's monthly payment for affordability is the instalment plus compulsory savings plus the creditor life monthly amount. See [Affordability and TDSR](/omnia/los/loans/affordability-and-tdsr).
-
----
-
-## Choosing the right loan type
-
-| If the member has... | Recommended type |
+| If the member has... | Kind |
 |---|---|
 | No collateral to offer | **Unsecured** |
-| Cash they can pledge for a better rate | **Cash-Secured** |
-| A vehicle to use as security | **Auto** |
-| Property to use as security | **Mortgage** |
+| Cash they can pledge for a better rate | **Cash secured** |
+| A vehicle to use as security | **Motor vehicle** |
+| Property to use as security | **Real estate** |
 
-The loan type and product can be changed while the application is a DRAFT. Another product of the same kind keeps the Loan ID; a different kind creates a new draft with a new Loan ID and abandons the old one. See [Change the loan type or product](/omnia/los/loans/changing-loan-type). After submission the type is locked.
+The type and product can be changed while the application is a **Draft**. See [Change the loan type or product](/omnia/los/loans/changing-loan-type). After submission the type is locked.
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="How much can a member borrow against their shares?">
-    Up to 97% of the combined pledged cash, or 95% when any of it is held at another institution.
+    Up to the share of the combined pledged cash your credit union sets, which is lower when any of it is held at another institution. The Cash Collateral card shows the exact maximum.
   </Accordion>
   <Accordion title="Why did my cash-secured loan price at the higher rate?">
-    The weakest security on the loan prices all of it. Shares plus a fixed deposit prices at the deposit tier; anything held at another institution prices at the external tier.
+    The weakest security on the loan prices all of it. Shares plus a fixed deposit price at the deposit rate. Anything held at another institution prices at that rate.
   </Accordion>
   <Accordion title="Can I change the loan type after creating the draft?">
-    Yes, while it is a DRAFT. Use **Change loan type / product**.
+    Yes, while it is a **Draft**. Use **Change loan type / product**.
   </Accordion>
   <Accordion title="Why is there no creditor life on a cash-secured loan?">
-    The pledged savings settle the balance on death, so the platform never applies the cover to that kind of loan.
+    The pledged savings settle the balance on death, so the cover is never applied.
   </Accordion>
   <Accordion title="Can a next-year model be priced?">
-    Yes. A next-model-year vehicle prices as new, so a 2027 model prices in 2026. A vehicle year two or more years ahead is refused as a typing error.
+    Yes. A next-model-year vehicle prices as new. A year two or more ahead is refused as a typing error.
   </Accordion>
 </AccordionGroup>

@@ -1,154 +1,145 @@
 ---
 title: "Loan application workflow states and transitions"
 sidebarTitle: "Workflow states"
-description: "Understand every status a loan application can have, from DRAFT through FILED, and which department is responsible at each stage."
+description: "Understand every stage a loan application can be in, from Draft through Filed, and which department is responsible at each one."
 icon: "list"
 ---
 
-Every loan application moves through one defined workflow. Each status tells you where the application is, who is responsible for it, and what happens next. The initial state is DRAFT, and a loan comes to rest in one of four terminal states: FILED, DECLINED, DRAFT_ABANDONED, or CANCELLED.
+Every loan application moves through one defined workflow. Its stage tells you where it is, who is responsible, and what happens next. Every loan starts as **Draft** and comes to rest in one of four final stages: **Filed**, **Declined**, **Draft abandoned** or **Cancelled**.
 
-## All workflow states
+## All stages
 
-| State | Who is responsible | Description |
+| Stage | Responsible | What it means |
 |---|---|---|
-| **DRAFT** | Credit Officer | The application is being filled in. The officer can save progress and return at any time. A draft does not appear in any review queue, and only the originating Credit Officer works on it. |
-| **SUBMITTED** | Adjudicator | The officer submitted the application. The risk assessment is computed during the submit step, and the application is queued in **Credit Approvals** right away. The status changes to ADJUDICATION when an approver claims the file. |
-| **ADJUDICATION** | Adjudicator | The approver reviews the application, the risk score, and supporting information, then makes a decision: Approve, Decline, or Request more information. Who may approve is set by your [approval routes](/omnia/los/workflows/approval-routes): one approver, an In-House Committee quorum, or a recorded Credit Committee decision. |
-| **INFO_REQUESTED** | Credit Officer | The Adjudicator needs more information before deciding. The application rests here, owned by the officer, until the officer sends it back to DRAFT to make the required updates and resubmit. The risk assessment is recalculated on resubmission. |
-| **APPROVED** | System | The application was approved. The loan always moves to **SECURITIES** next. Secured loans (Motor vehicle, Real estate, Cash secured) wait there for collateral review. Unsecured loans get no security requests, so they move on to DISBURSEMENT as soon as the documents your workspace requires before disbursement are signed. |
-| **SECURITIES** | Securities | The Securities team verifies and perfects the collateral. The loan moves to DISBURSEMENT when every security request is resolved and the legal documents required at this stage are executed. The documents requested are set per loan rather than fixed by the system. |
-| **SECURITIES_ISSUE** | Adjudicator | The Securities team flagged a structural problem with the collateral package (for example, a valuation mismatch or ineligible collateral) and sent it back to the Adjudicator. The Adjudicator resolves the issue and returns the file to the Securities team. |
-| **DISBURSEMENT** | Disbursement | All collateral has been cleared. Disbursement schedules the payees and executes the release of funds. Funds cannot be released until the legal documents required before disbursement are executed. |
-| **DISBURSED** | Disbursement | Funds have been released. The Disbursement team files the loan to complete it. If the `securitiesFinalCheckRequired` workflow override is set (it defaults to off), the loan returns to Securities for a final post-disbursement check first. |
-| **FILED** | Terminal | The loan record is locked. The audit trail is complete. No further edits or transitions are possible. |
-| **DECLINED** | Terminal | The Adjudicator declined the application. The record is sealed and preserved in the audit trail. |
-| **DRAFT_ABANDONED** | Terminal | The Credit Officer chose not to proceed with the draft and selected Abandon Draft. |
-| **CANCELLED** | Terminal | The application was cancelled. Cancellation is possible from SUBMITTED (before adjudication begins) and from DISBURSEMENT (the late-stage escape hatch). A disbursement that has already been executed blocks cancellation. |
+| **Draft** | Credit Officer | Being filled in. Not in any review queue. Only the capturing officer works on it. |
+| **Submitted** | Approver | Submitted and waiting in **Credit Approvals**. The risk band is assessed at submission. It moves to **Credit approval** when an approver claims it. |
+| **Credit approval** | Approver | The approver reviews the application and decides: approve, decline, or request more information. Who may approve is set by your [approval routes](/omnia/los/workflows/approval-routes): one approver, a committee quorum, or a recorded committee decision. |
+| **Info requested** | Credit Officer | The approver needs more information. The officer sends it back to **Draft**, makes the updates and resubmits. The risk band is reassessed. |
+| **Approved** | Automatic | Approved. The loan always moves to **Securities** next. |
+| **Securities** | Securities | Securities verifies and perfects the collateral. The loan moves to **Disbursement** once every security request is resolved and the documents required at this stage are signed. Unsecured loans have no security requests, so they move on as soon as the required documents are signed. |
+| **Securities issue** | Approver | Securities found a problem with the collateral (for example a valuation mismatch or ineligible collateral) and sent it back. The approver resolves it and returns it to Securities. |
+| **Disbursement** | Disbursement | Disbursement schedules the payees and releases the funds. Funds cannot be released until the documents required before disbursement are signed. |
+| **Disbursed** | Disbursement | Funds released. Disbursement files the loan. If your credit union requires a final securities check after disbursement (off by default), it goes back to Securities first. |
+| **Filed** | Final | Complete and locked. No further changes. |
+| **Declined** | Final | The approver declined it. The record is kept. |
+| **Draft abandoned** | Final | The Credit Officer clicked **Abandon draft**. |
+| **Cancelled** | Final | Cancelled from **Submitted** (before anyone claims it) or from **Disbursement**. A loan whose funds have already been released cannot be cancelled. |
 
 <Tip>
-  If you are not sure what to do next on a loan, check the status badge. It tells you which department holds the ball.
+  Not sure what to do next on a loan? Check the stage badge. It tells you which department has it.
 </Tip>
 
----
+## How the stages connect
 
-## How states connect
-
-The diagram below shows the primary path a loan takes from creation to filing, plus the send-back, revert, and cancel branches. Several states can send a file backward: an Adjudicator can return it to DRAFT for a full rebuild, Securities can return it to DRAFT or back one stage to ADJUDICATION, and Disbursement can revert it to SECURITIES.
+The main path runs from Draft to Filed. Some steps send a file backward: an approver can return it to Draft for a rebuild, Securities can return it to Draft or back to Credit approval, and Disbursement can return it to Securities.
 
 ```mermaid
 stateDiagram-v2
-    [*] --> DRAFT
-    DRAFT --> SUBMITTED: submit
-    DRAFT --> DRAFT_ABANDONED: abandon
-    SUBMITTED --> ADJUDICATION: approver claims
-    SUBMITTED --> CANCELLED: cancel
-    ADJUDICATION --> APPROVED: approve
-    ADJUDICATION --> DECLINED: decline
-    ADJUDICATION --> INFO_REQUESTED: request info
-    ADJUDICATION --> DRAFT: send back for rebuild
-    INFO_REQUESTED --> DRAFT: officer updates
-    APPROVED --> SECURITIES: approved
-    SECURITIES --> SECURITIES_ISSUE: issue flagged
-    SECURITIES_ISSUE --> SECURITIES: adjudicator resolves
-    SECURITIES --> DISBURSEMENT: requests resolved and documents signed
-    SECURITIES --> DRAFT: send back for rebuild
-    SECURITIES --> ADJUDICATION: revert one stage
-    DISBURSEMENT --> DISBURSED: funds released
-    DISBURSEMENT --> SECURITIES: revert
-    DISBURSEMENT --> CANCELLED: late-stage cancel
-    DISBURSED --> SECURITIES: optional final check
-    DISBURSED --> FILED: archive
-    FILED --> [*]
-    DECLINED --> [*]
-    DRAFT_ABANDONED --> [*]
-    CANCELLED --> [*]
+    state "Draft" as draft
+    state "Submitted" as submitted
+    state "Credit approval" as approval
+    state "Info requested" as info
+    state "Approved" as approved
+    state "Declined" as declined
+    state "Securities" as securities
+    state "Securities issue" as issue
+    state "Disbursement" as disbursement
+    state "Disbursed" as disbursed
+    state "Filed" as filed
+    state "Draft abandoned" as abandoned
+    state "Cancelled" as cancelled
+    [*] --> draft
+    draft --> submitted: submit
+    draft --> abandoned: abandon
+    submitted --> approval: approver claims
+    submitted --> cancelled: cancel
+    approval --> approved: approve
+    approval --> declined: decline
+    approval --> info: request info
+    approval --> draft: send back for rebuild
+    info --> draft: officer updates
+    approved --> securities: automatic
+    securities --> issue: issue flagged
+    issue --> securities: approver resolves
+    securities --> disbursement: requests resolved, documents signed
+    securities --> draft: send back for rebuild
+    securities --> approval: return one stage
+    disbursement --> disbursed: funds released
+    disbursement --> securities: return
+    disbursement --> cancelled: cancel
+    disbursed --> securities: optional final check
+    disbursed --> filed: file
+    filed --> [*]
+    declined --> [*]
+    abandoned --> [*]
+    cancelled --> [*]
 ```
 
-While a loan sits in DISBURSEMENT, the status badge shows one of two sub-state labels: **AWAITING SCHEDULE** before a disbursement instruction exists, and **AWAITING EXECUTION** once the instruction is scheduled.
-
----
+In **Disbursement**, the badge also shows **Awaiting schedule** before payees are scheduled, and **Awaiting execution** once they are.
 
 ## Who can make each move
 
-Each transition needs a capability, on top of the global `workflows.transition` and `loans.transition` gates.
-
-| Move | Capability | Held by default |
+| Move | Permission | Held by default |
 |---|---|---|
-| DRAFT to SUBMITTED | `loans.submit` | Credit Officer, Administrator |
-| DRAFT to DRAFT_ABANDONED | `loans.edit` | Credit Officer, Administrator |
-| SUBMITTED to ADJUDICATION (claim) | `loans.adjudicate` | Adjudicator |
-| SUBMITTED to CANCELLED | `loans.edit` | Credit Officer, Administrator |
-| ADJUDICATION to APPROVED, DECLINED, INFO_REQUESTED or DRAFT | `loans.adjudicate` | Adjudicator |
-| INFO_REQUESTED to DRAFT | `loans.edit` | Credit Officer, Administrator |
-| APPROVED to SECURITIES | `loans.adjudicate` | Adjudicator (runs as part of approval) |
-| SECURITIES to SECURITIES_ISSUE, SECURITIES_ISSUE to SECURITIES | `loans.adjudicate` | Adjudicator |
-| SECURITIES to DRAFT or ADJUDICATION | `securities.review` | Securities |
-| SECURITIES to DISBURSEMENT | `loans.transition` | Runs automatically once its conditions hold |
-| DISBURSEMENT to DISBURSED, CANCELLED or SECURITIES | `loans.disburse` | Disbursement |
-| DISBURSED to FILED | `loans.disburse` | Disbursement |
-| DISBURSED to SECURITIES | `loans.adjudicate` | Only when `securitiesFinalCheckRequired` is on |
+| Submit a draft | **Submit loans** | Credit Officer, Administrator |
+| Abandon a draft | **Edit loans** | Credit Officer, Administrator |
+| Claim a submitted loan | **Approve loans** | Adjudicator |
+| Cancel a submitted loan | **Edit loans** | Credit Officer, Administrator |
+| Approve, decline, request information or return to Draft | **Approve loans** | Adjudicator |
+| Send an Info requested loan back to Draft | **Edit loans** | Credit Officer, Administrator |
+| Flag or resolve a securities issue | **Approve loans** | Adjudicator |
+| Return from Securities to Draft or Credit approval | **Review securities** | Securities |
+| Move from Securities to Disbursement | None | Happens automatically once its conditions hold |
+| Release funds, cancel, or return to Securities from Disbursement | **Disburse loans** | Disbursement |
+| File a disbursed loan | **Disburse loans** | Disbursement |
 
-Three transitions carry conditions that must hold, and each one says why when it refuses:
+Three moves have conditions, and each says why when it refuses:
 
-- **DRAFT to SUBMITTED**: the member's KYC must be exactly VERIFIED. Submission also checks your workspace's required fields, the creditor life payment choice and the cash-secured advance limit first, and tells the officer what is missing. See [Creating an application](/omnia/los/loans/creating-an-application).
-- **SECURITIES to DISBURSEMENT**: every security request resolved, and the legal documents required at the Securities stage executed. The move is retried automatically when the last of those documents is executed.
-- **DISBURSEMENT to DISBURSED**: the legal documents required before disbursement executed.
-
----
+- **Submit**: the member must be **Verified**, required fields complete, the creditor life payment chosen and the cash-secured limit respected. See [Creating an application](/omnia/los/loans/creating-an-application).
+- **Securities to Disbursement**: every security request resolved and the documents required at this stage signed. The move happens on its own when the last document is signed.
+- **Release funds**: the documents required before disbursement signed.
 
 ## Section locking
 
-Once a loan application moves past DRAFT status, all form sections become **read-only**. You can no longer edit the applicant information, employment details, statement of affairs, or collateral data while the loan is under review.
+Once an application leaves **Draft**, every section is read-only: applicant details, income and expenses, collateral, all of it. This protects the record the approver reviewed.
 
-The only exceptions are states where the platform explicitly unlocks specific sections for a targeted action.
-
-- **INFO_REQUESTED:** the application returns to DRAFT, so the officer can update the sections the approver identified as needing clarification, then resubmit. Back in DRAFT, the officer can also [change the loan type or product](/omnia/los/loans/changing-loan-type).
-- **SECURITIES_ISSUE:** this state is owned by the Adjudicator, who resolves the flagged structural problem and returns the file to Securities. Routine document collection happens through the security-request loop while the loan is in SECURITIES, not in SECURITIES_ISSUE.
-
-All other sections stay locked throughout the loan's lifetime after submission. This protects the integrity of the record the Adjudicator reviewed and ensures the audit trail reflects what was actually decided.
-
----
+- **Info requested**: the loan goes back to **Draft**, so the officer can update what the approver asked about and resubmit. Back in Draft, the officer can also [change the loan type or product](/omnia/los/loans/changing-loan-type).
+- **Securities issue**: the approver resolves the problem and returns it to Securities. Routine document collection happens through security requests while the loan is in **Securities**.
 
 ## Status badge colours
 
-The platform displays a coloured status badge on every loan record in the loans list view. The colours give a quick visual cue.
-
-| Colour | States |
+| Colour | Stages |
 |---|---|
-| **Grey** | DRAFT |
-| **Blue** | SUBMITTED, ADJUDICATION, SECURITIES, DISBURSEMENT |
-| **Amber** | INFO_REQUESTED, SECURITIES_ISSUE |
-| **Green** | APPROVED, DISBURSED, FILED |
-| **Red** | DECLINED |
-| **Purple** | DRAFT_ABANDONED, CANCELLED |
+| **Grey** | Draft |
+| **Blue** | Submitted, Credit approval, Securities, Disbursement |
+| **Amber** | Info requested, Securities issue |
+| **Green** | Approved, Disbursed, Filed |
+| **Red** | Declined |
+| **Purple** | Draft abandoned, Cancelled |
 
 <Note>
-  This table describes the list view. The badge on the application header uses a slightly different palette: it groups DRAFT_ABANDONED and CANCELLED with DRAFT and shows all three as grey rather than purple.
-</Note>
-
-<Note>
-  Loans are never deleted. Even DECLINED or CANCELLED applications stay in the system for the audit record. Staff with the appropriate read permissions can always locate and review the full history of any application.
+  These are the loans list colours. The badge in the application header shows Draft abandoned and Cancelled in grey.
 </Note>
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="My approved unsecured loan is still in SECURITIES. Why?">
-    It is waiting for the legal documents your workspace requires before disbursement to be signed. When the last one is executed, it moves to DISBURSEMENT on its own.
+  <Accordion title="My approved unsecured loan is still in Securities. Why?">
+    It is waiting for the documents your credit union requires before disbursement to be signed. When the last one is signed, it moves to **Disbursement** on its own.
   </Accordion>
   <Accordion title="Can a submitted loan be edited?">
-    No. Every section locks at submission. To change it, the approver requests more information or returns it to DRAFT.
+    No. Every section locks at submission. The approver can request more information or return it to **Draft**.
   </Accordion>
   <Accordion title="Can a declined loan be reopened?">
-    No. DECLINED is terminal. The member needs a new application.
+    No. **Declined** is final. The member needs a new application.
   </Accordion>
-  <Accordion title="What is the difference between INFO_REQUESTED and returned to DRAFT?">
-    INFO_REQUESTED carries a list of conditions for the officer and keeps the same file. A return to DRAFT sends it back for a full rebuild. Both end with the officer resubmitting.
+  <Accordion title="What is the difference between Info requested and a return to Draft?">
+    **Info requested** carries a list of conditions for the officer. A return to **Draft** sends it back for a full rebuild. Both end with the officer resubmitting.
   </Accordion>
   <Accordion title="Who can cancel a loan?">
-    A holder of `loans.edit` from SUBMITTED, before anyone claims it. A holder of `loans.disburse` from DISBURSEMENT, unless a disbursement has already been executed.
+    Staff with **Edit loans**, from **Submitted** before anyone claims it. Staff with **Disburse loans**, from **Disbursement**, unless funds have already been released.
   </Accordion>
   <Accordion title="Is a loan ever deleted?">
-    No. Every application ends in FILED, DECLINED, DRAFT_ABANDONED or CANCELLED and stays on file.
+    No. Every application ends in **Filed**, **Declined**, **Draft abandoned** or **Cancelled** and stays on file.
   </Accordion>
 </AccordionGroup>

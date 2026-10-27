@@ -29,9 +29,9 @@ CompuZign has five marks. Getting the relationship between them right is the mos
 
 ### Everywhere on this site
 
-- **Never expose multi-tenancy.** Do not write "tenant", "multi-tenant", "per-tenant" or "cross-tenant" in prose, on any product. A credit union has its own private **workspace** (LOS) or is called **the institution** or **your credit union** (ARGOS). Staff should never read that they are a "tenant". The only exception is literal code identifiers, which keep their real names and go in code font: the LOS capability `admin.tenant.manage` and the models `TenantConfig` / `TenantBranding` / `TenantWorkflowOverride`; the ARGOS function `edw_app.current_tenant()` and the column `tenant_id`.
+- **Never expose multi-tenancy.** Do not write "tenant", "multi-tenant", "per-tenant" or "cross-tenant" in prose, on any product. A credit union has its own private **workspace** (LOS) or is called **the institution** or **your credit union** (ARGOS). Staff should never read that they are a "tenant". The only exception is literal ARGOS warehouse identifiers, which keep their real names and go in code font: the function `edw_app.current_tenant()` and the column `tenant_id`. LOS pages contain no code identifiers at all (see "General, not specific" below).
 - Use **member** for the credit union's customer and **staff** for credit union employees.
-- Capability strings are dot-notation and must match the codebase exactly. When in doubt, check the source rather than guessing.
+- Permissions are named in plain words, in bold, from the LOS permission vocabulary below. Never write internal permission strings.
 
 ### OMNIA and LOS
 
@@ -39,7 +39,16 @@ CompuZign has five marks. Getting the relationship between them right is the mos
 - The capture role is **Credit Officer**, never "Loan Officer".
 - The seven built-in roles are exactly: Administrator, Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Branch Manager. The admin role is **Administrator**, never "Tenant Administrator". Do not invent roles: there is no "Lead".
 - **workspace** is a credit union's isolated account on the platform.
-- Capability strings live in `packages/shared/src/capabilities.ts` in the `cns-iloan` repository.
+
+### General, not specific (LOS)
+
+The LOS pages are a general help guide for any credit union's loan origination system. They are specific about what staff see and do, and never about the code or about one credit union's business.
+
+- **No code-level detail.** No permission strings, audit event names, function, model, table, enum, API, job or environment-variable names, file paths, repository names, internal state codes, release numbers or engineering internals. Use the label the screen shows, in bold, and say "the audit trail records who did it and when" instead of naming events. Code font is only for text a user types, uploads or reads literally: import file column headers and values, loan ID formats like `MAIN-AUTO-00042`, downloaded file names.
+- **No one credit union's business.** Policy values a credit union sets (approval limits, committee rules, income shares, staff limits, rate tiers, fee amounts, thresholds, account suffixes) are described as configured by your credit union, with at most one clearly illustrative example. No institution-specific roles beyond the seven built-in ones, no real institution, person, branch or product names.
+- **Jurisdiction terms are generic.** "tax ID (TRN in Jamaica)" at most once per page, then "tax ID"; "tax (for example GCT)" then "tax"; plain amounts with "$" in prose; "your regulator"; "your national identity service"; no named statutes; "each weekday morning" rather than a time zone. Fixed screen labels may be quoted as they appear.
+- **Settings outside the app** are "set by your LOS support team" or "your system administrator", never a deployment flag.
+- **Permission vocabulary.** Members: Create members, Edit members, Suspend members, Delete members, Import members, View member personal details, Submit identity checks, Review identity checks, Manage member identity links, View / Upload / Delete member documents. Loans: Create loans, Edit loans, Submit loans, Claim loans, Approve loans, Override rates, Assign loans, Move loans between stages, View all loans, View branch loans, View confidential loans, Manage collateral, Place and release holds, View / Upload security documents, Manage guarantor documents. Securities: Review securities, Raise security requests. Documents: Prepare documents, Record signed documents, Void signed documents, View documents, Request e-signatures, Manage document templates. Disbursement: Disburse loans, Approve disbursements, Screen disbursements, Reverse disbursements, Update settlement, Manage saved payees, Configure disbursement controls. Loan import: Import loans, Review loan imports, Sign off loan imports. Administration and reporting: Manage workspace, Manage users and invitations, Manage loan products, Manage loan types, Manage rates, Manage fees, Manage mandatory shares, View reports, Export the audit trail.
 
 ### ARGOS
 
@@ -60,7 +69,7 @@ Write like a sharp human wrote it, never like AI output.
 - Be specific and opinionated: exact numbers, exact defaults, named exceptions. No hedging ("generally", "typically", "it depends", "recommended") and no filler transitions ("Additionally", "Furthermore", "It's worth noting").
 - Answer a question flatly. Lead with "Yes." or "No.", then explain.
 - Headings are short noun phrases or literal user questions. Sentence case. Bold the term being defined or the operative verb.
-- Bold for UI elements: click **Settings**. Code formatting for file names, commands, paths, capability strings, report keys and code references.
+- Bold for UI elements: click **Settings**. Code formatting for text a user types or reads literally (file names, import columns, ARGOS report keys). LOS pages never show code references.
 
 ## Hard formatting rules
 
@@ -79,6 +88,6 @@ Write like a sharp human wrote it, never like AI output.
 
 ## Content boundaries
 
-- Document the user-facing and admin-facing behaviour of the platform. Pull facts from the relevant codebase rather than guessing.
+- Document the user-facing and admin-facing behaviour of the platform. Check facts against the product's behaviour rather than guessing, but never copy code-level names into the page.
 - Do not document features that are not built. Where something is planned, say so and name the release it is expected in, or leave it out.
 - Check facts taken from a whitepaper or a sales document against the current state before repeating them. Documents are written at a point in time and go stale. As of this writing the ATLAS whitepaper of July 2026 still names Calico rather than Cilium, still calls the seven-platform reference architecture the "Omnia Enterprise Platform", still names Temenos alongside Profile Software, and predates ARGOS entirely.

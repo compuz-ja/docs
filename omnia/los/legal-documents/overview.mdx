@@ -1,35 +1,35 @@
 ---
 title: "Prepare, sign, and file loan legal documents"
 sidebarTitle: "Legal documents"
-description: "Every loan carries the legal paperwork it needs: consent forms, guarantees, security agreements, the declaration of purpose, and the disbursement sheet. Prepare each one from the loan's own figures, file the signed copy, and let the workflow hold the loan until the paperwork is done."
+description: "Every loan carries the legal paperwork it needs: consent forms, guarantees, security agreements, the declaration of purpose, and the disbursement sheet. Prepare each one from the loan's own figures, file the signed copy, and the loan waits until the paperwork is done."
 icon: "file-check"
 ---
 
-Legal documents are the forms your credit union puts in front of a member and their guarantors to make a loan enforceable, and the platform refuses to move a loan on until the ones that matter are signed and on file.
+Legal documents are the forms your credit union puts in front of a member and their guarantors to make a loan enforceable, and the loan cannot move on until the ones that matter are signed and on file.
 
-These are your credit union's own forms, not a generic pack. Your Administrator or Credit Manager registers each form once as a template, and from then on the platform fills it for every loan. See [Document templates](/omnia/los/legal-documents/templates).
+They are your credit union's own forms. Your Administrator or Credit Manager registers each form once as a template, and from then on the system fills it in for every loan. See [Document templates](/omnia/los/legal-documents/templates).
 
 <Note>
-  The **legal documents** on this page are separate from the **loan agreement**. The loan agreement is the single contract the platform generates automatically after approval, from one of four built-in templates. See [Loan agreements](/omnia/los/loans/loan-agreements).
+  These legal documents are separate from the **loan agreement**, the contract the system generates automatically after approval. See [Loan agreements](/omnia/los/loans/loan-agreements).
 </Note>
 
 ## The forms a loan needs
 
-The platform works out which documents a loan requires from the loan itself: its type, its guarantors, and its net disbursement. You never pick from a list. The **Legal documents & contracts** card on the loan page shows exactly the forms that loan needs, one row each, with whose copy it is.
+The system works out which documents a loan needs from its type, its guarantors, and its net disbursement. You never pick from a list. The **Legal documents & contracts** card on the loan shows one row per form, with whose copy it is.
 
 | Form | When a loan needs it | Whose copy | Must be signed before |
 |---|---|---|---|
-| **Personal Credit Consent** | Always. | The borrower, plus one for each guarantor. | The loan leaves Securities. |
-| **Guarantee & Indemnity** | One for each guarantor. | Each guarantor. | The loan leaves Securities. |
-| **NSIPP Security Agreement** | Auto loans. | The borrower. | The loan leaves Securities. |
+| **Personal Credit Consent** | Always. | The borrower, plus one per guarantor. | The loan leaves Securities. |
+| **Guarantee & Indemnity** | One per guarantor. | Each guarantor. | The loan leaves Securities. |
+| **NSIPP Security Agreement** (security over the vehicle) | Auto loans. | The borrower. | The loan leaves Securities. |
 | **Mortgage Deed** | Mortgage loans. | The borrower. | The loan leaves Securities. |
 | **Insurance Assignment** | Mortgage loans. | The borrower. | The loan leaves Securities. |
-| **Declaration of Purpose** | When the net to member is below J$1,000,000. | The borrower. | Funds are released. |
-| **Loan Disbursement Sheet** | Always. | The borrower's loan. | Funds are released. |
+| **Declaration of Purpose** | The net to member is below the declaration threshold. | The borrower. | Funds are released. |
+| **Loan Disbursement Sheet** | Always. | The loan, signed by staff. | Funds are released. |
 
-A loan with two guarantors shows three consent forms (the borrower's and one per guarantor), two guarantees, and the disbursement sheet, plus whatever its loan type adds. Remove a guarantor and their rows drop off the next time the card loads.
+A loan with two guarantors shows three consent forms, two guarantees, and the disbursement sheet, plus whatever its loan type adds. Remove a guarantor and their rows drop off.
 
-The **Declaration of Purpose** threshold is strict: a net of exactly J$1,000,000 does not need one. The net is the figure on the scheduled disbursement, so the Declaration row appears once the Disbursement team has scheduled the payment, not before.
+The **declaration threshold** is $1,000,000 in the standard setup. A net of exactly that amount needs no Declaration. The net comes from the scheduled disbursement, so the Declaration row appears only once the Disbursement team has scheduled the payment.
 
 <Frame caption="The Declaration lists each purpose with its amount. The amounts always add up to the gross loan.">
   <img src="/images/omnia/los/documents/declaration-of-purpose.png" alt="First page of a Declaration of Purpose for a demonstration loan, with a table of purposes and amounts totalling the gross loan" />
@@ -37,15 +37,15 @@ The **Declaration of Purpose** threshold is strict: a net of exactly J$1,000,000
 
 ### Optional documents per loan type
 
-An Administrator or Credit Manager can make extra forms available for a loan type, on that loan type's edit page under **Required documents**. Each one is set to block at Securities or at Disbursement. An added form is optional: it shows on the loan with a **Require for this loan** checkbox, and it blocks nothing until someone ticks the box. A ticked form then holds the loan at its stage until it is signed. Ticking the box needs `loans.legal_documents.prepare`. See [Loan types](/omnia/los/admin/loan-types#documents-attached-to-a-loan-type).
+An Administrator or Credit Manager can offer extra forms for a loan type, under **Required documents** on the loan type's edit page, each set to hold the loan at Securities or at Disbursement. An optional form shows on the loan with a **Require for this loan** checkbox and holds nothing up until someone ticks it. Once ticked, the loan waits at that stage until the form is signed. Ticking the box needs the **Prepare documents** permission. See [Loan types](/omnia/los/admin/loan-types#documents-attached-to-a-loan-type).
 
 ### Additional forms
 
-Forms registered as an **Additional form** sit on a separate **Additional forms** card. They fill from the loan with one click and never block a loan.
+Forms registered as an **Additional form** sit on their own **Additional forms** card. They fill from the loan with one click and never hold a loan up.
 
 ## Prepare, then execute
 
-Every legal document moves through the same two steps. **Prepare** generates the PDF from the loan's figures. **Execute** files the signed copy against the loan, either an uploaded wet-signed scan or an electronic signature.
+Every legal document goes through two steps. **Prepare** produces the PDF from the loan's figures. **Execute** files the signed copy, either an uploaded wet-signed scan or an electronic signature.
 
 <Frame caption="Each row names the form, whose copy it is, and where it stands. The buttons on the right change with the status.">
   <img src="/images/omnia/los/documents/legal-documents-panel.png" alt="The Legal documents and contracts card on a loan, listing consent forms, a guarantee and the disbursement sheet, some prepared and some executed" />
@@ -53,23 +53,23 @@ Every legal document moves through the same two steps. **Prepare** generates the
 
 <Steps>
   <Step title="Prepare the document">
-    Click **Prepare** on the form's row. The platform fills your credit union's template with the loan's own data and produces the finished PDF. The row moves to **Prepared, awaiting signature**. Preparing needs `loans.legal_documents.prepare`.
+    Click **Prepare** on the form's row. The system fills your template with the loan's data and the row moves to **Prepared, awaiting signature**.
 
-    The Declaration of Purpose button reads **Itemize & prepare**. List each purpose and its amount. The amounts must add up to the gross loan exactly, and **Prepare Declaration** stays disabled until they do.
+    On the Declaration of Purpose the button reads **Itemize & prepare**. List each purpose and its amount. **Prepare Declaration** stays disabled until the amounts add up to the gross loan exactly.
   </Step>
   <Step title="Take it for signature">
-    Use **View**, **Print**, or **Download** to get the PDF in front of the signers. Viewing needs `loans.legal_documents.view`, which every role in the loan's pipeline holds.
+    Use **View**, **Print**, or **Download** to put the PDF in front of the signers.
   </Step>
   <Step title="Record the signed copy">
-    For a wet signature, click **Upload signed**, fill in the signing details the form asks for, drop the scan (PDF, PNG, JPEG, or WebP, up to 10 MB), and click **Mark executed**. For an electronic signature, click **Sign electronically**. See [Electronic and paper signing](/omnia/los/legal-documents/signing). Either way the row moves to **Executed** and **View** becomes **View signed**. Recording needs `loans.legal_documents.execute`.
+    For a wet signature, click **Upload signed**, fill in the signing details the form asks for, drop the scan (PDF, PNG, JPEG, or WebP, up to 10 MB), and click **Mark executed**. For an electronic signature, click **Sign electronically**. See [Signing](/omnia/los/legal-documents/signing). Either way the row moves to **Executed** and **View** becomes **View signed**.
   </Step>
 </Steps>
 
 ### Signing details each form records
 
-The upload form asks for the details your signing rules require, and refuses to mark the document executed without them.
+The upload refuses to mark a document executed without the details your signing rules need.
 
-| Form | Details recorded with the signed scan |
+| Form | Recorded with the signed scan |
 |---|---|
 | Personal Credit Consent, Guarantee & Indemnity | **Witness name**, required. |
 | NSIPP Security Agreement | **Justice of the Peace (JP) name**, required. JP registration, witness name, and a registration reference, optional. |
@@ -78,73 +78,59 @@ The upload form asks for the details your signing rules require, and refuses to 
 
 ### Row statuses
 
-- **Required**: the document has not been prepared yet.
+- **Required**: not prepared yet.
 - **Optional** or **Required for this loan**: an optional form from the loan type, unticked or ticked.
 - **Prepared, awaiting signature**: the PDF exists and is waiting for a signature.
 - **Executed**: the signed copy is on file.
-- **Template not configured**: no active template exists for this form, so there is nothing to prepare and the form holds nothing up.
-- **Signed copy voided, prepare again**: a supervisor voided the signed copy. Prepare it afresh.
+- **Template not configured**: your credit union has no active template for this form, so there is nothing to prepare and it holds nothing up.
+- **Signed copy voided, prepare again**: a supervisor voided the signed copy. Prepare it again.
 
 ## The paperwork gates the workflow
 
-Two moves will not happen until the right documents are executed. These are server-side checks, not hidden buttons, so they hold against a stale page.
+Two moves wait for the right documents. The check runs when the move is attempted, so a stale page cannot get around it.
 
-| Move | What must be executed first |
+| Move | Must be executed first |
 |---|---|
-| **Securities to Disbursement** | Every consent (borrower and guarantors), every guarantee, and the loan type's security documents: the NSIPP Security Agreement on an auto loan, the Mortgage Deed and Insurance Assignment on a mortgage. Plus any optional form ticked to block at Securities. |
-| **Disbursement to Disbursed** | The Loan Disbursement Sheet, the Declaration of Purpose when the net is below J$1,000,000, and any optional form ticked to block at Disbursement. |
+| **Securities to Disbursement** | Every consent and guarantee, plus the security documents for the loan type: the NSIPP Security Agreement on an auto loan, the Mortgage Deed and Insurance Assignment on a mortgage. Plus any optional form ticked to hold at Securities. |
+| **Disbursement to Disbursed** | The Loan Disbursement Sheet, the Declaration of Purpose when required, and any optional form ticked to hold at Disbursement. |
 
-When the gate refuses, the message names the first outstanding document and whose copy it is, says how many others are still outstanding, and reminds you that a prepared document is not an executed one. The approving roles can see the documents but cannot execute them, so the message also says who can: a Credit Officer, or the Securities or Disbursement team.
+When a move is refused, the message names the first outstanding document and whose copy it is, says how many others are outstanding, and reminds you that prepared is not executed. It also says who can execute it: a Credit Officer, or the Securities or Disbursement team.
 
 <Note>
-  **The hand-off to Disbursement is automatic.** When the last document the Securities gate is waiting on is executed, by upload or e-signature, and no security request is still open, the loan moves to **DISBURSEMENT** in the same step and the Disbursement team is notified. Nobody has to press anything else. See [Securities](/omnia/los/workflows/securities#how-the-loan-reaches-disbursement).
+  **The hand-off to Disbursement is automatic.** When the last document the Securities stage is waiting on is executed, and no security request is open, the loan moves to **Disbursement** in the same step and the Disbursement team is told. See [Securities](/omnia/los/workflows/securities#how-the-loan-reaches-disbursement).
 </Note>
 
-A gate only applies to a form your credit union has an active template for. The two forms every loan needs, the **Personal Credit Consent** and the **Loan Disbursement Sheet**, are always enforced: every workspace starts with an active template for each, and the last active template of either cannot be archived.
+A form only holds a loan up when your credit union has an active template for it. The **Personal Credit Consent** and the **Loan Disbursement Sheet** always do: every workspace starts with a template for each, and the last active one of either cannot be archived.
 
 ## Correcting a document
 
-An unsigned document with an error is **re-prepared**. A signed document with an error is **voided** by a supervisor and then prepared again. See [Correcting documents](/omnia/los/legal-documents/correcting-documents).
+An unsigned document with an error is **re-prepared**. A signed one is **voided** by a supervisor and prepared again. See [Correcting documents](/omnia/los/legal-documents/correcting-documents).
 
-Documents also correct themselves when the parties change. If a guarantor is removed after their guarantee or consent was prepared, and the loan is later sent back to draft or resubmitted, that guarantor's documents are **superseded** automatically. They stay on file for the audit trail but no longer count toward any gate.
+Documents also tidy themselves up when the parties change. If a guarantor is removed after their documents were prepared, and the loan is later sent back to draft or resubmitted, those documents are marked superseded. They stay on file but no longer count.
 
-Preparing the same loan twice from the same template produces the same document, byte for byte. An auditor can reproduce exactly what a member signed.
+Preparing the same loan from the same template always produces an identical document, so an auditor can reproduce exactly what a member signed.
 
 ## Who can do what
 
-| Action | Capability | Built-in roles that hold it |
+| Action | Permission | Built-in roles |
 |---|---|---|
-| **Prepare** or **Re-prepare** | `loans.legal_documents.prepare` | Credit Officer, Securities, Disbursement, Administrator |
-| **Upload signed** or **Sign electronically** | `loans.legal_documents.execute` | Credit Officer, Securities, Disbursement, Administrator |
-| **View, Print, Download** | `loans.legal_documents.view` | Every pipeline role: Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Branch Manager, Administrator |
-| **Void** a signed document | `loans.legal_documents.void` | Adjudicator, Credit Manager, Administrator |
+| **Prepare** or **Re-prepare** | **Prepare documents** | Credit Officer, Securities, Disbursement, Administrator |
+| **Upload signed** or **Sign electronically** | **Record signed documents** | Credit Officer, Securities, Disbursement, Administrator |
+| **View**, **Print**, **Download** | **View documents** | Credit Officer, Adjudicator, Securities, Disbursement, Credit Manager, Branch Manager, Administrator |
+| **Void** a signed document | **Void signed documents** | Adjudicator, Credit Manager, Administrator |
 
-Voiding is a supervisory control, and the person who executed a document can never void it. See [Roles and permissions](/omnia/los/access/roles-and-permissions).
-
-## Events recorded
-
-Every step on a legal document is written to the immutable audit trail and the operational log.
-
-| Event | When it fires |
-|---|---|
-| `loan.legal_document.prepared` | A document was generated from a template and the loan's data. |
-| `loan.legal_document.executed` | A wet-signed scan was uploaded and filed. |
-| `loan.legal_document.esigned` | A document was signed electronically. |
-| `loan.legal_document.superseded` | A document was replaced by a re-prepared copy, or its guarantor was removed. The reason is recorded. |
-| `loan.legal_document.voided` | A supervisor voided a signed document. The reason is recorded. |
-| `loan.legal_document.generation.failed` | A prepare step failed. |
-| `loan_application.disbursement_route.deferred` | A document was executed but the Securities gate is still waiting on others, so the loan stayed in Securities. |
+The person who executed a document can never void it. Every prepare, signature, supersession, and void is recorded in the audit trail with who did it and when, and a void or supersession keeps its reason. See [Roles and permissions](/omnia/los/access/roles-and-permissions).
 
 ## FAQ
 
 <AccordionGroup>
   <Accordion title="Why is there no Declaration of Purpose row on my loan?">
-    Either the net to member is J$1,000,000 or more, or the disbursement has not been scheduled yet. The Declaration is decided from the scheduled net, so it appears once Disbursement schedules the payment.
+    Either the net to member is at or above the declaration threshold, or the disbursement is not scheduled yet. The row appears once Disbursement schedules the payment.
   </Accordion>
   <Accordion title="The loan is approved but still sits in Securities. Why?">
-    A Securities gate document is not executed yet. On an unsecured loan this is usually the borrower's Personal Credit Consent. The loan moves to Disbursement by itself the moment the last one is executed.
+    A document the Securities stage needs is not executed yet. On an unsecured loan, check the borrower's Personal Credit Consent first. The loan moves to Disbursement by itself as soon as the last one is executed.
   </Accordion>
   <Accordion title="Can an Adjudicator execute a document?">
-    No. The Adjudicator, Credit Manager, and Branch Manager can view documents but not prepare or execute them. That is the stage operators' job.
+    No. The Adjudicator, Credit Manager, and Branch Manager can view documents but not prepare or execute them. That is the job of the stage teams.
   </Accordion>
 </AccordionGroup>

@@ -1,129 +1,88 @@
 ---
 title: "Generate a compliance export bundle for regulatory review"
 sidebarTitle: "Compliance export"
-description: "Generate a cryptographically-verified compliance export bundle for BoJ examiners or auditors. It is a self-contained ZIP archive that verifies offline."
+description: "Produce a signed, self-contained ZIP of audit records that your regulator or auditor can verify without access to your system."
 icon: "file-down"
 ---
 
-The Loan Origination System generates a self-contained, cryptographically-signed compliance export bundle. The bundle is a ZIP archive containing your audit records, a hash-chain proof, and a signed manifest. Regulators verify it offline, with no access to your system. It answers questions like _"every loan decision over JMD $5M last year with the full event payload and decision rationale"_ in under five minutes.
+A compliance export is a signed ZIP file of audit records that your regulator or auditor can check for themselves, offline, without access to your system. It answers questions like _"every loan decision over $5 million last year, with the reason for each"_ in minutes.
 
-## Who can generate a compliance export
+## Who can generate one
 
-Generating a compliance export bundle requires the `reports.view` capability. The seeded **Administrator**, **Credit Manager**, and **Branch Manager** roles all carry it, so any of the three can generate a bundle. The export action checks `reports.view`, then re-validates the filter input with a Zod schema before the bundle runs, so a request cannot smuggle a cross-workspace or malformed filter past the gate.
-
-There is a separate `audit.export` capability that the platform reserves for the **Administrator** role as a compliance privilege. It does not gate the export, and it no longer decides who sees the **Audit Log** link: the link shows to everyone the audit trail page admits.
+Staff with **View reports**: in the built-in roles, the **Administrator**, **Credit Manager**, and **Branch Manager**. The bundle only ever contains your own workspace's records.
 
 <Note>
-  Do not confuse the compliance export bundle with the [quick CSV or JSON export](/omnia/los/compliance/audit-trail#quick-csv-or-json-export) on the same page. The quick export is a fast, unsigned download of up to 1,000 rows for internal work. The compliance bundle described here is the signed, hash-chained, immutably-stored archive that a regulator can verify offline.
+  This is not the [quick export](/omnia/los/compliance/audit-trail#quick-export) on the same page. The quick export is an unsigned file of up to 1,000 rows for your own use. The compliance export is signed, complete for the filters you chose, and kept in locked storage.
 </Note>
 
-## How to generate an export bundle
+## Generating a bundle
 
 <Steps>
   <Step title="Open the Audit Log">
-    In the sidebar, under **Administration**, click **Audit Log**. The page header reads **Audit trail**.
+    In the sidebar, under **Administration**, click **Audit Log**.
   </Step>
   <Step title="Filter to the records you need">
-    Use the filter bar to narrow the audit records to the time range and scope you want to export. For a BoJ examination of loan decisions, you might filter by:
-    - **Event type:** `adjudication.decision.recorded`
-    - **Time range:** the calendar year under review
+    Use the filters to set what goes in. For an examination of loan decisions, for example, set **Event** to approval decisions and **Date range** to the year under review. The bundle holds every entry that matches.
+  </Step>
+  <Step title="Click Export bundle">
+    In the toolbar, click **Export bundle**. The **Compliance export** dialog opens, marked **Beta**. Check the filters.
 
-    The bundle includes the audit rows matching your current filters.
+    To include only large loans, open **Advanced** and enter an amount in **Restrict to loan decisions at or above**, for example `5,000,000`. Only loans whose requested amount is at or above it are included.
   </Step>
-  <Step title="Generate the bundle">
-    In the toolbar, click **Export bundle**. A dialog titled **Compliance export** opens, currently marked **Beta**. Confirm the filters, then click **Generate bundle**. The platform builds the bundle, which takes a few seconds.
-
-    To restrict the bundle to large loan decisions, expand the **Advanced** disclosure and set **Restrict to loan decisions at or above (JMD)**, for example `5,000,000`. This scopes the bundle to loan applications whose requested amount is at or above the threshold, which is the basis for a query such as _"every loan decision over JMD $5M last year."_
+  <Step title="Click Generate bundle">
+    It takes a few seconds. The dialog then shows the **Export ID**, the number of records, the start of the **Manifest signature** for reference, and when the link expires.
   </Step>
-  <Step title="Download the bundle">
-    When generation is complete, the dialog shows your download link along with the **Export ID**, the row count, the **Manifest signature** (the first 32 characters of the bundle's RSA-SHA256 signature, for reference), and when the link expires. Click **Download** to save the ZIP file.
-  </Step>
-  <Step title="Provide the bundle to the examiner">
-    Share the downloaded ZIP file with the BoJ examiner or auditor. They can verify it completely offline using the [Verifying a bundle](#verifying-a-bundle) section below. They need no access to your system.
+  <Step title="Download and hand it over">
+    Click **Download** to save the ZIP file. Give it to your examiner or auditor. They need no access to your system to check it.
   </Step>
 </Steps>
 
 <Warning>
-  The download link expires **1 hour** after generation. Download the bundle immediately and store it in a secure location. If the link expires before you download it, generate a new bundle. The underlying records are retained for seven years.
+  The download link expires **1 hour** after the bundle is made. Download it straight away and store it securely. If the link expires, generate a new bundle; the records are not lost.
 </Warning>
 
-## What the bundle contains
+## What is in the bundle
 
-Every compliance export bundle is a ZIP archive with four files. The files are stored uncompressed inside the archive, in STORE mode, so each file's SHA-256 hash is stable and any standard tool can verify it.
+The ZIP holds four files.
 
 <CardGroup cols={2}>
   <Card title="manifest.json" icon="shield">
-    The signed envelope for the entire bundle. It lists the three data files (`audit-entries.csv`, `audit-entries.jsonl`, and `chain-proof.json`) with each file's SHA-256 hash and carries an RSA-SHA256 digital signature from the platform. Verifiers check the signature first, then re-hash each listed file to confirm nothing has been altered.
+    The signed index. It lists the other three files with a fingerprint of each, and carries the platform's digital signature plus the key needed to check it.
   </Card>
   <Card title="audit-entries.csv" icon="table">
-    A flat 22-column spreadsheet view of the audit records in a stable, documented column order. It is ideal for spot-checks, quick searches in Excel, and ad-hoc queries. It does not include the full event payload. Use the JSONL file for that.
+    The records as a spreadsheet, one row per entry, in a fixed column order. Good for searching and spot checks in Excel. It leaves out the full detail of each entry.
   </Card>
   <Card title="audit-entries.jsonl" icon="code">
-    The full audit records in newline-delimited JSON, one object per line. It includes complete event payloads and decision rationales. The full risk and rate inputs behind each decision live on the loan application's RiskAssessment and RateComputation rows, which the bundle does not export. It supports streaming queries with tools like `jq` without loading the entire file into memory.
+    The complete records, one per line, including the full detail of each event and the reason recorded for each decision.
   </Card>
   <Card title="chain-proof.json" icon="link">
-    The hash-chain bracket for the exported range, with the keys `startSequence`, `endSequence`, `startPreviousChainHash`, and `endChainHash`. It proves that the exported records are a contiguous, unmodified slice of the audit log.
+    Proof that the records are one unbroken, unaltered stretch of your audit trail, with nothing removed from the middle.
   </Card>
 </CardGroup>
 
+Each row records what happened, to which loan or member, who did it, their role and permissions at the time, the network address they used, how they signed in, the decision reason where there is one, and when.
+
 <Note>
-  If your filters match no records, the platform still produces a complete, signed bundle with a row count of zero and a chain proof whose start and end sequence are both `0`. An empty bundle is positive evidence: it shows an examiner that the answer to their query is genuinely "no matching records," signed and verifiable like any other bundle.
+  If nothing matches your filters, you still get a complete, signed bundle with zero records. That is evidence too: it proves to an examiner that the answer to their question is "none".
 </Note>
 
-The CSV column order is fixed at 22 columns:
+## How an examiner verifies a bundle
 
-```
-sequence_number, tenant_id, event_name, resource_type, resource_id,
-actor_user_id, actor_role_id, actor_caps_snapshot, actor_ip,
-actor_user_agent, actor_auth_method, actor_mfa_satisfied, session_id,
-request_id, trace_id, span_id, payload_hash, previous_chain_hash,
-chain_hash, decision_rationale, schema_version, created_at
-```
+Verification needs only the ZIP file and standard tools. It confirms four things:
 
-## Verifying a bundle
+1. **The files are complete.** The four files are all there and in the expected form.
+2. **Nothing was edited.** Each file still matches the fingerprint recorded in the signed index. A single changed character fails this check.
+3. **The index is genuine.** The signature on the index checks out against the key inside it, so the index came from the platform and was not altered.
+4. **No records are missing or rearranged.** Each record links to the one before it, and the last link matches the proof file.
 
-An examiner or auditor can verify the bundle completely offline. Verification proves four things: the bundle structure is valid, every file is unmodified since it was signed, the audit rows form an unbroken hash chain, and the manifest was signed with the platform's key.
+If any check fails, the bundle was changed after it was made. Your LOS support team can give your examiner the technical verification procedure.
 
-<Steps>
-  <Step title="Extract the ZIP archive">
-    Unzip the bundle to a local directory:
-    ```bash
-    unzip bundle.zip -d /tmp/bundle/
-    ```
-  </Step>
-  <Step title="Re-hash each file and compare to the manifest">
-    For each file listed in `manifest.json`, compute its SHA-256 hash and compare it to the value in `manifest.files`:
-    ```bash
-    sha256sum /tmp/bundle/audit-entries.csv
-    sha256sum /tmp/bundle/audit-entries.jsonl
-    sha256sum /tmp/bundle/chain-proof.json
-    ```
-    Each computed hash must match the corresponding `sha256` value in `manifest.json`. A mismatch means a file was altered after the bundle was signed.
-  </Step>
-  <Step title="Verify the RSA-SHA256 signature on the manifest">
-    The `manifest.json` file contains the public key (`signature.publicKeyPem`) and the base64-encoded signature (`signature.value`). To verify:
-    1. Parse `manifest.json` and remove the `signature` field.
-    2. Serialize the remaining body as canonical JSON, with keys sorted at every level.
-    3. Decode `signature.value` from base64.
-    4. Verify the decoded bytes against `signature.publicKeyPem` using RSA-SHA256.
+## How long bundles are kept
 
-    The public key is embedded directly in the manifest. No internet connection or platform access is needed.
-  </Step>
-  <Step title="Walk the hash chain">
-    Check that the audit rows form an unbroken chain across the export range. The JSONL rows use snake_case keys: the event body is under `payload`, and the chain fields are `payload_hash`, `previous_chain_hash`, and `chain_hash`. For each row in `audit-entries.jsonl` in sequence order:
-    - Recompute `SHA-256(canonicalJson(payload))` and confirm it matches the row's `payload_hash`.
-    - Recompute `SHA-256(payload_hash + previous_chain_hash)` and confirm it matches the row's `chain_hash`. For the very first row in the log, `previous_chain_hash` is null, so concatenate an empty string rather than the text `null`.
+Every bundle is also stored in locked storage for seven years. The lock is set when the bundle is made and cannot be shortened. Nobody, administrators included, can delete a bundle early.
 
-    The final `chain_hash` must match `endChainHash` in `chain-proof.json`. Any mismatch means records were tampered with after the bundle was generated.
-  </Step>
-</Steps>
-
-## Retention
-
-All compliance export bundles are stored in secure cloud storage with a **7-year compliance-mode retention lock**. Seven years is the Bank of Jamaica minimum for loan records. The retention lock is set when the bundle is created and **cannot be shortened retroactively**. Even administrators cannot delete a bundle before its retention period expires.
-
-The 7-year retention applies to the stored bundle in cloud storage. Your downloaded copy is yours to manage under your own data retention policies.
+Your downloaded copy is yours to keep under your own retention policy.
 
 <Note>
-  Generating a compliance export is itself recorded as an audit event (`audit.exported`) in the immutable audit log. The record shows which user generated the export, when, what filters they applied, and how many rows were included. The export chain of custody is itself auditable.
+  Generating a bundle is itself recorded in the audit trail: who made it, when, which filters they used, and how many records it held. So the hand-over is auditable too.
 </Note>

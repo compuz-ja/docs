@@ -1,62 +1,49 @@
 ---
 title: "Affordability, TDSR and residual income"
 sidebarTitle: "Affordability and TDSR"
-description: "How the Loan Origination System counts income, expenses and the new loan's payment to produce the TDSR, the money left over, and the inputs to the risk band."
+description: "How the Loan Origination System counts income, expenses and the new loan's payment to produce the TDSR, the money left over, and the risk band."
 icon: "calculator"
 ---
 
-The TDSR (Total Debt Service Ratio) is the share of a member's counted monthly income that goes to monthly outgoings once the new loan is added. The Credit Officer sees it live in the **Income & expenses** section while capturing, and the risk engine records the same figure when the application is submitted. One calculation serves both, so the number on the capture screen is the number the decision is made on.
+The TDSR (total debt service ratio) is the share of a member's counted monthly income that goes to monthly outgoings once the new loan is added. The Credit Officer sees it live in the **Income & expenses** section while capturing, and the same figure is recorded when the application is submitted. The number on the capture screen is the number the decision is made on.
 
-## What goes into the figure
+## The formula
 
 Three inputs, all monthly:
 
-- **Counted income.** Each income line multiplied by its applicable share.
-- **Expenses after this loan.** Every expense line at its after-loan amount. A debt this loan pays off counts as zero.
-- **This loan's monthly payment.** The instalment, plus compulsory savings, plus the creditor life amount counted for affordability.
+- **Counted income.** Each income line multiplied by the share of it that counts.
+- **Expenses after this loan.** Every expense at its after-loan amount. A debt this loan pays off counts as zero.
+- **This loan's monthly payment.** The instalment plus any compulsory savings and the monthly creditor life amount.
 
 ```latex
-\text{TDSR} = \frac{\text{expenses after this loan} + \text{instalment} + \text{compulsory savings} + \text{creditor life (monthly)}}{\sum_{\text{income lines}} \text{amount} \times \text{applicable share}}
+\text{TDSR} = \frac{\text{expenses after this loan} + \text{this loan's monthly payment}}{\text{counted income}}
 ```
 
-**Money left over** (residual income) is the same numbers subtracted instead of divided: counted income minus expenses after this loan minus this loan's monthly payment. A negative figure shows in red.
+**Money left over** (residual income) uses the same numbers subtracted instead of divided: counted income minus expenses after this loan minus this loan's monthly payment. A negative figure shows in red.
 
-## Income lines and the applicable share
+## Income lines and the share that counts
 
-Not every dollar of income counts in full. Each income line has an **applicable share**, the percentage of it that counts toward affordability. The share is set by the income type you pick.
+Not every dollar of income counts in full. Each income type counts at a share your credit union sets: for example, allowances might count at 75% while basic salary counts in full. The share follows the income type you pick, so you cannot change it on a line.
 
-| Income type | Share that counts |
-|---|---|
-| Basic Salary (gross) | 100% |
-| Allowances | 75% |
-| Performance-Based Pay | 50% |
-| Sole Trader | 100% |
-| Partner | 100% |
-| Existing Real Estate Rental | 100% |
-| Projected Real Estate Rental | 100% |
-| Other Income | 100% |
+The income types are **Basic Salary (gross)**, **Allowances**, **Performance-Based Pay**, **Sole Trader**, **Partner**, **Existing Real Estate Rental**, **Projected Real Estate Rental** and **Other Income**. Put commission, overtime and bonuses on a **Performance-Based Pay** line, not under Basic Salary, or they count at the salary share.
 
-Under each income line the screen shows the share and the counted amount, for example **75% counts · JMD 30,000.00**. **Total income** on the totals strip is the counted income. When it differs from the gross, the gross appears underneath as "counted of JMD 260,000.00 gross".
+Under each line the screen shows the share and the counted amount, for example **75% counts · 30,000.00**. **Total income** on the totals strip is the counted figure, with the gross underneath when the two differ.
 
-Put commission, overtime and bonuses on a **Performance-Based Pay** line, not under Basic Salary. The share follows the line type, so a bonus keyed as salary counts at 100%.
-
-<Frame caption="Each income line shows its applicable share and the amount that counts. Total income is the counted figure, with the gross underneath.">
-  <img src="/images/omnia/los/capture/income-applicable.png" alt="Income section with a basic salary line at 100 percent, an allowances line at 75 percent and a performance pay line at 50 percent, each showing the counted amount" />
+<Frame caption="Each income line shows the share that counts and the counted amount. Total income is the counted figure, with the gross underneath.">
+  <img src="/images/omnia/los/capture/income-applicable.png" alt="Income section with income lines each showing its counted share and the counted amount" />
 </Frame>
 
-The counted amount is rounded down to the cent on each line. Submission records the same share against each line, so the risk engine aggregates exactly what the screen showed.
+## Expenses: current and projected
 
-## Expenses: current and after this loan
+List every monthly outgoing, not only debts: statutory deductions, pension, existing loan payments, property costs, utilities, transport, personal and family costs. The categories are **Statutory Deductions**, **Pension**, **Existing Loan Payment**, **Other Payment**, **Property-Related**, **Utility / Household**, **Personal / Family**, **Transportation** and **Other Expense**. **Quick add** chips add the common ones in one click.
 
-List every monthly outgoing, not only debts. The risk engine's TDSR is measured against total outflows: statutory deductions, pension, existing loan payments, utilities, transport, personal and family costs. The categories are Statutory Deductions, Pension, Existing Loan Payment, Other Payment, Property-Related, Utility / Household, Personal / Family, Transportation and Other Expense. **Quick add** chips add Utility / Household, Transportation, Personal / Family, Existing Loan Payment and Property-Related in one click.
-
-An **Existing Loan Payment** or **Other Payment** line has a second field, **After this loan**. Use it when the new loan consolidates, refinances or pays off that debt.
+An **Existing Loan Payment** or **Other Payment** line has a second field, **After this loan**, for the projected amount when the new loan consolidates, refinances or pays off that debt.
 
 - Leave it blank and the line counts at its current amount.
 - Click **Paid off** to set it to zero. The line reads "paid off in full".
 - Type a smaller figure for a partial consolidation. The line reads "reduced from" the current amount.
 
-When any line changes, a green panel appears: **This loan lowers existing debt by** the monthly difference, with a **Before this loan** and **After this loan** pair showing the TDSR and the money left over each way. The TDSR that counts is the after figure.
+When any line changes, a green panel appears: **This loan lowers existing debt by** the monthly difference, with **Before this loan** and **After this loan** figures for the TDSR and the money left over. The after figure is the one that counts.
 
 <Frame caption="An existing loan marked Paid off drops to zero after this loan. The before and after panel shows both TDSRs; the after figure is the one recorded.">
   <img src="/images/omnia/los/capture/expenses-tdsr.png" alt="Expenses section with an existing loan payment marked paid off, the before and after affordability panel, and the totals row with TDSR" />
@@ -64,115 +51,100 @@ When any line changes, a green panel appears: **This loan lowers existing debt b
 
 ## This loan's monthly payment
 
-The new payment appears as its own line, **This loan's monthly payment**, beneath the expenses. You do not type it. It is built from three parts, shown in a breakdown under the totals: **Instalment** (with the rate it was priced at), **Compulsory savings** and **Creditor life**, then the total per month.
+The new payment appears as its own line, **This loan's monthly payment**, beneath the expenses. You do not type it. A breakdown under the totals shows its parts:
 
 | Part | How it is worked out |
 |---|---|
-| Instalment | Principal and interest, amortised over the term at the resolved rate. |
-| Compulsory savings | The greater of 5% of the instalment or the product's compulsory-savings minimum. A product with no minimum set uses JMD 2,000.00. |
-| Creditor life (monthly) | Depends on how the premium is paid. Annually: the annual premium divided by 12, rounded half-up to the cent. In full: zero. No cover, or a cash-secured loan: zero. |
+| **Instalment** | Principal and interest over the term at the rate the loan will be priced at on approval. |
+| **Compulsory savings** | A share of the instalment, never less than the minimum set on the [loan product](/omnia/los/admin/loan-products). The same figure prints on the agreement. |
+| **Creditor life** | Paid **Annually**: the annual premium divided by 12, so a yearly cost is not invisible to affordability. Paid **In full**, no cover, or a cash-secured loan: zero. |
 
-The **resolved rate** is the one the loan will be priced at on approval:
+The rate is a manual override when one is in force, otherwise the rate for the loan's risk band and collateral. When the loan cannot be priced yet, usually because the collateral is not captured, the breakdown uses the product's default rate and says **(product default rate)**.
 
-1. A manual rate override, when one is in force.
-2. Otherwise the rate engine, using the loan's latest risk band (R3 before the first risk assessment exists) and its collateral.
-3. When the engine cannot price the loan yet, the product's default rate, or 15% when the product has none. The breakdown then says **(product default rate)** next to the rate.
-
-The product's compulsory-savings minimum is set by an Administrator on the [loan product](/omnia/los/admin/loan-products). It binds: if the product says JMD 2,500.00, no member pays less than JMD 2,500.00 a month in compulsory savings on that product, and the same figure is printed on the agreement.
-
-Creditor life paid annually or in full is also a one-off charge at disbursement. That charge is a fee line, not part of the monthly payment. See [Fees and creditor life at capture](/omnia/los/loans/fees-and-insurance-at-capture).
+Creditor life paid annually or in full is also collected once at disbursement as a fee, not as part of the monthly payment. See [Fees and creditor life at capture](/omnia/los/loans/fees-and-insurance-at-capture).
 
 ## The TDSR chip
 
-The **TDSR** tile on the totals strip shows the percentage and a coloured chip. The bands are the same ones the risk engine scores.
+The **TDSR** tile on the totals strip shows the percentage and a coloured chip: **Healthy** (green), **Elevated** (amber) or **Exceeds policy** (red) as the ratio crosses the policy thresholds. With no income captured the tile shows a dash and **No income captured**.
 
-| TDSR | Chip | Risk factor score |
-|---|---|---|
-| 40% or less | **Healthy** (green) | 1 |
-| Above 40%, up to 70% | **Elevated** (amber) | 2 |
-| Above 70% | **Exceeds policy** (red) | 3, plus the `tdsr_high` policy flag |
-
-With no income captured the tile shows a dash and **No income captured**. The risk engine treats zero income as a TDSR of 100%.
+A high TDSR does not block submission. It is flagged for the approver, who decides.
 
 ## Worked example
 
 <Note>
-  Fictional figures for illustration. The rate card values below are examples, not any credit union's rates.
+  Illustrative round figures only, not any credit union's policy or rates. The shares and rates are examples.
 </Note>
 
-A member applies for JMD 1,500,000 over 60 months on a product priced at 12.00%. The new loan pays off an existing car loan.
+A member applies for a loan that pays off an existing car loan. Allowances count at 75% in this example.
 
 | Income line | Amount | Share | Counted |
 |---|---|---|---|
-| Basic Salary (gross) | 200,000.00 | 100% | 200,000.00 |
-| Allowances | 40,000.00 | 75% | 30,000.00 |
-| Performance-Based Pay | 20,000.00 | 50% | 10,000.00 |
-| **Total** | **260,000.00** | | **240,000.00** |
+| Basic Salary (gross) | 220,000 | 100% | 220,000 |
+| Allowances | 40,000 | 75% | 30,000 |
+| **Total** | **260,000** | | **250,000** |
 
 | Expense line | Current | After this loan |
 |---|---|---|
-| Statutory Deductions | 45,000.00 | 45,000.00 |
-| Utility / Household | 25,000.00 | 25,000.00 |
-| Existing Loan Payment | 30,000.00 | 0.00 (Paid off) |
-| Transportation | 15,000.00 | 15,000.00 |
-| **Total** | **115,000.00** | **85,000.00** |
+| Statutory Deductions | 40,000 | 40,000 |
+| Utility / Household | 20,000 | 20,000 |
+| Existing Loan Payment | 30,000 | 0 (Paid off) |
+| Transportation | 10,000 | 10,000 |
+| **Total** | **100,000** | **70,000** |
 
-This loan's monthly payment, with creditor life paid annually on an example rate card of JMD 0.50 per JMD 1,000 per month (single life) and a JMD 1,000 policy fee:
-
-| Part | Amount |
+| This loan's monthly payment | Amount |
 |---|---|
-| Instalment at 12.00% | 33,366.67 |
-| Compulsory savings: 5% of the instalment is 1,668.33, below the 2,000.00 minimum | 2,000.00 |
-| Creditor life: annual premium 10,000.00 ÷ 12 | 833.33 |
-| **This loan's monthly payment** | **36,200.00** |
+| Instalment | 30,000 |
+| Compulsory savings | 1,500 |
+| Creditor life (12,000 a year ÷ 12) | 1,000 |
+| **Total** | **32,500** |
 
 The result:
 
-- **TDSR** = (85,000.00 + 36,200.00) ÷ 240,000.00 = **50.5%**, an **Elevated** chip.
-- **Money left over** = 240,000.00 − 85,000.00 − 36,200.00 = **JMD 118,800.00**.
-- **Before this loan**: 115,000.00 ÷ 240,000.00 = 47.9%, with JMD 125,000.00 left over.
+- **TDSR** = (70,000 + 32,500) ÷ 250,000 = **41.0%**.
+- **Money left over** = 250,000 − 70,000 − 32,500 = **147,500**.
+- **Before this loan**: 100,000 ÷ 250,000 = 40.0%, with 150,000 left over.
 
-Had the member chosen to pay creditor life in full, the creditor life part would be zero, the monthly payment JMD 35,366.67, and the TDSR 50.2%.
+Had the member paid creditor life in full, the monthly payment would be 31,500 and the TDSR 40.6%.
 
 ## Risk band, credit rating and the Risk Registry
 
-The risk band (R1 to R5) is assessed when the application is submitted, and again on every resubmission. It sums seven factor scores: employment type, employment status, length of employment, TDSR, LTV, loan type and credit history. A sum of 9 or less is R1, 12 or less R2, 15 or less R3, 18 or less R4, anything higher R5. The full factor table is on [Loan types](/omnia/los/loans/loan-types).
+The **risk band** is a score built from the application's factors (employment, TDSR, loan-to-value, loan type, credit history), grouped into five bands from **R1** (lowest risk) to **R5** (highest). It is assessed at submission and again on every resubmission.
 
-The **Credit rating & risk registry** section on the application captures what the officer finds outside the platform:
+The **Credit rating & risk registry** section captures what the officer finds outside the system:
 
-- **Rating**: Very low risk, Low risk, Average risk, High risk or Very high risk. This is the credit history factor, scored 1 to 5. **Not captured** scores as Average risk (3). High risk and Very high risk add a policy flag the approver sees.
+- **Rating**: **Very low risk** to **Very high risk**, from the member's credit report. It is the credit history part of the score. **Not captured** counts as average risk. **High risk** and **Very high risk** also flag the loan for the approver.
 - **Credit score (optional)**: a whole number from 0 to 2000, for the record. It does not change the band.
 - **Credit report source (optional)**: the bureau or report reference, up to 120 characters.
-- **Risk Registry check**: **Clear** (no adverse listing), **Adverse listing found**, or **Not checked**. An adverse listing shows in red on the approval page. It does not change the band; it is a signal for the approver.
+- **Risk Registry check**: **Clear**, **Adverse listing found** or **Not checked**. An adverse listing shows in red on the approval page. It does not change the band.
 
-The section is editable while the application is a DRAFT. A change takes effect at the next submission.
+The section is editable while the application is a **Draft**. A change takes effect at the next submission.
 
 <Note>
-  The application page does not capture the applicant's own employment yet. Until it does, the three employment factors are scored on fixed values at submission: Employed (1), Permanent (1) and 12 months (3). Read the band with that in mind; the employment details are in the member's documents.
+  The application form does not capture the applicant's employment details yet, so the employment part of the score uses standard values at submission. Read the band with that in mind. The member's employment evidence is in their documents.
 </Note>
 
-After submission the **Risk rating** section on the loan, and the **Risk assessment** card on the approval page, show the band, the score, any policy flags and a **How the score was reached** breakdown: TDSR, LTV, loan type, employment, credit history and loan size.
+After submission the **Risk rating** section on the loan, and the **Risk assessment** card on the approval page, show the band, any flags and a **How the score was reached** breakdown.
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why does my TDSR differ from our spreadsheet?">
-    Check five things, in this order. First, the applicable share: Allowances count at 75% and Performance-Based Pay at 50%, so a spreadsheet that counts all income in full shows a lower TDSR. Second, the new payment includes compulsory savings and the monthly creditor life amount, not just the instalment. Third, expenses are every outgoing, not only debts. Fourth, a debt you marked **Paid off** or reduced counts at its after-loan amount. Fifth, the rate: compare the rate shown in the breakdown with the rate on your sheet. The screen prices at the rate approval will use, not the product's headline rate.
+    Check five things in order. The counted share: income that counts at less than 100% raises the TDSR against a sheet that counts everything in full. The new payment: it includes compulsory savings and monthly creditor life, not just the instalment. Expenses: every outgoing counts, not only debts. Paid-off debts: they count at the after-loan amount. The rate: compare the rate in the breakdown with your sheet's, since the screen prices at the rate approval will use.
   </Accordion>
   <Accordion title="Does the TDSR change between the capture screen and submission?">
-    No. Both call the same calculation with the same inputs. If you change the amount, the term, the creditor life choice or the rate override, the screen recalculates and submission records the new figure.
+    No. Both use the same calculation and inputs. Change the amount, term, creditor life choice or rate override and the screen recalculates, and submission records the new figure.
   </Accordion>
-  <Accordion title="Can a member with a TDSR above 70% be approved?">
-    The platform records the `tdsr_high` flag and the TDSR scores 3 toward the band. It does not refuse submission on TDSR alone. Whether a high-TDSR loan is approved is the approver's decision, inside the band ceiling for the product.
+  <Accordion title="Can a member with a high TDSR be approved?">
+    Yes, if the approver decides so. A TDSR above policy is flagged and raises the risk score, but it does not block submission.
   </Accordion>
   <Accordion title="Why is creditor life in my TDSR when nothing is charged monthly?">
-    With **Annually** chosen, the annual premium divided by 12 counts in the TDSR so that a yearly cost is not invisible to affordability. Nothing is charged monthly; the first year's premium is collected at disbursement. With **In full** chosen, creditor life adds nothing to the TDSR.
+    With **Annually**, the annual premium divided by 12 counts so a yearly cost is not invisible. Nothing is charged monthly: the first year's premium is collected at disbursement. With **In full**, creditor life adds nothing to the TDSR.
   </Accordion>
   <Accordion title="The breakdown says product default rate. What does that mean?">
-    The rate engine could not price the loan yet, usually because the collateral it prices on has not been captured. The screen falls back to the product's default rate, or 15% when the product has none. Capture the collateral and the breakdown switches to the engine rate.
+    The loan cannot be priced yet, usually because its collateral is not captured. Capture the collateral and the breakdown switches to the loan's own rate.
   </Accordion>
-  <Accordion title="Can I change an income line's applicable share?">
-    No. The share is fixed by the income type. Pick the type that matches the income.
+  <Accordion title="Can I change an income line's share?">
+    No. The share follows the income type. Pick the type that matches the income.
   </Accordion>
   <Accordion title="Where does residual income show?">
     As **Money left over** on the totals strip, and in the before and after panel when a debt is being paid off.

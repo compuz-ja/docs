@@ -1,53 +1,53 @@
 ---
 title: "Release approved loan funds in Disbursement"
 sidebarTitle: "Disbursement"
-description: "Enter payee details, verify fees, and execute funds release for approved loans. An overview of the Disbursement queue and its detail topics."
+description: "Check the fees, enter the payees, schedule the payment, and release the funds for an approved loan, then file it. An overview of the Disbursement queue and its detail topics."
 icon: "banknote"
 ---
 
-The **Disbursement** queue holds approved loans that have cleared Securities and are ready for funds release.
+The **Disbursement** queue holds approved loans that have cleared Securities and are ready for their funds to be released.
 
-With the **Disbursement** role, you enter payee details, verify the fees, schedule the disbursement, and release it. A loan is only marked **DISBURSED** once you confirm. No funds are scheduled or released until you act.
+As a Disbursement officer you check the fees, enter who gets paid, schedule the payment, and release it. Nothing is scheduled or released until you act, and a loan becomes **Disbursed** only when you confirm the release.
 
-A loan lands here by itself. When its last security request is resolved and its last Securities gate document is signed, it moves to **DISBURSEMENT** and your team is emailed. See [Securities](/omnia/los/workflows/securities#how-the-loan-reaches-disbursement).
+A loan arrives here by itself. When its last security request is resolved and its last Securities document is signed, it moves to **Disbursement** and your team is emailed. See [Securities](/omnia/los/workflows/securities#how-the-loan-reaches-disbursement).
 
 ## What you need
 
-You need the **Disbursement** role, which carries the `loans.disburse` capability. If you can view the queue but cannot act on applications, ask your Administrator to verify your role.
+You need the **Disburse loans** permission, which the **Disbursement** role holds. If you can see the queue but cannot act on a loan, ask your Administrator to check your role.
 
 ## How a disbursement works
 
 <Steps>
   <Step title="Open the Disbursement queue">
-    Open **Disbursement** under **Review Queue** in the sidebar. The count beside it is the number of loans waiting. The queue's **Pending** tab shows loans in **DISBURSEMENT** status, ready to schedule or release; loans still in Securities never appear here. The **Completed** tab shows disbursed and filed loans. The **All / My queue / Unassigned** tabs filter to your files or unclaimed work.
+    Open **Disbursement** under **Review Queue** in the sidebar. The count beside it is the number of loans waiting. The **Pending** tab lists loans ready to schedule or release. The **Completed** tab lists disbursed and filed loans. **All**, **My queue**, and **Unassigned** narrow the list to your files or unclaimed work.
   </Step>
-  <Step title="Open the application">
-    Click a row to open the disbursement detail page. You'll see the approved loan amount, the fees pre-filled, and the calculated net-to-member amount.
+  <Step title="Open the loan">
+    Click a row. The page shows the approved amount, the fees already filled in, and the net to member.
 
-    The fees start from what the Credit Officer agreed with the member at capture: any fee amount they edited, the treatment they chose for each fee, and any fee they added. Fees they did not touch come from the product's own fees, else the fee schedule. When the member chose to pay creditor-life cover annually or in full, the premium appears as its own line, deducted by default. See [Fees and GCT](/omnia/los/disbursement/fees-and-gct).
+    The fees start from what the Credit Officer agreed with the member at capture: any fee they edited, the treatment they chose, and any fee they added. Untouched fees come from the product, or else the fee schedule. A creditor-life premium paid annually or in full appears as its own line. See [Fees and taxes](/omnia/los/disbursement/fees-and-gct).
   </Step>
-  <Step title="Review fees and the net to member">
-    The form shows the gross approved amount, the fee and tax breakdown, and the live **Net to member** figure. This is the amount you must distribute in full across all payees.
+  <Step title="Check the fees and the net to member">
+    Review the **Gross approved** amount, each fee and tax line, and the **Net to member**. Edit, waive, or add lines if needed. The net is the amount you must pay out in full across your payees.
   </Step>
-  <Step title="Enter payees and amounts">
-    Add one or more payees, each with a payee type, name, payment method, account and routing details, amount, and purpose. The sum of all payee amounts must equal the net-to-member figure exactly before you can schedule.
+  <Step title="Enter the payees">
+    For each payee, give the type, name, payment method, bank and account details, amount, and purpose. Use **Pick saved payee** to fill a regular payee's details, and **Add another payee** to split the money. The payee amounts must add up to the net to member exactly.
   </Step>
   <Step title="Schedule the disbursement">
-    Pick a scheduled date of today or later, then click **Schedule disbursement**. This creates the disbursement instruction with all its payees and fee lines. The loan stays in **DISBURSEMENT** status. The Disbursement team, or the file's assignee if one is set, is notified that the disbursement is scheduled.
+    Choose a **Scheduled date** of today or later and click **Schedule disbursement**. The loan stays in **Disbursement**, and the Disbursement team, or the loan's assignee, is told it is scheduled.
 
-    Scheduling is refused if an instruction already exists on the loan (re-scheduling means reverting the file back to Securities first), or if the deductions would push the net to member below zero.
+    Scheduling is refused if the loan already has a scheduled disbursement, or if the deductions would leave the net below zero. To schedule again, send the loan back to Securities first.
   </Step>
-  <Step title="Execute the release">
-    Return to the instruction and click **Mark disbursed** to release the funds. Only then does the loan move to **DISBURSED**. The Credit Officer is notified, and the member is notified too when your CompuZign team has switched member emails on (they are off by default). Scheduling and execution are two separate actions, so a file can be scheduled by one officer and released by another.
+  <Step title="Release the funds">
+    Enter the **Bank reference number** from the issuing bank and click **Mark disbursed**. The loan moves to **Disbursed** and the Credit Officer is told. The member is told too when member emails are turned on for your workspace.
 
-    **Mark disbursed** is refused until the **Loan Disbursement Sheet** is signed and on file, and, when the net to member is below J$1,000,000, the **Declaration of Purpose** too. The refusal names the first document still outstanding. Both are on the loan's **Legal documents & contracts** card. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet).
+    Scheduling and release are separate, so one officer can schedule and another release.
 
-    Dual control is off until your credit union sets a threshold, so existing workspaces are never blocked by it. When it applies, the platform refuses to release the funds while approval is still pending. The block is enforced server-side, not by graying out the button: a net at or above your credit union's dual-control threshold sets the instruction to await a second approver, and a **different** user holding `disbursements.approve` must sign off before the release goes through (the maker cannot be the checker). Until they do, **Mark disbursed** is turned away with an "awaiting a maker-checker approval" message.
+    **Mark disbursed** is refused until the signed **Loan Disbursement Sheet** is on file, plus the **Declaration of Purpose** when the net is below the declaration threshold. The message names the first missing document. Both are on the loan's **Legal documents & contracts** card. See [Loan Disbursement Sheet](/omnia/los/legal-documents/disbursement-sheet).
 
-    There is one exception to the two-step flow: when auto-disbursement is enabled and the net to member is at or below the configured threshold, scheduling executes the release immediately. Auto-disbursement also requires that no dual-control approval is pending, that the officer is within their personal limit, and that your credit union does not require AML screening.
+    It is also refused while a second approval is pending, while required screening is not clear, or when the net is above your personal limit. See [Controls](/omnia/los/disbursement/controls).
   </Step>
   <Step title="File the loan">
-    With the loan in **DISBURSED**, the **File loan** card shows a **File loan (terminal)** button. Clicking it fires the **DISBURSED → FILED** transition (gated by `loans.disburse`) and closes the file at its terminal **FILED** state. Filing always lands on **FILED**; it never routes the loan anywhere else. Filing is a manual step, not automatic.
+    With the loan **Disbursed**, click **File loan (terminal)** on the **File loan** card. The loan closes at **Filed**. Filing is always a manual step.
   </Step>
 </Steps>
 
@@ -59,82 +59,76 @@ You need the **Disbursement** role, which carries the `loans.disburse` capabilit
   <img src="/images/omnia/los/disbursement/execution.png" alt="The disbursement detail page for a demonstration loan, showing fee lines, the net to member, and two payees" />
 </Frame>
 
-## Sending a loan back or cancelling it
+If your credit union releases small disbursements automatically, **Schedule disbursement** also releases the funds when every condition is met. See [Automatic release](/omnia/los/disbursement/controls#automatic-release).
 
-Until the disbursement is executed, the page header offers two exits:
+## Paying more than one party
 
-- **Revert to Securities** returns the loan one stage with prior work intact, for example to replace a signed Securities document. It needs a reason of at least 20 characters, and the Securities team is notified.
-- **Cancel** closes the application for good. It needs a reason of at least 20 characters. The member must apply afresh to be reconsidered.
+Many loans pay several parties. An auto loan might split between the car dealer and the member. A mortgage might send part to an attorney for transfer costs. A disbursement holds up to 20 payees.
 
-Both need `loans.disburse`.
-
-## What the detail page shows
-
-The disbursement detail page is also a read-only recap of the whole file, so you can sanity-check it before releasing funds without leaving the page. Alongside the approved amount and the payee form, you'll see:
-
-- **Risk assessment.** The latest risk band, score, engine version, and the same factor breakdown the Adjudicator saw.
-- **Collateral summary.** The most recent collateral record for secured loans, with valued amount and valuation source.
-- **Decision history.** Every adjudication decision in order, each with its rationale, the decider's name, and their role.
-- **KYC status.** The member's identity-verification state, with a link to their documents.
-- **Collateral & security holds.** Record or adjust collateral, and place or release a hold on the member's pledged account. See [Securities](/omnia/los/workflows/securities#collateral-and-security-holds).
-- **Agreement.** The signed loan agreement to view or download. If the agreement PDF failed to generate, the page surfaces the last generation error so you know why it's missing.
+<Warning>
+The payee amounts must equal the net to member exactly. Any shortfall or excess blocks scheduling. The **Payees total vs net** panel shows the current total, the required net, and the difference.
+</Warning>
 
 ## Pre-execution checklist
 
-Before you can schedule or release a disbursement, the loan has to clear three prerequisites, separate from the signed documents above. The detail page shows them as a **Pre-execution checklist** and disables the **Mark disbursed** button until all three pass:
+Three conditions must hold before you can schedule or release, on top of the signed documents. The page shows them as the **Pre-execution checklist** and keeps **Mark disbursed** disabled until all three pass:
 
-- **Member identity verification (KYC) is VERIFIED.**
-- **Zero outstanding security requests.** No request on the loan is in PENDING or SUBMITTED.
-- **A loan agreement has been generated.**
+- The member's identity check is **Verified**.
+- No security request on the loan is still open.
+- A loan agreement has been generated.
 
-This is a hard rule, not just a UI gate. The platform re-checks all three inside both scheduling and execution and refuses the action if any is open, even from a stale page or a direct call. If something regresses between scheduling and release, for example a security request reopens or the agreement is revoked, execution is blocked until it clears again.
+The checks run again when you click, so a stale page cannot get around them. If something slips back after scheduling, for example a security request reopens, the release is blocked until it is fixed. If the agreement is missing, click **Generate agreement** on the **Loan agreement** card. See [Loan agreements](/omnia/los/loans/loan-agreements).
+
+## Sending a loan back or cancelling it
+
+Until the funds are released, the page header offers two ways out. Each needs a reason of at least 20 characters.
+
+- **Revert to Securities** sends the loan back one stage with its work intact, for example to replace a signed Securities document. The Securities team is told.
+- **Cancel** closes the application for good. The member must apply again.
+
+## What else the page shows
+
+The page also recaps the whole file so you can check it without leaving:
+
+- **Risk assessment**: the risk band, score, and the factor breakdown the Adjudicator saw.
+- **Collateral summary**: the latest collateral record with its value and valuation source.
+- **Decision history**: every adjudication decision, with its rationale and who made it.
+- **Identity check status**: the member's verification state, with a link to their documents.
+- **Collateral & security holds**: record collateral, or place or release a hold on a pledged account. See [Securities](/omnia/los/workflows/securities#collateral-and-security-holds).
+- **Loan agreement**: view or download it. If it failed to generate, the reason shows here.
+
+## After the release
+
+The bank reference you entered is kept on the disbursement. Record the payment's progress, or reverse it, on the **Controls & settlement** card. See [Settlement](/omnia/los/disbursement/settlement).
+
+### Post-disbursement security check
+
+Some credit unions check security again after funds go out, for example to confirm the vehicle insurance started or a lien was registered. If yours does, a staff member with the **Approve loans** permission opens a post-disbursement security request. The file goes back to the Securities queue while the loan stays **Disbursed**, and returns to Disbursement for filing once the request is resolved. **File loan** never starts this check. Your LOS support team turns the check on for your credit union.
+
+<Note>
+**Filed** is final. A filed loan is locked against further changes and its audit trail is complete. New lending for the member needs a new application.
+</Note>
 
 ## Disbursement topics
 
-Disbursement has several detail areas, each covered on its own page.
-
 <CardGroup cols={2}>
   <Card title="Payment methods" icon="send" href="/omnia/los/disbursement/payment-methods">
-    Choose a payment rail for each payee: ACH, RTGS, Internal Transfer, Cheque, Manager's Cheque, or Wire/SWIFT. ACH cannot carry more than J$1,000,000 per payee. Use RTGS for larger amounts.
+    ACH, RTGS, internal transfer, cheque, manager's cheque, or wire, and the bank details each needs.
   </Card>
-  <Card title="Fees and GCT" icon="file-text" href="/omnia/los/disbursement/fees-and-gct">
-    Review, edit, waive, or add fee lines, set how each is treated, and adjust the GCT rate. The net-to-member figure updates as you go.
+  <Card title="Fees and taxes" icon="file-text" href="/omnia/los/disbursement/fees-and-gct">
+    Review, edit, waive, or add fee lines and adjust the tax rate. The net updates as you go.
   </Card>
   <Card title="Saved payees" icon="bookmark" href="/omnia/los/disbursement/saved-payees">
-    Save frequently used payees such as attorneys, insurers, and dealer accounts to the payee directory, then reuse them without re-entering details.
+    Keep attorneys, insurers, and dealers in a directory and reuse them.
   </Card>
   <Card title="Controls" icon="user-check" href="/omnia/los/disbursement/controls">
-    Dual control sign-off, AML and sanctions screening, per-officer limits, and auto-disburse settings that govern who can release funds and when.
+    Second approver, AML screening, officer limits, and automatic release.
   </Card>
   <Card title="Settlement" icon="clock" href="/omnia/los/disbursement/settlement">
-    Track each disbursement through its lifecycle as the payment moves on the rail: sent, cleared, returned, failed, or reversed.
+    Track each payment as sent, cleared, returned, or failed, and reverse it if needed.
   </Card>
 </CardGroup>
 
-## Multi-payee disbursements
-
-Many loans pay more than one party. An auto loan might split between the car dealer and the member. A mortgage might include a portion to an attorney for title transfer fees. Add payees with **Add another payee**, and the sum of all payee amounts must equal the net-to-member figure exactly before you can schedule.
-
-A single instruction holds between 1 and 20 payees, and the payee sequence numbers must run as a contiguous 1-to-N list with no gaps or duplicates.
-
-<Warning>
-The total of all payee amounts must equal the net-to-member amount exactly. The form will not allow scheduling if there is any shortfall or excess. Watch the **Payees total vs net** panel for the current total, the required net, and the difference.
-</Warning>
-
-## After disbursement
-
-Marking a loan **DISBURSED** stamps the bank reference number on the instruction and emits the `disbursement.executed` event, which notifies the Credit Officer (and the member, when member emails are enabled). The loan does not file itself. Filing is the separate manual step described above: someone on the Disbursement team clicks **File loan** to mark it **FILED**, and that always lands the loan on **FILED**.
-
-### Post-disbursement securities re-check
-
-A few credit unions require a security check *after* funds have gone out, for example to confirm vehicle insurance was activated or a lien was filed. That re-check is a distinct **DISBURSED → SECURITIES** transition, gated by `loans.adjudicate`, that someone holding that capability starts with a post-disbursement security request. It is not part of the **File loan** button, and clicking **File loan** never triggers it.
-
-When that transition fires, the workflow opens a new security request and moves the file back to the Securities queue for review, while the loan's status stays **DISBURSED**. The platform only allows it when your credit union's `securitiesFinalCheckRequired` configuration flag is on (a setting on `TenantWorkflowOverride`, off by default and set by your CompuZign team). Once the new request is resolved, the file returns through Disbursement and can be filed.
-
-<Note>
-**FILED** is the terminal state. Once a loan is filed, the record is locked from further editing and the audit trail is complete. Any future lending for the same member requires a new application.
-</Note>
-
 ## Disbursement dashboard
 
-The **Disbursement dashboard** lives under the **Dashboards** group in the sidebar (**Dashboards → Disbursement**). It shows four tiles plus a throughput sparkline over fixed windows: **Awaiting disbursement** (the same count as the queue's **Pending** tab, so loans still in Securities are not included), **Disbursed this week**, **Total disbursed** (net of fees, last 7 days), and **Avg approval to fund** (last 7 days), with a **Disbursements per day** sparkline over the last 14 days. Reaching it needs `loans.disburse` or `reports.view`.
+Open **Dashboards → Disbursement** for four tiles: **Awaiting disbursement** (the same count as the **Pending** tab), **Disbursed this week**, **Total disbursed** (net of fees, last 7 days), and **Avg approval to fund** (last 7 days), plus a **Disbursements per day** chart over the last 14 days. You need **Disburse loans** or **View reports**.

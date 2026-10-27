@@ -1,90 +1,82 @@
 ---
-title: "Staff, Board and confidential loans"
+title: "Staff and confidential loans"
 sidebarTitle: "Staff and confidential loans"
 description: "How a member's classification makes their loans confidential, who can see a confidential loan, and how staff loans are routed, limited and waived."
 icon: "lock"
 ---
 
-A loan to a member of staff or a Board member is **confidential**: only the people who must handle it can see it. A colleague in the same branch, who would otherwise see every loan there, does not see it at all. Not redacted, not a placeholder row. The loan is simply not in their lists.
+A confidential loan is visible only to the people who must handle it. It is the usual treatment for loans to your own staff and officials. A colleague in the same branch, who would otherwise see every loan there, does not see it at all: no redacted row, no placeholder. The loan is simply not in their lists.
 
 ## Classifications decide it
 
-Every member can carry a **classification** from your workspace's list, for example Staff, Supervisor, Manager or Volunteer. Each classification is marked as confidential or not. An unclassified member is an ordinary member.
+A member can carry a **classification** from your credit union's list, for example Staff or Manager. Each classification is marked confidential or not. An unclassified member is an ordinary member, and a classification that was never marked either way is treated as confidential.
 
-A classification created without saying either way is treated as confidential. When in doubt, the platform hides rather than exposes.
-
-Your classification list is workspace configuration that CompuZign sets up with you. Which staff categories exist and which are confidential is your credit union's policy, not the platform's.
+Which classifications exist and which are confidential is your credit union's policy. Ask your system administrator to change the list.
 
 ## Set a member's classification
 
 Open the member's profile. The **Identity and access** card holds two settings:
 
 - **Classification**: pick from the list. A confidential classification shows "confidential" beside its name. **Not classified** is an ordinary member.
-- **Linked login**: the staff member's own workspace login, when the member is also a user. Click **Link a login**, choose the login, and click **Link**. **Unlink** removes it.
+- **Linked login**: the staff member's own login, when the member is also a user. Click **Link a login**, choose the login and click **Link**. **Unlink** removes it.
 
-The card is visible only with the `members.identity.manage` capability, which is separate from `members.edit`. The Administrator holds it. A clerk who may correct an address cannot decide whose loans are confidential.
-
-The login is never matched automatically on name or email; you choose it deliberately. Each change records an audit event: `member.classification.changed`, `member.user.linked` or `member.user.unlinked`.
+The card needs the **Manage member identity links** permission, separate from **Edit members**, so a clerk who may correct an address cannot decide whose loans are confidential. The Administrator holds it. A login is never matched automatically by name or email: you choose it. Every change is recorded in the audit trail.
 
 ## Confidentiality is fixed at capture
 
-When an application is created, the platform takes a snapshot: whether the loan is confidential, and the borrower's classification at that moment. Changing the member's classification later affects only future applications. A promotion never hides or reveals a loan already in flight, and unlinking a login does not make an existing loan ordinary.
+When an application is created, it records whether it is confidential and the borrower's classification at that moment. A later change to the member affects only future applications. A promotion never hides or reveals a loan already in progress.
 
 ## Who can see a confidential loan
 
 | Who | Sees the loan |
 |---|---|
-| Anyone holding `loans.read.confidential` | Always. These are the designated handlers of staff loans. |
+| Staff with **View confidential loans** | Always. These are your designated handlers of staff loans. |
 | The borrower, through their linked login | Always. |
-| The person the loan is currently assigned to | While it is assigned to them. |
-| The Credit Officer who captured it | Only while it is in DRAFT or INFO_REQUESTED. |
+| The person the loan is assigned to | While it is assigned to them. |
+| The Credit Officer who captured it | Only while it is a **Draft** or **Info requested**. |
 | Everyone else | Never. |
 
-The capturing officer can finish what they started and fix what comes back, then the loan leaves their hands. After submission it is gone from their loans list, My Work and every queue they see.
+The capturing officer finishes what they started and fixes what comes back. After submission the loan leaves their loans list, My Work and every queue they see.
 
-The same rule runs on every surface that lists loans: the loans list, the three queues, My Work, reports, analytics, the audit viewer and notification recipients. Branch scope does not override it.
+The rule applies everywhere loans are listed: the loans list, the queues, My Work, reports, analytics, the audit viewer and notifications. Branch access does not override it.
 
-`loans.read.confidential` is not granted to any built-in role by default. Your workspace assigns it to the roles your policy routes staff lending to.
+No built-in role has **View confidential loans** by default. Your credit union grants it to the roles that handle staff lending.
 
 ## How staff loans are approved
 
-Your [approval routing policy](/omnia/los/workflows/approval-routes) can treat a borrower's classification, or their own staff role, as a reason to change the route:
+Your [approval routes](/omnia/los/workflows/approval-routes) can use the borrower's classification, or their own staff role, to change the route:
 
-- send a classification or staff role to the **In-House Committee**, or straight to the **Credit Committee**;
-- name a substitute recorder for the Credit Committee when the borrower is the usual recorder, so nobody records the decision on their own loan;
-- require an **approved waiver** before any loan for a listed classification or staff role can be approved.
+- send the loan to your credit union's committee instead of a single approver;
+- name a substitute recorder when the borrower would normally record the committee's decision, so nobody records the decision on their own loan;
+- require an **approved waiver** before the loan can be approved.
 
-The approval route card states the reason, for example "The borrower's staff category sends this loan to this route."
+The approval route card gives the reason, for example "The borrower's staff category sends this loan to this route."
 
-## Staff motor-vehicle limits
+## Staff vehicle loan limits
 
-The routing policy can cap a motor-vehicle loan by the borrower's classification. A classification with no cap has no limit beyond the product's own maximum.
+Your credit union can cap a motor-vehicle loan by the borrower's classification. A classification with no cap is limited only by the product's maximum.
 
-Above the cap the loan is not refused. It can be approved only once a waiver has been approved. The approval route card shows **Above the staff motor-vehicle limit** with the classification's limit, and approval is refused until a waiver is approved: "Approval blocked: the amount is above the CLASSIFICATION motor-vehicle limit of AMOUNT."
-
-<Note>
-  Fictional example caps: Manager JMD 6,000,000, Supervisor JMD 4,000,000, Staff JMD 2,500,000. A Supervisor's JMD 4,500,000 car loan needs an approved waiver before it can be approved.
-</Note>
+Above the cap the loan is not refused, but it cannot be approved until a waiver is approved. The approval route card shows **Above the staff motor-vehicle limit** with the limit, and approval is refused with "Approval blocked: the amount is above the CLASSIFICATION motor-vehicle limit of AMOUNT."
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="I captured a staff loan and now I cannot find it. Is it lost?">
-    No. Once it left DRAFT, it left your view, as designed. It is with the approvers. If it comes back to you for more information, you see it again while it is in INFO_REQUESTED and DRAFT.
+    No. Once it left **Draft**, it left your view, as designed. It is with the approvers. If it comes back for more information, you see it again while it is **Info requested** or **Draft**.
   </Accordion>
-  <Accordion title="Is a Board member's loan confidential?">
-    If their classification is marked confidential, yes. Volunteer and Board classifications are configured per workspace.
+  <Accordion title="Is a board member's loan confidential?">
+    If their classification is marked confidential, yes. Your credit union decides which classifications exist.
   </Accordion>
-  <Accordion title="We promoted someone to Manager. Do their existing loans move?">
-    No. Each loan keeps the classification it was captured under. Their next application uses the new classification.
+  <Accordion title="We promoted someone. Do their existing loans move?">
+    No. Each loan keeps the classification it was captured under. Their next application uses the new one.
   </Accordion>
-  <Accordion title="Can a staff member approve or disburse their own loan?">
-    Your routing policy is the control. Send staff loans to the In-House Committee or the Credit Committee, name a substitute Credit Committee recorder for the recorder's own loan, and require a waiver for staff classifications. The capturer rule, when your workspace switches it on, also stops the officer who keyed a loan from approving it.
+  <Accordion title="Can a staff member approve their own loan?">
+    Your approval routes are the control: route staff loans to a committee, name a substitute recorder, and require a waiver for staff classifications. If your credit union turns on the capturer rule, the officer who keyed a loan also cannot approve it.
   </Accordion>
   <Accordion title="Can a Branch Manager see a confidential loan in their branch?">
-    Only if they hold `loans.read.confidential` or the loan is assigned to them. Branch scope alone is not enough.
+    Only with **View confidential loans**, or when the loan is assigned to them. Branch access alone is not enough.
   </Accordion>
   <Accordion title="Who can change a member's classification?">
-    Anyone holding `members.identity.manage`. By default that is the Administrator.
+    Staff with **Manage member identity links**. By default, the Administrator.
   </Accordion>
 </AccordionGroup>

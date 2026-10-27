@@ -1,209 +1,136 @@
 ---
 title: "Create and manage loan products"
 sidebarTitle: "Loan products"
-description: "Create, edit, and archive the loan products your credit union offers, including code, loan type, rate source, amount and term limits, audience, per-product fees, minimum shares, and required supporting documents."
+description: "Create, edit, and archive the loan products your credit union offers: code, loan type, rate source, amount and term limits, audience, fees, shares, and required documents."
 icon: "file-text"
 ---
 
-A loan product is a lending offering your credit union makes available to members: its code, loan type, rate source, amount and term limits, and the rest of its product sheet.
+A loan product is one lending offering your credit union makes to members, with its own code, loan type, pricing method, limits, and product sheet.
 
-Credit Officers see only active products when creating a new loan application, so keeping your product list accurate directly affects what your team can originate. As a **Credit Manager** or **Administrator** you can create new products, update their parameters, or archive discontinued ones.
+Credit Officers see only active products when they start an application, so this list decides what your team can lend.
 
-**Required role:** Credit Manager or Administrator (`loans.products.manage` capability). Viewing the product catalog and the new-application dropdown requires `loans.products.read` (read-only; the New, Edit, and Archive controls need `loans.products.manage`).
+**Required permission:** **Manage loan products**, held by the Credit Manager and the Administrator. Everyone who captures loans can see the product list, but only these roles see **New**, **Edit**, and **Archive**.
 
-To access the product catalog, navigate to **Administration → Products**.
+Open **Administration → Products**.
 
 <Frame caption="Each row shows the product's code, loan type, rate source, amount and term range, and how many applications have used it.">
   <img src="/images/omnia/los/admin/loan-products.png" alt="The Products page listing several demonstration loan products with their codes, loan types and rate sources" />
 </Frame>
 
 <Note>
-  Create your loan types first. A product is built on top of a workspace-defined
-  loan type, so if no active loan types exist the product form shows the notice
-  "No loan types yet. Add one under Loan types first, then come back to create
-  this product.", and creation fails until you pick one. Set those up before
-  adding products.
+  Set up your loan types first. Every product belongs to a loan type, and with no active loan types the form says "No loan types yet. Add one under Loan types first, then come back to create this product." See [Loan types](/omnia/los/admin/loan-types).
 </Note>
 
-<Tip>
-  Give every product a clear **name** that Credit Officers will recognize in
-  the new-application dropdown. The examples below such as "Public Sector Personal Loan"
-  and "First Home Mortgage" are illustrative names; pick whatever fits
-  your own lineup. The **code** is the short internal identifier shown in the
-  product list and recorded in audit events.
-</Tip>
+## What a product contains
 
-## What a loan product contains
-
-Each loan product is defined by these fields:
-
-| Field | Description |
+| Field | What it is |
 |---|---|
-| **Code** | A short, unique internal identifier such as `PUBLIC-PL` or `MORTGAGE-STD`. Uppercase letters, numbers, and dashes only, 2 to 20 characters. Shown in the product list and recorded in audit events |
-| **Name** | The display name Credit Officers see in the new loan application dropdown, up to 80 characters |
-| **Loan type** | The workspace-defined loan type this product belongs to, chosen from your Loan types catalog. Each loan type is bound to one behavioral archetype (Unsecured, Cash secured, Motor vehicle, or Real estate), which determines the PDF agreement template, collateral fields, and rate engine path |
-| **Rate source** | How the interest rate is calculated for this product: FLAT, RISK_BAND, COLLATERAL_TYPE, or VEHICLE_AGE. See [Rate Tables](/omnia/los/admin/rate-tables) for details |
-| **Default rate** | For FLAT products, the fixed annual interest rate as a percentage such as `12.00` (0 to 100 percent). Not used for RISK_BAND, COLLATERAL_TYPE, or VEHICLE_AGE products, where the rate is looked up from your rate table at approval time |
-| **Minimum amount** | The lowest loan amount a Credit Officer can request for this product. Non-negative |
-| **Maximum amount** | The highest loan amount a Credit Officer can request for this product. Non-negative. When your workspace allows product-limit exceptions, an amount a set margin above the maximum can be kept with a reason and goes to the named approver; beyond the margin it is refused. See [Approval routes](/omnia/los/workflows/approval-routes#product-limit-exceptions) |
-| **Minimum term** | The shortest repayment period, 1 to 480 months |
-| **Maximum term** | The longest repayment period, 1 to 480 months |
-| **Description** | Optional. An internal note kept on the product record; not currently surfaced on the New Loan dropdown |
+| **Code** | A short, unique identifier such as `PUBLIC-PL` or `MORTGAGE-STD`. Uppercase letters, numbers, and dashes, 2 to 20 characters. Shown in the product list and the audit trail |
+| **Name** | What Credit Officers see in the new-application list, up to 80 characters. Pick a name your team will recognise |
+| **Loan type** | The loan type the product belongs to. Its security basis (Unsecured, Cash secured, Motor vehicle, or Real estate) decides the collateral fields and the loan agreement used |
+| **Rate source** | How the interest rate is set: **Flat rate**, **Risk band**, **Collateral type**, or **Vehicle age**. See [Rate sources](#rate-sources) below |
+| **Default rate** | For **Flat rate** products only, the annual rate every loan gets, such as `12.00` |
+| **Minimum and maximum amount** | The loan amounts a Credit Officer can request. Leave blank for no limit. The minimum cannot exceed the maximum |
+| **Minimum and maximum term** | The repayment period in months, each from 1 to 480. Leave blank for no limit |
+| **Description** | An optional internal note, up to 500 characters. Not shown to Credit Officers |
 
-## The product sheet: audience, shares, fees, and documents
+When your credit union allows product-limit exceptions, an amount a set margin above the maximum can be kept with a reason and goes to the approver your policy names. Beyond the margin it is refused. See [Approval routes](/omnia/los/workflows/approval-routes#product-limit-exceptions).
 
-Beyond the basics above, each product carries the rest of its product sheet. These settings are all optional and live on the same New product and Edit product forms.
+## The product sheet
+
+The rest of the product sheet is optional and sits on the same form.
 
 | Setting | What it does |
 |---|---|
-| **Audience** | Who the product is offered to: **General** (any member) or **Staff**. This is an eligibility label for grouping and filtering, not a loan type. A staff cash secured product, for example, keeps its true security basis (Cash secured) and is simply tagged Staff, so pricing and risk are unchanged |
-| **Repayment method** | How the loan is repaid: Salary deduction, Over-the-counter payment, Automatic transfer, or Standing order. Tap all that apply. Recorded on the product sheet and shown to staff at capture |
-| **Repayment frequency** | How often a repayment falls due: Weekly, Fortnightly, or Monthly. Reference information; the schedule is still calculated as a monthly-blended payment |
-| **Minimum shares** | The share equity a member must hold for this product, as a percentage of the loan. When set, it overrides the loan type's minimum-shares rate for this product only, so two products under the same loan type can differ. Leave it blank to inherit the loan type's rate |
-| **Compulsory savings** | The product's compulsory-savings minimum per month, for example JMD 2,500. When set, it is the floor the platform applies: the monthly compulsory savings is the greater of this minimum and 5% of the monthly loan payment, in the affordability check at submission and on the signed loan agreement. Leave it blank to use the platform default of JMD 2,000 |
-| **Approvals required** | How many approvers a loan on this product needs, for example 2 for approval by two approvers. Shown to Credit Approvals as policy guidance; the binding approval rules come from your workspace's approval routing |
-| **Applicable fees** | The fees that apply to this product. See "Setting fees per product" below |
-| **Required supporting documents** | A checklist of the documents this product needs from the member, such as a job letter, recent payslips, or a valuation report. See "Required supporting documents" below |
-| **Product specifications** | Free-form rows (a label and its details) for anything else on the product sheet: loan purpose, target market, special terms, risk notes, and so on. Descriptive only |
+| **Audience** | **General** (any member) or **Staff**. A label for grouping and filtering. A staff product keeps its normal security basis and pricing |
+| **Repayment method** | Salary deduction, Over-the-counter payment, Automatic transfer, or Standing order. Tick all that apply. Shown to staff at capture |
+| **Repayment frequency** | Weekly, Fortnightly, or Monthly. For reference; the payment is still worked out monthly |
+| **Minimum shares** | The shares a member must hold, as a percentage of the loan. Overrides the loan type's figure for this product only. Leave blank to use the loan type's figure |
+| **Compulsory savings** | The monthly compulsory-savings minimum for this product. The member saves the greater of this minimum and a share of the monthly payment set for your credit union. It counts in the affordability check at submission and prints on the loan agreement. Leave blank for your credit union's default |
+| **Approvals required** | How many approvers the product calls for. Shown to approvers as guidance; the binding rules come from your approval routing |
+| **Applicable fees** | The fees that apply to this product. See [Fees per product](#setting-fees-per-product) |
+| **Required supporting documents** | The documents the member must provide. See [Required supporting documents](#required-supporting-documents) |
+| **Product specifications** | Free-form label and detail rows for anything else: purpose, target market, special terms, risk notes |
 
-<Note>
-  The repayment, approvals-required, and specifications settings are recorded
-  as product-sheet information. They are shown to staff on the loan; they do
-  not change how a loan is priced or how the workflow gates. Compulsory
-  savings is different: it changes the monthly obligation, even though the
-  form's hint still calls it a reference value.
-</Note>
+Repayment, approvals-required, and specifications are information for staff. They do not change pricing or what the workflow allows. Compulsory savings does change the member's monthly obligation.
 
 ### Setting fees per product
 
-By default a product uses the fees configured for its loan type on the [Fees](/omnia/los/admin/fee-schedule) page. When you want a product to differ, add per-product fee rows on the product form:
+A product uses the fees set for its loan type on the [Fee schedule](/omnia/los/admin/fee-schedule) unless you add fee rows to the product:
 
-- **Opt a product into specific fees.** Pick a fee from your fee schedule to attach it to this product.
-- **Override the amount.** Enter a different value for this product only. A percentage fee takes a percent, a flat fee takes a JMD amount. Your fee schedule keeps its original value.
-- **Waive a fee.** Keep the fee on the sheet for the record while contributing nothing to the total.
+- **Attach a fee.** Pick a fee from your fee schedule.
+- **Change the amount.** Enter a percentage or flat amount for this product only. The fee schedule keeps its own figure.
+- **Waive a fee.** Keep it on the sheet for the record at zero.
 
-When a product has one or more fee rows, those rows are its fee set. When it has none, the product falls back to the fees configured for its loan type, exactly as before. New fees themselves are still created on the [Fees](/omnia/los/admin/fee-schedule) page, where each fee also carries its GL account and tax treatment; the product form only chooses which of those apply and at what amount.
+Once a product has any fee rows, those rows are its whole fee set. New fees are created on the fee schedule, where each also gets its ledger account and tax setting.
 
-On the loan, the Credit Officer sees these product fees at capture and can edit a fee's amount for that one loan while it is a draft. At disbursement, the Disbursement officer starts from the officer's figures and can still edit or waive them. See [Fees, deductions, and GCT](/omnia/los/disbursement/fees-and-gct#where-the-starting-figures-come-from).
+On the loan, the Credit Officer sees these fees at capture and can change one for that loan while it is a draft. At funding, the Disbursement officer starts from those figures and can still adjust or waive them. See [Fees, deductions, and tax](/omnia/los/disbursement/fees-and-gct#where-the-starting-figures-come-from).
 
 ### Required supporting documents
 
-Use this to record the supporting documents a product asks for, for example a completed application form, valid photo ID, a job letter, recent payslips, or proof of address. Add each as a row and mark it **Required** or **Recommended**. A one-click button inserts a standard set you can then adjust.
+List the documents the product needs, such as a completed application form, photo ID, a job letter, recent payslips, or proof of address. Mark each **Required** or **Recommended**. A one-click button adds a standard set you can then edit.
 
-The list appears on the loan as a checklist so the Credit Officer knows what to collect. The documents themselves are uploaded in the member and income document cards on the loan, using the existing upload tools.
+The list appears on each loan as a checklist so the Credit Officer knows what to collect. The documents themselves are uploaded in the member and income document cards on the loan.
 
-## Finding products in the catalog
+## Finding a product
 
-The Products page lists your products with a search box (by code or name), a loan-type filter, a rate-source filter, and **All / Active / Archived** status tabs that each show a count. Each row shows how many applications have used that product (rows with no applications yet show no count), so you can tell active offerings from dormant ones at a glance. The list pages 20 at a time with a **Load more** button.
+Search by code or name, filter by loan type or rate source, and switch between **All**, **Active**, and **Archived**. Each tab shows a count. Each row shows how many applications have used the product, so dormant products stand out. The list loads 20 at a time; click **Load more** for the rest.
 
 ## Creating a product
 
 <Steps>
   <Step title="Make sure a loan type exists">
-    A product is built on a loan type from your Loan types catalog. If none are
-    active, set one up under **Administration → Loan types** first. See
-    [Loan types](/omnia/los/admin/loan-types).
-  </Step>
-  <Step title="Go to Administration → Products">
-    The Products page lists all active and archived products for your workspace.
+    If none are active, add one under **Administration → Loan types** first.
   </Step>
   <Step title="Click New product">
-    The new product form opens.
+    On **Administration → Products**, click **New product**.
   </Step>
-  <Step title="Enter a product code and name">
-    The **code** is a short internal identifier such as `PUBLIC-PL` or
-    `MORTGAGE-STD`. It must be unique within your workspace, can contain only
-    uppercase letters, numbers, and dashes, and is 2 to 20 characters. The
-    **name** is what Credit Officers see in the dropdown.
+  <Step title="Enter a code and name">
+    The code must be unique in your workspace.
   </Step>
   <Step title="Pick the loan type">
-    Choose the loan type from your Loan types catalog. The product inherits that
-    type's behavioral archetype (Unsecured, Cash secured, Motor vehicle, or Real estate),
-    which drives the rate engine path, collateral fields, and PDF template.
+    The product takes its security basis from the loan type.
   </Step>
-  <Step title="Select the rate source">
-    Choose how this product's interest rate is calculated. If you select
-    **FLAT**, enter the fixed rate in the Default Rate field. For RISK_BAND,
-    COLLATERAL_TYPE, and VEHICLE_AGE, the rate is looked up from your rate
-    table at loan approval time.
+  <Step title="Pick the rate source">
+    For **Flat rate**, enter the rate in **Default rate**. For the others, the rate comes from your rate table when the loan is approved.
   </Step>
-  <Step title="Set amount limits">
-    Enter the minimum and maximum loan amounts in JMD. Leave these blank if you
-    do not want to enforce limits for this product. The minimum cannot exceed
-    the maximum.
+  <Step title="Set amount and term limits">
+    For example, a term of `12` to `60` months for a one-to-five-year product. Leave a limit blank to skip it.
   </Step>
-  <Step title="Set term limits">
-    Enter the minimum and maximum repayment terms in months, each between 1 and
-    480. For example, enter `12` and `60` for a one-to-five-year product. Leave
-    blank if you do not want to enforce term limits.
-  </Step>
-  <Step title="Add an optional description">
-    Enter a short description (up to 500 characters). This is an internal note
-    kept on the product record; it is not currently surfaced on the New Loan
-    dropdown.
-  </Step>
-  <Step title="Complete the rest of the product sheet (optional)">
-    Set the audience, repayment method and frequency, minimum shares,
-    compulsory savings, approvals required, per-product fees, and required
-    supporting documents as needed. See
-    [The product sheet](#the-product-sheet-audience-shares-fees-and-documents)
-    above. All of these are optional and can change later.
+  <Step title="Fill in the product sheet">
+    Audience, repayment, shares, compulsory savings, fees, and documents, as needed. All of it can change later.
   </Step>
   <Step title="Click Create product">
-    The product is created and immediately appears in the new loan application
-    dropdown for Credit Officers.
+    The product appears in the new-application list straight away.
   </Step>
 </Steps>
 
 ## Editing a product
 
-To update an existing product:
+Click the product's row, or **Edit** on the row, change what you need, and click **Save changes**.
 
-1. Go to **Administration → Products**.
-2. Find the product and click its row, or use the **Edit** button on the row, to open the edit form.
-3. Update the fields you want to change, then click **Save changes**.
-
-Every field is editable, including the loan type and rate source. Changing the loan type re-points the product to a different archetype, so do it deliberately. Existing loan records read the product fields live, so an edited name, code, or limit appears on loans already using the product. Any loan not yet approved is priced at approval against the edited rate source and rate. The requested amount and term captured on each application are unchanged, and the interest rate is locked only once it has been computed at approval. Each save records a `loan_product.updated` audit event.
-
-<Note>
-  The new loan application form shows only active (non-archived) products.
-  Archive discontinued products to keep the dropdown clean for Credit Officers.
-</Note>
+Every field can change, including the loan type and rate source. Change the loan type deliberately: it changes the product's security basis. Loans read the product live, so a new name, code, or limit shows on loans already using it. A loan not yet approved is priced at approval with the edited settings. The amount and term on each application stay as captured, and a loan's rate is fixed only once it is approved. Every save is recorded in the audit trail.
 
 ## Archiving and restoring a product
 
-When your credit union stops offering a product, archive it rather than deleting it. Archiving hides the product from the new loan application dropdown without affecting any existing loans that used it.
+Archive a product you no longer offer. It disappears from the new-application list but stays on every loan that used it.
 
-**To archive a product:**
+- **To archive:** find the product and click **Archive**. It moves to the **Archived** tab.
+- **To restore:** open the **Archived** tab, find the product, and click **Restore**. It returns to the new-application list.
 
-1. Go to **Administration → Products**.
-2. Find the product and click **Archive**.
+Both are recorded in the audit trail.
 
-The product moves to the **Archived** tab. It no longer appears to Credit Officers. Archiving records a `loan_product.archived` audit event.
-
-**To restore an archived product:**
-
-1. Go to **Administration → Products** and open the **Archived** tab.
-2. Find the product and click **Restore**.
-
-The product becomes active again and reappears in the new loan application dropdown. Restoring records a `loan_product.restored` audit event.
-
-<Accordion title="What happens to loans created with an archived product?">
-  Archiving only prevents new applications from being created with that
-  product. Archived and edited products stay linked to their loans (the
-  relation is restricted, so an in-use product cannot be deleted) and remain
-  visible on those loan records. There is no versioned product snapshot: the
-  displayed product fields reflect the current product values. The requested
-  amount and term captured on each application are unchanged, and the interest
-  rate is locked only once it has been computed at approval, so a loan still in
-  progress re-prices at approval against the current product.
+<Accordion title="What happens to loans that used an archived product?">
+  Nothing. Archiving only stops new applications. A product that loans use can never be deleted, and it stays visible on those loans. Loans show the product's current details, not a copy from when they were made. A loan still in progress is priced at approval against the product as it is then.
 </Accordion>
 
-## Rate sources at a glance
+## Rate sources
 
-| Rate source | Best for | How the rate is determined |
+| Rate source | Best for | How the rate is set |
 |---|---|---|
-| **FLAT** | Simple fixed-rate products | The rate you enter on the product is applied to every loan |
-| **RISK_BAND** | Unsecured and mortgage loans | Looked up from your rate table based on the borrower's R1 to R5 risk band. Mortgage products read a separate real-estate band table |
-| **COLLATERAL_TYPE** | Cash secured and collateral-rated loans | Looked up based on the collateral type (Vehicle, Shares, Cash hypothecation, Funds held externally, Property). A loan pledging several cash accounts is priced at its highest cash tier |
-| **VEHICLE_AGE** | Auto loans | Looked up based on the vehicle's age in years |
+| **Flat rate** | Simple fixed-rate products | The rate on the product applies to every loan |
+| **Risk band** | Unsecured and mortgage loans | From your rate table by the borrower's risk band, R1 to R5. Real estate products use a separate band table |
+| **Collateral type** | Cash secured and other collateral-priced loans | From your rate table by collateral: Vehicle, Shares, Cash hypothecation, Funds held externally, or Property. A loan pledging several cash accounts is priced at its highest cash tier |
+| **Vehicle age** | Motor vehicle loans | From your rate table by the vehicle's age in years |
+
+See [Rate tables](/omnia/los/admin/rate-tables).

@@ -13,19 +13,13 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
 
 <Steps>
   <Step title="Sign in to your workspace">
-    Every credit union has its own workspace URL. Go to your credit union's address:
+    Every credit union has its own workspace address. Open the link your Administrator gave you, which ends in your credit union's short name.
 
-    ```text
-    https://loan.compuzign.com/your-slug
-    ```
+    Enter your email and password. If you have set up two-factor authentication, enter the one-time code from your authenticator app.
 
-    Replace `your-slug` with the short identifier your Administrator gave you, like `https://loan.compuzign.com/demo-cu`.
+    You land on the **Overview** dashboard. Three things on your first screen tell you where your work is:
 
-    Enter your email and password. If you have set up two-factor authentication on your account, enter the one-time code from your authenticator app.
-
-    After signing in you land on the **Overview** dashboard at `/your-slug/dashboard`. Three things on your first screen tell you where your work is:
-
-    - **The counts in the left menu.** Every queue you can open shows how many items are in it. A count turns amber once its oldest item has waited more than 24 hours.
+    - **The counts in the left menu.** Every queue you can open shows how many items are in it. A count turns amber once its oldest item has waited more than a day.
     - **Waiting for you**, at the top of the dashboard. It lists the loans that are your next action, oldest first. On your first day it reads **All clear**.
     - **The bell** in the top bar. It lists the loan events that concern you, like a loan arriving in your queue.
 
@@ -36,19 +30,19 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
     Every loan application links to a verified member record. Create the member and complete KYC before you submit a loan.
 
     1. In the left navigation, click **Members**.
-    2. Click **New member** and fill in their details: Member CIF number, full name, date of birth, Tax Registration Number (TRN) or driver's licence number, contact information, and branch. The member needs a TRN or driver's licence number on file before you can run KYC, and the CIF number is how you find them later when creating a loan.
+    2. Click **New member** and fill in their details: member number (CIF), full name, date of birth, tax ID (TRN in Jamaica) or driver's licence number, contact information, and branch. The member needs a tax ID or driver's licence number on file before you can run KYC, and the CIF number is how you find them later when creating a loan.
     3. Click **Create member**. KYC status shows **Unverified**.
-    4. Open the record and go to the KYC page. Under **Verify against identity verifier**, choose **TRN** or **Driver's licence** as the verification type, then click **Submit for verification**. This runs that number through the identity verifier. If you have confirmed the member's documents in person instead, use **Verify manually**.
+    4. Open the record and go to the KYC page. Under **Verify against identity verifier**, choose the identifier to check, then click **Submit for verification**. This runs the number through your national identity service. If you have confirmed the member's documents in person instead, use **Verify manually**.
     5. The check returns one of three results:
        - **Verified**: identity confirmed, the member is ready to link to a loan.
        - **Failed**: the number could not be verified. Capture a different identifier or correct the details and try again.
        - **Manual review**: the check raised a flag, so the case lands in the KYC review queue for a reviewer to approve, reject, or escalate.
 
-    Each retry creates a new verification record, so every attempt is kept on file.
+    Every attempt is kept on file, so a retry never overwrites an earlier result.
   </Step>
 
   <Step title="Create a loan application">
-    With a member in place, open a new application. You can start a draft while KYC is in progress or in manual review, but submission stays blocked until KYC is Verified.
+    With a member in place, open a new application. You can start a draft while KYC is in progress or in manual review, but submission stays blocked until KYC is **Verified**.
 
     1. In the left navigation, click **Loans**, then **New Application**.
     2. In the **Search members by name or CIF** field, find and select the member you just verified.
@@ -60,13 +54,13 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
     4. Pick the product, then click **Create draft application**.
     5. On the draft, the **Application progress** bar shows six steps: Applicant, Loan, Income & expenses, Guarantors, Collateral and Documents. Click a step to jump to its section. The hint under the bar names the next section to complete.
 
-    The platform saves your progress as a draft as you go. Leave and come back any time before you submit. A draft you have not submitted waits under **Loans** then **All Loans**.
+    Your progress saves as a draft as you go. Leave and come back any time before you submit. A draft you have not submitted waits under **Loans** then **All Loans**.
   </Step>
 
   <Step title="Submit for approval">
-    Before you submit, check the figures the platform computed from your inputs:
+    Before you submit, check the figures the LOS computed from your inputs:
 
-    - **TDSR (Total Debt Service Ratio)** is the applicant's monthly debt obligations as a percentage of gross income.
+    - **TDSR (total debt service ratio)** is the applicant's monthly debt obligations as a percentage of gross income.
     - **Risk band** is a rating from **R1** (lowest risk) to **R5** (highest risk), calculated from employment, income, loan type, and other factors.
     - **Indicative rate** is the rate that applies based on the loan product and risk band.
 
@@ -76,7 +70,7 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
   </Step>
 
   <Step title="Track the loan through the workflow">
-    After submission, the loan routes to the next department's queue at each step. Staff in that department pick it up and act: an Adjudicator claims it and records a decision, the Securities team clears collateral, and the Disbursement team executes the funds release. One step, Securities to Disbursement, advances automatically once collateral clears.
+    After submission, the loan routes to the next department's queue at each step. An Adjudicator claims it and records a decision, the Securities team clears collateral, and the Disbursement team releases the funds. One step, Securities to Disbursement, advances automatically once collateral clears.
 
     You do not need to chase it. Open the loan at any time and the **next-step banner** at the top says who has it now, what is stopping it, and who gets it next. The **Timeline** card shows each stage it has passed through and how long it spent there. See [A guided tour of the loan page](/omnia/los/navigation/the-loan-page).
 
@@ -93,7 +87,7 @@ Five steps take you from signing in to a submitted loan: sign in, verify a membe
 
     If the Adjudicator requests more information, status moves to **Info requested** with a note on what is needed. The loan shows up in your **Returned to Me** count in the menu and on your Waiting for you list, and the bell tells you. Update the application and resubmit. The loan returns to Credit Approvals for the decision to continue.
 
-    Each hand-off emails the person who owns the next step, or the whole team when nobody owns it yet, and adds an alert to their bell. Every weekday at 08:00 Jamaica time, anyone with work waiting gets a summary email. See [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).
+    Each hand-off emails the person who owns the next step, or the whole team when nobody owns it yet, and adds an alert to their bell. Each weekday morning, anyone with work waiting gets a summary email. See [Alerts, hand-off emails and the morning summary](/omnia/los/navigation/alerts-and-email).
   </Step>
 </Steps>
 
